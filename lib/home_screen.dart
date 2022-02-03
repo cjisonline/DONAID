@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
            Padding(
-             padding: EdgeInsets.symmetric(vertical: 16.0),
+             padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
              child: Material(
                elevation: 5.0,
                color: Colors.blue,
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 10.0,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
+              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
               child: Material(
                 elevation: 5.0,
                 color: Colors.blue,
