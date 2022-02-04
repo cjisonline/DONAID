@@ -1,8 +1,10 @@
 import 'package:donaid/login_screen.dart';
+import 'home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DonorRegistrationScreen extends StatefulWidget {
   static const id = 'donor_registration_screen';
@@ -14,6 +16,7 @@ class DonorRegistrationScreen extends StatefulWidget {
 
 class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
   final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -49,6 +52,16 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
         dynamic newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
 
         if(newUser != null) {
+          _firestore.collection('DonorUsers').add({
+            'firstName':firstName,
+            'lastName': lastName,
+            'email':email,
+            'phoneNumber':phoneNumber,
+            'password':password,
+
+          });
+
+          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id));
           Navigator.pushNamed(context, LoginScreen.id);
         }
       }
@@ -58,7 +71,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
       }
     else{
       //If the email is already in use
-      print('email not available.');
+      print('Email not available.');
     }
   }
 
