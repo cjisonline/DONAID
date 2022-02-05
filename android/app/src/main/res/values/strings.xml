@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Donaid</string>
+    <string name="facebook_app_id">469490557980157</string>
+    <string name="fb_login_protocol_scheme">fb469490557980157</string>
+    <string name="facebook_client_token">c79784b27117005f97566ded3f27d6b8</string>
+</resources>
+
+    <?xml version="1.0" encoding="utf-8"?>

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'donor_dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -111,14 +112,70 @@ class _LoginScreenState extends State<LoginScreen> {
                       catch (e) {
                         print(e);
                       }
+
+
                     }
                   },
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
+              child: Material(
+                elevation: 5.0,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(32.0),
+                child: MaterialButton(
+                  child: const Text(
+                    'Login with Facebook',
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  onPressed: () async{
+
+                    final LoginResult result = await FacebookAuth.instance.login(); // by default we request the email and the public profile
+// or FacebookAuth.i.login()
+                    if (result.status == LoginStatus.success) {
+                      // you are logged
+                      final AccessToken accessToken = result.accessToken!;
+                      Navigator.pushNamed(context, DonorDashboard.id);
+                    } else {
+                      print(result.status);
+                      print(result.message);
+                    }
+
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
+              child: Material(
+                elevation: 5.0,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(32.0),
+                child: MaterialButton(
+                  child: const Text(
+                    'Login with Google',
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  onPressed: () async{
+
+
+
+                  },
+                ),
+              ),
+            ),
+
+
           ],
         ),
       ),
     );
   }
+
 }
