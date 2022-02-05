@@ -1,3 +1,4 @@
+import 'package:donaid/donor_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
@@ -60,6 +61,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   onPressed: (){
                     Navigator.pushNamed(context, RegistrationScreen.id);
+                  },
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 10.0,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
+              child: Material(
+                elevation: 5.0,
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(30.0),
+                child: MaterialButton(
+                  child: Text(
+                    'Donor Dashboard',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: (){
+                    Navigator.pushNamed(context, DonorDashboard.id);
                   },
                 ),
               ),

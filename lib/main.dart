@@ -1,3 +1,4 @@
+import 'package:donaid/donor_dashboard.dart';
 import 'package:donaid/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
@@ -18,6 +19,7 @@ class Donaid extends StatelessWidget {
         HomeScreen.id: (context) => HomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
+        DonorDashboard.id: (context) => DonorDashboard()
       },
     );
   }
