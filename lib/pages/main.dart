@@ -1,4 +1,4 @@
-import 'package:donaid/registration_screen.dart';
+import 'package:donaid/pages/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
