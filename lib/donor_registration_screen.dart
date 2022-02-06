@@ -45,7 +45,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
     }
   }
 
-  void createNewUser() async {
+  void createNewDonorUser() async {
     //This method creates the new user in Firebase
     if (await isEmailAvailable()) {
       //If the email is available
@@ -62,10 +62,8 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             'password': password,
           });
 
-          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen
-              .id)); //remove all screens on the stack and return to home screen
-          Navigator.pushNamed(
-              context, LoginScreen.id); //redirect to login screen
+          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
+          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
         }
       } catch (signUpError) {
         print(signUpError);
@@ -301,7 +299,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                               showLoadingSpinner = true;
                             });
 
-                            createNewUser();
+                            createNewDonorUser();
 
                             setState(() {
                               showLoadingSpinner = false;
