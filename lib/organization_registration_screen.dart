@@ -52,7 +52,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
             email: email, password: password);
 
         if (newUser != null) {
-          _firestore.collection('OrganizationUsers').add({
+          await _firestore.collection('OrganizationUsers').add({
             'organizationName': organizationName,
             'email': email,
             'phoneNumber': phoneNumber,
@@ -60,8 +60,10 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
             'approved':false
           });
 
-          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
-          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
+          await _firestore.collection('Users').add({
+            'email': email,
+            'userType':2
+          });
         }
       } catch (signUpError) {
         print(signUpError);
@@ -280,6 +282,9 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                           setState(() {
                             showLoadingSpinner = false;
                           });
+
+                          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
+                          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
                         }
                       },
                     ),

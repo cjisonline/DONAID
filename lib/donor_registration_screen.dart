@@ -54,7 +54,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             email: email, password: password);
 
         if (newUser != null) {
-          _firestore.collection('DonorUsers').add({
+          await _firestore.collection('DonorUsers').add({
             'firstName': firstName,
             'lastName': lastName,
             'email': email,
@@ -62,8 +62,10 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             'password': password,
           });
 
-          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
-          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
+          await _firestore.collection('Users').add({
+            'email':email,
+            'userType':1
+          });
         }
       } catch (signUpError) {
         print(signUpError);
@@ -304,6 +306,9 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                             setState(() {
                               showLoadingSpinner = false;
                             });
+
+                            Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
+                            Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
                           }
                         },
                       ),
