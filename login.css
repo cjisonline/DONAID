@@ -1,0 +1,68 @@
+html {
+    height: 100%;
+  }
+  
+  body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    background-color: #54647A;
+  }
+  
+  .formContainer {
+    width: 50%;
+    height: 50%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    background-color: #DAE3ED;
+    border-radius: 20px;
+    box-shadow: 0px 0px 5px 2px #036AFC;
+  }
+  
+ .inputWrapper {
+    align-self: flex-start;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+  }
+  
+  .inputField::placeholder {
+    color: black;
+  }
+  
+  .inputField {
+    border: none;
+    background-color: #DAE3ED;
+    border-bottom: 1px solid #3a3a3a;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    outline: none;
+    padding: 0px 0px 5px 5px;
+  }
+  
+  .submitButton {
+    width: 100%;
+    padding: 7px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    background-color: #036AFC;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .submitButton:hover {
+      background-color: #54647A;
+      transition: background-color 0.5s;
+  }
+
+  .submitButton:active {
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+         box-shadow: inset 0px 0px 5px #c1c1c1;
+  }

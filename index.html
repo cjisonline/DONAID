@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<!-- CSS Loads -->
+<link rel="stylesheet" href="login.css">
+
+<!-- JS Loads -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="login.js"></script>
+
+<title>DONAID Admin Console</title>
+</head>
+
+<body>
+    <div class="formContainer">
+    <h1 id="login-header">DONAID Admin</h1>
+    <form class="inputWrapper">
+        <input class="inputField" type="email" name="email" placeholder="Email" id="email"><br>
+        <input class="inputField" type="password" name="password" placeholder="Password" id="password"><br>
+        <button onclick="loginAdmin()" class="submitButton" id="login">Login</button>
+    </form>
+</div>    
+</body>
+</html>

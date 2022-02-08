@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<!-- CSS Loads -->
+<link rel="stylesheet" href="login.css">
+
+<!-- JS Loads -->
+<script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script defer src="login.js"></script>
+
+
+<title>DONAID Admin Console</title>
+</head>
+
+<body>
+    <div class="formContainer">
+        <h1 id="login-header">DONAID Admin</h1>
+
+        <table id="adminTable">
+            <thead>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Edit</th>
+            </thead>
+
+            <tbody>
+            </tbody>
+        </table>
+
+        <form class="inputWrapper">
+            <button onclick="logoutAdmin()" class="submitButton" id="logout">Logout</button>
+        </form>
+
+        
+</body>
+</html>
