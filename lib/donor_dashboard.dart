@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class DonorDashboard extends StatefulWidget {
   static const id = 'donor_dashboard';
+
   const DonorDashboard({Key? key}) : super(key: key);
 
   @override
@@ -9,21 +10,23 @@ class DonorDashboard extends StatefulWidget {
 }
 
 class _DonorDashboardState extends State<DonorDashboard> {
+  String placeholderText =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod "
+      "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim"
+      " veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+      "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit "
+      "esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat "
+      "non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: (){
-
-          },
-        ),
       ),
       drawer: _drawer(),
-    body: _body(),
-    bottomNavigationBar: _bottomNavigationBar(),
+      body: _body(),
+      bottomNavigationBar: _bottomNavigationBar(),
     );
   }
 
@@ -32,127 +35,317 @@ class _DonorDashboardState extends State<DonorDashboard> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-      Align(
-      alignment: Alignment.centerLeft,
-        child:
-        Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-              'Charity Campaign',
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.start,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Categories',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                    Text(
+                      'See more >',
+                      style: TextStyle(fontSize: 14),
+                      textAlign: TextAlign.start,
+                    ),
+                  ]),
             ),
-              Text(
-                'See more >',
-                style: TextStyle(fontSize: 14),
-                textAlign: TextAlign.start,
-              ),
-          ]
           ),
-        ),
-      ),
           SizedBox(
-            height: 150.0,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Container(
-                  width: 125.0,
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
-                  ),
-                  child :  Column(
-                      children: [
-                        IconButton(
-                          enableFeedback: false,
-                          onPressed: () {},
-                          icon: const Icon(
-                              Icons.apartment,
-                              color: Colors.white,
-                              size: 50
-                          ),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Text('Charity 1',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white, fontSize: 20, )
-                            ),
-                        )
-                      ]
-                  ),
-                )
-                ),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Container(
-                      width: 125.0,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.all(Radius.circular(20))
-                      ),
-                      child :  Column(
-                          children: [
-                            IconButton(
-                              enableFeedback: false,
-                              onPressed: () {},
-                              icon: const Icon(
-                                  Icons.apartment,
-                                  color: Colors.white,
-                                  size: 50
+              height: 75.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Row(children: [
+                              IconButton(
+                                enableFeedback: false,
+                                onPressed: () {},
+                                icon: const Icon(Icons.fastfood,
+                                    color: Colors.white, size: 20),
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Text('Charity 2',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white, fontSize: 20, )
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    left: 0.0, right: 10.0),
+                                child: Text('Food',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                    )),
+                              )
+                            ]),
+                          ))),
+                  Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10))),
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Row(children: [
+                              IconButton(
+                                enableFeedback: false,
+                                onPressed: () {},
+                                icon: const Icon(Icons.health_and_safety,
+                                    color: Colors.white, size: 20),
                               ),
-                            )
-                          ]
-                      ),
-                    )
-                ),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Container(
-                      width: 125.0,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.all(Radius.circular(20))
-                      ),
-                      child :  Column(
-                          children: [
-                            IconButton(
-                              enableFeedback: false,
-                              onPressed: () {},
-                              icon: const Icon(
-                                  Icons.apartment,
-                                  color: Colors.white,
-                                  size: 50
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    left: 0.0, right: 10.0),
+                                child: Text('Health',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                    )),
+                              )
+                            ]),
+                          ))),
+                  Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10))),
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Row(children: [
+                              IconButton(
+                                enableFeedback: false,
+                                onPressed: () {},
+                                icon: const Icon(Icons.book,
+                                    color: Colors.white, size: 20),
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Text('Charity 3',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white, fontSize: 20, )
-                              ),
-                            )
-                          ]
-                      ),
-                    )
-                ),
-              ],
-            )
-          ),
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    left: 0.0, right: 10.0),
+                                child: Text('Education',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                    )),
+                              )
+                            ]),
+                          ))),
+                ],
+              )),
 
+
+          // organization list
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Organizations',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                    Text(
+                      'See more >',
+                      style: TextStyle(fontSize: 14),
+                      textAlign: TextAlign.start,
+                    ),
+                  ]),
+            ),
+          ),
+          SizedBox(
+              height: 150.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Container(
+                        width: 125.0,
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        child: Column(children: [
+                          IconButton(
+                            enableFeedback: false,
+                            onPressed: () {},
+                            icon: const Icon(Icons.apartment,
+                                color: Colors.white, size: 50),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text('Org 1',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                )),
+                          )
+                        ]),
+                      )),
+                  Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Container(
+                        width: 125.0,
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        child: Column(children: [
+                          IconButton(
+                            enableFeedback: false,
+                            onPressed: () {},
+                            icon: const Icon(Icons.apartment,
+                                color: Colors.white, size: 50),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text('Org 2',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                )),
+                          )
+                        ]),
+                      )),
+                ],
+              )),
+
+          // urgent case list
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Urgent Cases',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                    Text(
+                      'See more >',
+                      style: TextStyle(fontSize: 14),
+                      textAlign: TextAlign.start,
+                    ),
+                  ]),
+            ),
+          ),
+          SizedBox(
+              height: 300.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Container(
+                        width: 275.0,
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        child: Column(children: [
+                          IconButton(
+                            enableFeedback: false,
+                            onPressed: () {},
+                            icon: const Icon(Icons.apartment,
+                                color: Colors.white, size: 50),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Text('Urgent Case 1',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                )),
+                          ),
+                          SizedBox(
+                              height: 75.0,
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    placeholderText,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 3,
+                                  ))),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('70%',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 15)),
+                                Text(
+                                  '\$100',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
+                                ),
+                              ]),
+                          LinearProgressIndicator(
+                            backgroundColor: Colors.white,
+                            valueColor: new AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).primaryColor),
+                            value: 0.7,
+                            minHeight: 10,
+                          ),
+                          Container(
+                              margin: const EdgeInsets.only(top: 10.0),
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Row(children: [
+                                  IconButton(
+                                    enableFeedback: false,
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.favorite,
+                                        color: Colors.white, size: 20),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        left: 0.0, right: 10.0),
+                                    child: Text('Donate',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                        )),
+                                  )
+                                ]),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.pink,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ))
+                        ]),
+                      )),
+                ],
+              )),
         ],
       ),
     );
@@ -167,84 +360,52 @@ class _DonorDashboardState extends State<DonorDashboard> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  enableFeedback: false,
-                  onPressed: () {},
-                  icon: const Icon(
-                      Icons.home,
-                      color: Colors.white,
-                      size: 35
-                  ),
-
-                ),
-                Text('Home',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 10)
-                ),
-              ]
-          ),
-          Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  enableFeedback: false,
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                    size: 35,
-                  ),
-
-                ),
-                Text('Search',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 10)
-                ),
-              ]
-          ),
-          Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  enableFeedback: false,
-                  onPressed: () {},
-                  icon: const Icon(
-                      Icons.notifications,
-                      color: Colors.white,
-                      size: 35
-                  ),
-
-                ),
-                Text('Notifications',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 10)
-                ),
-              ]
-          ),
-          Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  enableFeedback: false,
-                  onPressed: () {},
-                  icon: const Icon(
-                      Icons.message,
-                      color: Colors.white,
-                      size: 35
-                  ),
-
-                ),
-                Text('Messages',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 10)
-                ),
-              ]
-          ),
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            IconButton(
+              enableFeedback: false,
+              onPressed: () {},
+              icon: const Icon(Icons.home, color: Colors.white, size: 35),
+            ),
+            Text('Home',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 10)),
+          ]),
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            IconButton(
+              enableFeedback: false,
+              onPressed: () {},
+              icon: const Icon(
+                Icons.search,
+                color: Colors.white,
+                size: 35,
+              ),
+            ),
+            Text('Search',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 10)),
+          ]),
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            IconButton(
+              enableFeedback: false,
+              onPressed: () {},
+              icon: const Icon(Icons.notifications,
+                  color: Colors.white, size: 35),
+            ),
+            Text('Notifications',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 10)),
+          ]),
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            IconButton(
+              enableFeedback: false,
+              onPressed: () {},
+              icon: const Icon(Icons.message, color: Colors.white, size: 35),
+            ),
+            Text('Messages',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 10)),
+          ]),
         ],
-
       ),
     );
   }
@@ -258,30 +419,38 @@ class _DonorDashboardState extends State<DonorDashboard> {
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
-            child: Text('DONAID'),
+            child: Text('DONAID',
+                style: TextStyle(color: Colors.white, fontSize: 30)),
           ),
           ListTile(
-            title: const Text('Favorites'),
+            title: const Text('Favorites', style: TextStyle(fontSize: 20)),
             onTap: () {
               // Update the state of the app.
               // ...
             },
           ),
           ListTile(
-            title: const Text('Edit Profile'),
+            title: const Text('Edit Profile', style: TextStyle(fontSize: 20)),
             onTap: () {
               // Update the state of the app.
               // ...
             },
           ),
           ListTile(
-            title: const Text('Donations History'),
+            title:
+                const Text('Donations History', style: TextStyle(fontSize: 20)),
             onTap: () {
               // Update the state of the app.
               // ...
             },
           ),
-
+          ListTile(
+            title: const Text('Log Out', style: TextStyle(fontSize: 20)),
+            onTap: () {
+              // Update the state of the app.
+              // ...
+            },
+          ),
         ],
       ),
     );
