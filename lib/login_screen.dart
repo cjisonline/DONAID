@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'donor_dashboard.dart';
+import 'Donor/donor_dashboard.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -23,19 +23,27 @@ class _LoginScreenState extends State<LoginScreen> {
   String email="";
   String password="";
   bool showLoadingSpinner = false;
-  int userType=-1; // 1 indicates donor user, 2 indicates organization user
 
-  Future<int> getUserType() async{
-    final user = await _firestore.collection('Users').where('email', isEqualTo: email).get();
-    final userType = user.docs[0]['userType'];
-    print('USERTYPE: $userType');
+  Future<int> getUserType() async{ //Searches firestore for the user corresponding to the email. Changes the userType variable accordingly.
+    int userType =-1;
+    try {
+      final user = await _firestore.collection('Users').where(
+          'email', isEqualTo: email).get();
+      userType = user.docs[0]['userType'];
+      print('USERTYPE: $userType');
+    }
+    catch(e){
+      print(e);
+    }
+
     return userType;
   }
   void loginUser() async{
     //TODO: Handle if the user does not exist or credentials do not match
-    final userType = await getUserType();
+
 
     try{
+      final userType = await getUserType();
       if(userType == 1) { //If user logging in is a donor user
         final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
         Navigator.pushNamed(context, DonorDashboard.id);
@@ -46,15 +54,79 @@ class _LoginScreenState extends State<LoginScreen> {
         print('APPROVAL STATUS: $approved');
         if(approved == true){
           //TODO: Navigate to organization dashboard
+          final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+
         }
         else{
           _accountNotApprovedDialog();
         }
       }
+      else{
+        return _accountNotFoundDialog();
+      }
     }
-    catch (e) {
-      print(e);
+    on FirebaseAuthException catch (e) {
+      print('Failed with error code: ${e.code}');
+      if(e.code == 'wrong-password'){
+        _wrongPasswordDialog();
+      }
     }
+  }
+
+  Future<void> _wrongPasswordDialog() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Hold on a second!'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'That password doesn\'t match that email. Please try again!'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _accountNotFoundDialog() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Alert'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'No account with this email could be found.'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   Future<void> _accountNotApprovedDialog() async {
@@ -91,12 +163,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: (){
             Navigator.pop(context);
           },
         ),
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: ModalProgressHUD(
         inAsyncCall: showLoadingSpinner,
