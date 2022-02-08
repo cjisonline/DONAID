@@ -1,5 +1,6 @@
 
 import 'package:donaid/OrganizationWidget/add_categorys.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'add_charities.dart';
@@ -94,54 +95,53 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
               onTap: () {},
             ),
             ListTile(
-              leading: Icon(Icons.not_interested),
-              title: Text("Report"),
-              onTap: () {},
-            ),
-            ListTile(
               leading: Icon(Icons.help),
               title: Text("Help"),
               onTap: () {},
-            )
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text("Logout"),
+              onTap: (){Navigator.of(context).pushAndRemoveUntil(CupertinoPageRoute( builder: (context) => HomeScreen()),
+                  (_) => false, ); }
+            ),
           ],
         ),
       ),
       appBar: AppBar(
         title: Text('DONAID'),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.logout, size: 30,), onPressed: (){
-    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => HomeScreen()),
-    );}),
-        ],
       ),
       backgroundColor: Colors.white.withAlpha(55),
       body: Stack(
         children: [
           ListView(
             children:<Widget>[
+             Container(
+                  padding: EdgeInsets.fromLTRB(20, 20,0,0),
+                  child: Text('My Campaigns', style: TextStyle(fontSize: 20,color: Colors.white))),
+               IconButton(padding: EdgeInsets.zero, alignment: Alignment.centerRight, icon: Text('See more >', style: TextStyle(fontSize: 14, color: Colors.white)),
+                onPressed: () {Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );  },),
+              Category(),
               Container(
                   padding: EdgeInsets.fromLTRB(20, 20,0,0),
-                  child: Text('My Campaigns', style: TextStyle(fontSize: 25,color: Colors.white))),
+                  child: Text('My Urgent Cases', style: TextStyle(fontSize: 20,color: Colors.white))),
+              IconButton(padding: EdgeInsets.zero, alignment: Alignment.centerRight, icon: Text('See more >', style: TextStyle(fontSize: 14, color: Colors.white)),
+                onPressed: () {Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );  },),
               Category(),
-              // TextField (
-              //   controller: _searchController,
-              //   decoration: InputDecoration(filled: true, fillColor: Colors.white,
-              //       hintText: 'Search',focusedBorder:OutlineInputBorder (borderSide:
-              //       const BorderSide (color: Colors.blue, width: 2.0), borderRadius:
-              //       BorderRadius.circular (25.0),),
-              //     prefixIcon: Icon(Icons.search)
-              //   ),
-              // ),
               Container(
-              padding: EdgeInsets.fromLTRB(20, 0,0,0),
-              child: Text('My Beneficiaries', style: TextStyle(fontSize: 25, color: Colors.white),)),
-              Category(),
-
-              Container(
-                padding: EdgeInsets.fromLTRB(20, 0,0,0),
-                child: Text('My Urgent Cases', style: TextStyle(fontSize: 25, color: Colors.white),)),
+                  padding: EdgeInsets.fromLTRB(20, 20,0,0),
+                  child: Text('My Beneficiary', style: TextStyle(fontSize: 20,color: Colors.white))),
+              IconButton(padding: EdgeInsets.zero, alignment: Alignment.centerRight, icon: Text('See more >', style: TextStyle(fontSize: 14, color: Colors.white)),
+                onPressed: () {Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );  },),
               Category(),
               //AllProducts(),
             ],
