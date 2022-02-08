@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DonorDashboard extends StatefulWidget {
@@ -9,6 +10,27 @@ class DonorDashboard extends StatefulWidget {
 }
 
 class _DonorDashboardState extends State<DonorDashboard> {
+  final _auth = FirebaseAuth.instance;
+  User? loggedInUser;
+
+  @override
+  void initState(){
+    super.initState();
+    getCurrentUser();
+  }
+  void getCurrentUser() async {
+    try{
+      final user = _auth.currentUser;
+      if(user != null){
+        loggedInUser = user;
+        print('Logged in user: ${loggedInUser?.email}');
+      }
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -303,10 +303,6 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
 
                             createNewDonorUser();
 
-                            setState(() {
-                              showLoadingSpinner = false;
-                            });
-
                             Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
                             Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
                           }

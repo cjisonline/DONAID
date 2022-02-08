@@ -39,13 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return userType;
   }
   void loginUser() async{
-    //TODO: Handle if the user does not exist or credentials do not match
-
-
     try{
       final userType = await getUserType();
       if(userType == 1) { //If user logging in is a donor user
-        final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+        await _auth.signInWithEmailAndPassword(email: email, password: password);
         Navigator.pushNamed(context, DonorDashboard.id);
       }
       else if(userType == 2){ //If user logging in is an organization user
@@ -54,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
         print('APPROVAL STATUS: $approved');
         if(approved == true){
           //TODO: Navigate to organization dashboard
-          final user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+          await _auth.signInWithEmailAndPassword(email: email, password: password);
 
         }
         else{
@@ -249,10 +246,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
 
                        loginUser();
-
-                        setState(() {
-                          showLoadingSpinner=false;
-                        });
                       }
                     },
                   ),
