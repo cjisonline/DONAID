@@ -78,6 +78,9 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
   }
 
   Future<void> _emailInUseDialog() async {
+    setState(() {
+      showLoadingSpinner = false;
+    });
     return showDialog<void>(
         context: context,
         barrierDismissible: false,

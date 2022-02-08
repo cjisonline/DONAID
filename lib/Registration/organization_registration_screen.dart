@@ -76,6 +76,9 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   }
 
   Future<void> _emailInUseDialog() async {
+    setState(() {
+      showLoadingSpinner = false;
+    });
     return showDialog<void>(
         context: context,
         barrierDismissible: false,

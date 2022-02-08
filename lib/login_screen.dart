@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Donor/donor_dashboard.dart';
@@ -52,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if(approved == true){
           //TODO: Navigate to organization dashboard
           await _auth.signInWithEmailAndPassword(email: email, password: password);
+          Navigator.pushNamed(context, OrganizationDashboard.id);
 
         }
         else{
@@ -71,6 +73,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _wrongPasswordDialog() async {
+    setState(() {
+      showLoadingSpinner=false;
+    });
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -99,6 +104,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _accountNotFoundDialog() async {
+    setState(() {
+      showLoadingSpinner=false;
+    });
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -127,6 +135,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _accountNotApprovedDialog() async {
+    setState(() {
+      showLoadingSpinner=false;
+    });
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
