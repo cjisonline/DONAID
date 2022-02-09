@@ -52,9 +52,11 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
       try {
         dynamic newUser = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
+        print('newUser id: ${newUser.user.uid}');
 
         if (newUser != null) {
           await _firestore.collection('DonorUsers').add({
+            'uid': newUser.user.uid,
             'firstName': firstName,
             'lastName': lastName,
             'email': email,
@@ -63,6 +65,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
           });
 
           await _firestore.collection('Users').add({
+            'uid':newUser.user.uid,
             'email':email,
             'userType':1
           });
