@@ -53,6 +53,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
 
         if (newUser != null) {
           await _firestore.collection('OrganizationUsers').add({
+            'uid': newUser.user.uid,
             'organizationName': organizationName,
             'email': email,
             'phoneNumber': phoneNumber,
@@ -61,6 +62,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
           });
 
           await _firestore.collection('Users').add({
+            'uid': newUser.user.uid,
             'email': email,
             'userType':2
           });
