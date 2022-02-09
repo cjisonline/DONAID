@@ -15,14 +15,8 @@ class _NavState extends State<SearchPage> {
   // This OrganizationWidget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Bottom Nav Bar V2',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: BottomNavBarV2(),
+    return Scaffold(
+      body: BottomNavBarV2(),
     );
   }
 }

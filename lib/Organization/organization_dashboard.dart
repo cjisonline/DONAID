@@ -39,14 +39,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Bottom Nav Bar V2',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: BottomNavBarV2(),
+    return Scaffold(
+      body: BottomNavBarV2(),
     );
   }
 }
@@ -120,9 +114,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
             ListTile(
                 leading: Icon(Icons.logout),
                 title: Text("Logout"),
-                onTap: () {
+                onTap: () async {
+                  await _auth.signOut();
                   Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id));
-                  _auth.signOut();
                 }),
           ],
         ),
