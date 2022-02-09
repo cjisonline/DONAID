@@ -1,7 +1,6 @@
-import 'package:donaid/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
-
+import 'Registration/registration_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const id = 'home_screen';
@@ -24,13 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
            Padding(
-             padding: EdgeInsets.symmetric(vertical: 16.0),
+             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
              child: Material(
                elevation: 5.0,
                color: Colors.blue,
                borderRadius: BorderRadius.circular(30.0),
                child: MaterialButton(
-                 child: Text(
+                 child: const Text(
                    'Login',
                    style: TextStyle(
                      color: Colors.white,
@@ -43,17 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
              ),
            ),
 
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
               child: Material(
                 elevation: 5.0,
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
-                  child: Text(
+                  child: const Text(
                     'Register',
                     style: TextStyle(
                       color: Colors.white,

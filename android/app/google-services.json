@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "240146097284",
+    "project_id": "donaid-d3244",
+    "storage_bucket": "donaid-d3244.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240146097284:android:eafc4f1d40814e961cced1",
+        "android_client_info": {
+          "package_name": "com.example.donaid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240146097284-cbe9iudgmuqmci2ni8jp5pshmvbfjdi6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXEBNOHoGPQ9VDIaO8BnGZNi9uGy21Wig"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240146097284-cbe9iudgmuqmci2ni8jp5pshmvbfjdi6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
