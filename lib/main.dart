@@ -1,6 +1,7 @@
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:donaid/Registration/registration_screen.dart';
 import 'package:flutter/material.dart';
+import 'Organization/urgent_case_form.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
 import 'Registration/donor_registration_screen.dart';
@@ -30,6 +31,7 @@ class Donaid extends StatelessWidget {
         OrganizationRegistrationScreen.id: (context) => const OrganizationRegistrationScreen(),
         DonorDashboard.id: (context) => const DonorDashboard(),
         OrganizationDashboard.id: (context) => const OrganizationDashboard(),
+        UrgentForm.id: (context) => const UrgentForm(),
       },
     );
   }

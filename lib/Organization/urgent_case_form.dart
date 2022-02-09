@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'OrganizationWidget/form.dart';
 ///Author: Raisa Zaman
 class UrgentForm extends StatelessWidget {
+  static const id = 'urgent_case_form';
   const UrgentForm({Key? key}) : super(key: key);
 
   @override
