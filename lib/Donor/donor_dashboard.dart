@@ -44,7 +44,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _getOrganizationUsers() async {
-    var ret = await _firestore.collection('OrganizationUsers').get();
+    var ret = await _firestore.collection('OrganizationUsers').where('approved', isEqualTo: true).get();
     ret.docs.forEach((element) {
       Organization organization = Organization(
         organizationName: element.data()['organizationName'],

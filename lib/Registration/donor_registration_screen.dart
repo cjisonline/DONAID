@@ -68,6 +68,9 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             'email':email,
             'userType':1
           });
+
+          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
+          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
         }
       } catch (signUpError) {
         print(signUpError);
@@ -307,9 +310,6 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                             });
 
                             createNewDonorUser();
-
-                            Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
-                            Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
                           }
                         },
                       ),

@@ -70,6 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
       if(e.code == 'wrong-password'){
         _wrongPasswordDialog();
       }
+      if(e.code == 'user-not-found'){
+        _accountNotFoundDialog();
+      }
     }
   }
 

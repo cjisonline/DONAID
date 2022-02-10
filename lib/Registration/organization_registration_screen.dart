@@ -66,6 +66,9 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
             'email': email,
             'userType':2
           });
+
+          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
+          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
         }
       } catch (signUpError) {
         print(signUpError);
@@ -283,9 +286,6 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                           });
 
                           createNewOrganizationUser();
-
-                          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
-                          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
                         }
                       },
                     ),
