@@ -1,33 +1,39 @@
-(function(){
-    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+// import "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
+// import "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
+// import "https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js";
+// import {FirebaseInit} from '/firebaseauth.js';
 
-    var uiConfig = {
-        callbacks: {
-          signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-            // User successfully signed in.
-            // Return type determines whether we continue the redirect automatically
-            // or whether we leave that to developer to handle.
-            return true;
-          },
-          uiShown: function() {
-            // The widget is rendered.
-            // Hide the loader.
-            document.getElementById('loader').style.display = 'none';
-          }
-        },
-        // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-        signInFlow: 'popup',
-        signInSuccessUrl: 'dashboard.html',
-        signInOptions: [
-          firebase.auth.EmailAuthProvider.PROVIDER_ID
-        ],
-        // Terms of service url.
-        tosUrl: 'dashboard.html',
-        // Privacy policy url.
-        privacyPolicyUrl: '<your-privacy-policy-url>'
-      };
+// (function(){
+    
+//     var ui = new firebaseui.auth.AuthUI(firebase.auth());
 
-      ui.start('#firebaseui-auth-container', uiConfig);
+//     var uiConfig = {
+//         callbacks: {
+//           signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+//             // User successfully signed in.
+//             // Return type determines whether we continue the redirect automatically
+//             // or whether we leave that to developer to handle.
+//             return true;
+//           },
+//           uiShown: function() {
+//             // The widget is rendered.
+//             // Hide the loader.
+//             document.getElementById('loader').style.display = 'none';
+//           }
+//         },
+//         // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+//         signInFlow: 'popup',
+//         signInSuccessUrl: 'dashboard.html',
+//         signInOptions: [
+//           firebase.auth.EmailAuthProvider.PROVIDER_ID
+//         ],
+//         // Terms of service url.
+//         tosUrl: 'dashboard.html',
+//         // Privacy policy url.
+//         privacyPolicyUrl: '<your-privacy-policy-url>'
+//       };
+
+//       ui.start('#firebaseui-auth-container', uiConfig);
 
       
-})()
+// })()

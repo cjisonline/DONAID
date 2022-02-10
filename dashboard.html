@@ -11,23 +11,24 @@
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
 <script type="module" src="firebaseauth.js"></script>
-<script>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAZIToR8oHIIgWmayz0PncWAaiwmJ5n_64",
-  authDomain: "donaid-d3244.firebaseapp.com",
-  projectId: "donaid-d3244",
-  storageBucket: "donaid-d3244.appspot.com",
-  messagingSenderId: "240146097284",
-  appId: "1:240146097284:web:0e78cae430d624551cced1",
-  measurementId: "G-33T6FD2DK6"
-};
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
+import {getFirestore, getDocs, collection, query} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
+    const firebaseConfig = {
+    apiKey: "AIzaSyAZIToR8oHIIgWmayz0PncWAaiwmJ5n_64",
+    authDomain: "donaid-d3244.firebaseapp.com",
+    projectId: "donaid-d3244",
+    storageBucket: "donaid-d3244.appspot.com",
+    messagingSenderId: "240146097284",
+    appId: "1:240146097284:web:0e78cae430d624551cced1",
+    measurementId: "G-33T6FD2DK6"
+  };
 
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db =getFirestore(app);
 
 // Logout
 function logoutAdmin(){
@@ -53,7 +54,7 @@ function createTable(email, phoneNumber, lastName, firstName) {
     td2.innerHTML = phoneNumber;
     td3.innerHTML = lastName;
     td4.innerHTML = firstName;
-    td5.innerHTML = Edit;
+    td5.innerHTML = 'Edit';
 
     trow.appendChild(td1);
     trow.appendChild(td2);
@@ -74,24 +75,30 @@ function populateTable(DonorUsers) {
 
 
 
-function getData() {
-    const dbRef = ref(db);
-    getData(child(dbRef, "DonorUsers"))
-    .then((snapshot)=>{
+async function getData(){
+    window.onload = async function(){
+        // const dbRef = ref(db);
+        //const querySnapshot = getDocs(collection(db, "DonorUsers"));
+        const querySnapshot = await getDocs(collection(db, "DonorUsers"));
         var donors = [];
 
-        snapshot.forEach(childSnapshot => {
-            donors.push(childSnapshot.val());
-        })
-        populateTable(donors);
+        querySnapshot.forEach((doc) => {
+        donors.push(doc.data())
+        
+
+        
     })
+    console.log(donors)
+    populateTable(donors);
+    }
 }
+getData();
 </script>
 
 <title>DONAID Admin Console</title>
 </head>
 
-<body onload = "getData()">
+<body>
     <div class="formContainer">
         <h1 id="login-header">DONAID Admin</h1>
 
@@ -114,9 +121,12 @@ function getData() {
 
         
 
-        <script>
+        <script type="module">
+            import {getAuth, signInWithEmailAndPassword} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
+            const auth = getAuth();
+
             document.addEventListener('DOMContentLoaded', function() {
-                Firebase.auth().onAuthStateChanged(user => {console.log("user: " + user);
+                auth.onAuthStateChanged(user => {console.log("user: " + user);
                 });
             });
         </script>
