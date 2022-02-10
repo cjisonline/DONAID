@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 class UrgentCaseSection extends StatelessWidget {
-  final Icon icon;
   final String title;
   final String description;
 
-  UrgentCaseSection(this.icon, this.title, this.description);
+  UrgentCaseSection( this.title, this.description);
   @override
   Widget build(BuildContext context) {
     return Padding(
