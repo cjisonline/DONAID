@@ -10,13 +10,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import 'main.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await GetStorage.init();
-  await Auth.getCurrentUser();
-  runApp(const Donaid());
-}
+
 class HomeScreen extends StatefulWidget {
   static const id = 'home_screen';
   const HomeScreen({Key? key}) : super(key: key);
