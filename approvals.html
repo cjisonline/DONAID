@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<!-- CSS Loads -->
+<link rel="stylesheet" href="login.css">
+
+<!-- JS Loads -->
+<script src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css" />
+<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js"></script>
+<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js"></script>
+<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
+import {getFirestore, getDocs, collection, query, where} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
+    const firebaseConfig = {
+    apiKey: "AIzaSyAZIToR8oHIIgWmayz0PncWAaiwmJ5n_64",
+    authDomain: "donaid-d3244.firebaseapp.com",
+    projectId: "donaid-d3244",
+    storageBucket: "donaid-d3244.appspot.com",
+    messagingSenderId: "240146097284",
+    appId: "1:240146097284:web:0e78cae430d624551cced1",
+    measurementId: "G-33T6FD2DK6"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db =getFirestore(app);
+
+// Logout
+function logoutAdmin(){
+    Firebase.auth().signOut()
+    .then(function(){
+        console.log("Logout Successful");
+        window.location = 'index.html'; // Index redirect upon logout
+    });
+    alert("Logged Out");
+}
+
+var tbody = document.getElementById('approvalsTable');
+
+function createTable(email, phoneNumber, password, organizationName) {
+    let trow = document.createElement("tr");
+    let td1 = document.createElement('td');
+    let td2 = document.createElement('td');
+    let td3 = document.createElement('td');
+    let td4 = document.createElement('td');
+    let td5 = document.createElement('td');
+
+    td1.innerHTML = email;
+    td2.innerHTML = phoneNumber;
+    td3.innerHTML = password;
+    td4.innerHTML = organizationName;
+    td5.innerHTML = '<button class="submitButton" type="submit">Yes</button>';
+
+    trow.appendChild(td1);
+    trow.appendChild(td2);
+    trow.appendChild(td3);
+    trow.appendChild(td4);
+    trow.appendChild(td5);
+
+    tbody.appendChild(trow);
+}
+
+function populateTable(OrganizationUsers) {
+    tbody.innerHTML="";
+    OrganizationUsers.forEach(element => {
+        if(element.approved == false) {
+        createTable(element.email, element.phoneNumber, element.password, element.organizationName);
+        }
+    })
+}
+
+async function getApprovalData(){
+    window.onload = async function(){
+        const querySnapshot = await getDocs(collection(db, "OrganizationUsers"));
+        var approvals = [];
+
+        querySnapshot.forEach((doc) => {
+        approvals.push(doc.data())
+    })
+    console.log(approvals)
+    populateTable(approvals);
+    }
+}
+getApprovalData();
+</script>
+
+<title>DONAID Admin Console</title>
+</head>
+
+<body>
+    <div id="firebaseui-container">
+        <h1 class="firebaseui-title" style="text-align:center; font-size: 24px;">DONAID Admin</h1>
+        <div class="select">
+            <select class="select-text" required onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                <option value="donor_dashboard.html">Donors</option>
+                <option value="org_dashboard.html">Organizations</option>
+                <option value="beneficiaries.html">Beneficiaries</option>
+                <option value="approvals.html" selected>Approvals</option>
+                <option value="urgent_cases.html">Urgent Cases</option>
+            </select>
+            <span class="select-highlight"></span>
+            <span class="select-bar"></span>
+            <label class="select-label">Select</label>
+        </div><br>
+        
+        <div class="table-responsive-vertical shadow-z-1">
+        <table class="table" id="adminTable">
+            <thead>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Password</th>
+                <th>Organization Name</th>
+                <th>Approve?</th>
+            </thead>
+            <tbody id="approvalsTable">
+            </tbody>
+        </table>
+    </div>
+
+        <!-- <form class="inputWrapper">
+            <button onclick="logoutAdmin()" class="submitButton" id="logout">Logout</button>
+        </form> -->
+
+        
+
+        <script type="module">
+            import {getAuth, signInWithEmailAndPassword} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
+            const auth = getAuth();
+
+            document.addEventListener('DOMContentLoaded', function() {
+                auth.onAuthStateChanged(user => {console.log("user: " + user);
+                });
+            });
+        </script>
+</body>
+</html>

@@ -15,10 +15,6 @@
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-storage.js"></script>
-<script type="module" defer src="login.js"></script>
-<script type="module">
-    
-</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
@@ -53,14 +49,14 @@ import {getFirestore} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-fi
         },
         // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
         signInFlow: 'popup',
-        signInSuccessUrl: 'dashboard.html',
+        signInSuccessUrl: 'donor_dashboard.html',
         signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID
         ],
         // Terms of service url.
-        tosUrl: 'dashboard.html',
+        tosUrl: 'index.html',
         // Privacy policy url.
-        privacyPolicyUrl: '<your-privacy-policy-url>'
+        privacyPolicyUrl: 'index.html'
     };
 
     var ui = new firebaseui.auth.AuthUI(firebase.auth());
@@ -71,8 +67,11 @@ import {getFirestore} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-fi
 </head>
 
 <body>
-    <h1 id="login-header">DONAID Admin</h1>
-    <div id="firebaseui-auth-container"></div>
-    <div id="loader">Loading...</div>     
+    
+    <div id="firebaseui-auth-container">
+        <h1 class="firebaseui-title" style="text-align:center; font-size: 24px;">DONAID Admin</h1>
+    </div>
+    
+    <div id="loader">Please Wait...</div>     
 </body>
 </html>
