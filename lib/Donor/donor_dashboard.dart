@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorWidgets/category_card.dart';
-import 'package:donaid/Donor/DonorWidgets/organization_layout.dart';
-import 'package:donaid/Donor/DonorWidgets/urgent_case_layout.dart';
+import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
+import 'package:donaid/Donor/DonorWidgets/organization_card.dart';
+import 'package:donaid/Donor/DonorWidgets/urgent_case_card.dart';
+import 'package:donaid/Models/CharityCategory.dart';
+import 'package:donaid/Models/Organization.dart';
+import 'package:donaid/Models/UrgentCase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +26,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
 
   List<UrgentCase> urgentCases = [];
-  List<OrganizationUser> organizations = [];
+  List<Organization> organizations = [];
   List<CharityCategory> charityCategories = [];
 
 
@@ -41,11 +45,12 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
   _getOrganizationUsers() async {
     var ret = await _firestore.collection('OrganizationUsers').get();
-    ret.docs.forEach((doc) {
-      OrganizationUser organizationUser = OrganizationUser(
-        organizationName: doc.data()['organizationName'],
+    ret.docs.forEach((element) {
+      Organization organization = Organization(
+        organizationName: element.data()['organizationName'],
+        uid: element.data()['uid']
       );
-      organizations.add(organizationUser);
+      organizations.add(organization);
     });
     setState(() {});
   }
@@ -53,9 +58,10 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
   _getCharityCategories() async {
     var ret = await _firestore.collection('CharityCategories').get();
-    ret.docs.forEach((doc) {
+    ret.docs.forEach((element) {
       CharityCategory charityCategory = CharityCategory(
-        name: doc.data()['name'],
+        name: element.data()['name'],
+        id: element.data()['id']
       );
       charityCategories.add(charityCategory);
     });
@@ -64,13 +70,17 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
   _getUrgentCases() async {
     var ret = await _firestore.collection('UrgentCases').get();
-    ret.docs.forEach((doc) {
+    ret.docs.forEach((element){
       UrgentCase urgentCase = UrgentCase(
-        name: doc.data()['title'],
-        amountRaised: doc.data()['amountRaised'],
-        category: doc.data()['category'],
-        description: doc.data()['description'],
-        goalAmount: doc.data()['goalAmount'],
+          title: element.data()['title'],
+          description: element.data()['description'],
+          goalAmount: element.data()['goalAmount'],
+          amountRaised: element.data()['amountRaised'],
+          category: element.data()['category'],
+          endDate: element.data()['endDate'],
+          dateCreated: element.data()['dateCreated'],
+          id: element.data()['id'],
+          organizationID: element.data()['organizationID']
       );
       urgentCases.add(urgentCase);
     });
@@ -84,7 +94,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
       appBar: AppBar(
         title: const Text('Dashboard'),
       ),
-      drawer: _drawer(),
+      drawer: const DonorDrawer(),
       body: _body(),
       bottomNavigationBar: _bottomNavigationBar(),
     );
@@ -103,7 +113,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -135,7 +145,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -158,8 +168,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 itemCount: organizations.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
-                  return OrganizationSection(
-                      organizations[index].organizationName, "category");
+                  return OrganizationCard(
+                      organizations[index].organizationName);
                 },
               )),
 
@@ -167,7 +177,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -190,7 +200,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 itemCount: urgentCases.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
-                  return UrgentCaseCard(urgentCases[index].name, urgentCases[index].description, urgentCases[index].goalAmount, urgentCases[index].amountRaised);
+                  return UrgentCaseCard(urgentCases[index].title, urgentCases[index].description, urgentCases[index].goalAmount, urgentCases[index].amountRaised);
                 },
               )),
         ],
@@ -213,7 +223,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
               onPressed: () {},
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-            Text('Home',
+            const Text('Home',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -227,9 +237,9 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 size: 35,
               ),
             ),
-            Text('Search',
+            const Text('Search',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
+                style:  TextStyle(color: Colors.white, fontSize: 10)),
           ]),
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
@@ -238,7 +248,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-            Text('Notifications',
+            const Text('Notifications',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -248,7 +258,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
               onPressed: () {},
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-            Text('Messages',
+            const Text('Messages',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -256,84 +266,6 @@ class _DonorDashboardState extends State<DonorDashboard> {
       ),
     );
   }
-
-  _drawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text('DONAID',
-                style: TextStyle(color: Colors.white, fontSize: 30)),
-          ),
-          ListTile(
-            title: const Text('Favorites', style: TextStyle(fontSize: 20)),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
-          ListTile(
-            title: const Text('Edit Profile', style: TextStyle(fontSize: 20)),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
-          ListTile(
-            title:
-                const Text('Donations History', style: TextStyle(fontSize: 20)),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
-          ListTile(
-            title: const Text('Log Out', style: TextStyle(fontSize: 20)),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 
-class UrgentCase {
-  String name;
-  int amountRaised;
-  String category;
-  String description;
-  int goalAmount;
-
-  UrgentCase(
-      {required this.name,
-      required this.amountRaised,
-      required this.category,
-      required this.description,
-      required this.goalAmount});
-}
-
-
-class OrganizationUser {
-  // TODO: add categories
-  String organizationName;
-
-  OrganizationUser({
-    required this.organizationName,
-  });
-}
-
-class CharityCategory {
-  String name;
-
-  CharityCategory({
-    required this.name,
-  });
-}

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-class OrganizationSection extends StatelessWidget {
+class OrganizationCard extends StatelessWidget {
   final String name;
-  final String category;
 
-  OrganizationSection( this.name, this.category);
+  const OrganizationCard( this.name, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return  Padding(
