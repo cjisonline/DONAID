@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorWidgets/category_card.dart';
 import 'package:donaid/Donor/DonorWidgets/organization_layout.dart';
 import 'package:donaid/Donor/DonorWidgets/urgent_case_layout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,10 +20,10 @@ class _DonorDashboardState extends State<DonorDashboard> {
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
 
-  List<Beneficiary> beneficiaries = [];
-  List<Campaign> campaigns = [];
+
   List<UrgentCase> urgentCases = [];
   List<OrganizationUser> organizations = [];
+  List<CharityCategory> charityCategories = [];
 
   _getOrganizationUsers() async {
     var ret = await _firestore.collection('OrganizationUsers').get();
@@ -35,7 +36,19 @@ class _DonorDashboardState extends State<DonorDashboard> {
     setState(() {});
   }
 
-  _getUrgent() async {
+
+  _getCharityCategories() async {
+    var ret = await _firestore.collection('CharityCategories').get();
+    ret.docs.forEach((doc) {
+      CharityCategory charityCategory = CharityCategory(
+        name: doc.data()['name'],
+      );
+      charityCategories.add(charityCategory);
+    });
+    setState(() {});
+  }
+
+  _getUrgentCases() async {
     var ret = await _firestore.collection('UrgentCases').get();
     ret.docs.forEach((doc) {
       UrgentCase urgentCase = UrgentCase(
@@ -43,38 +56,10 @@ class _DonorDashboardState extends State<DonorDashboard> {
         goal: doc.data()['goalAmount'],
         category: doc.data()['category'],
         description: doc.data()['description'],
+        goalAmount: doc.data()['goalAmount'],
       );
       urgentCases.add(urgentCase);
     });
-    setState(() {});
-  }
-
-  _getCampaign() async {
-    var ret = await _firestore.collection('Campaigns').get();
-    ret.docs.forEach((element) {
-      Campaign campaign = Campaign(
-          name: element.data()['title'],
-          goal: element.data()['goalAmount'],
-          category: element.data()['category']);
-      campaigns.add(campaign);
-    });
-
-    setState(() {});
-  }
-
-  _getBeneficiaries() async {
-    var ret = await _firestore.collection('Beneficiaries').get();
-
-    ret.docs.forEach((element) {
-      Beneficiary beneficiary = Beneficiary(
-          name: element.data()['name'],
-          goal: element.data()['goalAmount'],
-          category: element.data()['category']); // need to add category
-      beneficiaries.add(beneficiary);
-    });
-
-    print('Beneficiaries list: $beneficiaries');
-
     setState(() {});
   }
 
@@ -86,10 +71,9 @@ class _DonorDashboardState extends State<DonorDashboard> {
   void initState() {
     super.initState();
     _getCurrentUser();
-    _getBeneficiaries();
-    _getCampaign();
-    _getUrgent();
+    _getUrgentCases();
     _getOrganizationUsers();
+    _getCharityCategories();
   }
 
   @override
@@ -131,94 +115,13 @@ class _DonorDashboardState extends State<DonorDashboard> {
           ),
           SizedBox(
               height: 75.0,
-              child: ListView(
+              child: ListView.builder(
+                itemCount: charityCategories.length,
                 scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Row(children: [
-                              IconButton(
-                                enableFeedback: false,
-                                onPressed: () {},
-                                icon: const Icon(Icons.fastfood,
-                                    color: Colors.white, size: 20),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    left: 0.0, right: 10.0),
-                                child: Text('Food',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                    )),
-                              )
-                            ]),
-                          ))),
-                  Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Row(children: [
-                              IconButton(
-                                enableFeedback: false,
-                                onPressed: () {},
-                                icon: const Icon(Icons.health_and_safety,
-                                    color: Colors.white, size: 20),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    left: 0.0, right: 10.0),
-                                child: Text('Health',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                    )),
-                              )
-                            ]),
-                          ))),
-                  Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Row(children: [
-                              IconButton(
-                                enableFeedback: false,
-                                onPressed: () {},
-                                icon: const Icon(Icons.book,
-                                    color: Colors.white, size: 20),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    left: 0.0, right: 10.0),
-                                child: Text('Education',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                    )),
-                              )
-                            ]),
-                          ))),
-                ],
+                itemBuilder: (context, int index) {
+                  return CharityCategoryCard(
+                      charityCategories[index].name);
+                },
               )),
 
           // organization list
@@ -280,7 +183,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 itemCount: urgentCases.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
-                  return UrgentCaseSection( urgentCases[index].name, urgentCases[index].description);
+                  return UrgentCaseSection(urgentCases[index].name, urgentCases[index].description, urgentCases[index].goalAmount);
                 },
               )),
         ],
@@ -394,42 +297,22 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 }
 
-class Campaign {
-  String name;
-  int goal;
-  String category;
-
-  Campaign({
-    required this.name,
-    required this.goal,
-    required this.category,
-  });
-}
 
 class UrgentCase {
   String name;
   int goal;
   String category;
   String description;
+  int goalAmount;
 
   UrgentCase(
       {required this.name,
       required this.goal,
       required this.category,
-      required this.description});
+      required this.description,
+      required this.goalAmount});
 }
 
-class Beneficiary {
-  String name;
-  int goal;
-  String category;
-
-  Beneficiary({
-    required this.name,
-    required this.goal,
-    required this.category,
-  });
-}
 
 class OrganizationUser {
   // TODO: add categories
@@ -437,5 +320,13 @@ class OrganizationUser {
 
   OrganizationUser({
     required this.organizationName,
+  });
+}
+
+class CharityCategory {
+  String name;
+
+  CharityCategory({
+    required this.name,
   });
 }

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class UrgentCaseSection extends StatelessWidget {
   final String title;
   final String description;
+  final int goalAmount;
 
-  UrgentCaseSection( this.title, this.description);
+  UrgentCaseSection( this.title, this.description, this.goalAmount);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -49,7 +50,7 @@ class UrgentCaseSection extends StatelessWidget {
                   textAlign: TextAlign.left,
                   style: TextStyle(color: Colors.white, fontSize: 15)),
               Text(
-                '\$100',
+                '\$$goalAmount',
                 textAlign: TextAlign.start,
                 style: TextStyle(color: Colors.white, fontSize: 15),
               ),

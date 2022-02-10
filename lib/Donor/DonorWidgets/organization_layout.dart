@@ -24,7 +24,7 @@ class OrganizationSection extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(10.0),
-              child: Text('Org 1',
+              child: Text(name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
