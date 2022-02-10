@@ -7,16 +7,91 @@
 <link rel="stylesheet" href="login.css">
 
 <!-- JS Loads -->
-<script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<script defer src="login.js"></script>
+<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js"></script>
+<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js"></script>
+<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
+<script type="module" src="firebaseauth.js"></script>
+<script>
 
+const firebaseConfig = {
+  apiKey: "AIzaSyAZIToR8oHIIgWmayz0PncWAaiwmJ5n_64",
+  authDomain: "donaid-d3244.firebaseapp.com",
+  projectId: "donaid-d3244",
+  storageBucket: "donaid-d3244.appspot.com",
+  messagingSenderId: "240146097284",
+  appId: "1:240146097284:web:0e78cae430d624551cced1",
+  measurementId: "G-33T6FD2DK6"
+};
+
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+
+// Logout
+function logoutAdmin(){
+    Firebase.auth().signOut()
+    .then(function(){
+        console.log("Logout Successful");
+        window.location = 'index.html'; // Index redirect upon logout
+    });
+    alert("Logged Out");
+}
+
+var tbody = document.getElementById('donorsTable');
+
+function createTable(email, phoneNumber, lastName, firstName) {
+    let trow = document.createElement("tr");
+    let td1 = document.createElement('td');
+    let td2 = document.createElement('td');
+    let td3 = document.createElement('td');
+    let td4 = document.createElement('td');
+    let td5 = document.createElement('td');
+
+    td1.innerHTML = email;
+    td2.innerHTML = phoneNumber;
+    td3.innerHTML = lastName;
+    td4.innerHTML = firstName;
+    td5.innerHTML = Edit;
+
+    trow.appendChild(td1);
+    trow.appendChild(td2);
+    trow.appendChild(td3);
+    trow.appendChild(td4);
+    trow.appendChild(td5);
+
+    tbody.appendChild(trow);
+
+}
+
+function populateTable(DonorUsers) {
+    tbody.innerHTML="";
+    DonorUsers.forEach(element => {
+        createTable(element.email, element.phoneNumber, element.lastName, element.firstName);
+    })
+}
+
+
+
+function getData() {
+    const dbRef = ref(db);
+    getData(child(dbRef, "DonorUsers"))
+    .then((snapshot)=>{
+        var donors = [];
+
+        snapshot.forEach(childSnapshot => {
+            donors.push(childSnapshot.val());
+        })
+        populateTable(donors);
+    })
+}
+</script>
 
 <title>DONAID Admin Console</title>
 </head>
 
-<body>
+<body onload = "getData()">
     <div class="formContainer">
         <h1 id="login-header">DONAID Admin</h1>
 
@@ -29,7 +104,7 @@
                 <th>Edit</th>
             </thead>
 
-            <tbody>
+            <tbody id="donorsTable">
             </tbody>
         </table>
 
@@ -38,5 +113,12 @@
         </form>
 
         
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Firebase.auth().onAuthStateChanged(user => {console.log("user: " + user);
+                });
+            });
+        </script>
 </body>
 </html>
