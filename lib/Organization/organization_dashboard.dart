@@ -1258,10 +1258,15 @@
 // }
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Models/Beneficiary.dart';
+import 'package:donaid/Models/Campaign.dart';
+import 'package:donaid/Models/UrgentCase.dart';
+import 'package:donaid/Organization/OrganizationWidget/campaign_card.dart';
+import 'package:donaid/Organization/OrganizationWidget/urgent_case_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'OrganizationWidget/org_card.dart';
+import 'OrganizationWidget/beneficiary_card.dart';
 
 class OrganizationDashboard extends StatefulWidget {
   static const id = 'donor_dashboard';
@@ -1302,9 +1307,16 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
         'organizationID', isEqualTo: loggedInUser?.uid).get();
     ret.docs.forEach((element) {
       Campaign campaign = Campaign(
-          name: element.data()['title'],
-          goal: element.data()['goalAmount'],
-          category: element.data()['category']);
+          title: element.data()['title'],
+          description: element.data()['description'],
+          goalAmount: element.data()['goalAmount'],
+          amountRaised: element.data()['amountRaised'],
+          category: element.data()['category'],
+        endDate: element.data()['endDate'],
+        dateCreated: element.data()['dateCreated'],
+        id: element.data()['id'],
+        organizationID: element.data()['organizationID']
+      );
       campaigns.add(campaign);
     });
 
@@ -1314,19 +1326,23 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     var ret = await _firestore.collection('UrgentCases').where(
         'organizationID', isEqualTo: loggedInUser?.uid).get();
 
-    final documents = ret.docs;
-
-    ret.docs.forEach((doc){
+    ret.docs.forEach((element){
       UrgentCase urgentCase = UrgentCase(
-          name: doc.data()['title'],
-          goal: doc.data()['goalAmount'],
-          category: doc.data()['category']);
+          title: element.data()['title'],
+          description: element.data()['description'],
+          goalAmount: element.data()['goalAmount'],
+          amountRaised: element.data()['amountRaised'],
+          category: element.data()['category'],
+          endDate: element.data()['endDate'],
+          dateCreated: element.data()['dateCreated'],
+          id: element.data()['id'],
+          organizationID: element.data()['organizationID']
+      );
       urgentCases.add(urgentCase);
     });
 
     setState(() {});
   }
-
   _getBeneficiaries() async {
     var ret = await _firestore.collection('Beneficiaries').where(
         'organizationID', isEqualTo: loggedInUser?.uid).get();
@@ -1334,8 +1350,15 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     ret.docs.forEach((element) {
       Beneficiary beneficiary = Beneficiary(
           name: element.data()['name'],
-          goal: element.data()['goalAmount'],
-          category: element.data()['category']); // need to add category
+          biography: element.data()['biography'],
+          goalAmount: element.data()['goalAmount'],
+          amountRaised: element.data()['amountRaised'],
+          category: element.data()['category'],
+          endDate: element.data()['endDate'],
+          dateCreated: element.data()['dateCreated'],
+          id: element.data()['id'],
+          organizationID: element.data()['organizationID']
+      ); // need to add category
       beneficiaries.add(beneficiary);
     });
 
@@ -1367,7 +1390,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               padding: EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     Text(
                       'Campaign',
                       style: TextStyle(fontSize: 20),
@@ -1382,13 +1405,13 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
             ),
           ),
           SizedBox(
-              height: 150.0,
+              height: 325.0,
               child: ListView.builder(
                 itemCount: campaigns.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
-                  return OrganizationSection(
-                      campaigns[index].name, campaigns[index].category);
+                  return CampaignCard(
+                      campaigns[index].title, campaigns[index].description, campaigns[index].goalAmount, campaigns[index].amountRaised);
                 },
               )),
 
@@ -1399,7 +1422,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               padding: EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     Text(
                       'Urgent Cases',
                       style: TextStyle(fontSize: 20),
@@ -1414,13 +1437,13 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
             ),
           ),
           SizedBox(
-              height: 150.0,
+              height: 325.0,
               child: ListView.builder(
                 itemCount: urgentCases.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
-                  return OrganizationSection(
-                      urgentCases[index].name, urgentCases[index].category);
+                  return UrgentCaseCard(
+                      urgentCases[index].title, urgentCases[index].description, urgentCases[index].goalAmount, urgentCases[index].amountRaised);
                 },
               )),
 
@@ -1431,7 +1454,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               padding: EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     Text(
                       'Beneficiary',
                       style: TextStyle(fontSize: 20),
@@ -1446,12 +1469,12 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
             ),
           ),
           SizedBox(
-              height: 150.0,
+              height: 325.0,
               child: ListView.builder(
                 itemCount: beneficiaries.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
-                  return OrganizationSection(beneficiaries[index].name,beneficiaries[index].category);
+                  return BeneficiaryCard(beneficiaries[index].name,beneficiaries[index].biography, beneficiaries[index].goalAmount, beneficiaries[index].amountRaised);
                 },
               )),
         ],
@@ -1565,41 +1588,10 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   }
 
 }
-class Campaign {
-  String name;
-  int goal;
-  String category;
 
-  Campaign(
-      {
-        required this.name,
-        required this.goal,
-        required this.category,
-      });
-}
 
-class UrgentCase {
-  String name;
-  int goal;
-  String category;
 
-  UrgentCase(
-      {
-        required this.name,
-        required this.goal,
-        required this.category,});
-}
 
-class Beneficiary {
-  String name;
-  int goal;
-  String category;
 
-  Beneficiary({
-    required this.name,
-    required this.goal,
-    required this.category,
-  });
-}
 
 

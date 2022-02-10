@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class UrgentCaseCard extends StatelessWidget {
+class CampaignCard extends StatelessWidget {
   final String title;
   final String description;
   final int goalAmount;
   final int amountRaised;
 
-  const UrgentCaseCard( this.title, this.description, this.goalAmount, this.amountRaised, {Key? key}) : super(key: key);
+  const CampaignCard( this.title, this.description, this.goalAmount, this.amountRaised, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,32 +66,6 @@ class UrgentCaseCard extends StatelessWidget {
               value: (amountRaised/goalAmount),
               minHeight: 10,
             ),
-            Container(
-                margin: const EdgeInsets.only(top: 10.0),
-                child: FittedBox(
-                  fit: BoxFit.contain,
-                  child: Row(children: [
-                    IconButton(
-                      enableFeedback: false,
-                      onPressed: () {},
-                      icon: const Icon(Icons.favorite,
-                          color: Colors.white, size: 20),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 0.0, right: 10.0),
-                      child: const Text('Donate',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          )),
-                    )
-                  ]),
-                ),
-                decoration: const BoxDecoration(
-                  color: Colors.pink,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ))
           ]),
         ));
   }
