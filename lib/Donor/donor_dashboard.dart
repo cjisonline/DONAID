@@ -94,7 +94,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
     return Container(
     decoration: BoxDecoration(
     color: Colors.blueGrey.shade50,
-    borderRadius: BorderRadius.all(Radius.circular(10)),
+    borderRadius: const BorderRadius.all(Radius.circular(10)),
     border: Border.all(color: Colors.grey.shade100)),
     child: SingleChildScrollView(
       child: Column(
