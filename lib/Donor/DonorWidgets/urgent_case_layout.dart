@@ -50,7 +50,7 @@ class UrgentCaseCard extends StatelessWidget {
                   maxLines: 3,
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('$amountRaised',
+              Text('${(amountRaised/goalAmount)*100}%',
                   textAlign: TextAlign.left,
                   style: TextStyle(color: Colors.black, fontSize: 15)),
               Text(
