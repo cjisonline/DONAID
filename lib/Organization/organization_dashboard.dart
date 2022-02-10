@@ -11,7 +11,7 @@ import 'OrganizationWidget/beneficiary_card.dart';
 import 'OrganizationWidget/organization_drawer.dart';
 
 class OrganizationDashboard extends StatefulWidget {
-  static const id = 'donor_dashboard';
+  static const id = 'organization_dashboard';
 
   const OrganizationDashboard({Key? key}) : super(key: key);
 
