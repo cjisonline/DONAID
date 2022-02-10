@@ -10,7 +10,7 @@ class CharityCategoryCard extends StatelessWidget {
         padding: EdgeInsets.all(10.0),
         child: Container(
             decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Colors.blue,
                 borderRadius:
                 BorderRadius.all(Radius.circular(10))),
             child: FittedBox(
@@ -29,7 +29,7 @@ class CharityCategoryCard extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20.0,
+                        fontSize: 15.0,
                       )),
                 )
               ]),

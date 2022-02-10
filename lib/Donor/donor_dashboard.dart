@@ -89,7 +89,12 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _body() {
-    return SingleChildScrollView(
+    return Container(
+    decoration: BoxDecoration(
+    color: Colors.blueGrey.shade50,
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+    border: Border.all(color: Colors.grey.shade100)),
+    child: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -188,7 +193,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
               )),
         ],
       ),
-    );
+    ));
   }
 
   _bottomNavigationBar() {

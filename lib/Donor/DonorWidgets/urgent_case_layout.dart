@@ -14,14 +14,16 @@ class UrgentCaseSection extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           width: 275.0,
           decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.all(Radius.circular(10))),
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              border: Border.all(color: Colors.grey.shade300, width: 2.0)),
+
           child: Column(children: [
             IconButton(
               enableFeedback: false,
               onPressed: () {},
               icon: const Icon(Icons.apartment,
-                  color: Colors.white,
+                  color: Colors.blue,
                   size: 50),
             ),
             Padding(
@@ -29,7 +31,7 @@ class UrgentCaseSection extends StatelessWidget {
               child: Text(title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 20,
                   )),
             ),
@@ -39,7 +41,7 @@ class UrgentCaseSection extends StatelessWidget {
                   description,
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 15,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -48,15 +50,15 @@ class UrgentCaseSection extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text('70%',
                   textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.white, fontSize: 15)),
+                  style: TextStyle(color: Colors.black, fontSize: 15)),
               Text(
                 '\$$goalAmount',
                 textAlign: TextAlign.start,
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                style: TextStyle(color: Colors.black, fontSize: 15),
               ),
             ]),
             LinearProgressIndicator(
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.grey,
               valueColor: new AlwaysStoppedAnimation<Color>(
                   Theme.of(context).primaryColor),
               value: 0.7,
