@@ -25,6 +25,20 @@ class _DonorDashboardState extends State<DonorDashboard> {
   List<OrganizationUser> organizations = [];
   List<CharityCategory> charityCategories = [];
 
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentUser();
+    _getUrgentCases();
+    _getOrganizationUsers();
+    _getCharityCategories();
+  }
+
+  void _getCurrentUser() {
+    loggedInUser = _auth.currentUser;
+  }
+
   _getOrganizationUsers() async {
     var ret = await _firestore.collection('OrganizationUsers').get();
     ret.docs.forEach((doc) {
@@ -63,18 +77,6 @@ class _DonorDashboardState extends State<DonorDashboard> {
     setState(() {});
   }
 
-  void _getCurrentUser() {
-    loggedInUser = _auth.currentUser;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getCurrentUser();
-    _getUrgentCases();
-    _getOrganizationUsers();
-    _getCharityCategories();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +106,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
               padding: EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     Text(
                       'Categories',
                       style: TextStyle(fontSize: 20),
@@ -136,7 +138,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
               padding: EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     Text(
                       'Organizations',
                       style: TextStyle(fontSize: 20),
@@ -168,7 +170,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
               padding: EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     Text(
                       'Urgent Cases',
                       style: TextStyle(fontSize: 20),
