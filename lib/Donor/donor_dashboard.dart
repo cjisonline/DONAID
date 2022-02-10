@@ -67,7 +67,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
     ret.docs.forEach((doc) {
       UrgentCase urgentCase = UrgentCase(
         name: doc.data()['title'],
-        goal: doc.data()['goalAmount'],
+        amountRaised: doc.data()['amountRaised'],
         category: doc.data()['category'],
         description: doc.data()['description'],
         goalAmount: doc.data()['goalAmount'],
@@ -190,7 +190,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 itemCount: urgentCases.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
-                  return UrgentCaseSection(urgentCases[index].name, urgentCases[index].description, urgentCases[index].goalAmount);
+                  return UrgentCaseCard(urgentCases[index].name, urgentCases[index].description, urgentCases[index].goalAmount, urgentCases[index].amountRaised);
                 },
               )),
         ],
@@ -307,14 +307,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
 class UrgentCase {
   String name;
-  int goal;
+  int amountRaised;
   String category;
   String description;
   int goalAmount;
 
   UrgentCase(
       {required this.name,
-      required this.goal,
+      required this.amountRaised,
       required this.category,
       required this.description,
       required this.goalAmount});

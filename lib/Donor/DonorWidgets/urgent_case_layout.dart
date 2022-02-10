@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-class UrgentCaseSection extends StatelessWidget {
+class UrgentCaseCard extends StatelessWidget {
   final String title;
   final String description;
   final int goalAmount;
+  final int amountRaised;
 
-  UrgentCaseSection( this.title, this.description, this.goalAmount);
+  UrgentCaseCard( this.title, this.description, this.goalAmount, this.amountRaised);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,7 +32,7 @@ class UrgentCaseSection extends StatelessWidget {
               padding: EdgeInsets.all(20.0),
               child: Text(title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 20,
                   )),
@@ -48,7 +50,7 @@ class UrgentCaseSection extends StatelessWidget {
                   maxLines: 3,
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('70%',
+              Text('$amountRaised',
                   textAlign: TextAlign.left,
                   style: TextStyle(color: Colors.black, fontSize: 15)),
               Text(
@@ -61,7 +63,7 @@ class UrgentCaseSection extends StatelessWidget {
               backgroundColor: Colors.grey,
               valueColor: new AlwaysStoppedAnimation<Color>(
                   Theme.of(context).primaryColor),
-              value: 0.7,
+              value: (amountRaised/goalAmount),
               minHeight: 10,
             ),
             Container(
