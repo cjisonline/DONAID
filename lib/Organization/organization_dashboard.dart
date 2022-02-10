@@ -355,10 +355,10 @@ final FirebaseAuth auth = FirebaseAuth.instance;
 class _OrganizationDashboardState extends State<OrganizationDashboard> {
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
-  final _fireStore = FirebaseFirestore.instance;
+  final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries = [];
   List<Campaign> campaigns = [];
-  List<Urgent> urgents = [];
+  List<UrgentCase> urgentCases = [];
 
   @override
   void initState() {
@@ -366,7 +366,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     _getCurrentUser();
     _getBeneficiaries();
     _getCampaign();
-    _getUrgent();
+    _getUrgentCases();
   }
 
 
@@ -403,7 +403,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
 
   _urgentBody() {
     return ListView.builder(
-      itemCount: urgents.length,
+      itemCount: urgentCases.length,
       shrinkWrap: true,
       itemBuilder: (context, int index) {
         return Card(
@@ -411,9 +411,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           elevation: 3,
           child: ListTile(
-            title: Text(urgents[index].name),
-            subtitle: Text(urgents[index].category),
-            trailing: Text(urgents[index].goal.toString()),
+            title: Text(urgentCases[index].name),
+            subtitle: Text(urgentCases[index].category),
+            trailing: Text(urgentCases[index].goal.toString()),
           ),
         );
       },
@@ -440,21 +440,26 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   }
 
 //Need a field
-  _getUrgent() async {
-    var ret = await _fireStore.collection('').get();
-    ret.docs.forEach((element) {
-      Urgent urgent = Urgent(
-          name: element.data()['name'],
-          goal: element.data()['goal'],
-          category: element.data()['category']);
-      urgents.add(urgent);
+  _getUrgentCases() async {
+    var ret = await _firestore.collection('UrgentCases').where(
+        'organizationID', isEqualTo: loggedInUser?.uid).get();
+
+    final documents = ret.docs;
+
+    ret.docs.forEach((doc){
+      UrgentCase urgentCase = UrgentCase(
+          name: doc.data()['title'],
+          goal: doc.data()['goalAmount'],
+          category: doc.data()['category']);
+      urgentCases.add(urgentCase);
     });
 
     setState(() {});
   }
 
   _getCampaign() async {
-    var ret = await _fireStore.collection('Campaigns').get();
+    var ret = await _firestore.collection('Campaigns').where(
+        'organizationID', isEqualTo: loggedInUser?.uid).get();
     ret.docs.forEach((element) {
       Campaign campaign = Campaign(
           name: element.data()['title'],
@@ -467,7 +472,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   }
 
   _getBeneficiaries() async {
-    var ret = await _fireStore.collection('Beneficiaries').get();
+    var ret = await _firestore.collection('Beneficiaries').where(
+        'organizationID', isEqualTo: loggedInUser?.uid).get();
+
     ret.docs.forEach((element) {
       Beneficiary beneficiary = Beneficiary(
           name: element.data()['name'],
@@ -475,6 +482,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           category: element.data()['category']); // need to add category
       beneficiaries.add(beneficiary);
     });
+
+    print('Beneficiaries list: $beneficiaries');
 
     setState(() {});
   }
@@ -582,12 +591,12 @@ class Campaign {
       });
 }
 
-class Urgent {
+class UrgentCase {
   String name;
   int goal;
   String category;
 
-  Urgent(
+  UrgentCase(
       {
         required this.name,
         required this.goal,
