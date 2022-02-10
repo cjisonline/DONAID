@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 ///Author: Raisa Zaman
 class CategorySection extends StatelessWidget {
-  final Icon icon;
   final String name;
 
-  CategorySection(this.icon, this.name);
+  CategorySection( this.name);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,7 +24,6 @@ class CategorySection extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
-              icon,
               SizedBox(height: 10,),
               Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
             ],
