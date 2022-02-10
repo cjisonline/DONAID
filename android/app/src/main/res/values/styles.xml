@@ -15,4 +15,9 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+
+    <string name="app_name">DONAID</string>
+    <string name="facebook_app_id">927307591318939</string>
+    <string name="fb_login_protocol_scheme">fb927307591318939</string>
+    <string name="facebook_client_token">208cae1b282a017646e9da18dc3006e6</string>
 </resources>
