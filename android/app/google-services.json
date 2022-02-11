@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:240146097284:android:eafc4f1d40814e961cced1",
+        "mobilesdk_app_id": "1:240146097284:android:32992a8f904a01081cced1",
         "android_client_info": {
-          "package_name": "com.example.donaid"
+          "package_name": "com.app.donaid"
         }
       },
       "oauth_client": [
@@ -29,6 +29,57 @@
             {
               "client_id": "240146097284-cbe9iudgmuqmci2ni8jp5pshmvbfjdi6.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "240146097284-95kjd110p1humu9opvji0kts5p35paqr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.donaid"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240146097284:android:eafc4f1d40814e961cced1",
+        "android_client_info": {
+          "package_name": "com.example.donaid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240146097284-7ls0bf9u5doedq34tpqnilcpvttrfcn7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.donaid",
+            "certificate_hash": "ff0fd64abad776f509228134ac5472b65016fc7d"
+          }
+        },
+        {
+          "client_id": "240146097284-cbe9iudgmuqmci2ni8jp5pshmvbfjdi6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXEBNOHoGPQ9VDIaO8BnGZNi9uGy21Wig"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240146097284-cbe9iudgmuqmci2ni8jp5pshmvbfjdi6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "240146097284-95kjd110p1humu9opvji0kts5p35paqr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.donaid"
+              }
             }
           ]
         }
