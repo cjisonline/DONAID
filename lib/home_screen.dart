@@ -1,6 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
+import 'package:get_storage/get_storage.dart';
+import 'authentication.dart';
 import 'login_screen.dart';
 import 'Registration/registration_screen.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
+import 'main.dart';
+
 
 class HomeScreen extends StatefulWidget {
   static const id = 'home_screen';
@@ -64,6 +73,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+
+            Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 15.0),
+                child: SignInButton(Buttons.Facebook,
+                    onPressed: () async => Auth.fbLogin(context))),
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+              child: SignInButton(Buttons.Google,
+                  onPressed: () => Auth.googleLogin(context)),
+            )
           ],
         ),
       ),

@@ -1,6 +1,9 @@
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:donaid/Registration/registration_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get_storage/get_storage.dart';
+import 'authentication.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
 import 'Registration/donor_registration_screen.dart';
@@ -11,7 +14,8 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  await GetStorage.init();
+  await Auth.getCurrentUser();
   runApp(const Donaid());
 }
 
@@ -21,6 +25,7 @@ class Donaid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: EasyLoading.init(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
