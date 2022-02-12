@@ -1,3 +1,4 @@
+import 'package:donaid/Donor/donor_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -38,6 +39,13 @@ class _DonorDrawerState extends State<DonorDrawer> {
               leading: const Icon(Icons.settings),
               title: const Text("Settings"),
               onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.account_circle),
+              title: const Text("Profile"),
+              onTap: () {
+                Navigator.pushNamed(context, DonorProfile.id);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.article_outlined),
