@@ -33,6 +33,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   String passwordConfirm = "";
   String phoneNumber = "";
   String country="";
+  String gatewayLink="";
 
   Future<bool> isEmailAvailable() async {
     //This method checks to make sure the email is not already being used in Firebase
@@ -262,6 +263,30 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     textAlign: TextAlign.center,
                     decoration: const InputDecoration(
                         hintText: "Confirm Password",
+                        border: OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(32.0)),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      gatewayLink = value;
+                    },
+                    validator: (value){
+                      if(country != 'United States' && value == null){
+                        return "Countries not based in the United States must provide their own gateway.";
+                      }
+                      else{
+                        return null;
+                      }
+                    },
+                    obscureText: true,
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                        hintText: "Link to Payment Gateway",
                         border: OutlineInputBorder(
                           borderRadius:
                           BorderRadius.all(Radius.circular(32.0)),
