@@ -5,10 +5,14 @@ import 'package:donaid/Donor/DonorWidgets/organization_card.dart';
 import 'package:donaid/Donor/DonorWidgets/urgent_case_card.dart';
 import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Models/CharityCategory.dart';
+import 'package:donaid/Models/Donor.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
+import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'DonorWidgets/profile_list_row.dart';
 
 class DonorProfile extends StatefulWidget {
   static const id = 'donor_profile';
@@ -24,6 +28,7 @@ class _DonorProfileState extends State<DonorProfile> {
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
+  List<Donor> donors = [];
 
   @override
   void initState() {
@@ -33,6 +38,22 @@ class _DonorProfileState extends State<DonorProfile> {
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
+  }
+
+  _getDonorInformation() async {
+    var ret = await _firestore.collection('DonorUsers').where('email', isEqualTo: loggedInUser?.email).get();
+    for (var element in ret.docs) {
+      Donor donor = Donor(
+          email: element.data()['email'],
+          firstName: element.data()['firstName'],
+          lastName: element.data()['lastName'],
+          password: element.data()['password'],
+          phoneNumber: element.data()['phoneNumber'],
+      );
+      // print(donor.email);
+      donors.add(donor);
+    }
+    setState(() {});
   }
 
   @override
@@ -48,21 +69,21 @@ class _DonorProfileState extends State<DonorProfile> {
   }
 
   _body() {
-    return Container(
-        child: SingleChildScrollView(
+    // _getDonorInformation();
+    return  SingleChildScrollView(
             scrollDirection: Axis.vertical,
-            child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.blueGrey.shade50,
-                    border: Border.all(color: Colors.black)),
-                child: const Center(
-                  child: Text(
-                    'User Email',
-                    style: TextStyle(fontSize: 32.0),
-                  ),
-                ))));
-  }
+            child: Column(
+              children:  [
+                ProfileRow('YOUR EMAIL', currentUser.email),
+                ProfileRow('FIRST NAME', 'hello world'),
+                ProfileRow('LAST NAME', 'hello world'),
+                ProfileRow('YOUR PASSWORD', 'hello world'),
+                ProfileRow('YOUR PHONE', 'hello world')
 
+              ],
+            )
+        );
+  }
 
   _bottomNavigationBar() {
     return Container(
