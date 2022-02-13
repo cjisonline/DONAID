@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:country_picker/country_picker.dart';
 
 import '../home_screen.dart';
 import '../login_screen.dart';
@@ -31,6 +32,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   String password = "";
   String passwordConfirm = "";
   String phoneNumber = "";
+  String country="";
 
   Future<bool> isEmailAvailable() async {
     //This method checks to make sure the email is not already being used in Firebase
@@ -58,7 +60,8 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
             'email': email,
             'phoneNumber': phoneNumber,
             'password': password,
-            'approved':false
+            'approved':false,
+            'country': country
           });
 
           await _firestore.collection('Users').add({
@@ -265,6 +268,33 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                         )),
                   ),
                 ),
+                //TODO: Insert country selection
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                    elevation: 5.0,
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(32.0),
+                    child: MaterialButton(
+                      child: const Text(
+                        'Select Country',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        showCountryPicker(
+                            context: context,
+                            onSelect: (Country selectedCountry){
+                              print('Selected country: ${selectedCountry.name}');
+                              country = selectedCountry.name;
+                            }
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                //TODO: Implement document upload
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 25.0, horizontal: 5.0),
