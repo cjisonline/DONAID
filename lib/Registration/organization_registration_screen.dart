@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 
 import '../home_screen.dart';
 import '../login_screen.dart';
@@ -22,8 +27,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   final _formKey = GlobalKey<FormState>();
 
   static final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-  static final phoneNumberRegExp =
-  RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+  static final phoneNumberRegExp = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
 
   bool showLoadingSpinner = false;
 
@@ -34,6 +38,10 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   String phoneNumber = "";
   String country="";
   String gatewayLink="";
+
+  XFile? _image;
+  String _uploadedFileURL='';
+  final ImagePicker _imagePicker = ImagePicker();
 
   Future<bool> isEmailAvailable() async {
     //This method checks to make sure the email is not already being used in Firebase
@@ -62,7 +70,9 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
             'phoneNumber': phoneNumber,
             'password': password,
             'approved':false,
-            'country': country
+            'country': country,
+            'gatewayLink':gatewayLink,
+            'verificationDocumentURL': _uploadedFileURL
           });
 
           await _firestore.collection('Users').add({
@@ -113,6 +123,96 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
             ],
           );
         });
+  }
+
+  Future<void> _imageRequiredDialog() async {
+    setState(() {
+      showLoadingSpinner = false;
+    });
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Alert'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'Organizations are required to upload images of documents to verify their organization.'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _countryRequiredDialog() async {
+    setState(() {
+      showLoadingSpinner = false;
+    });
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Alert'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'Organizations are required to specify the country that their organization is based in.'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future chooseFile() async {
+    await _imagePicker.pickImage(source: ImageSource.gallery).then((image) {
+      setState(() {
+        _image = image;
+      });
+    });
+  }
+
+  Future uploadFile() async {
+
+
+    Reference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('verificationDocuments/${Path.basename(_image!.path)}}');
+    UploadTask uploadTask = storageReference.putFile(File(_image!.path));
+
+    await uploadTask.whenComplete(() => {
+      storageReference.getDownloadURL().then((fileURL) {
+        setState(() {
+          _uploadedFileURL = fileURL;
+        });
+      })
+    });
+
+    print('File Uploaded');
+
   }
 
   @override
@@ -309,7 +409,6 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                         showCountryPicker(
                             context: context,
                             onSelect: (Country selectedCountry){
-                              print('Selected country: ${selectedCountry.name}');
                               country = selectedCountry.name;
                             }
                         );
@@ -318,6 +417,22 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                   ),
                 ),
                 //TODO: Implement document upload
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    onPressed: () async{
+                      chooseFile();
+                    },
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.upload),
+                        Text('Upload document to verify organization.')
+                      ],
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 25.0, horizontal: 5.0),
@@ -333,12 +448,26 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                         ),
                       ),
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (_image == null) {
                           setState(() {
                             showLoadingSpinner = true;
                           });
+                          _imageRequiredDialog();
+                        }
+                        else if(country == ''){
+                          setState(() {
+                            showLoadingSpinner = true;
+                          });
+                          _countryRequiredDialog();
+                        }
+                        else {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              showLoadingSpinner = true;
+                            });
 
-                          createNewOrganizationUser();
+                            createNewOrganizationUser();
+                          }
                         }
                       },
                     ),
