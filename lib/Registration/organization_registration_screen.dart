@@ -276,14 +276,13 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                       gatewayLink = value;
                     },
                     validator: (value){
-                      if(country != 'United States' && value == null){
-                        return "Countries not based in the United States must provide their own gateway.";
+                      if(country != 'United States' && value == ''){
+                        return "Countries not based in the United States must provide their own\n gateway.";
                       }
                       else{
                         return null;
                       }
                     },
-                    obscureText: true,
                     textAlign: TextAlign.center,
                     decoration: const InputDecoration(
                         hintText: "Link to Payment Gateway",
@@ -293,7 +292,6 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                         )),
                   ),
                 ),
-                //TODO: Insert country selection
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Material(
