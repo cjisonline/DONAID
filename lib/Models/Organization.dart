@@ -3,13 +3,13 @@ class Organization {
   String uid;
   String organizationDescription;
   String country;
-  String gatewayLink;
+  String? gatewayLink;
 
   Organization({
     required this.organizationName,
     required this.uid,
     required this.organizationDescription,
     required this.country,
-    required this.gatewayLink
+    this.gatewayLink
   });
 }
