@@ -72,6 +72,7 @@ class _OrganizationRegistrationScreenState
           await _firestore.collection('OrganizationUsers').add({
             'uid': newUser.user.uid,
             'organizationName': organizationName,
+            'organizationDescription': organizationDescription,
             'email': email,
             'phoneNumber': phoneNumber,
             'password': password,
