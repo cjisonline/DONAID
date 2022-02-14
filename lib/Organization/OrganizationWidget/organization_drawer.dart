@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../home_screen.dart';
@@ -13,51 +12,49 @@ class OrganizationDrawer extends StatefulWidget {
 class _OrganizationDrawerState extends State<OrganizationDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Stack(
-                children: [
-                  Positioned(
-                    bottom: 8.0,
-                    left: 4.0,
-                    child: Text(
-                      "Organization",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  )
-                ],
-              ),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
+    return Drawer(
+      child: ListView(
+        children: [
+          DrawerHeader(
+            child: Stack(
+              children: const [
+                Positioned(
+                  bottom: 8.0,
+                  left: 4.0,
+                  child: Text(
+                    "Organization",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                )
+              ],
             ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text("Settings"),
-              onTap: () {},
+            decoration: const BoxDecoration(
+              color: Colors.blue,
             ),
-            ListTile(
-              leading: Icon(Icons.article_outlined),
-              title: Text("About"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.help),
-              title: Text("Help"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text("Logout"),
-              onTap: () {
-                Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id));
-              },
-            ),
-          ],
-        ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text("Settings"),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.article_outlined),
+            title: const Text("About"),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.help),
+            title: const Text("Help"),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text("Logout"),
+            onTap: () {
+              Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id));
+            },
+          ),
+        ],
       ),
     );
   }
