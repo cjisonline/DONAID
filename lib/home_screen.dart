@@ -38,9 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
                color: Colors.blue,
                borderRadius: BorderRadius.circular(30.0),
                child: MaterialButton(
+                 height: 60.0,
                  child: const Text(
                    'Login',
                    style: TextStyle(
+                     fontSize: 25.0,
                      color: Colors.white,
                    ),
                  ),
@@ -61,9 +63,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
+                  height: 60.0,
                   child: const Text(
                     'Register',
                     style: TextStyle(
+                      fontSize: 25.0,
                       color: Colors.white,
                     ),
                   ),
