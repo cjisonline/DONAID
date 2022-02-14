@@ -39,6 +39,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   String phoneNumber = "";
   String country="";
   String gatewayLink="";
+  String organizationDescription="";
 
   XFile? _image;
   String _uploadedFileURL="";
@@ -248,6 +249,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    maxLength: 50,
                     onChanged: (value) {
                       organizationName = value;
                     },
@@ -261,6 +263,24 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     textAlign: TextAlign.center,
                     decoration: const InputDecoration(
                         hintText: "Organization Name",
+                        border: OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(32.0)),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    minLines: 2,
+                    maxLines: 5,
+                    maxLength: 240,
+                    onChanged: (value) {
+                      organizationDescription = value;
+                    },
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                        hintText: "Organization Description",
                         border: OutlineInputBorder(
                           borderRadius:
                           BorderRadius.all(Radius.circular(32.0)),
@@ -390,25 +410,20 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Material(
-                    elevation: 5.0,
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(32.0),
-                    child: MaterialButton(
-                      child: const Text(
-                        'Select Country',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      onPressed: () {
-                        showCountryPicker(
-                            context: context,
-                            onSelect: (Country selectedCountry){
-                              country = selectedCountry.name;
-                            }
-                        );
-                      },
+                  child: TextButton(
+                    onPressed: (){
+                      showCountryPicker(
+                          context: context,
+                          onSelect: (Country selectedCountry){
+                        country = selectedCountry.name;
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.flag),
+                        Text('Select Country')
+                      ],
                     ),
                   ),
                 ),
