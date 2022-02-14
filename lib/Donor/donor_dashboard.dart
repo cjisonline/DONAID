@@ -48,7 +48,10 @@ class _DonorDashboardState extends State<DonorDashboard> {
     ret.docs.forEach((element) {
       Organization organization = Organization(
         organizationName: element.data()['organizationName'],
-        uid: element.data()['uid']
+        uid: element.data()['uid'],
+        organizationDescription: element.data()['organizationDescription'],
+        country: element.data()['country'],
+        gatewayLink: element.data()['gatewayLink'],
       );
       organizations.add(organization);
     });
