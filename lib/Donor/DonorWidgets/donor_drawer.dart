@@ -45,11 +45,6 @@ class _DonorDrawerState extends State<DonorDrawer> {
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(Icons.not_interested),
-              title: const Text("Report"),
-              onTap: () {},
-            ),
-            ListTile(
               leading: const Icon(Icons.help),
               title: const Text("Help"),
               onTap: () {},

@@ -45,11 +45,6 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               onTap: () {},
             ),
             ListTile(
-              leading: Icon(Icons.not_interested),
-              title: Text("Report"),
-              onTap: () {},
-            ),
-            ListTile(
               leading: Icon(Icons.help),
               title: Text("Help"),
               onTap: () {},
