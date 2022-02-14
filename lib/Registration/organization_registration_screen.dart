@@ -17,10 +17,12 @@ class OrganizationRegistrationScreen extends StatefulWidget {
   const OrganizationRegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  _OrganizationRegistrationScreenState createState() => _OrganizationRegistrationScreenState();
+  _OrganizationRegistrationScreenState createState() =>
+      _OrganizationRegistrationScreenState();
 }
 
-class _OrganizationRegistrationScreenState extends State<OrganizationRegistrationScreen> {
+class _OrganizationRegistrationScreenState
+    extends State<OrganizationRegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   final _firebaseStorage = FirebaseStorage.instance;
@@ -28,7 +30,8 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   final _formKey = GlobalKey<FormState>();
 
   static final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-  static final phoneNumberRegExp = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+  static final phoneNumberRegExp =
+      RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
 
   bool showLoadingSpinner = false;
 
@@ -37,12 +40,12 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   String password = "";
   String passwordConfirm = "";
   String phoneNumber = "";
-  String country="";
-  String gatewayLink="";
-  String organizationDescription="";
+  String country = "";
+  String gatewayLink = "";
+  String organizationDescription = "";
 
   XFile? _image;
-  String _uploadedFileURL="";
+  String _uploadedFileURL = "";
   final ImagePicker _imagePicker = ImagePicker();
 
   Future<bool> isEmailAvailable() async {
@@ -72,20 +75,20 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
             'email': email,
             'phoneNumber': phoneNumber,
             'password': password,
-            'approved':false,
+            'approved': false,
             'country': country,
-            'gatewayLink':gatewayLink,
+            'gatewayLink': gatewayLink,
             'verificationDocumentURL': _uploadedFileURL
           });
 
-          await _firestore.collection('Users').add({
-            'uid': newUser.user.uid,
-            'email': email,
-            'userType':2
-          });
+          await _firestore
+              .collection('Users')
+              .add({'uid': newUser.user.uid, 'email': email, 'userType': 2});
 
-          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
-          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
+          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen
+              .id)); //remove all screens on the stack and return to home screen
+          Navigator.pushNamed(
+              context, LoginScreen.id); //redirect to login screen
         }
       } catch (signUpError) {
         print(signUpError);
@@ -209,7 +212,6 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
     await storageReference.putFile(file);
     var fileURL = await storageReference.getDownloadURL();
     _uploadedFileURL = fileURL;
-
   }
 
   @override
@@ -219,7 +221,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
         title: const Text('Organization Registration'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
         ),
@@ -246,6 +248,14 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                 const SizedBox(
                   height: 15.0,
                 ),
+                const Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
+                  child: Text(
+                    '* - required fields',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
@@ -261,11 +271,25 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                       }
                     },
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Organization Name",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: const TextSpan(
+                                  text: 'Organization Name',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20.0),
+                                  children: [
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
                   ),
                 ),
@@ -279,11 +303,18 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                       organizationDescription = value;
                     },
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Organization Description",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                            text: const TextSpan(
+                              text: 'Organization Description',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 20.0),
+                            ),
+                          ),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
                   ),
                 ),
@@ -304,11 +335,25 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     },
                     keyboardType: TextInputType.emailAddress,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Email",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: const TextSpan(
+                                  text: 'Email',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20.0),
+                                  children: [
+                                    TextSpan(
+                                        text: ' *',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
                   ),
                 ),
@@ -329,11 +374,25 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     },
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Phone Number",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: const TextSpan(
+                                  text: 'Phone Number',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20.0),
+                                  children: [
+                                    TextSpan(
+                                        text: ' *',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
                   ),
                 ),
@@ -352,11 +411,25 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     },
                     obscureText: true,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Password",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: const TextSpan(
+                                  text: 'Password',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20.0),
+                                  children: [
+                                    TextSpan(
+                                        text: ' *',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
                   ),
                 ),
@@ -377,11 +450,25 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     },
                     obscureText: true,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Confirm Password",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: const TextSpan(
+                                  text: 'Confirm Password',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20.0),
+                                  children: [
+                                    TextSpan(
+                                        text: ' *',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
                   ),
                 ),
@@ -391,55 +478,60 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     onChanged: (value) {
                       gatewayLink = value;
                     },
-                    validator: (value){
-                      if(country != 'United States' && value == ''){
+                    validator: (value) {
+                      if (country != 'United States' && value == '') {
                         return "Countries not based in the United States must provide their own\n gateway.";
-                      }
-                      else{
+                      } else {
                         return null;
                       }
                     },
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Link to Payment Gateway",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration:  InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: const TextSpan(
+                                  text: 'Link to Payment Gateway',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20.0),
+                                  )),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
-                    onPressed: (){
+                    onPressed: () {
                       showCountryPicker(
                           context: context,
-                          onSelect: (Country selectedCountry){
-                        country = selectedCountry.name;
-                      });
+                          onSelect: (Country selectedCountry) {
+                            country = selectedCountry.name;
+                          });
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Icon(Icons.flag),
-                        Text('Select Country')
+                        Text('Select Country'),
+                        Text(' *', style: TextStyle(color: Colors.red),)
                       ],
                     ),
                   ),
                 ),
-                //TODO: Implement document upload
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
-                    onPressed: () async{
+                    onPressed: () async {
                       chooseFile();
                     },
-
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Icon(Icons.upload),
-                        Text('Upload document to verify organization.')
+                        Text('Upload document to verify organization.'),
+                        Text(' *', style: TextStyle(color: Colors.red),)
                       ],
                     ),
                   ),
@@ -464,14 +556,12 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                             showLoadingSpinner = true;
                           });
                           _imageRequiredDialog();
-                        }
-                        else if(country == ''){
+                        } else if (country == '') {
                           setState(() {
                             showLoadingSpinner = true;
                           });
                           _countryRequiredDialog();
-                        }
-                        else {
+                        } else {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
                               showLoadingSpinner = true;
