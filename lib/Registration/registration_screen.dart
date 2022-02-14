@@ -45,9 +45,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               color: Colors.blue,
               borderRadius: BorderRadius.circular(30.0),
               child: MaterialButton(
+                height: 60.0,
                 child: const Text(
                   'Donor',
                   style: TextStyle(
+                    fontSize: 25.0,
                     color: Colors.white,
                   ),
                 ),
@@ -64,9 +66,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               color: Colors.blue,
               borderRadius: BorderRadius.circular(30.0),
               child: MaterialButton(
+                height: 60.0,
                 child: const Text(
                   'Organization',
                   style: TextStyle(
+                    fontSize: 25.0,
                     color: Colors.white,
                   ),
                 ),
