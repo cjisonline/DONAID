@@ -23,6 +23,7 @@ class OrganizationRegistrationScreen extends StatefulWidget {
 class _OrganizationRegistrationScreenState extends State<OrganizationRegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  final _firebaseStorage = FirebaseStorage.instance;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -40,7 +41,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   String gatewayLink="";
 
   XFile? _image;
-  String _uploadedFileURL='';
+  String _uploadedFileURL="";
   final ImagePicker _imagePicker = ImagePicker();
 
   Future<bool> isEmailAvailable() async {
@@ -55,7 +56,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   }
 
   void createNewOrganizationUser() async {
-    //This method creates the new user in Firebase
+    //This method creates the new user in Firebase and uploads verification docs
     if (await isEmailAvailable()) {
       //If the email is available
       try {
@@ -63,6 +64,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
             email: email, password: password);
 
         if (newUser != null) {
+          await uploadFile(newUser);
           await _firestore.collection('OrganizationUsers').add({
             'uid': newUser.user.uid,
             'organizationName': organizationName,
@@ -195,23 +197,17 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
     });
   }
 
-  Future uploadFile() async {
+  Future uploadFile(dynamic newUser) async {
+    File file = File(_image!.path);
 
-
-    Reference storageReference = FirebaseStorage.instance
+    final storageReference = _firebaseStorage
         .ref()
-        .child('verificationDocuments/${Path.basename(_image!.path)}}');
-    UploadTask uploadTask = storageReference.putFile(File(_image!.path));
+        .child('verificationDocuments/')
+        .child('${newUser.user.uid}-${Path.basename(file.path)}');
 
-    await uploadTask.whenComplete(() => {
-      storageReference.getDownloadURL().then((fileURL) {
-        setState(() {
-          _uploadedFileURL = fileURL;
-        });
-      })
-    });
-
-    print('File Uploaded');
+    await storageReference.putFile(file);
+    var fileURL = await storageReference.getDownloadURL();
+    _uploadedFileURL = fileURL;
 
   }
 
