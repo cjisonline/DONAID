@@ -91,7 +91,8 @@ class BeneficiaryCard extends StatelessWidget {
                 decoration: const BoxDecoration(
                   color: Colors.pink,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                ))
+                )),
+
           ]),
         ));
   }

@@ -7,7 +7,7 @@ import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
-import 'package:donaid/Organization/OrganizationWidget/beneficiary_card.dart';
+import 'package:donaid/Donor/DonorWidgets/beneficiary_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
