@@ -13,8 +13,7 @@ class CategoryScreenTile extends StatelessWidget {
     String downloadURL = await _firebaseStorage
             .ref()
             .child('icons/')
-            .child('${imageName}.png').getDownloadURL();
-    print('DOWNLOAD URL: $downloadURL');
+            .child('$imageName.png').getDownloadURL();
     return downloadURL;
   }
 
@@ -33,7 +32,7 @@ class CategoryScreenTile extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.contain,
                 child: Row(children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   FutureBuilder(
