@@ -6,12 +6,13 @@ class Donor {
   String phoneNumber;
 
 
-  Donor(
-      {
-        required this.email,
-        required this.firstName,
-        required this.lastName,
-        required this.password,
-        required this.phoneNumber,
-      });
+  Donor(this.email, this.firstName, this.lastName, this.password, this.phoneNumber);
+  Donor.c1()
+      :email="",
+      firstName="",
+  lastName="",
+  password="",
+  phoneNumber=""
+    ;
+
 }

@@ -28,12 +28,13 @@ class _DonorProfileState extends State<DonorProfile> {
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
-  List<Donor> donors = [];
+  Donor donor = Donor.c1();
 
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
+    _getDonorInformation();
   }
 
   void _getCurrentUser() {
@@ -41,18 +42,15 @@ class _DonorProfileState extends State<DonorProfile> {
   }
 
   _getDonorInformation() async {
-    var ret = await _firestore.collection('DonorUsers').where('email', isEqualTo: loggedInUser?.email).get();
-    for (var element in ret.docs) {
-      Donor donor = Donor(
-          email: element.data()['email'],
-          firstName: element.data()['firstName'],
-          lastName: element.data()['lastName'],
-          password: element.data()['password'],
-          phoneNumber: element.data()['phoneNumber'],
+    var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
+    final doc = ret.docs[0];
+    donor = Donor(
+          doc['email'],
+        doc['firstName'],
+        doc['lastName'],
+           doc['password'],
+           doc['phoneNumber'],
       );
-      // print(donor.email);
-      donors.add(donor);
-    }
     setState(() {});
   }
 
@@ -74,11 +72,11 @@ class _DonorProfileState extends State<DonorProfile> {
             scrollDirection: Axis.vertical,
             child: Column(
               children:  [
-                ProfileRow('YOUR EMAIL', currentUser.email),
-                ProfileRow('FIRST NAME', 'hello world'),
-                ProfileRow('LAST NAME', 'hello world'),
-                ProfileRow('YOUR PASSWORD', 'hello world'),
-                ProfileRow('YOUR PHONE', 'hello world')
+                ProfileRow('YOUR EMAIL', donor.email),
+                ProfileRow('FIRST NAME', donor.firstName),
+                ProfileRow('LAST NAME', donor.lastName),
+                ProfileRow('YOUR PASSWORD', donor.password),
+                ProfileRow('YOUR PHONE', donor.phoneNumber)
 
               ],
             )
