@@ -146,6 +146,14 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                   const SizedBox(
                     height: 15.0,
                   ),
+                  const Padding(
+                    padding:
+                    EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
+                    child: Text(
+                      '* - required fields',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
@@ -160,9 +168,24 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                         }
                       },
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                          hintText: "First Name",
-                          border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          label: Center(
+                            child: RichText(
+                                text: const TextSpan(
+                                    text: 'First Name',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20.0),
+                                    children: [
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
+                          ),
+                          border: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(32.0)),
                           )),
@@ -182,9 +205,24 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                         }
                       },
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                          hintText: "Last Name",
-                          border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          label: Center(
+                            child: RichText(
+                                text: const TextSpan(
+                                    text: 'Last Name',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20.0),
+                                    children: [
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
+                          ),
+                          border: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(32.0)),
                           )),
@@ -207,9 +245,24 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       },
                       keyboardType: TextInputType.emailAddress,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                          hintText: "Email",
-                          border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          label: Center(
+                            child: RichText(
+                                text: const TextSpan(
+                                    text: 'Email',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20.0),
+                                    children: [
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
+                          ),
+                          border: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(32.0)),
                           )),
@@ -232,9 +285,24 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       },
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                          hintText: "Phone Number",
-                          border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          label: Center(
+                            child: RichText(
+                                text: const TextSpan(
+                                    text: 'Phone Number',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20.0),
+                                    children: [
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
+                          ),
+                          border: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(32.0)),
                           )),
@@ -255,9 +323,24 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       },
                       obscureText: true,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                          hintText: "Password",
-                          border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          label: Center(
+                            child: RichText(
+                                text: const TextSpan(
+                                    text: 'Password',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20.0),
+                                    children: [
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
+                          ),
+                          border: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(32.0)),
                           )),
@@ -280,12 +363,48 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       },
                       obscureText: true,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                          hintText: "Confirm Password",
-                          border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          label: Center(
+                            child: RichText(
+                                text: const TextSpan(
+                                    text: 'Confirm Password',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20.0),
+                                    children: [
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
+                          ),
+                          border: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(32.0)),
                           )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Center(
+                        child: RichText(
+                            text: const TextSpan(
+                                text: 'Note: ',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 15.0),
+                                children: [
+                                  TextSpan(
+                                      text: 'All account information is kept private unless you choose to share it at a later time.',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15.0
+                                      )),
+                                ])),
+                      ),
                     ),
                   ),
                   Padding(
