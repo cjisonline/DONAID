@@ -68,7 +68,7 @@ class _CategoryScreenTileState extends State<CategoryScreenTile> {
                         }
                         if (snapshot.connectionState == ConnectionState.waiting ||
                             !snapshot.hasData) {
-                          const CircularProgressIndicator(color: Colors.white,);
+                          return const CircularProgressIndicator(color: Colors.white,);
                         }
                         return const CircularProgressIndicator(color: Colors.white);
                       }),
