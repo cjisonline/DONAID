@@ -8,8 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'OrganizationWidget/beneficiary_card.dart';
+import 'OrganizationWidget/button_nav_bar.dart';
 import 'OrganizationWidget/organization_drawer.dart';
-import 'add_screen.dart';
+import 'add_selection_screen.dart';
 
 class OrganizationDashboard extends StatefulWidget {
   static const id = 'organization_dashboard';
@@ -126,13 +127,13 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 size: 30,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, AddPage.id);
+                Navigator.pushNamed(context, OrgAddSelection.id);
               }),
         ],
       ),
       drawer: OrganizationDrawer(),
       body: _body(),
-      bottomNavigationBar: _bottomNavigationBar(),
+      bottomNavigationBar: ButtomNavigation(),
     );
   }
 
@@ -244,65 +245,6 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                       beneficiaries[index].amountRaised);
                 },
               )),
-        ],
-      ),
-    );
-  }
-
-  _bottomNavigationBar() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.home, color: Colors.white, size: 35),
-            ),
-            Text('Home',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 35,
-              ),
-            ),
-            Text('Search',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.notifications,
-                  color: Colors.white, size: 35),
-            ),
-            Text('Notifications',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.message, color: Colors.white, size: 35),
-            ),
-            Text('Messages',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
         ],
       ),
     );

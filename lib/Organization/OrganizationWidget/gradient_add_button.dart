@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../campaign_form_screen.dart';
+import '../add_campaigns_screen.dart';
 
-class MyStatelessWidget extends StatelessWidget {
-  const MyStatelessWidget({Key? key}) : super(key: key);
+class GradientButton extends StatelessWidget {
+  const GradientButton({Key? key}) : super(key: key);
   ///Author: Raisa Zaman
   @override
   Widget build(BuildContext context) {
@@ -37,8 +37,8 @@ class MyStatelessWidget extends StatelessWidget {
                     textStyle: const TextStyle(fontSize: 20),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, AddCampaign.id);
-                    },
+                    Navigator.pushNamed(context, AddCampaignForm.id);
+                  },
                   child: const Text('Create Campaign'),
                 ),
               ],
@@ -70,7 +70,7 @@ class MyStatelessWidget extends StatelessWidget {
                     textStyle: const TextStyle(fontSize: 20),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, AddCampaign.id);
+                   // Navigator.pushNamed(context, AddCampaign.id);
                   },
                   child: const Text('Create Urgent Case'),
                 ),
@@ -102,7 +102,7 @@ class MyStatelessWidget extends StatelessWidget {
                     textStyle: const TextStyle(fontSize: 20),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, AddCampaign.id);
+                    // Navigator.pushNamed(context, AddCampaign.id);
                   },
                   child: const Text('Create Beneficiary'),
                 ),

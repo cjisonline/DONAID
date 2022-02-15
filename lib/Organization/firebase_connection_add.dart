@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class FormCRUD {
+class FormCUD {
   late FirebaseFirestore firestore;
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
+
   initiliase() {
     firestore = FirebaseFirestore.instance;
     _getCurrentUser();
@@ -51,11 +52,11 @@ class FormCRUD {
           .doc(id)
           .update(
           {'category': category,
-        'dataCreated': FieldValue.serverTimestamp(),
-        'description': description,
-        'endDate': endDate,
-        'goalAmount': goalAmount,
-        'title' : title});
+            'dataCreated': FieldValue.serverTimestamp(),
+            'description': description,
+            'endDate': endDate,
+            'goalAmount': goalAmount,
+            'title' : title});
     } catch (e) {
       print(e);
     }

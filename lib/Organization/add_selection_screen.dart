@@ -1,17 +1,18 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'OrganizationWidget/gradient_button.dart';
+import 'OrganizationWidget/button_nav_bar.dart';
+import 'OrganizationWidget/gradient_add_button.dart';
 
-class AddPage extends StatefulWidget {
-  static const id = 'add_page';
-  const AddPage({Key? key}) : super(key: key);
+
+class OrgAddSelection extends StatefulWidget {
+  static const id = 'add_selection_screen';
+  const OrgAddSelection({Key? key}) : super(key: key);
 
   @override
   _addPage createState() => _addPage();
 }
-class _addPage extends State<AddPage> {
+class _addPage extends State<OrgAddSelection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,12 +36,13 @@ class _addPage extends State<AddPage> {
                   children:<Widget>[
                     Container(
                       padding: EdgeInsets.fromLTRB(20, 50,0,0),
-                      child: const MyStatelessWidget(),
+                      child: const GradientButton(),
                     )
                   ]
               )
             ]
-        )
+        ),
+        bottomNavigationBar: ButtomNavigation(),
     );
   }
 }
