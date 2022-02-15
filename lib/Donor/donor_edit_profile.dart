@@ -4,7 +4,6 @@ import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
 import 'package:donaid/Donor/DonorWidgets/organization_card.dart';
 import 'package:donaid/Donor/DonorWidgets/urgent_case_card.dart';
 import 'package:donaid/Donor/donor_dashboard.dart';
-import 'package:donaid/Donor/donor_edit_profile.dart';
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:donaid/Models/Donor.dart';
 import 'package:donaid/Models/Organization.dart';
@@ -14,17 +13,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'DonorWidgets/profile_list_row.dart';
+import 'edit_profile_form.dart';
 
-class DonorProfile extends StatefulWidget {
-  static const id = 'donor_profile';
+class DonorEditProfile extends StatefulWidget {
+  static const id = 'donor_edit_profile';
 
-  const DonorProfile({Key? key}) : super(key: key);
+  const DonorEditProfile({Key? key}) : super(key: key);
 
   @override
-  _DonorProfileState createState() => _DonorProfileState();
+  _DonorEditProfileState createState() => _DonorEditProfileState();
 }
 
-class _DonorProfileState extends State<DonorProfile> {
+class _DonorEditProfileState extends State<DonorEditProfile> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
@@ -46,12 +46,12 @@ class _DonorProfileState extends State<DonorProfile> {
     var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
     donor = Donor(
-          doc['email'],
-        doc['firstName'],
-        doc['lastName'],
-           doc['password'],
-           doc['phoneNumber'],
-      );
+      doc['email'],
+      doc['firstName'],
+      doc['lastName'],
+      doc['password'],
+      doc['phoneNumber'],
+    );
     setState(() {});
   }
 
@@ -59,7 +59,7 @@ class _DonorProfileState extends State<DonorProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('Edit Profile'),
       ),
       drawer: const DonorDrawer(),
       body: _body(),
@@ -69,30 +69,11 @@ class _DonorProfileState extends State<DonorProfile> {
 
   _body() {
     // _getDonorInformation();
-    return  SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children:  [
-                ProfileRow('YOUR EMAIL', donor.email),
-                ProfileRow('FIRST NAME', donor.firstName),
-                ProfileRow('LAST NAME', donor.lastName),
-                ProfileRow('YOUR PASSWORD', donor.password),
-                ProfileRow('YOUR PHONE', donor.phoneNumber),
-           MaterialButton(
-                  color: Colors.blue,
-                  child: const Text(
-                    'Edit Profile',
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                  onPressed: () async {
-                    print("button pressed");
-                    Navigator.pushNamed(context, DonorEditProfile.id);
-                  },)
-              ],
-            )
-        );
+    return
+    const SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: EditProfileForm()
+    );
   }
 
   _bottomNavigationBar() {
@@ -156,3 +137,6 @@ class _DonorProfileState extends State<DonorProfile> {
     );
   }
 }
+
+
+
