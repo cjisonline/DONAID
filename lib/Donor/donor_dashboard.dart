@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorWidgets/category_card.dart';
+import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
 import 'package:donaid/Donor/DonorWidgets/organization_card.dart';
 import 'package:donaid/Donor/DonorWidgets/urgent_case_card.dart';
@@ -22,7 +23,6 @@ class DonorDashboard extends StatefulWidget {
 }
 
 class _DonorDashboardState extends State<DonorDashboard> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
@@ -122,7 +122,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
       ),
       drawer: const DonorDrawer(),
       body: _body(),
-      bottomNavigationBar: _bottomNavigationBar(),
+      bottomNavigationBar: const DonorBottomNavigationBar(),
     );
   }
 
@@ -269,65 +269,6 @@ class _DonorDashboardState extends State<DonorDashboard> {
         ],
       ),
     ));
-  }
-
-  _bottomNavigationBar() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.home, color: Colors.white, size: 35),
-            ),
-            const Text('Home',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 35,
-              ),
-            ),
-            const Text('Search',
-                textAlign: TextAlign.center,
-                style:  TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.notifications,
-                  color: Colors.white, size: 35),
-            ),
-            const Text('Notifications',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.message, color: Colors.white, size: 35),
-            ),
-            const Text('Messages',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-        ],
-      ),
-    );
   }
 }
 
