@@ -6,7 +6,7 @@ class CharityCategoryCard extends StatelessWidget {
   const CharityCategoryCard( this.name, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return   Padding(
+    return Padding(
         padding: const EdgeInsets.all(10.0),
         child: Container(
             decoration: const BoxDecoration(
