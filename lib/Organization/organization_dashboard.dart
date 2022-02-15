@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import 'OrganizationWidget/beneficiary_card.dart';
 import 'OrganizationWidget/organization_drawer.dart';
+import 'add_screen.dart';
 
 class OrganizationDashboard extends StatefulWidget {
   static const id = 'organization_dashboard';
@@ -125,6 +126,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 size: 30,
               ),
               onPressed: () {
+                Navigator.pushNamed(context, AddPage.id);
               }),
         ],
       ),
