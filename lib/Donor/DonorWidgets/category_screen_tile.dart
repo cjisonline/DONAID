@@ -1,7 +1,7 @@
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'category_campaigns_screen.dart';
 
 class CategoryScreenTile extends StatelessWidget {
   final CharityCategory charityCategory;
@@ -21,7 +21,13 @@ class CategoryScreenTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
+        print(charityCategory.name);
         //TODO: Direct to that category page
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context){
+            return(CategoryCampaignsScreen(categoryName: charityCategory.name));
+        }
+        ));
       },
       child: Padding(
           padding: const EdgeInsets.all(10.0),
