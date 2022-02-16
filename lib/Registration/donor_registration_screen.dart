@@ -391,7 +391,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                                 children: [
                               TextSpan(
                                   text:
-                                      'All account information is kept private unless you choose to share it at a later time.',
+                                      'All account information is kept private, and your contact information will not be shared.',
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 15.0)),
                             ])),
