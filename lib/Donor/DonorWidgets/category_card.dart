@@ -1,19 +1,17 @@
-import 'package:donaid/Donor/DonorWidgets/category_campaigns_screen.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:donaid/Donor/category_campaigns_screen.dart';
 import 'package:flutter/material.dart';
 
 class CharityCategoryCard extends StatelessWidget {
   final String name;
   final String iconDownloadURL;
-  final _firebaseStorage = FirebaseStorage.instance;
 
-  CharityCategoryCard(this.name, this.iconDownloadURL, {Key? key})
+  const CharityCategoryCard(this.name, this.iconDownloadURL, {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5.0),
         child: GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
