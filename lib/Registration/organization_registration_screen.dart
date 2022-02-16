@@ -275,11 +275,11 @@ class _OrganizationRegistrationScreenState
                     decoration: InputDecoration(
                         label: Center(
                           child: RichText(
-                              text: const TextSpan(
+                              text: TextSpan(
                                   text: 'Organization Name',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 20.0),
-                                  children: [
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const [
                                 TextSpan(
                                     text: ' *',
                                     style: TextStyle(
@@ -307,10 +307,10 @@ class _OrganizationRegistrationScreenState
                     decoration: InputDecoration(
                         label: Center(
                           child: RichText(
-                            text: const TextSpan(
+                            text: TextSpan(
                               text: 'Organization Description',
                               style: TextStyle(
-                                  color: Colors.black, fontSize: 20.0),
+                                  color: Colors.grey[600], fontSize: 20.0),
                             ),
                           ),
                         ),
@@ -339,11 +339,11 @@ class _OrganizationRegistrationScreenState
                     decoration: InputDecoration(
                         label: Center(
                           child: RichText(
-                              text: const TextSpan(
+                              text: TextSpan(
                                   text: 'Email',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 20.0),
-                                  children: [
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const [
                                     TextSpan(
                                         text: ' *',
                                         style: TextStyle(
@@ -365,9 +365,10 @@ class _OrganizationRegistrationScreenState
                       phoneNumber = value;
                     },
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Please enter your phone number.";
-                      } else if (!phoneNumberRegExp.hasMatch(value)) {
+                      if(value!.isEmpty){
+                        return "Please enter a phone number.";
+                      }
+                      if (value!.isNotEmpty && !phoneNumberRegExp.hasMatch(value)) {
                         return "Please enter a valid phone number.";
                       } else {
                         return null;
@@ -378,11 +379,11 @@ class _OrganizationRegistrationScreenState
                     decoration: InputDecoration(
                         label: Center(
                           child: RichText(
-                              text: const TextSpan(
+                              text: TextSpan(
                                   text: 'Phone Number',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 20.0),
-                                  children: [
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const [
                                     TextSpan(
                                         text: ' *',
                                         style: TextStyle(
@@ -390,7 +391,8 @@ class _OrganizationRegistrationScreenState
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.bold,
                                         )),
-                                  ])),
+                                  ]
+                                  )),
                         ),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
@@ -415,11 +417,11 @@ class _OrganizationRegistrationScreenState
                     decoration: InputDecoration(
                         label: Center(
                           child: RichText(
-                              text: const TextSpan(
+                              text: TextSpan(
                                   text: 'Password',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 20.0),
-                                  children: [
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const[
                                     TextSpan(
                                         text: ' *',
                                         style: TextStyle(
@@ -454,11 +456,11 @@ class _OrganizationRegistrationScreenState
                     decoration: InputDecoration(
                         label: Center(
                           child: RichText(
-                              text: const TextSpan(
+                              text: TextSpan(
                                   text: 'Confirm Password',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 20.0),
-                                  children: [
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const [
                                     TextSpan(
                                         text: ' *',
                                         style: TextStyle(
@@ -490,10 +492,10 @@ class _OrganizationRegistrationScreenState
                     decoration:  InputDecoration(
                         label: Center(
                           child: RichText(
-                              text: const TextSpan(
+                              text: TextSpan(
                                   text: 'Link to Payment Gateway',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 20.0),
+                                      color: Colors.grey[600], fontSize: 20.0),
                                   )),
                         ),
                         border: const OutlineInputBorder(
