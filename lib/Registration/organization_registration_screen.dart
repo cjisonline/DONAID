@@ -43,6 +43,9 @@ class _OrganizationRegistrationScreenState
   String country = "";
   String gatewayLink = "";
   String organizationDescription = "";
+  String street ="";
+  String city="";
+  String postalCode="";
 
   XFile? _image;
   String _uploadedFileURL = "";
@@ -75,6 +78,7 @@ class _OrganizationRegistrationScreenState
             'organizationDescription': organizationDescription,
             'email': email,
             'phoneNumber': phoneNumber,
+            'address':{'street':street,'city':city,'postalCode':postalCode},
             'password': password,
             'approved': false,
             'country': country,
@@ -368,7 +372,7 @@ class _OrganizationRegistrationScreenState
                       if(value!.isEmpty){
                         return "Please enter a phone number.";
                       }
-                      if (value!.isNotEmpty && !phoneNumberRegExp.hasMatch(value)) {
+                      if (value.isNotEmpty && !phoneNumberRegExp.hasMatch(value)) {
                         return "Please enter a valid phone number.";
                       } else {
                         return null;
@@ -397,6 +401,122 @@ class _OrganizationRegistrationScreenState
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 24.0,8.0 , 8.0),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      street = value;
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please provide street address.";
+                      } else {
+                        return null;
+                      }
+                    },
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: TextSpan(
+                                  text: 'Street Address',
+                                  style: TextStyle(
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const[
+                                    TextSpan(
+                                        text: ' *',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 8.0,8.0 , 24.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 195,
+                        child: TextFormField(
+                          onChanged: (value) {
+                            city=value;
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please provide city.";
+                            } else {
+                              return null;
+                            }
+                          },
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              label: Center(
+                                child: RichText(
+                                    text: TextSpan(
+                                        text: 'City',
+                                        style: TextStyle(
+                                            color: Colors.grey[600], fontSize: 20.0),
+                                        children: const[
+                                          TextSpan(
+                                              text: ' *',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                        ])),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                              )),
+                        ),
+                      ),
+                      Container(
+                        width: 195,
+                        child: TextFormField(
+                          onChanged: (value) {
+                            postalCode=value;
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please provide postal code.";
+                            } else {
+                              return null;
+                            }
+                          },
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              label: Center(
+                                child: RichText(
+                                    text: TextSpan(
+                                        text: 'Postal Code',
+                                        style: TextStyle(
+                                            color: Colors.grey[600], fontSize: 20.0),
+                                        children: const[
+                                          TextSpan(
+                                              text: ' *',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                        ])),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                              )),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
