@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/campaign_donate_screen.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'donor_bottom_navigation_bar.dart';
-import 'donor_drawer.dart';
+import 'DonorWidgets/donor_bottom_navigation_bar.dart';
+import 'DonorWidgets/donor_drawer.dart';
 
 class CategoryCampaignsScreen extends StatefulWidget {
-  static const id = 'category_campaigns_screen';
   final categoryName;
   const CategoryCampaignsScreen({Key? key, this.categoryName})
       : super(key: key);
@@ -56,14 +56,14 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
         itemCount: campaigns.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
-          //TODO: Create list of charity campaigns here
           return Card(
-
             child: Column(
               children: [
                 ListTile(
                   onTap: () {
-                    //TODO: implement on tap
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return(CampaignDonateScreen(campaigns[index]));
+                    }));
                   },
                   title: Text(campaigns[index].title),
                   subtitle: Text(campaigns[index].description),
@@ -85,7 +85,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                   value: (campaigns[index].amountRaised/campaigns[index].goalAmount),
                   minHeight: 10,
                 ),
-                Divider()
+                const Divider()
               ],
             ),
           );
@@ -96,7 +96,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Campaigns'),
+        title: Text('Campaigns - ${widget.categoryName}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
