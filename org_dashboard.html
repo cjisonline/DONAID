@@ -55,7 +55,7 @@ function createTable(email, phoneNumber, password, organizationName) {
     td2.innerHTML = phoneNumber;
     td3.innerHTML = password;
     td4.innerHTML = organizationName;
-    td5.innerHTML = '<button class="submitButton" type="submit">Edit</button>';
+    td5.innerHTML = '<button class="submitButton" type="submit" onclick="orgDocs()">Documents</button>';
 
     trow.appendChild(td1);
     trow.appendChild(td2);
@@ -88,6 +88,10 @@ async function getOrgData(){
     }
 }
 getOrgData();
+
+function orgDocs(){
+    
+}
 </script>
 
 <title>DONAID Admin Console</title>
@@ -116,7 +120,7 @@ getOrgData();
                 <th>Phone Number</th>
                 <th>Password</th>
                 <th>Organization Name</th>
-                <th>Edit</th>
+                <th>Documents</th>
             </thead>
             <tbody id="orgsTable">
             </tbody>

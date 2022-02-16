@@ -5,6 +5,7 @@
 
 <!-- CSS Loads -->
 <link rel="stylesheet" href="login.css">
+<link rel="stylesheet" href="modal.css">
 
 <!-- JS Loads -->
 <script src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
@@ -12,7 +13,6 @@
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
@@ -43,25 +43,22 @@ function logoutAdmin(){
 
 var tbody = document.getElementById('approvalsTable');
 
-function createTable(email, phoneNumber, password, organizationName) {
+function createTable(email, phoneNumber, organizationName) {
     let trow = document.createElement("tr");
     let td1 = document.createElement('td');
     let td2 = document.createElement('td');
     let td3 = document.createElement('td');
     let td4 = document.createElement('td');
-    let td5 = document.createElement('td');
 
     td1.innerHTML = email;
     td2.innerHTML = phoneNumber;
-    td3.innerHTML = password;
-    td4.innerHTML = organizationName;
-    td5.innerHTML = '<button class="submitButton" type="submit">Yes</button>';
+    td3.innerHTML = organizationName;
+    td4.innerHTML = '<button id="orgButton" class="submitButton">Approve</button>';
 
     trow.appendChild(td1);
     trow.appendChild(td2);
     trow.appendChild(td3);
     trow.appendChild(td4);
-    trow.appendChild(td5);
 
     tbody.appendChild(trow);
 }
@@ -70,7 +67,7 @@ function populateTable(OrganizationUsers) {
     tbody.innerHTML="";
     OrganizationUsers.forEach(element => {
         if(element.approved == false) {
-        createTable(element.email, element.phoneNumber, element.password, element.organizationName);
+        createTable(element.email, element.phoneNumber, element.organizationName);
         }
     })
 }
@@ -88,6 +85,33 @@ async function getApprovalData(){
     }
 }
 getApprovalData();
+
+function approveOrg(){
+
+}
+
+function denyOrg(){
+
+}
+
+document.addEventListener("click", event => {
+    if(event.target.id == 'orgButton'){
+        var approveModal = document.getElementById("approveModalDiv");
+        approveModalDiv.style.display = "block";
+
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            approveModalDiv.style.display = "none";
+        }
+        window.onclick = function(event) {
+        if (event.target == approveModal) {
+            approveModalDiv.style.display = "none";
+            }
+        } 
+    }
+
+});
+
 </script>
 
 <title>DONAID Admin Console</title>
@@ -114,18 +138,24 @@ getApprovalData();
             <thead>
                 <th>Email</th>
                 <th>Phone Number</th>
-                <th>Password</th>
                 <th>Organization Name</th>
-                <th>Approve?</th>
+                <th>Approve</th>
             </thead>
             <tbody id="approvalsTable">
             </tbody>
         </table>
     </div>
 
-        <!-- <form class="inputWrapper">
-            <button onclick="logoutAdmin()" class="submitButton" id="logout">Logout</button>
-        </form> -->
+    <div id="approveModalDiv" class="modal">
+
+        <div class="approve-modal-content">
+            <span class="close">&times;</span>
+            <h1>Approve this Organization?</h1>
+            <textarea>Reason</textarea>
+            <button class="submitButton" id="approveOrgBtn" onclick()="approveOrg()">Approve</button><button class="submitButton" id="denyOrgBtn" onclick()="denyOrg">Deny</button>
+        </div>
+
+    </div> 
 
         
 
@@ -138,5 +168,6 @@ getApprovalData();
                 });
             });
         </script>
+
 </body>
 </html>
