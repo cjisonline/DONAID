@@ -28,7 +28,13 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
   }
 
   _getCampaigns() async {
-    var ret = await _firestore.collection('UrgentCases').get();
+    var ret = await _firestore.collection('Campaigns')
+        .where('category', isEqualTo: widget.categoryName)
+        .where('active', isEqualTo: true)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .orderBy('endDate',descending: false)
+        .get();
+
     for (var element in ret.docs) {
       Campaign campaign = Campaign(
           title: element.data()['title'],

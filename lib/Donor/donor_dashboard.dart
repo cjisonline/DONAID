@@ -68,7 +68,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
     for (var element in ret.docs) {
       CharityCategory charityCategory = CharityCategory(
         name: element.data()['name'],
-        id: element.data()['id']
+        id: element.data()['id'],
+        iconDownloadURL:element.data()['iconDownloadURL']
       );
       charityCategories.add(charityCategory);
     }
@@ -168,7 +169,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
                   return CharityCategoryCard(
-                      charityCategories[index].name);
+                      charityCategories[index].name, charityCategories[index].iconDownloadURL);
                 },
               )),
 

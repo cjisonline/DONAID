@@ -30,7 +30,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     for (var element in ret.docs) {
       CharityCategory charityCategory = CharityCategory(
           name: element.data()['name'],
-          id: element.data()['id']
+          id: element.data()['id'],
+          iconDownloadURL: element.data()['iconDownloadURL']
       );
       charityCategories.add(charityCategory);
     }
