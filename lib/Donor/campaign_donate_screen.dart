@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Campaign.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -18,6 +19,10 @@ class CampaignDonateScreen extends StatefulWidget {
 
 class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
+
   Map<String, dynamic>? paymentIntentData;
   String donationAmount = "";
   bool showLoadingSpinner = false;
@@ -136,6 +141,22 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
     );
   }
 
+  void createDonationDocument() async{
+    await _firestore.collection('Donations').add({
+      'donorID': _auth.currentUser?.uid,
+      'organizationID': widget.campaign.organizationID,
+      'charityID': widget.campaign.id,
+      'donationAmount': donationAmount,
+      'donatedAt':Timestamp.now()
+    });
+
+  }
+
+  void updateCampaign() async{
+    await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
+      'amountRaised': widget.campaign.amountRaised+double.parse(donationAmount)
+    });
+  }
   Future<void> makePayment() async {
     try {
       paymentIntentData =
@@ -173,6 +194,9 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
       });
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Paid successfully!')));
+
+      createDonationDocument();
+      updateCampaign();
 
     }on StripeException catch (e) {
       print('Stripe Exception: ${e.toString()}');
