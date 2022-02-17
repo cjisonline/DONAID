@@ -8,7 +8,6 @@ const stripe = require("stripe")('sk_test_51KTuiGEvfimLlZrspSXbovMmnyU9eJsrzUOSa
 
 app.use(express.static("public"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 
 app.post("/create-payment-intent", async (req, res) => {
