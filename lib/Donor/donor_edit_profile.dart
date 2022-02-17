@@ -31,7 +31,13 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   Donor donor = Donor.c1();
-  TextEditingController? _controller;
+  TextEditingController? _firstNameController;
+  TextEditingController? _lastNameController;
+  TextEditingController? _passwordController;
+  TextEditingController? _confirmPasswordController;
+  TextEditingController? _phoneNumberController;
+
+  static final phoneNumberRegExp = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
 
   @override
   void initState() {
@@ -62,7 +68,12 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
   _updateDonorInformation() async {
     var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
-    _firestore.collection('DonorUsers').doc(doc.id).update({"firstName":donor.firstName});
+    _firestore.collection('DonorUsers').doc(doc.id).update(
+        {"firstName":donor.firstName,
+          "lastName":donor.lastName,
+          "password":donor.password,
+          "phoneNumber":donor.phoneNumber
+        });
   }
 
 
@@ -80,10 +91,10 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Widget _buildFirstNameField2() {
-    _controller = TextEditingController(text: donor.firstName);
+  Widget _buildFirstNameField() {
+    _firstNameController = TextEditingController(text: donor.firstName);
     return TextFormField(
-      controller: _controller,
+      controller: _firstNameController,
       decoration: const InputDecoration(labelText: 'First Name', ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -97,6 +108,80 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     );
   }
 
+  Widget _buildLastNameField() {
+    _lastNameController = TextEditingController(text: donor.lastName);
+    return TextFormField(
+      controller: _lastNameController,
+      decoration: const InputDecoration(labelText: 'Last Name', ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter last name.';
+        }
+        return null;
+      },
+      onSaved: (value) {
+        donor.lastName = value!;
+      },
+    );
+  }
+
+  Widget _buildPasswordField() {
+    _passwordController = TextEditingController(text: donor.password);
+    return TextFormField(
+      controller: _passwordController,
+      decoration: const InputDecoration(labelText: 'Password'),
+      validator: (value) {
+        if (value!.isEmpty || value.length < 6) {
+          return "Password must be at least 6 characters.";
+        } else {
+          return null;
+        }
+      },
+      obscureText: true,
+      onSaved: (value) {
+        donor.password = value!;
+      },
+    );
+  }
+
+  Widget _buildConfirmPasswordField() {
+    _confirmPasswordController = TextEditingController(text: donor.password);
+    return TextFormField(
+      controller: _confirmPasswordController,
+      decoration: const InputDecoration(labelText: 'Confirm Password'),
+      validator: (value) {
+        if (value!.isEmpty || value.length < 6) {
+          return "Password must be at least 6 characters.";
+        } else if (value != _passwordController?.text) {
+          return "Passwords do not match";
+        } else {
+          return null;
+        }
+      },
+      obscureText: true,
+    );
+  }
+
+  Widget _buildPhoneNumberField() {
+    _phoneNumberController = TextEditingController(text: donor.phoneNumber);
+    return TextFormField(
+      controller: _phoneNumberController,
+      decoration: const InputDecoration(labelText: 'Phone number', ),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please enter your phone number.";
+        } else if (!phoneNumberRegExp.hasMatch(value)) {
+          return "Please enter a valid phone number.";
+        } else {
+          return null;
+        }
+      },
+      onSaved: (value) {
+        donor.phoneNumber = value!;
+      },
+    );
+  }
+
   _body() {
     return SingleChildScrollView(
       child: Container(
@@ -106,7 +191,11 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              _buildFirstNameField2(),
+              _buildFirstNameField(),
+              _buildLastNameField(),
+              _buildPasswordField(),
+              _buildConfirmPasswordField(),
+              _buildPhoneNumberField(),
               MaterialButton(
                 color: Colors.blue,
                 child: const Text(
@@ -120,7 +209,6 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
                     return;
                   }
                   _formKey.currentState!.save();
-                  print('in save: ${donor.firstName}');
                   _updateDonorInformation();
 
                 },
