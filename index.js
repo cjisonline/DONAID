@@ -10,11 +10,11 @@ app.use(express.static("public"));
 app.use(express.json());
 
 const calculateAmount = (body) =>{
-    return 500
+    return body.amount
 }
 
 app.post("/create-payment-intent", async (req, res) => {
-  const { body } = req.body;
+  var body = req.body;
 
   console.log('Amount:'+body)
     // Create a PaymentIntent with the order amount and currency
