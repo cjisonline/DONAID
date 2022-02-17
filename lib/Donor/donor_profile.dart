@@ -60,7 +60,15 @@ class _DonorProfileState extends State<DonorProfile> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
-      ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, DonorEditProfile.id);
+              },
+              child: const Text('Edit',
+                  style: TextStyle(fontSize: 20.0, color: Colors.white)),
+            ),
+          ]),
       drawer: const DonorDrawer(),
       body: _body(),
       bottomNavigationBar: _bottomNavigationBar(),
@@ -75,19 +83,7 @@ class _DonorProfileState extends State<DonorProfile> {
                 ProfileRow('YOUR EMAIL', donor.email),
                 ProfileRow('FIRST NAME', donor.firstName),
                 ProfileRow('LAST NAME', donor.lastName),
-                ProfileRow('YOUR PASSWORD', donor.password),
                 ProfileRow('YOUR PHONE', donor.phoneNumber),
-           MaterialButton(
-                  color: Colors.blue,
-                  child: const Text(
-                    'Edit Profile',
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                  onPressed: () async {
-                    Navigator.pushNamed(context, DonorEditProfile.id);
-                  },)
               ],
             )
         );

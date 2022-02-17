@@ -14,6 +14,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'DonorWidgets/profile_list_row.dart';
+import 'donor_profile.dart';
 import 'edit_profile_form.dart';
 
 class DonorEditProfile extends StatefulWidget {
@@ -37,14 +38,14 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
   TextEditingController? _confirmPasswordController;
   TextEditingController? _phoneNumberController;
 
-  static final phoneNumberRegExp = RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+  static final phoneNumberRegExp =
+      RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
 
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
     _getDonorInformation();
-
   }
 
   void _getCurrentUser() {
@@ -52,7 +53,10 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
   }
 
   _getDonorInformation() async {
-    var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
+    var ret = await _firestore
+        .collection('DonorUsers')
+        .where('uid', isEqualTo: loggedInUser?.uid)
+        .get();
     final doc = ret.docs[0];
     donor = Donor(
       doc['email'],
@@ -64,26 +68,46 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     setState(() {});
   }
 
-
   _updateDonorInformation() async {
-    var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
+    var ret = await _firestore
+        .collection('DonorUsers')
+        .where('uid', isEqualTo: loggedInUser?.uid)
+        .get();
     final doc = ret.docs[0];
-    _firestore.collection('DonorUsers').doc(doc.id).update(
-        {"firstName":donor.firstName,
-          "lastName":donor.lastName,
-          "password":donor.password,
-          "phoneNumber":donor.phoneNumber
-        });
+    _firestore.collection('DonorUsers').doc(doc.id).update({
+      "firstName": donor.firstName,
+      "lastName": donor.lastName,
+      "password": donor.password,
+      "phoneNumber": donor.phoneNumber
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Profile'),
-      ),
-      drawer: const DonorDrawer(),
+          centerTitle: true,
+          title: const Text('Edit Profile'),
+          leadingWidth: 80,
+          leading: Flexible(
+            child: TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, DonorProfile.id);
+              },
+              child: const Text('Cancel',
+                  style: TextStyle(fontSize: 15.0, color: Colors.white)),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                _submitForm();
+                Navigator.pushNamed(context, DonorProfile.id);
+              },
+              child: const Text('Save',
+                  style: TextStyle(fontSize: 15.0, color: Colors.white)),
+            ),
+          ]),
       body: _body(),
       bottomNavigationBar: _bottomNavigationBar(),
     );
@@ -93,9 +117,17 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
 
   Widget _buildFirstNameField() {
     _firstNameController = TextEditingController(text: donor.firstName);
-    return TextFormField(
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+    child: TextFormField(
       controller: _firstNameController,
-      decoration: const InputDecoration(labelText: 'First Name', ),
+      decoration: const InputDecoration(
+        labelText: 'First Name',
+          border: OutlineInputBorder(
+            borderRadius:
+            BorderRadius.all(Radius.circular(32.0)),
+          )
+      ),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter first name.';
@@ -105,14 +137,23 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
       onSaved: (value) {
         donor.firstName = value!;
       },
-    );
+
+    ));
   }
 
   Widget _buildLastNameField() {
     _lastNameController = TextEditingController(text: donor.lastName);
-    return TextFormField(
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+    child: TextFormField(
       controller: _lastNameController,
-      decoration: const InputDecoration(labelText: 'Last Name', ),
+      decoration: const InputDecoration(
+        labelText: 'Last Name',
+          border: OutlineInputBorder(
+            borderRadius:
+            BorderRadius.all(Radius.circular(32.0)),
+          )
+      ),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter last name.';
@@ -122,14 +163,20 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
       onSaved: (value) {
         donor.lastName = value!;
       },
-    );
+    ));
   }
 
   Widget _buildPasswordField() {
     _passwordController = TextEditingController(text: donor.password);
-    return TextFormField(
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+    child:TextFormField(
       controller: _passwordController,
-      decoration: const InputDecoration(labelText: 'Password'),
+      decoration: const InputDecoration(labelText: 'Password',
+          border: OutlineInputBorder(
+            borderRadius:
+            BorderRadius.all(Radius.circular(32.0)),
+          )),
       validator: (value) {
         if (value!.isEmpty || value.length < 6) {
           return "Password must be at least 6 characters.";
@@ -141,14 +188,20 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
       onSaved: (value) {
         donor.password = value!;
       },
-    );
+    ));
   }
 
   Widget _buildConfirmPasswordField() {
     _confirmPasswordController = TextEditingController(text: donor.password);
-    return TextFormField(
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+    child: TextFormField(
       controller: _confirmPasswordController,
-      decoration: const InputDecoration(labelText: 'Confirm Password'),
+      decoration: const InputDecoration(labelText: 'Confirm Password',
+          border: OutlineInputBorder(
+            borderRadius:
+            BorderRadius.all(Radius.circular(32.0)),
+          )),
       validator: (value) {
         if (value!.isEmpty || value.length < 6) {
           return "Password must be at least 6 characters.";
@@ -159,14 +212,22 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
         }
       },
       obscureText: true,
-    );
+    ));
   }
 
   Widget _buildPhoneNumberField() {
     _phoneNumberController = TextEditingController(text: donor.phoneNumber);
-    return TextFormField(
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+    child: TextFormField(
       controller: _phoneNumberController,
-      decoration: const InputDecoration(labelText: 'Phone number', ),
+      decoration: const InputDecoration(
+        labelText: 'Phone number',
+          border: OutlineInputBorder(
+            borderRadius:
+            BorderRadius.all(Radius.circular(32.0)),
+          )
+      ),
       validator: (value) {
         if (value!.isEmpty) {
           return "Please enter your phone number.";
@@ -179,12 +240,22 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
       onSaved: (value) {
         donor.phoneNumber = value!;
       },
-    );
+    ));
+  }
+
+  _submitForm(){
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    _formKey.currentState!.save();
+    _updateDonorInformation();
   }
 
   _body() {
     return SingleChildScrollView(
       child: Container(
+      // decoration: BoxDecoration(
+      // color: Colors.blueGrey.shade50,),
         margin: const EdgeInsets.all(15),
         child: Form(
           key: _formKey,
@@ -196,23 +267,6 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               _buildPasswordField(),
               _buildConfirmPasswordField(),
               _buildPhoneNumberField(),
-              MaterialButton(
-                color: Colors.blue,
-                child: const Text(
-                  'Submit',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () async {
-                  if (!_formKey.currentState!.validate()) {
-                    return;
-                  }
-                  _formKey.currentState!.save();
-                  _updateDonorInformation();
-
-                },
-              )
             ],
           ),
         ),
@@ -281,6 +335,3 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     );
   }
 }
-
-
-
