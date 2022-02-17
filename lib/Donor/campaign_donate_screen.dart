@@ -74,6 +74,12 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                           if (value!.isEmpty) {
                             return 'Please enter a valid payment amount.';
                           }
+                          else if(double.parse(value)<0.50){
+                            return 'Please provide a donation minimum of \$0.50';
+                          }
+                          else {
+                            return null;
+                          }
                         },
                         keyboardType: const TextInputType.numberWithOptions(
                             decimal: true),
@@ -145,15 +151,16 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
       ));
 
       print(paymentIntentData);
-      displayPaymentSheet();
+      await displayPaymentSheet();
+
     } catch (e) {
-      print('Excpetion: ${e.toString()}');
+      print('Exception: ${e.toString()}');
     }
   }
 
   displayPaymentSheet() async {
     try {
-      Stripe.instance.presentPaymentSheet(
+      await Stripe.instance.presentPaymentSheet(
         parameters: PresentPaymentSheetParameters(
             clientSecret: paymentIntentData!['client_secret'],
           confirmPayment: true,
@@ -162,41 +169,36 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
       );
 
       setState(() {
-        paymentIntentData = null;
+        // paymentIntentData = null;
       });
-
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Paid successfully!')));
-    } on StripeException catch (e) {
+
+    }on StripeException catch (e) {
       print('Stripe Exception: ${e.toString()}');
 
-      showDialog(
-        context: context,
-        builder: (_) => const AlertDialog(
-          content: Text('Payment Cancelled.'),
-        ),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Payment cancelled.')));
+
     }
   }
 
   createPaymentIntent(String amount, String currency) async {
     try {
-      Map<String, dynamic> body = {
+      final body = {
         'amount': calculateAmount(amount),
         'currency': currency,
-        'payment_method_types[]': 'card'
+        'payment_method_types':['card']
       };
 
       var response = await http.post(
-          Uri.parse('https://api.stripe.com/v1/payment_intents'),
-          body: body,
-          headers: {
-            'Authorization':
-                'Bearer sk_test_51KTuiGEvfimLlZrspSXbovMmnyU9eJsrzUOSatcAYvz3AfLDE5QcgPOX6oPN6FuzKVhBOETTWiNFWLRVoTm0OURb00HhwsIFwH',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          });
+          Uri.https('donaidmobileapp.herokuapp.com','/create-payment-intent'),
+          body: jsonEncode(body),
+          headers: {'Content-Type':'application/json'}
+      );
 
-      return jsonDecode(response.body.toString());
+      print(response.body);
+      return jsonDecode(response.body);
     } catch (e) {
       print('Exception: ${e.toString()}');
     }
