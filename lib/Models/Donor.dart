@@ -5,7 +5,6 @@ class Donor {
   String password;
   String phoneNumber;
 
-
   Donor(this.email, this.firstName, this.lastName, this.password, this.phoneNumber);
   Donor.c1()
       :email="",

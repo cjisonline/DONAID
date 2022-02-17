@@ -4,6 +4,7 @@ import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
 import 'package:donaid/Donor/DonorWidgets/organization_card.dart';
 import 'package:donaid/Donor/DonorWidgets/urgent_case_card.dart';
 import 'package:donaid/Donor/donor_dashboard.dart';
+import 'package:donaid/Donor/edit_profile_form2.dart';
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:donaid/Models/Donor.dart';
 import 'package:donaid/Models/Organization.dart';
@@ -30,12 +31,14 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   Donor donor = Donor.c1();
+  TextEditingController? _controller;
 
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
     _getDonorInformation();
+
   }
 
   void _getCurrentUser() {
@@ -55,6 +58,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     setState(() {});
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,12 +71,56 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     );
   }
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Widget _buildFirstNameField2() {
+    _controller = TextEditingController(text: donor.firstName);
+    return TextFormField(
+      controller: _controller,
+      decoration: const InputDecoration(labelText: 'First Name'),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter first name.';
+        }
+        return null;
+      },
+      onSaved: (value) {
+        donor.firstName = value!;
+      },
+    );
+  }
+
   _body() {
-    // _getDonorInformation();
-    return
-    const SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: EditProfileForm()
+    return SingleChildScrollView(
+      child: Container(
+        margin: const EdgeInsets.all(15),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _buildFirstNameField2(),
+              MaterialButton(
+                color: Colors.blue,
+                child: const Text(
+                  'Submit',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () async {
+                  if (!_formKey.currentState!.validate()) {
+                    return;
+                  }
+                  _formKey.currentState!.save();
+                  print('in save: ${donor.firstName}');
+
+                },
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 

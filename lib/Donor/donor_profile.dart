@@ -68,7 +68,6 @@ class _DonorProfileState extends State<DonorProfile> {
   }
 
   _body() {
-    // _getDonorInformation();
     return  SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -87,7 +86,6 @@ class _DonorProfileState extends State<DonorProfile> {
                     ),
                   ),
                   onPressed: () async {
-                    print("button pressed");
                     Navigator.pushNamed(context, DonorEditProfile.id);
                   },)
               ],
