@@ -1,24 +1,21 @@
 const express = require("express");
 const port = process.env.PORT || 3000
 const app = express();
+const bodyparser = require('body-parser')
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
 const stripe = require("stripe")('sk_test_51KTuiGEvfimLlZrspSXbovMmnyU9eJsrzUOSatcAYvz3AfLDE5QcgPOX6oPN6FuzKVhBOETTWiNFWLRVoTm0OURb00HhwsIFwH');
 
 app.use(express.static("public"));
-app.use(express.json());
-app.use(
-    express.urlencoded({
-        extended = true
-    })
-)
+app.use(bodyparser.urlencoded({extended:false}))
+app.use(bodyparser.json());
 
 
 app.post("/create-payment-intent", async (req, res) => {
   const { body } = req.body;
 
-  console.log('amount:' + req.body.amount)
+  console.log('req:' + req.body)
     // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
     amount: 200,
