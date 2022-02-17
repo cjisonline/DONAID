@@ -19,7 +19,7 @@ app.post("/create-payment-intent", async (req, res) => {
   console.log('Amount:'+body.amount)
     // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: body.amount,
+    amount: 200,
     currency: 'usd',
     payment_method_types: ['card']
   });
