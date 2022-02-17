@@ -1,15 +1,13 @@
 const express = require("express");
 const port = process.env.PORT || 3000
 const app = express();
-const bodyparser = require('body-parser')
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
 const stripe = require("stripe")('sk_test_51KTuiGEvfimLlZrspSXbovMmnyU9eJsrzUOSatcAYvz3AfLDE5QcgPOX6oPN6FuzKVhBOETTWiNFWLRVoTm0OURb00HhwsIFwH');
 
 app.use(express.static("public"));
-app.use(bodyparser.urlencoded({extended:false}))
-app.use(bodyparser.json());
+app.use(express.json());
 
 
 app.post("/create-payment-intent", async (req, res) => {
