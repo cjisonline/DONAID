@@ -1,0 +1,22 @@
+{
+  "name": "donaid",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cj-fox/DONAID.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cj-fox/DONAID/issues"
+  },
+  "homepage": "https://github.com/cj-fox/DONAID#readme",
+  "dependencies": {
+    "stripe": "^8.203.0"
+  }
+}
