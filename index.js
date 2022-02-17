@@ -8,23 +8,15 @@ const stripe = require("stripe")('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 app.use(express.static("public"));
 app.use(express.json());
 
-const calculateOrderAmount = (items) => {
-  // Replace this constant with a calculation of the order's amount
-  // Calculate the order total on the server to prevent
-  // people from directly manipulating the amount on the client
-  return 1400;
-};
 
 app.post("/create-payment-intent", async (req, res) => {
-  const { items } = req.body;
+  const { amount } = req.body;
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(items),
-    currency: "eur",
-    automatic_payment_methods: {
-      enabled: true,
-    },
+    amount: amount,
+    currency: 'usd',
+    payment_method_types: ['card']
   });
 
   res.send({
@@ -32,4 +24,4 @@ app.post("/create-payment-intent", async (req, res) => {
   });
 });
 
-app.listen(4242, () => console.log("Node server listening on port 4242!"));
+app.listen(4242, () => console.log("Server on port 4242"));
