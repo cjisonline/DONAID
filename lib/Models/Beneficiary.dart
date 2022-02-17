@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Beneficiary {
   String name;
   String biography;
-  int goalAmount;
-  int amountRaised;
+  double goalAmount;
+  double amountRaised;
   String category;
   Timestamp endDate;
   Timestamp dateCreated;

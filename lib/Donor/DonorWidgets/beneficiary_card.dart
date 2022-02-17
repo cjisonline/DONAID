@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class BeneficiaryCard extends StatelessWidget {
   final String name;
   final String biography;
-  final int goalAmount;
-  final int amountRaised;
+  final double goalAmount;
+  final double amountRaised;
 
   const BeneficiaryCard( this.name, this.biography, this.goalAmount, this.amountRaised, {Key? key}) : super(key: key);
 
@@ -50,7 +50,7 @@ class BeneficiaryCard extends StatelessWidget {
                   maxLines: 3,
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('${(amountRaised/goalAmount)*100}%',
+              Text('${((amountRaised/goalAmount)*100).toStringAsFixed(3)}%',
                   textAlign: TextAlign.left,
                   style: const TextStyle(color: Colors.black, fontSize: 15)),
               Text(

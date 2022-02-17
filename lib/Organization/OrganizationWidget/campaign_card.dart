@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class CampaignCard extends StatelessWidget {
   final String title;
   final String description;
-  final int goalAmount;
-  final int amountRaised;
+  final double goalAmount;
+  final double amountRaised;
 
   const CampaignCard( this.title, this.description, this.goalAmount, this.amountRaised, {Key? key}) : super(key: key);
 

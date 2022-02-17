@@ -82,8 +82,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
       Beneficiary beneficiary = Beneficiary(
           name: element.data()['name'],
           biography: element.data()['biography'],
-          goalAmount: element.data()['goalAmount'],
-          amountRaised: element.data()['amountRaised'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
           category: element.data()['category'],
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
@@ -101,8 +101,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
       UrgentCase urgentCase = UrgentCase(
           title: element.data()['title'],
           description: element.data()['description'],
-          goalAmount: element.data()['goalAmount'],
-          amountRaised: element.data()['amountRaised'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
           category: element.data()['category'],
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],

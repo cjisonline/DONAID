@@ -39,8 +39,8 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
       Campaign campaign = Campaign(
           title: element.data()['title'],
           description: element.data()['description'],
-          goalAmount: element.data()['goalAmount'],
-          amountRaised: element.data()['amountRaised'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
           category: element.data()['category'],
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
@@ -69,7 +69,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                   subtitle: Text(campaigns[index].description),
                 ),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('${(campaigns[index].amountRaised/campaigns[index].goalAmount)*100}%',
+                  Text('${((campaigns[index].amountRaised/campaigns[index].goalAmount)*100).toStringAsFixed(3)}%',
                       textAlign: TextAlign.left,
                       style: const TextStyle(color: Colors.black, fontSize: 15)),
                   Text(
