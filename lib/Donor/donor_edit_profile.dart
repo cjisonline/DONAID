@@ -59,6 +59,13 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
   }
 
 
+  _updateDonorInformation() async {
+    var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
+    final doc = ret.docs[0];
+    _firestore.collection('DonorUsers').doc(doc.id).update({"firstName":donor.firstName});
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +84,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     _controller = TextEditingController(text: donor.firstName);
     return TextFormField(
       controller: _controller,
-      decoration: const InputDecoration(labelText: 'First Name'),
+      decoration: const InputDecoration(labelText: 'First Name', ),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter first name.';
@@ -114,6 +121,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
                   }
                   _formKey.currentState!.save();
                   print('in save: ${donor.firstName}');
+                  _updateDonorInformation();
 
                 },
               )
