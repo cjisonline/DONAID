@@ -153,9 +153,18 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   }
 
   void updateCampaign() async{
-    await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
-      'amountRaised': widget.campaign.amountRaised+double.parse(donationAmount)
-    });
+    if(widget.campaign.amountRaised+double.parse(donationAmount) >= widget.campaign.goalAmount){
+      await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
+        'amountRaised': widget.campaign.amountRaised+double.parse(donationAmount),
+        'active':false
+      });
+    }
+    else{
+      await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
+        'amountRaised': widget.campaign.amountRaised+double.parse(donationAmount)
+      });
+    }
+
   }
   Future<void> makePayment() async {
     try {
