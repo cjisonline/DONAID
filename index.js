@@ -1,4 +1,5 @@
 const express = require("express");
+const port = process.env.PORT || 3000
 const app = express();
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
@@ -24,4 +25,4 @@ app.post("/create-payment-intent", async (req, res) => {
   });
 });
 
-app.listen(4242, () => console.log("Server on port 4242"));
+app.listen(port, () => console.log("Server on port 4242"));
