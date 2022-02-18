@@ -1,30 +1,61 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class AddCampaignForm extends StatefulWidget {
-
   static const id = 'campaign_form_screen';
   AddCampaignForm({Key? key}) : super(key: key);
 
+  @override
+  _AddCampaignFormState createState() => _AddCampaignFormState();
+}
+
+class _AddCampaignFormState extends State<AddCampaignForm> {
+  TextEditingController categoryController = new TextEditingController();
+  TextEditingController descriptionController = new TextEditingController();
+  TextEditingController endDateController = new TextEditingController();
+  TextEditingController goalAmountController = new TextEditingController();
+  TextEditingController titleController = new TextEditingController();
+  bool showLoadingSpinner = false;
+  final _formKey = GlobalKey<FormState>();
+  static final goalRegExp = RegExp(r"\$?\d+(?:\.\d+)?");
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final firestore = FirebaseFirestore.instance;
+  String dropdownvalue = 'Select';
 
-  initiliase() {
+  // List of items in our dropdown menu
+  var category = ['Select'];
+
+  _getCampaign() async {
+    var ret = await firestore
+        .collection('CharityCategories')
+        .get();
+    ret.docs.forEach((element) {
+      category.add(element.data()['name']);
+    });
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
     _getCurrentUser();
+    _getCampaign();
   }
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
 
-  Future<void> create(String category,
-      String description, int goalAmount,
-      String title) async {
+  Future<void> create(
+      String category, String description, int goalAmount, String title) async {
     try {
       await firestore.collection("CampaignsTest").add({
         'amountRaised': 0,
@@ -33,8 +64,8 @@ class AddCampaignForm extends StatefulWidget {
         'description': description,
         'endDate': FieldValue.serverTimestamp(),
         'goalAmount': goalAmount,
-        'organizationID': loggedInUser,
-        'title' : title
+        'organizationID': loggedInUser?.uid,
+        'title': title
       });
     } catch (e) {
       print(e);
@@ -49,140 +80,299 @@ class AddCampaignForm extends StatefulWidget {
     }
   }
 
-
-  Future<void> update(int amountRaised, String category,
-      String description, Timestamp endDate, int goalAmount,
-      String id, String title) async {
+  Future<void> update(int amountRaised, String category, String description,
+      Timestamp endDate, int goalAmount, String id, String title) async {
     try {
-      await firestore
-          .collection("CampaignsTest")
-          .doc(id)
-          .update(
-          {'category': category,
-            'dataCreated': FieldValue.serverTimestamp(),
-            'description': description,
-            'endDate': endDate,
-            'goalAmount': goalAmount,
-            'title' : title});
+      await firestore.collection("CampaignsTest").doc(id).update({
+        'category': category,
+        'dataCreated': FieldValue.serverTimestamp(),
+        'description': description,
+        'endDate': endDate,
+        'goalAmount': goalAmount,
+        'title': title
+      });
     } catch (e) {
       print(e);
     }
   }
-  @override
-  _AddCampaignFormState createState() => _AddCampaignFormState();
-}
 
-
-class _AddCampaignFormState extends State<AddCampaignForm> {
-  TextEditingController categoryController = new TextEditingController();
-  TextEditingController descriptionController = new TextEditingController();
-  TextEditingController endDateController = new TextEditingController();
-  TextEditingController goalAmountController = new TextEditingController();
-  TextEditingController titleController = new TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Add Campaign"),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                // widget.db.delete(widget.country["id"]);
-                // Navigator.pop(context, true);
-              })
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              TextFormField(
-                style: TextStyle(color: Colors.black),
-                decoration: inputDecoration("Title"),
-                controller: titleController,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                style: TextStyle(color: Colors.black),
-                decoration: inputDecoration("Category"),
-                controller: categoryController,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                style: TextStyle(color: Colors.black),
-                decoration: inputDecoration("Description"),
-                controller: descriptionController,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                style: TextStyle(color: Colors.black),
-                decoration: inputDecoration("End Date"),
-                controller: endDateController,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                style: TextStyle(color: Colors.black),
-                decoration: inputDecoration("Goal Amount"),
-                controller: goalAmountController,
-              ),
-
-            ],
+        appBar: AppBar(
+          title: const Text("DONAID"),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        color: Colors.transparent,
-        child: BottomAppBar(
-          color: Colors.transparent,
-          child: RaisedButton(
-              color: Colors.black,
-              onPressed: () {
-                widget.create(categoryController.text,descriptionController.text
-                    , goalAmountController.hashCode, titleController.text);
-                Navigator.pop(context, true);
-              },
-              child: Text(
-                "Save",
-                style: TextStyle(color: Colors.white),
-              )),
-        ),
-      ),
-    );
-  }
+        body: ModalProgressHUD(
+            inAsyncCall: showLoadingSpinner,
+            child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        const Center(
+                          child: Text(
+                            'Add Campaign',
+                            style: TextStyle(fontSize: 32.0),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 25.0),
+                          child: Text(
+                            '* - required fields',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: titleController,
+                            inputFormatters: [new LengthLimitingTextInputFormatter(50)],
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Please enter a title.";
+                              } else {
+                                return null;
+                              }
+                            },
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                label: Center(
+                                  child: RichText(
+                                      text: TextSpan(
+                                          text: 'Title',
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 20.0),
+                                          children: const [
+                                        TextSpan(
+                                            text: ' *',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold,
+                                            )),
+                                      ])),
+                                ),
+                                border: const OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(32.0)),
+                                )),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 25.0),
+                          child: Text(
+                            '* - required fields',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: descriptionController,
+                            inputFormatters: [new LengthLimitingTextInputFormatter(250)],
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Please enter a description.";
+                              } else {
+                                return null;
+                              }
+                            },
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                label: Center(
+                                  child: RichText(
+                                      text: TextSpan(
+                                          text: 'Description',
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 20.0),
+                                          children: const [
+                                            TextSpan(
+                                                text: ' *',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                          ])),
+                                ),
+                                border: const OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(32.0)),
+                                )),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 25.0),
+                          child: Text(
+                            '* - required fields',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
 
-  InputDecoration inputDecoration(String labelText) {
-    return InputDecoration(
-      focusColor: Colors.black,
-      labelStyle: TextStyle(color: Colors.black),
-      labelText: labelText,
-      fillColor: Colors.black,
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(color: Colors.black),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(
-          color: Colors.black,
-          width: 2.0,
-        ),
-      ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: categoryController,
+                            inputFormatters: [new LengthLimitingTextInputFormatter(50)],
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Please enter a category.";
+                              } else {
+                                return null;
+                              }
+                            },
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                label: Center(
+                                  child: RichText(
+                                      text: TextSpan(
+                                          text: 'Category',
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 20.0),
+                                          children: const [
+                                            TextSpan(
+                                                text: ' *',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                          ])),
+                                ),
+                                border: const OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(32.0)),
+                                )),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 25.0),
+                          child: Text(
+                            '* - required fields',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: goalAmountController,
+                            inputFormatters: [new LengthLimitingTextInputFormatter(50)],
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Please enter a goal amount.";
+                              }else if (!goalRegExp.hasMatch(value)){
+                                return "Please enter a valid goal amount.";
+                              }
+                              else {
+                                return null;
+                              }
+                            },
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                label: Center(
+                                  child: RichText(
+                                      text: TextSpan(
+                                          text: 'Goal',
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 20.0),
+                                          children: const [
+                                            TextSpan(
+                                                text: ' *',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                          ])),
+                                ),
+                                border: const OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(32.0)),
+                                )),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 25.0),
+                          child: Text(
+                            '* - required fields',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child:  DropdownButton(
+                          value: dropdownvalue,
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          items: category.map((String items) {
+                            return DropdownMenuItem(
+                              value: items,
+                              child: Text(items),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              dropdownvalue = newValue!;
+                            });
+                          },
+                        ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 25.0, horizontal: 5.0),
+                          child: Material(
+                            elevation: 5.0,
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(32.0),
+                            child: MaterialButton(
+                              child: const Text(
+                                'Submit',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() {
+                                    showLoadingSpinner = true;
+                                  });
+                                  create(categoryController.text,descriptionController.text,
+                                      int.parse(goalAmountController.text), titleController.text);
+                                  Navigator.pop(context, true);
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+
+                      ]),
+                )
+                )
+        )
     );
   }
 }
