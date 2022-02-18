@@ -79,7 +79,10 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
       "lastName": donor.lastName,
       "password": donor.password,
       "phoneNumber": donor.phoneNumber
-    });
+    }).whenComplete(_goToProfilePage);
+  }
+  _goToProfilePage(){
+    Navigator.pushNamed(context, DonorProfile.id);
   }
 
   @override
@@ -89,15 +92,13 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           centerTitle: true,
           title: const Text('Edit Profile'),
           leadingWidth: 80,
-          leading: Flexible(
-            child: TextButton(
+          leading: TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, DonorProfile.id);
               },
               child: const Text('Cancel',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
-          ),
           actions: [
             TextButton(
               onPressed: () {
