@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
+import 'OrganizationWidget/popup_dialog_success.dart';
+
 class AddCampaignForm extends StatefulWidget {
   static const id = 'campaign_form_screen';
   AddCampaignForm({Key? key}) : super(key: key);
@@ -55,14 +57,14 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   }
 
   Future<void> create(
-      String category, String description, int goalAmount, String title) async {
+      String category, String description, int goalAmount, String title, String endDateController) async {
     try {
       await firestore.collection("CampaignsTest").add({
         'amountRaised': 0,
         'category': category,
         'dataCreated': FieldValue.serverTimestamp(),
         'description': description,
-        'endDate': FieldValue.serverTimestamp(),
+        'endDate': endDateController,
         'goalAmount': goalAmount,
         'organizationID': loggedInUser?.uid,
         'title': title
@@ -176,14 +178,6 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 )),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 25.0),
-                          child: Text(
-                            '* - required fields',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -219,60 +213,6 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                   borderRadius:
                                   BorderRadius.all(Radius.circular(32.0)),
                                 )),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 25.0),
-                          child: Text(
-                            '* - required fields',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: categoryController,
-                            inputFormatters: [new LengthLimitingTextInputFormatter(50)],
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Please enter a category.";
-                              } else {
-                                return null;
-                              }
-                            },
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                                label: Center(
-                                  child: RichText(
-                                      text: TextSpan(
-                                          text: 'Category',
-                                          style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 20.0),
-                                          children: const [
-                                            TextSpan(
-                                                text: ' *',
-                                                style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.bold,
-                                                )),
-                                          ])),
-                                ),
-                                border: const OutlineInputBorder(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(32.0)),
-                                )),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 25.0),
-                          child: Text(
-                            '* - required fields',
-                            style: TextStyle(color: Colors.red),
                           ),
                         ),
                         Padding(
@@ -315,31 +255,84 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 )),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 25.0),
-                          child: Text(
-                            '* - required fields',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
+                        Padding(padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              readOnly: true,
+                              controller: endDateController,
+                              decoration: InputDecoration(
+                                  label: Center(
+                                    child: RichText(
+                                        text: TextSpan(
+                                            text: 'Enter End Date',
+                                            style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize: 20.0),
+                                            children: const [
+                                              TextSpan(
+                                                  text: ' *',
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ])),
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(32.0)),
+                                  )
+                              ),
+                              onTap: () async {
+                                var date =  await showDatePicker(
+                                    context: context,
+                                    initialDate:DateTime.now(),
+                                    firstDate:DateTime.now(),
+                                    lastDate: DateTime(2100));
+                                endDateController.text = date.toString().substring(0,10);
+                              },)),
+
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child:  DropdownButton(
-                          value: dropdownvalue,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          items: category.map((String items) {
-                            return DropdownMenuItem(
-                              value: items,
-                              child: Text(items),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              dropdownvalue = newValue!;
-                            });
-                          },
-                        ),
+                          child: DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  label: Center(
+                                    child: RichText(
+                                        text: TextSpan(
+                                            text: 'Category',
+                                            style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize: 20.0),
+                                            children: const [
+                                              TextSpan(
+                                                  text: ' *',
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ])),
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(32.0)),
+                                  )),
+
+                            value: dropdownvalue,
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                              items: category.map((String items) {
+                                return DropdownMenuItem(
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownvalue = newValue!;
+                                  categoryController.text = dropdownvalue.toString();
+                                });
+
+                              },
+                          )
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -361,8 +354,13 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                     showLoadingSpinner = true;
                                   });
                                   create(categoryController.text,descriptionController.text,
-                                      int.parse(goalAmountController.text), titleController.text);
+                                      int.parse(goalAmountController.text), titleController.text, endDateController.text);
                                   Navigator.pop(context, true);
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) => PopUpSuccessDialog(),
+                                  );
+
                                 }
                               },
                             ),
