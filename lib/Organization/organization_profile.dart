@@ -1,57 +1,62 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Donor/DonorWidgets/category_card.dart';
-import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
-import 'package:donaid/Donor/DonorWidgets/organization_card.dart';
-import 'package:donaid/Donor/DonorWidgets/urgent_case_card.dart';
-import 'package:donaid/Donor/donor_dashboard.dart';
-import 'package:donaid/Donor/donor_edit_profile.dart';
-import 'package:donaid/Models/CharityCategory.dart';
-import 'package:donaid/Models/Donor.dart';
 import 'package:donaid/Models/Organization.dart';
-import 'package:donaid/Models/UrgentCase.dart';
-import 'package:donaid/globals.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'DonorWidgets/profile_list_row.dart';
+import 'OrganizationWidget/profile_list_row.dart';
 
-class DonorProfile extends StatefulWidget {
-  static const id = 'donor_profile';
+class OrganizationProfile extends StatefulWidget {
+  static const id = 'organization_profile';
 
-  const DonorProfile({Key? key}) : super(key: key);
+  const OrganizationProfile({Key? key}) : super(key: key);
 
   @override
-  _DonorProfileState createState() => _DonorProfileState();
+  _OrganizationProfileState createState() => _OrganizationProfileState();
 }
 
-class _DonorProfileState extends State<DonorProfile> {
+class _OrganizationProfileState extends State<OrganizationProfile> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
-  Donor donor = Donor.c1();
+  Organization? organization;
 
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
-    _getDonorInformation();
+    _getOrganizationInformation();
   }
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
 
-  _getDonorInformation() async {
-    var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
+  _getOrganizationInformation() async {
+    // String? organizationEmail;
+    // String organizationName;
+    // String? password;
+    // String? phoneNumber;
+    // String uid;
+    // String? organizationDescription;
+    // String? country;
+    // String? gatewayLink;
+    var ret = await _firestore.collection('OrganizationUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
-    donor = Donor(
-          doc['email'],
-        doc['firstName'],
-        doc['lastName'],
-           doc['password'],
-           doc['phoneNumber'],
-      );
+    organization = Organization(
+      organizationEmail: doc['email'],
+      organizationName: doc['organizationName'],
+      password: doc['password'],
+      phoneNumber: doc['phoneNumber'],
+      uid: doc['uid'],
+      organizationDescription: doc['organizationDescription'],
+      country: doc['country'],
+      gatewayLink: doc['gatewayLink']
+    );
+    print('country:${organization?.country}x');
+    print('get org');
     setState(() {});
   }
 
@@ -59,17 +64,17 @@ class _DonorProfileState extends State<DonorProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+          title: const Text('Profile'),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, DonorEditProfile.id);
+                // Navigator.pushNamed(context, DonorEditProfile.id);
               },
               child: const Text('Edit',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
-      drawer: const DonorDrawer(),
+      drawer: const OrganizationDrawer(),
       body: _body(),
       bottomNavigationBar: _bottomNavigationBar(),
     );
@@ -77,16 +82,18 @@ class _DonorProfileState extends State<DonorProfile> {
 
   _body() {
     return  SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children:  [
-                ProfileRow('YOUR EMAIL', donor.email),
-                ProfileRow('FIRST NAME', donor.firstName),
-                ProfileRow('LAST NAME', donor.lastName),
-                ProfileRow('YOUR PHONE', donor.phoneNumber),
-              ],
-            )
-        );
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children:  [
+            ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
+            ProfileRow('NAME', organization?.organizationName??'N/A'),
+            ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
+            ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
+            ProfileRow('COUNTRY', organization?.country??'N/A'),
+            ProfileRow('GATEWAY LINK', organization?.gatewayLink??'N/A'),
+          ],
+        )
+    );
   }
 
   _bottomNavigationBar() {
@@ -102,7 +109,7 @@ class _DonorProfileState extends State<DonorProfile> {
             IconButton(
               enableFeedback: false,
               onPressed: () {
-                Navigator.pushNamed(context, DonorDashboard.id);
+                Navigator.pushNamed(context, OrganizationDashboard.id);
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),

@@ -1,21 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Donor/DonorWidgets/category_card.dart';
-import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
-import 'package:donaid/Donor/DonorWidgets/organization_card.dart';
-import 'package:donaid/Donor/DonorWidgets/urgent_case_card.dart';
 import 'package:donaid/Donor/donor_dashboard.dart';
-import 'package:donaid/Donor/edit_profile_form2.dart';
-import 'package:donaid/Models/CharityCategory.dart';
 import 'package:donaid/Models/Donor.dart';
-import 'package:donaid/Models/Organization.dart';
-import 'package:donaid/Models/UrgentCase.dart';
-import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'DonorWidgets/profile_list_row.dart';
 import 'donor_profile.dart';
-import 'edit_profile_form.dart';
 
 class DonorEditProfile extends StatefulWidget {
   static const id = 'donor_edit_profile';
