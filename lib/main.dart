@@ -1,6 +1,7 @@
 import 'package:donaid/Donor/donor_edit_profile.dart';
 import 'package:donaid/Donor/donor_profile.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
+import 'package:donaid/Organization/organization_edit_profile.dart';
 import 'package:donaid/Organization/organization_profile.dart';
 import 'package:donaid/Registration/registration_screen.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class Donaid extends StatelessWidget {
         DonorProfile.id: (context) => const DonorProfile(),
         DonorEditProfile.id: (context) => const DonorEditProfile(),
         OrganizationProfile.id: (context) => const OrganizationProfile(),
+        OrganizationEditProfile.id: (context) => const OrganizationEditProfile(),
 
       },
     );

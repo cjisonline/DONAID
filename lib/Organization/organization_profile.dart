@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'OrganizationWidget/profile_list_row.dart';
+import 'organization_edit_profile.dart';
 
 class OrganizationProfile extends StatefulWidget {
   static const id = 'organization_profile';
@@ -35,14 +36,6 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
   }
 
   _getOrganizationInformation() async {
-    // String? organizationEmail;
-    // String organizationName;
-    // String? password;
-    // String? phoneNumber;
-    // String uid;
-    // String? organizationDescription;
-    // String? country;
-    // String? gatewayLink;
     var ret = await _firestore.collection('OrganizationUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
     organization = Organization(
@@ -68,7 +61,7 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
           actions: [
             TextButton(
               onPressed: () {
-                // Navigator.pushNamed(context, DonorEditProfile.id);
+                Navigator.pushNamed(context, OrganizationEditProfile.id);
               },
               child: const Text('Edit',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
