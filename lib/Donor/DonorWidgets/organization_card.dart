@@ -9,18 +9,14 @@ class OrganizationCard extends StatelessWidget {
     return  Padding(
         padding: const EdgeInsets.all(10.0),
         child: Container(
-          width: 125.0,
+          width: 175.0,
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               border: Border.all(color: Colors.grey.shade300, width: 2.0)),
-          child: Column(children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.apartment,
-                  color: Colors.blue, size: 50),
-            ),
+          child: Column(
+              children: [
+            const Icon(Icons.apartment, color: Colors.blue, size: 40,),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(name,

@@ -195,7 +195,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
             ),
           ),
           SizedBox(
-              height: 150.0,
+              height: 200.0,
               child: ListView.builder(
                 itemCount: organizations.length,
                 scrollDirection: Axis.horizontal,

@@ -21,12 +21,7 @@ class UrgentCaseCard extends StatelessWidget {
               border: Border.all(color: Colors.grey.shade300, width: 2.0)),
 
           child: Column(children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.apartment,
-                  color: Colors.blue,
-                  size: 50),
+              const Icon(Icons.assistant, color: Colors.blue, size: 40,
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
