@@ -42,11 +42,11 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${((widget.campaign.amountRaised / widget.campaign.goalAmount) * 100).toStringAsFixed(3)}%',
+                    '\$${(widget.campaign.amountRaised.toStringAsFixed(2))}',
                     style: const TextStyle(color: Colors.black, fontSize: 15),
                   ),
                   Text(
-                    '\$${widget.campaign.goalAmount}',
+                    '\$${widget.campaign.goalAmount.toStringAsFixed(2)}',
                     style: const TextStyle(color: Colors.black, fontSize: 15),
                   ),
                 ]),

@@ -69,11 +69,11 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                   subtitle: Text(campaigns[index].description),
                 ),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('${((campaigns[index].amountRaised/campaigns[index].goalAmount)*100).toStringAsFixed(3)}%',
+                  Text('\$${(campaigns[index].amountRaised.toStringAsFixed(2))}',
                       textAlign: TextAlign.left,
                       style: const TextStyle(color: Colors.black, fontSize: 15)),
                   Text(
-                    '\$${campaigns[index].goalAmount}',
+                    '\$${campaigns[index].goalAmount.toStringAsFixed(2)}',
                     textAlign: TextAlign.start,
                     style: const TextStyle(color: Colors.black, fontSize: 15),
                   ),
