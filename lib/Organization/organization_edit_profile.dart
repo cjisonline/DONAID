@@ -23,8 +23,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
   Organization? organization;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
-
   TextEditingController? _organizationNameController;
   TextEditingController? _passwordController;
   TextEditingController? _confirmPasswordController;
@@ -64,15 +62,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     print('get org');
     setState(() {});
   }
-
-  // organizationEmail: doc['email'],
-  // organizationName: doc['organizationName'],
-  // password: doc['password'],
-  // phoneNumber: doc['phoneNumber'],
-  // uid: doc['uid'],
-  // organizationDescription: doc['organizationDescription'],
-  // country: doc['country'],
-  // gatewayLink: doc['gatewayLink']
 
   _updateOrganizationInformation() async {
     var ret = await _firestore
@@ -121,135 +110,192 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }
-  //
-  //
-  // Widget _buildFirstNameField() {
-  //   _organizationNameController = TextEditingController(text: donor.firstName);
-  //   return Padding(
-  //       padding: const EdgeInsets.all(8.0),
-  //   child: TextFormField(
-  //     controller: _organizationNameController,
-  //     decoration: const InputDecoration(
-  //       labelText: 'First Name',
-  //         border: OutlineInputBorder(
-  //           borderRadius:
-  //           BorderRadius.all(Radius.circular(32.0)),
-  //         )
-  //     ),
-  //     validator: (value) {
-  //       if (value == null || value.isEmpty) {
-  //         return 'Please enter first name.';
-  //       }
-  //       return null;
-  //     },
-  //     onSaved: (value) {
-  //       donor.firstName = value!;
-  //     },
-  //
-  //   ));
-  // }
-  //
-  // Widget _buildLastNameField() {
-  //   _organizationDescriptionController = TextEditingController(text: donor.lastName);
-  //   return Padding(
-  //       padding: const EdgeInsets.all(8.0),
-  //   child: TextFormField(
-  //     controller: _organizationDescriptionController,
-  //     decoration: const InputDecoration(
-  //       labelText: 'Last Name',
-  //         border: OutlineInputBorder(
-  //           borderRadius:
-  //           BorderRadius.all(Radius.circular(32.0)),
-  //         )
-  //     ),
-  //     validator: (value) {
-  //       if (value == null || value.isEmpty) {
-  //         return 'Please enter last name.';
-  //       }
-  //       return null;
-  //     },
-  //     onSaved: (value) {
-  //       donor.lastName = value!;
-  //     },
-  //   ));
-  // }
-  //
-  // Widget _buildPasswordField() {
-  //   _passwordController = TextEditingController(text: donor.password);
-  //   return Padding(
-  //       padding: const EdgeInsets.all(8.0),
-  //   child:TextFormField(
-  //     controller: _passwordController,
-  //     decoration: const InputDecoration(labelText: 'Password',
-  //         border: OutlineInputBorder(
-  //           borderRadius:
-  //           BorderRadius.all(Radius.circular(32.0)),
-  //         )),
-  //     validator: (value) {
-  //       if (value!.isEmpty || value.length < 6) {
-  //         return "Password must be at least 6 characters.";
-  //       } else {
-  //         return null;
-  //       }
-  //     },
-  //     obscureText: true,
-  //     onSaved: (value) {
-  //       donor.password = value!;
-  //     },
-  //   ));
-  // }
-  //
-  // Widget _buildConfirmPasswordField() {
-  //   _confirmPasswordController = TextEditingController(text: donor.password);
-  //   return Padding(
-  //       padding: const EdgeInsets.all(8.0),
-  //   child: TextFormField(
-  //     controller: _confirmPasswordController,
-  //     decoration: const InputDecoration(labelText: 'Confirm Password',
-  //         border: OutlineInputBorder(
-  //           borderRadius:
-  //           BorderRadius.all(Radius.circular(32.0)),
-  //         )),
-  //     validator: (value) {
-  //       if (value!.isEmpty || value.length < 6) {
-  //         return "Password must be at least 6 characters.";
-  //       } else if (value != _passwordController?.text) {
-  //         return "Passwords do not match";
-  //       } else {
-  //         return null;
-  //       }
-  //     },
-  //     obscureText: true,
-  //   ));
-  // }
-  //
-  // Widget _buildPhoneNumberField() {
-  //   _phoneNumberController = TextEditingController(text: donor.phoneNumber);
-  //   return Padding(
-  //       padding: const EdgeInsets.all(8.0),
-  //   child: TextFormField(
-  //     controller: _phoneNumberController,
-  //     decoration: const InputDecoration(
-  //       labelText: 'Phone number',
-  //         border: OutlineInputBorder(
-  //           borderRadius:
-  //           BorderRadius.all(Radius.circular(32.0)),
-  //         )
-  //     ),
-  //     validator: (value) {
-  //       if (value!.isEmpty) {
-  //         return "Please enter your phone number.";
-  //       } else if (!phoneNumberRegExp.hasMatch(value)) {
-  //         return "Please enter a valid phone number.";
-  //       } else {
-  //         return null;
-  //       }
-  //     },
-  //     onSaved: (value) {
-  //       donor.phoneNumber = value!;
-  //     },
-  //   ));
-  // }
+
+
+
+  Widget _buildOrganizationNameField() {
+    _organizationNameController = TextEditingController(text: organization?.organizationName);
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+    child: TextFormField(
+      controller: _organizationNameController,
+      decoration: const InputDecoration(
+        labelText: 'Name',
+          border: OutlineInputBorder(
+            borderRadius:
+            BorderRadius.all(Radius.circular(32.0)),
+          )
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter organization\'s name.';
+        }
+        return null;
+      },
+      onSaved: (value) {
+        organization?.organizationName = value!;
+      },
+    ));
+  }
+
+
+  Widget _buildPasswordField() {
+    _passwordController = TextEditingController(text: organization?.password);
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+    child:TextFormField(
+      controller: _passwordController,
+      decoration: const InputDecoration(labelText: 'Password',
+          border: OutlineInputBorder(
+            borderRadius:
+            BorderRadius.all(Radius.circular(32.0)),
+          )),
+      validator: (value) {
+        if (value!.isEmpty || value.length < 6) {
+          return "Password must be at least 6 characters.";
+        } else {
+          return null;
+        }
+      },
+      obscureText: true,
+      onSaved: (value) {
+        organization?.password = value!;
+      },
+    ));
+  }
+
+  Widget _buildConfirmPasswordField() {
+    _confirmPasswordController = TextEditingController(text: organization?.password);
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+    child: TextFormField(
+      controller: _confirmPasswordController,
+      decoration: const InputDecoration(labelText: 'Confirm Password',
+          border: OutlineInputBorder(
+            borderRadius:
+            BorderRadius.all(Radius.circular(32.0)),
+          )),
+      validator: (value) {
+        if (value!.isEmpty || value.length < 6) {
+          return "Password must be at least 6 characters.";
+        } else if (value != _passwordController?.text) {
+          return "Passwords do not match";
+        } else {
+          return null;
+        }
+      },
+      obscureText: true,
+    ));
+  }
+
+  Widget _buildPhoneNumberField() {
+    _phoneNumberController = TextEditingController(text: organization?.phoneNumber);
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+    child: TextFormField(
+      controller: _phoneNumberController,
+      decoration: const InputDecoration(
+        labelText: 'Phone number',
+          border: OutlineInputBorder(
+            borderRadius:
+            BorderRadius.all(Radius.circular(32.0)),
+          )
+      ),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please enter your phone number.";
+        } else if (!phoneNumberRegExp.hasMatch(value)) {
+          return "Please enter a valid phone number.";
+        } else {
+          return null;
+        }
+      },
+      onSaved: (value) {
+        organization?.phoneNumber = value!;
+      },
+    ));
+  }
+
+
+  Widget _buildOrganizationDescriptionField() {
+    _organizationDescriptionController = TextEditingController(text: organization?.organizationDescription);
+    return  Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        controller: _organizationDescriptionController,
+        minLines: 2,
+        maxLines: 5,
+        maxLength: 240,
+        onSaved: (value) {
+          organization?.organizationDescription = value;
+        },
+        textAlign: TextAlign.center,
+        decoration: InputDecoration(
+            label: Center(
+              child: RichText(
+                text: const TextSpan(
+                  text: 'Organization Description',
+                  style: TextStyle(
+                      color: Colors.black, fontSize: 20.0),
+                ),
+              ),
+            ),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(32.0)),
+            )),
+      ),
+    );
+  }
+
+  Widget _buildCountryField() {
+    _countryController = TextEditingController(text: organization?.country);
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextFormField(
+          controller: _countryController,
+          decoration: const InputDecoration(
+              labelText: 'Country',
+              border: OutlineInputBorder(
+                borderRadius:
+                BorderRadius.all(Radius.circular(32.0)),
+              )
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter country.';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            organization?.country = value!;
+          },
+        ));
+  }
+
+  Widget _buildGatewayLinkField() {
+    _gatewayLinkController = TextEditingController(text: organization?.gatewayLink);
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextFormField(
+          controller: _gatewayLinkController,
+          decoration: const InputDecoration(
+              labelText: 'Gateway Link',
+              border: OutlineInputBorder(
+                borderRadius:
+                BorderRadius.all(Radius.circular(32.0)),
+              )
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter gateway link.';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            organization?.country = value!;
+          },
+        ));
+  }
 
   _submitForm(){
     if (!_formKey.currentState!.validate()) {
@@ -269,11 +315,14 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // _buildFirstNameField(),
-              // _buildLastNameField(),
-              // _buildPasswordField(),
-              // _buildConfirmPasswordField(),
-              // _buildPhoneNumberField(),
+              _buildOrganizationNameField(),
+              _buildPasswordField(),
+              _buildConfirmPasswordField(),
+              _buildPhoneNumberField(),
+              _buildOrganizationDescriptionField(),
+              _buildCountryField(),
+              _buildGatewayLinkField()
+
             ],
           ),
         ),
