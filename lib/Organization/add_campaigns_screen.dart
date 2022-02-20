@@ -29,11 +29,10 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final firestore = FirebaseFirestore.instance;
-  String dropdownvalue = 'Select';
+  // late String dropdownvalue;
   late DocumentSnapshot documentSnapshot;
+  var category = [];
 
-  // List of items in our dropdown menu
-  var category = ['Select'];
 
   _getCampaign() async {
     var ret = await firestore
@@ -63,6 +62,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   Future<void> create(
       String category, String description, int goalAmount, String title, String endDateController) async {
     try {
+      //final docRef = await firestore.collection("CampaignsTest").add({
       await firestore.collection("CampaignsTest").add({
         'amountRaised': 0,
         'category': category,
@@ -70,6 +70,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
         'description': description,
         'endDate': Timestamp.fromDate(DateTime.parse(endDateController)),
         'goalAmount': goalAmount,
+        //'id' : docRef.documentID,
         'organizationID': loggedInUser?.uid,
         'title': title
       });
@@ -159,8 +160,6 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
-                            minLines: 2,
-                            maxLines: 5,
                             maxLength: 50,
                             controller: titleController,
                             inputFormatters: [new LengthLimitingTextInputFormatter(50)],
@@ -322,7 +321,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
 
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: DropdownButtonFormField(
+                          child: DropdownButtonFormField <String>(
                               decoration: InputDecoration(
                                   label: Center(
                                     child: RichText(
@@ -345,20 +344,32 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(32.0)),
                                   )),
-                            value: dropdownvalue,
                             icon: const Icon(Icons.keyboard_arrow_down),
-                              items: category.map((String items) {
-                                return DropdownMenuItem(
-                                  value: items,
-                                  child: Text(items),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownvalue = newValue!;
-                                  categoryController.text = dropdownvalue.toString();
-                                });
-                              },
+                            //   items: category.map((String items) {
+                            //     return DropdownMenuItem(
+                            //       value: items,
+                            //       child: Text(items),
+                            //     );
+                            //   }).toList(),
+                            //   onChanged: (String? newValue) {
+                            //     setState(() {
+                            //       dropdownvalue = newValue!;
+                            //       categoryController.text = dropdownvalue.toString();
+                            //     });
+                            //   },
+                            // validator: (value) => value == null
+                            //     ? 'Please fill in the category.' : null,
+                            items: category == null? []: category.map((items) {
+                              return DropdownMenuItem<String>(
+                                child: Text(items),
+                                value: items,
+                              );
+                            }).toList(),
+                            onChanged: (val) => setState(() {
+                              categoryController.text = val.toString();
+                            }),
+                              validator: (value) => value == null
+                                 ? 'Please fill in the category.' : null,
                           )
                         ),
                         Padding(
