@@ -7,12 +7,12 @@ class OrganizationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         child: Container(
           width: 125.0,
           decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
               border: Border.all(color: Colors.grey.shade300, width: 2.0)),
           child: Column(children: [
             IconButton(
@@ -22,10 +22,10 @@ class OrganizationCard extends StatelessWidget {
                   color: Colors.blue, size: 50),
             ),
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Text(name,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 20,
                   )),
