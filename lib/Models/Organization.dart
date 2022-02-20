@@ -1,7 +1,6 @@
 class Organization {
   String? organizationEmail;
   String organizationName;
-  String? password;
   String? phoneNumber;
   String uid;
   String? organizationDescription;
@@ -11,11 +10,19 @@ class Organization {
   Organization({
     this.organizationEmail,
     required this.organizationName,
-    this.password,
     this.phoneNumber,
     required this.uid,
     this.organizationDescription,
     this.country,
     this.gatewayLink
   });
+  Organization.c1()
+      :organizationEmail="",
+        organizationName="",
+        phoneNumber="",
+        uid="",
+        organizationDescription="",
+        country="",
+        gatewayLink=""
+  ;
 }

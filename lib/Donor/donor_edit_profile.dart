@@ -23,8 +23,6 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
   Donor donor = Donor.c1();
   TextEditingController? _firstNameController;
   TextEditingController? _lastNameController;
-  TextEditingController? _passwordController;
-  TextEditingController? _confirmPasswordController;
   TextEditingController? _phoneNumberController;
 
   static final phoneNumberRegExp =
@@ -51,7 +49,6 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
       doc['email'],
       doc['firstName'],
       doc['lastName'],
-      doc['password'],
       doc['phoneNumber'],
     );
     setState(() {});
@@ -66,11 +63,11 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     _firestore.collection('DonorUsers').doc(doc.id).update({
       "firstName": donor.firstName,
       "lastName": donor.lastName,
-      "password": donor.password,
       "phoneNumber": donor.phoneNumber
     }).whenComplete(_goToProfilePage);
   }
-  _goToProfilePage(){
+
+  _goToProfilePage() {
     Navigator.pushNamed(context, DonorProfile.id);
   }
 
@@ -82,12 +79,12 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           title: const Text('Edit Profile'),
           leadingWidth: 80,
           leading: TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, DonorProfile.id);
-              },
-              child: const Text('Cancel',
-                  style: TextStyle(fontSize: 15.0, color: Colors.white)),
-            ),
+            onPressed: () {
+              Navigator.pushNamed(context, DonorProfile.id);
+            },
+            child: const Text('Cancel',
+                style: TextStyle(fontSize: 15.0, color: Colors.white)),
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -109,131 +106,75 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     _firstNameController = TextEditingController(text: donor.firstName);
     return Padding(
         padding: const EdgeInsets.all(8.0),
-    child: TextFormField(
-      controller: _firstNameController,
-      decoration: const InputDecoration(
-        labelText: 'First Name',
-          border: OutlineInputBorder(
-            borderRadius:
-            BorderRadius.all(Radius.circular(32.0)),
-          )
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter first name.';
-        }
-        return null;
-      },
-      onSaved: (value) {
-        donor.firstName = value!;
-      },
-
-    ));
+        child: TextFormField(
+          controller: _firstNameController,
+          decoration: const InputDecoration(
+              labelText: 'First Name',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(32.0)),
+              )),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter first name.';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            donor.firstName = value!;
+          },
+        ));
   }
 
   Widget _buildLastNameField() {
     _lastNameController = TextEditingController(text: donor.lastName);
     return Padding(
         padding: const EdgeInsets.all(8.0),
-    child: TextFormField(
-      controller: _lastNameController,
-      decoration: const InputDecoration(
-        labelText: 'Last Name',
-          border: OutlineInputBorder(
-            borderRadius:
-            BorderRadius.all(Radius.circular(32.0)),
-          )
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter last name.';
-        }
-        return null;
-      },
-      onSaved: (value) {
-        donor.lastName = value!;
-      },
-    ));
-  }
-
-  Widget _buildPasswordField() {
-    _passwordController = TextEditingController(text: donor.password);
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-    child:TextFormField(
-      controller: _passwordController,
-      decoration: const InputDecoration(labelText: 'Password',
-          border: OutlineInputBorder(
-            borderRadius:
-            BorderRadius.all(Radius.circular(32.0)),
-          )),
-      validator: (value) {
-        if (value!.isEmpty || value.length < 6) {
-          return "Password must be at least 6 characters.";
-        } else {
-          return null;
-        }
-      },
-      obscureText: true,
-      onSaved: (value) {
-        donor.password = value!;
-      },
-    ));
-  }
-
-  Widget _buildConfirmPasswordField() {
-    _confirmPasswordController = TextEditingController(text: donor.password);
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-    child: TextFormField(
-      controller: _confirmPasswordController,
-      decoration: const InputDecoration(labelText: 'Confirm Password',
-          border: OutlineInputBorder(
-            borderRadius:
-            BorderRadius.all(Radius.circular(32.0)),
-          )),
-      validator: (value) {
-        if (value!.isEmpty || value.length < 6) {
-          return "Password must be at least 6 characters.";
-        } else if (value != _passwordController?.text) {
-          return "Passwords do not match";
-        } else {
-          return null;
-        }
-      },
-      obscureText: true,
-    ));
+        child: TextFormField(
+          controller: _lastNameController,
+          decoration: const InputDecoration(
+              labelText: 'Last Name',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(32.0)),
+              )),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter last name.';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            donor.lastName = value!;
+          },
+        ));
   }
 
   Widget _buildPhoneNumberField() {
     _phoneNumberController = TextEditingController(text: donor.phoneNumber);
     return Padding(
         padding: const EdgeInsets.all(8.0),
-    child: TextFormField(
-      controller: _phoneNumberController,
-      decoration: const InputDecoration(
-        labelText: 'Phone number',
-          border: OutlineInputBorder(
-            borderRadius:
-            BorderRadius.all(Radius.circular(32.0)),
-          )
-      ),
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Please enter your phone number.";
-        } else if (!phoneNumberRegExp.hasMatch(value)) {
-          return "Please enter a valid phone number.";
-        } else {
-          return null;
-        }
-      },
-      onSaved: (value) {
-        donor.phoneNumber = value!;
-      },
-    ));
+        child: TextFormField(
+          controller: _phoneNumberController,
+          decoration: const InputDecoration(
+              labelText: 'Phone number',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(32.0)),
+              )),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "Please enter your phone number.";
+            } else if (!phoneNumberRegExp.hasMatch(value)) {
+              return "Please enter a valid phone number.";
+            } else {
+              return null;
+            }
+          },
+          onSaved: (value) {
+            donor.phoneNumber = value!;
+          },
+        ));
   }
 
-  _submitForm(){
+  _submitForm() {
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -244,8 +185,8 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
   _body() {
     return SingleChildScrollView(
       child: Container(
-      // decoration: BoxDecoration(
-      // color: Colors.blueGrey.shade50,),
+        // decoration: BoxDecoration(
+        // color: Colors.blueGrey.shade50,),
         margin: const EdgeInsets.all(15),
         child: Form(
           key: _formKey,
@@ -254,8 +195,6 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
             children: <Widget>[
               _buildFirstNameField(),
               _buildLastNameField(),
-              _buildPasswordField(),
-              _buildConfirmPasswordField(),
               _buildPhoneNumberField(),
             ],
           ),

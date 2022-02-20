@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/donor_dashboard.dart';
-import 'package:donaid/Models/Donor.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Organization/organization_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,12 +19,10 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
-  Organization? organization;
+  Organization organization = Organization.c1();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController? _organizationNameController;
-  TextEditingController? _passwordController;
-  TextEditingController? _confirmPasswordController;
   TextEditingController? _phoneNumberController;
   TextEditingController? _organizationDescriptionController;
   TextEditingController? _countryController;
@@ -51,15 +48,12 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     organization = Organization(
         organizationEmail: doc['email'],
         organizationName: doc['organizationName'],
-        password: doc['password'],
         phoneNumber: doc['phoneNumber'],
         uid: doc['uid'],
         organizationDescription: doc['organizationDescription'],
         country: doc['country'],
         gatewayLink: doc['gatewayLink']
     );
-    print('country:${organization?.country}x');
-    print('get org');
     setState(() {});
   }
 
@@ -70,14 +64,14 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         .get();
     final doc = ret.docs[0];
     _firestore.collection('OrganizationUsers').doc(doc.id).update({
-      "organizationName": organization?.organizationName,
-      "password": organization?.password,
-      "phoneNumber": organization?.phoneNumber,
-      "organizationDescription": organization?.organizationDescription,
-      "country": organization?.country,
-      "gatewayLink": organization?.gatewayLink
+      "organizationName": organization.organizationName,
+      "phoneNumber": organization.phoneNumber,
+      "organizationDescription": organization.organizationDescription,
+      "country": organization.country,
+      "gatewayLink": organization.gatewayLink
     }).whenComplete(_goToProfilePage);
   }
+
   _goToProfilePage(){
     Navigator.pushNamed(context, OrganizationProfile.id);
   }
@@ -114,7 +108,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
 
 
   Widget _buildOrganizationNameField() {
-    _organizationNameController = TextEditingController(text: organization?.organizationName);
+    _organizationNameController = TextEditingController(text: organization.organizationName);
     return Padding(
         padding: const EdgeInsets.all(8.0),
     child: TextFormField(
@@ -133,63 +127,13 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         return null;
       },
       onSaved: (value) {
-        organization?.organizationName = value!;
+        organization.organizationName = value!;
       },
-    ));
-  }
-
-
-  Widget _buildPasswordField() {
-    _passwordController = TextEditingController(text: organization?.password);
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-    child:TextFormField(
-      controller: _passwordController,
-      decoration: const InputDecoration(labelText: 'Password',
-          border: OutlineInputBorder(
-            borderRadius:
-            BorderRadius.all(Radius.circular(32.0)),
-          )),
-      validator: (value) {
-        if (value!.isEmpty || value.length < 6) {
-          return "Password must be at least 6 characters.";
-        } else {
-          return null;
-        }
-      },
-      obscureText: true,
-      onSaved: (value) {
-        organization?.password = value!;
-      },
-    ));
-  }
-
-  Widget _buildConfirmPasswordField() {
-    _confirmPasswordController = TextEditingController(text: organization?.password);
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-    child: TextFormField(
-      controller: _confirmPasswordController,
-      decoration: const InputDecoration(labelText: 'Confirm Password',
-          border: OutlineInputBorder(
-            borderRadius:
-            BorderRadius.all(Radius.circular(32.0)),
-          )),
-      validator: (value) {
-        if (value!.isEmpty || value.length < 6) {
-          return "Password must be at least 6 characters.";
-        } else if (value != _passwordController?.text) {
-          return "Passwords do not match";
-        } else {
-          return null;
-        }
-      },
-      obscureText: true,
     ));
   }
 
   Widget _buildPhoneNumberField() {
-    _phoneNumberController = TextEditingController(text: organization?.phoneNumber);
+    _phoneNumberController = TextEditingController(text: organization.phoneNumber);
     return Padding(
         padding: const EdgeInsets.all(8.0),
     child: TextFormField(
@@ -211,14 +155,14 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         }
       },
       onSaved: (value) {
-        organization?.phoneNumber = value!;
+        organization.phoneNumber = value!;
       },
     ));
   }
 
 
   Widget _buildOrganizationDescriptionField() {
-    _organizationDescriptionController = TextEditingController(text: organization?.organizationDescription);
+    _organizationDescriptionController = TextEditingController(text: organization.organizationDescription);
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
@@ -227,7 +171,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         maxLines: 5,
         maxLength: 240,
         onSaved: (value) {
-          organization?.organizationDescription = value;
+          organization.organizationDescription = value;
         },
         textAlign: TextAlign.center,
         decoration: InputDecoration(
@@ -248,7 +192,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
   }
 
   Widget _buildCountryField() {
-    _countryController = TextEditingController(text: organization?.country);
+    _countryController = TextEditingController(text: organization.country);
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
@@ -267,13 +211,13 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
             return null;
           },
           onSaved: (value) {
-            organization?.country = value!;
+            organization.country = value!;
           },
         ));
   }
 
   Widget _buildGatewayLinkField() {
-    _gatewayLinkController = TextEditingController(text: organization?.gatewayLink);
+    _gatewayLinkController = TextEditingController(text: organization.gatewayLink);
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
@@ -292,7 +236,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
             return null;
           },
           onSaved: (value) {
-            organization?.country = value!;
+            organization.gatewayLink = value!;
           },
         ));
   }
@@ -316,8 +260,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               _buildOrganizationNameField(),
-              _buildPasswordField(),
-              _buildConfirmPasswordField(),
               _buildPhoneNumberField(),
               _buildOrganizationDescriptionField(),
               _buildCountryField(),

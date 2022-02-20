@@ -49,7 +49,6 @@ class _DonorProfileState extends State<DonorProfile> {
           doc['email'],
         doc['firstName'],
         doc['lastName'],
-           doc['password'],
            doc['phoneNumber'],
       );
     setState(() {});

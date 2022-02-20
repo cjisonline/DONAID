@@ -41,15 +41,12 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
     organization = Organization(
       organizationEmail: doc['email'],
       organizationName: doc['organizationName'],
-      password: doc['password'],
       phoneNumber: doc['phoneNumber'],
       uid: doc['uid'],
       organizationDescription: doc['organizationDescription'],
       country: doc['country'],
       gatewayLink: doc['gatewayLink']
     );
-    print('country:${organization?.country}x');
-    print('get org');
     setState(() {});
   }
 
