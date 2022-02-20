@@ -24,12 +24,13 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   TextEditingController titleController = new TextEditingController();
   bool showLoadingSpinner = false;
   final _formKey = GlobalKey<FormState>();
-  static final goalRegExp = RegExp(r"\$?\d+(?:\.\d+)?");
+  static final goalRegExp = RegExp("^\$|^(0|([1-9][0-9]{0,3}))(\\.[0-9]{0,2})?\$");
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final firestore = FirebaseFirestore.instance;
   String dropdownvalue = 'Select';
+  late DocumentSnapshot documentSnapshot;
 
   // List of items in our dropdown menu
   var category = ['Select'];
@@ -50,11 +51,14 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
     super.initState();
     _getCurrentUser();
     _getCampaign();
+   // _getDocID();
   }
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
+
+
 
   Future<void> create(
       String category, String description, int goalAmount, String title, String endDateController) async {
@@ -62,9 +66,9 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
       await firestore.collection("CampaignsTest").add({
         'amountRaised': 0,
         'category': category,
-        'dataCreated': FieldValue.serverTimestamp(),
+        'dateCreated': FieldValue.serverTimestamp(),
         'description': description,
-        'endDate': endDateController,
+        'endDate': Timestamp.fromDate(DateTime.parse(endDateController)),
         'goalAmount': goalAmount,
         'organizationID': loggedInUser?.uid,
         'title': title
@@ -73,6 +77,17 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
       print(e);
     }
   }
+
+  // _getDocID() async {
+  //   await firestore
+  //       .collection('CharityCategories')
+  //       .doc(loggedInUser?.uid)
+  //       .get()
+  //       .then((value){
+  //     documentSnapshot = value;
+  //   });
+  //   setState(() {});
+  // }
 
   Future<void> delete(String id) async {
     try {
@@ -144,6 +159,9 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            minLines: 2,
+                            maxLines: 5,
+                            maxLength: 50,
                             controller: titleController,
                             inputFormatters: [new LengthLimitingTextInputFormatter(50)],
                             validator: (value) {
@@ -181,8 +199,10 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            minLines: 2,
+                            maxLines: 5,
+                            maxLength: 240,
                             controller: descriptionController,
-                            inputFormatters: [new LengthLimitingTextInputFormatter(250)],
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Please enter a description.";
@@ -218,8 +238,8 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            keyboardType: TextInputType.number,
                             controller: goalAmountController,
-                            inputFormatters: [new LengthLimitingTextInputFormatter(50)],
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Please enter a goal amount.";
@@ -255,10 +275,19 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 )),
                           ),
                         ),
-                        Padding(padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              readOnly: true,
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
                               controller: endDateController,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Please enter end date.";
+                                  }
+                                  else {
+                                    return null;
+                                  }
+                                },
+                              textAlign: TextAlign.center,
                               decoration: InputDecoration(
                                   label: Center(
                                     child: RichText(
@@ -316,7 +345,6 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(32.0)),
                                   )),
-
                             value: dropdownvalue,
                             icon: const Icon(Icons.keyboard_arrow_down),
                               items: category.map((String items) {
@@ -330,7 +358,6 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                   dropdownvalue = newValue!;
                                   categoryController.text = dropdownvalue.toString();
                                 });
-
                               },
                           )
                         ),
@@ -360,7 +387,6 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                     context: context,
                                     builder: (BuildContext context) => PopUpSuccessDialog(),
                                   );
-
                                 }
                               },
                             ),
