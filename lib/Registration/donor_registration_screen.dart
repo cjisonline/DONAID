@@ -53,7 +53,10 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             email: email, password: password);
 
         if (newUser != null) {
-          await _firestore.collection('DonorUsers').add({
+          final docRef = await _firestore.collection('DonorUsers').add({});
+
+          await _firestore.collection('DonorUsers').doc(docRef.id).set({
+            'id': docRef.id,
             'uid': newUser.user.uid,
             'firstName': firstName,
             'lastName': lastName,
@@ -62,7 +65,10 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             'password': password,
           });
 
-          await _firestore.collection('Users').add({
+          final usersDocRef = await _firestore.collection('Users').add({});
+
+          await _firestore.collection('Users').doc(usersDocRef.id).set({
+            'id': usersDocRef.id,
             'uid':newUser.user.uid,
             'email':email,
             'userType':1
