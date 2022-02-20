@@ -1,5 +1,9 @@
+import 'package:donaid/Models/message.dart';
+import 'package:donaid/globals.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 import '../../home_screen.dart';
 
@@ -20,12 +24,12 @@ class _DonorDrawerState extends State<DonorDrawer> {
             DrawerHeader(
               child: Stack(
                 children: const [
-                   Positioned(
+                  Positioned(
                     bottom: 8.0,
                     left: 4.0,
-                    child:  Text(
+                    child: Text(
                       "Donor",
-                      style:  TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   )
                 ],
@@ -58,7 +62,10 @@ class _DonorDrawerState extends State<DonorDrawer> {
               leading: const Icon(Icons.logout),
               title: const Text("Logout"),
               onTap: () {
-                Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id));
+                FirebaseAuth.instance.signOut();
+                MyGlobals.allMessages = <MessageModel>[].obs;
+                Navigator.of(context)
+                    .popUntil(ModalRoute.withName(HomeScreen.id));
               },
             ),
           ],

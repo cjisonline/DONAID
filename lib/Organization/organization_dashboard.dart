@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Chat/conversation.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/campaign_card.dart';
 import 'package:donaid/Organization/OrganizationWidget/urgent_case_card.dart';
+import 'package:donaid/Services/chatServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'OrganizationWidget/beneficiary_card.dart';
 import 'OrganizationWidget/organization_drawer.dart';
@@ -27,6 +30,13 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   List<Beneficiary> beneficiaries = [];
   List<Campaign> campaigns = [];
   List<UrgentCase> urgentCases = [];
+  int currentIndex = 0;
+
+  updateIndex(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
@@ -39,6 +49,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     _getCampaign();
     _getUrgentCases();
     _getBeneficiaries();
+    Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
+    Get.find<ChatService>().listenFriend(loggedInUser!.uid, 1);
   }
 
   _getCampaign() async {
@@ -114,27 +126,47 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-        backgroundColor: Colors.blue,
-        actions: <Widget>[
-          IconButton(
-              icon: const Icon(
-                Icons.add,
-                size: 30,
-              ),
-              onPressed: () {
-              }),
-        ],
-      ),
-      drawer: OrganizationDrawer(),
-      body: _body(),
-      bottomNavigationBar: _bottomNavigationBar(),
-    );
+    return Container(
+        color: Colors.blue,
+        child: SafeArea(
+            child: Scaffold(
+                appBar: AppBar(
+                  title: Text('Dashboard'),
+                  backgroundColor: Colors.blue,
+                  actions: <Widget>[
+                    // IconButton(
+                    //     icon: Icon(
+                    //       Icons.add,
+                    //       size: 30,
+                    //     ),
+                    //     onPressed: () {}),
+                  ],
+                ),
+                drawer: OrganizationDrawer(),
+                body: currentIndex == 0
+                    ? home()
+                    : currentIndex == 1
+                        ? search()
+                        : currentIndex == 2
+                            ? notification()
+                            : messages(),
+                bottomNavigationBar:
+                    _bottomNavigationBar(context, updateIndex))));
   }
 
-  _body() {
+  search() {
+    return Container(child: Center(child: Text("Search")));
+  }
+
+  notification() {
+    return Container(child: Center(child: Text("notification")));
+  }
+
+  messages() {
+    return Conversation(loggedInUser!.uid, "DonorUsers");
+  }
+
+  home() {
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -247,7 +279,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     );
   }
 
-  _bottomNavigationBar() {
+  _bottomNavigationBar(context, onpress) {
     return Container(
       height: 70,
       decoration: BoxDecoration(
@@ -259,7 +291,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () => onpress(0),
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
             Text('Home',
@@ -269,7 +301,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () => onpress(1),
               icon: const Icon(
                 Icons.search,
                 color: Colors.white,
@@ -283,7 +315,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () => onpress(2),
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
@@ -294,7 +326,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () => onpress(3),
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
             Text('Messages',

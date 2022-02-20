@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'Donor/donor_dashboard.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-
 class LoginScreen extends StatefulWidget {
   static const id = 'login_screen';
   const LoginScreen({Key? key}) : super(key: key);
@@ -19,58 +18,59 @@ class _LoginScreenState extends State<LoginScreen> {
   final _firestore = FirebaseFirestore.instance;
 
   final _formKey = GlobalKey<FormState>();
-  
+
   static final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
-  String email="";
-  String password="";
+  String email = "";
+  String password = "";
   bool showLoadingSpinner = false;
 
-  Future<int> getUserType() async{ //Searches firestore for the user corresponding to the email. Changes the userType variable accordingly.
-    int userType =-1;
+  Future<int> getUserType() async {
+    //Searches firestore for the user corresponding to the email. Changes the userType variable accordingly.
+    int userType = -1;
     try {
-      final user = await _firestore.collection('Users').where(
-          'email', isEqualTo: email).get();
+      final user = await _firestore
+          .collection('Users')
+          .where('email', isEqualTo: email)
+          .get();
       userType = user.docs[0]['userType'];
       print('USERTYPE: $userType');
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
 
     return userType;
   }
-  void loginUser() async{
-    try{
+
+  void loginUser() async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
       final userType = await getUserType();
-      if(userType == 1) { //If user logging in is a donor user
-        await _auth.signInWithEmailAndPassword(email: email, password: password);
+      if (userType == 1) {
+        //If user logging in is a donor user
         Navigator.pushNamed(context, DonorDashboard.id);
-      }
-      else if(userType == 2){ //If user logging in is an organization user
-        final organizationUser = await _firestore.collection('OrganizationUsers').where('email', isEqualTo: email).get();
+      } else if (userType == 2) {
+        //If user logging in is an organization user
+        final organizationUser = await _firestore
+            .collection('OrganizationUsers')
+            .where('email', isEqualTo: email)
+            .get();
         final approved = organizationUser.docs[0]['approved'];
         print('APPROVAL STATUS: $approved');
-        if(approved == true){
-          //TODO: Navigate to organization dashboard
-          await _auth.signInWithEmailAndPassword(email: email, password: password);
+        if (approved) {
           Navigator.pushNamed(context, OrganizationDashboard.id);
-
-        }
-        else{
+        } else {
           _accountNotApprovedDialog();
         }
-      }
-      else{
+      } else {
         return _accountNotFoundDialog();
       }
-    }
-    on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
-      if(e.code == 'wrong-password'){
+      if (e.code == 'wrong-password') {
         _wrongPasswordDialog();
       }
-      if(e.code == 'user-not-found'){
+      if (e.code == 'user-not-found') {
         _accountNotFoundDialog();
       }
     }
@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _wrongPasswordDialog() async {
     setState(() {
-      showLoadingSpinner=false;
+      showLoadingSpinner = false;
     });
     return showDialog<void>(
         context: context,
@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _accountNotFoundDialog() async {
     setState(() {
-      showLoadingSpinner=false;
+      showLoadingSpinner = false;
     });
     return showDialog<void>(
         context: context,
@@ -122,8 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content: const Text(
-                'No account with this email could be found.'),
+            content: const Text('No account with this email could be found.'),
             actions: [
               Center(
                 child: TextButton(
@@ -140,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _accountNotApprovedDialog() async {
     setState(() {
-      showLoadingSpinner=false;
+      showLoadingSpinner = false;
     });
     return showDialog<void>(
         context: context,
@@ -155,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             content: const Text(
                 'Your organization account has not yet been approved by the admin. You must wait for '
-                    'approval before you can login to this account.'),
+                'approval before you can login to this account.'),
             actions: [
               Center(
                 child: TextButton(
@@ -176,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
         ),
@@ -193,17 +192,15 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  onChanged: (value){
+                  onChanged: (value) {
                     email = value;
                   },
-                  validator: (value){
-                    if(value!.isEmpty){
+                  validator: (value) {
+                    if (value!.isEmpty) {
                       return "Please enter your email.";
-                    }
-                    else if(!emailRegExp.hasMatch(value)){
+                    } else if (!emailRegExp.hasMatch(value)) {
                       return "Please enter a valid email address.";
-                    }
-                    else{
+                    } else {
                       return null;
                     }
                   },
@@ -213,21 +210,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: "Email",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      )
-                  ),
+                      )),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  onChanged: (value){
+                  onChanged: (value) {
                     password = value;
                   },
-                  validator: (value){
-                    if(value!.isEmpty || value.length < 6){
+                  validator: (value) {
+                    if (value!.isEmpty || value.length < 6) {
                       return "Password must be at least 6 characters.";
-                    }
-                    else {
+                    } else {
                       return null;
                     }
                   },
@@ -237,12 +232,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: "Password",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      )
-                  ),
+                      )),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
                 child: Material(
                   elevation: 5.0,
                   color: Colors.blue,
@@ -254,20 +249,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Colors.white,
                       ),
                     ),
-                    onPressed: () async{
-                      if(_formKey.currentState!.validate()) {
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
                         setState(() {
-                          showLoadingSpinner=true;
+                          showLoadingSpinner = true;
                         });
 
-                       loginUser();
+                        loginUser();
                       }
                     },
                   ),
                 ),
               ),
-
-              
             ],
           ),
         ),

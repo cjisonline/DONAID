@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class OrganizationCard extends StatelessWidget {
   final String name;
 
-  const OrganizationCard( this.name, {Key? key}) : super(key: key);
+  const OrganizationCard(this.name, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
         padding: EdgeInsets.all(10.0),
         child: Container(
           width: 125.0,
@@ -18,8 +18,7 @@ class OrganizationCard extends StatelessWidget {
             IconButton(
               enableFeedback: false,
               onPressed: () {},
-              icon: const Icon(Icons.apartment,
-                  color: Colors.blue, size: 50),
+              icon: Icon(Icons.apartment, color: Colors.blue, size: 50),
             ),
             Padding(
               padding: EdgeInsets.all(10.0),
