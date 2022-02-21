@@ -24,7 +24,9 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   TextEditingController titleController = new TextEditingController();
   bool showLoadingSpinner = false;
   final _formKey = GlobalKey<FormState>();
-  static final goalRegExp = RegExp("^\$|^(0|([1-9][0-9]{0,3}))(\\.[0-9]{0,2})?\$");
+  static final goalRegExp = RegExp(
+      r"^(?!0\.00)\d{1,13}(,\d{3})*(\.\d\d)?$"
+  );
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
