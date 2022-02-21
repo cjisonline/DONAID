@@ -43,25 +43,22 @@ function logoutAdmin(){
 
 var tbody = document.getElementById('orgsTable');
 
-function createTable(email, phoneNumber, password, organizationName) {
+function createTable(email, phoneNumber, organizationName, verificationDocumentURL) {
     let trow = document.createElement("tr");
     let td1 = document.createElement('td');
     let td2 = document.createElement('td');
     let td3 = document.createElement('td');
     let td4 = document.createElement('td');
-    let td5 = document.createElement('td');
 
     td1.innerHTML = email;
     td2.innerHTML = phoneNumber;
-    td3.innerHTML = password;
-    td4.innerHTML = organizationName;
-    td5.innerHTML = '<button class="submitButton" type="submit" onclick="orgDocs()">Documents</button>';
+    td3.innerHTML = organizationName;
+    td4.innerHTML = '<a href='+verificationDocumentURL+' download><button id="docsButton" class="submitButton" type="submit">Download</button></a>';
 
     trow.appendChild(td1);
     trow.appendChild(td2);
     trow.appendChild(td3);
     trow.appendChild(td4);
-    trow.appendChild(td5);
 
     tbody.appendChild(trow);
 }
@@ -70,7 +67,7 @@ function populateTable(OrganizationUsers) {
     tbody.innerHTML="";
     OrganizationUsers.forEach(element => {
         if(element.approved == true) {
-        createTable(element.email, element.phoneNumber, element.password, element.organizationName);
+        createTable(element.email, element.phoneNumber, element.organizationName, element.verificationDocumentURL);
         }
     })
 }
@@ -89,9 +86,6 @@ async function getOrgData(){
 }
 getOrgData();
 
-function orgDocs(){
-    
-}
 </script>
 
 <title>DONAID Admin Console</title>
@@ -118,7 +112,6 @@ function orgDocs(){
             <thead>
                 <th>Email</th>
                 <th>Phone Number</th>
-                <th>Password</th>
                 <th>Organization Name</th>
                 <th>Documents</th>
             </thead>

@@ -5,9 +5,16 @@
 
 <!-- CSS Loads -->
 <link rel="stylesheet" href="login.css">
-<link rel="stylesheet" href="modal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.css">
+
+<!-- JQuery Loads -->
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
 
 <!-- JS Loads -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.all.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
 <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css" />
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js"></script>
@@ -16,7 +23,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
-import {getFirestore, getDocs, collection, query, where} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
+import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
     const firebaseConfig = {
     apiKey: "AIzaSyAZIToR8oHIIgWmayz0PncWAaiwmJ5n_64",
     authDomain: "donaid-d3244.firebaseapp.com",
@@ -29,7 +36,7 @@ import {getFirestore, getDocs, collection, query, where} from 'https://www.gstat
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const db =getFirestore(app);
+  const db = getFirestore(app);
 
 // Logout
 function logoutAdmin(){
@@ -43,74 +50,74 @@ function logoutAdmin(){
 
 var tbody = document.getElementById('approvalsTable');
 
-function createTable(email, phoneNumber, organizationName) {
-    let trow = document.createElement("tr");
-    let td1 = document.createElement('td');
-    let td2 = document.createElement('td');
-    let td3 = document.createElement('td');
-    let td4 = document.createElement('td');
-
-    td1.innerHTML = email;
-    td2.innerHTML = phoneNumber;
-    td3.innerHTML = organizationName;
-    td4.innerHTML = '<button id="orgButton" class="submitButton">Approve</button>';
-
-    trow.appendChild(td1);
-    trow.appendChild(td2);
-    trow.appendChild(td3);
-    trow.appendChild(td4);
-
-    tbody.appendChild(trow);
-}
-
-function populateTable(OrganizationUsers) {
-    tbody.innerHTML="";
-    OrganizationUsers.forEach(element => {
-        if(element.approved == false) {
-        createTable(element.email, element.phoneNumber, element.organizationName);
-        }
-    })
-}
-
 async function getApprovalData(){
     window.onload = async function(){
-        const querySnapshot = await getDocs(collection(db, "OrganizationUsers"));
-        var approvals = [];
 
-        querySnapshot.forEach((doc) => {
-        approvals.push(doc.data())
-    })
-    console.log(approvals)
-    populateTable(approvals);
-    }
-}
-getApprovalData();
-
-function approveOrg(){
-
-}
-
-function denyOrg(){
-
-}
-
-document.addEventListener("click", event => {
-    if(event.target.id == 'orgButton'){
-        var approveModal = document.getElementById("approveModalDiv");
-        approveModalDiv.style.display = "block";
-
-        var span = document.getElementsByClassName("close")[0];
-        span.onclick = function() {
-            approveModalDiv.style.display = "none";
-        }
-        window.onclick = function(event) {
-        if (event.target == approveModal) {
-            approveModalDiv.style.display = "none";
+    const querySnapshot = await getDocs(collection(db, "OrganizationUsers"));
+        querySnapshot.forEach((item) => {
+            if(item.data().approved == false) {
+                document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
+                "<tr><td class='emailTD'>" + item.data().email + 
+                "</td><td>" + item.data().phoneNumber + 
+                "</td><td>" + item.data().organizationName + 
+                "</td><td class='documentTD'>" + item.data().id +
+                "</td><td>" + '<a href=' + item.data().verificationDocumentURL + ' download><button id="docsButton" class="submitButton" type="submit">Download</button></a>' + 
+                "</td><td>" + '<button id="approveButton" class="approveButtonClass">Approve</button>' + "</td></tr>";
             }
-        } 
-    }
+        });
 
-});
+        $('button.approveButtonClass').click(function() {
+            var $item = $(this).closest("tr")
+            .find('td.documentTD')
+            .text(); 
+
+            $("#resultas").append($item); 
+            var documentID = $item;
+
+            approveTheOrganization(documentID);
+            });
+        }
+}
+
+function approveTheOrganization(documentID) {
+      
+    swal.fire({
+        title: 'Approve this organization?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+
+    })
+    .then((result) => {
+        if (result.isConfirmed) { 
+            const approvals = doc(db, "OrganizationUsers", documentID);
+            updateDoc(approvals, {approved: true})
+    
+            .then(() => {
+                swal.fire('Approved!',
+                'Organization is approved.',
+                'success').then(function () {
+                    location.reload(); 
+                })
+                
+                .catch((error) => {
+                    console.error("Error approving organization: ", error);
+                })
+            })
+        }
+
+        else {
+            swal.fire('Cancelled!',
+            'The organization was not approved.',
+            'success');
+        }
+            
+    });
+}
+
+getApprovalData();
 
 </script>
 
@@ -139,25 +146,14 @@ document.addEventListener("click", event => {
                 <th>Email</th>
                 <th>Phone Number</th>
                 <th>Organization Name</th>
+                <th>ID</th>
+                <th>Documents</th>
                 <th>Approve</th>
             </thead>
-            <tbody id="approvalsTable">
+            <tbody>
             </tbody>
         </table>
     </div>
-
-    <div id="approveModalDiv" class="modal">
-
-        <div class="approve-modal-content">
-            <span class="close">&times;</span>
-            <h1>Approve this Organization?</h1>
-            <textarea>Reason</textarea>
-            <button class="submitButton" id="approveOrgBtn" onclick()="approveOrg()">Approve</button><button class="submitButton" id="denyOrgBtn" onclick()="denyOrg">Deny</button>
-        </div>
-
-    </div> 
-
-        
 
         <script type="module">
             import {getAuth, signInWithEmailAndPassword} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
