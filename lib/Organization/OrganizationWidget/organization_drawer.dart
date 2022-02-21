@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../home_screen.dart';
-import '../organization_profile.dart';
 
 class OrganizationDrawer extends StatefulWidget {
   const OrganizationDrawer({Key? key}) : super(key: key);

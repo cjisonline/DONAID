@@ -52,7 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
         final approved = organizationUser.docs[0]['approved'];
         print('APPROVAL STATUS: $approved');
         if(approved == true){
-          //TODO: Navigate to organization dashboard
           await _auth.signInWithEmailAndPassword(email: email, password: password);
           Navigator.pushNamed(context, OrganizationDashboard.id);
 
@@ -62,52 +61,21 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
       else{
-        return _accountNotFoundDialog();
+        return _invalidCredentialsDialog();
       }
     }
     on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       if(e.code == 'wrong-password'){
-        _wrongPasswordDialog();
+        _invalidCredentialsDialog();
       }
       if(e.code == 'user-not-found'){
-        _accountNotFoundDialog();
+        _invalidCredentialsDialog();
       }
     }
   }
 
-  Future<void> _wrongPasswordDialog() async {
-    setState(() {
-      showLoadingSpinner=false;
-    });
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Center(
-              child: Text('Hold on a second!'),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0),
-            ),
-            content: const Text(
-                'That password doesn\'t match that email. Please try again!'),
-            actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK'),
-                ),
-              ),
-            ],
-          );
-        });
-  }
-
-  Future<void> _accountNotFoundDialog() async {
+  Future<void> _invalidCredentialsDialog() async {
     setState(() {
       showLoadingSpinner=false;
     });
@@ -123,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
               borderRadius: BorderRadius.circular(32.0),
             ),
             content: const Text(
-                'No account with this email could be found.'),
+                'Username or password was invalid.'),
             actions: [
               Center(
                 child: TextButton(

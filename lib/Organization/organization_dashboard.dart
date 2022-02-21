@@ -46,7 +46,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
         .collection('Campaigns')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
         .get();
-    ret.docs.forEach((element) {
+    for (var element in ret.docs) {
       Campaign campaign = Campaign(
           title: element.data()['title'],
           description: element.data()['description'],
@@ -58,7 +58,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID']);
       campaigns.add(campaign);
-    });
+    }
 
     setState(() {});
   }
@@ -69,7 +69,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
         .where('organizationID', isEqualTo: loggedInUser?.uid)
         .get();
 
-    ret.docs.forEach((element) {
+    for (var element in ret.docs) {
       UrgentCase urgentCase = UrgentCase(
           title: element.data()['title'],
           description: element.data()['description'],
@@ -81,7 +81,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID']);
       urgentCases.add(urgentCase);
-    });
+    }
 
     setState(() {});
   }
@@ -92,7 +92,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
         .where('organizationID', isEqualTo: loggedInUser?.uid)
         .get();
 
-    ret.docs.forEach((element) {
+    for (var element in ret.docs) {
       Beneficiary beneficiary = Beneficiary(
           name: element.data()['name'],
           biography: element.data()['biography'],
@@ -105,7 +105,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           organizationID:
               element.data()['organizationID']); // need to add category
       beneficiaries.add(beneficiary);
-    });
+    }
 
     print('Beneficiaries list: $beneficiaries');
 
@@ -116,7 +116,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: const Text('Dashboard'),
         backgroundColor: Colors.blue,
         actions: <Widget>[
           IconButton(
@@ -128,7 +128,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               }),
         ],
       ),
-      drawer: OrganizationDrawer(),
+      drawer: const OrganizationDrawer(),
       body: _body(),
       bottomNavigationBar: _bottomNavigationBar(),
     );
@@ -142,7 +142,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -177,7 +177,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -212,7 +212,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -262,7 +262,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               onPressed: () {},
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-            Text('Home',
+            const Text('Home',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -276,7 +276,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 size: 35,
               ),
             ),
-            Text('Search',
+            const Text('Search',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -287,7 +287,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-            Text('Notifications',
+            const Text('Notifications',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -297,7 +297,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               onPressed: () {},
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-            Text('Messages',
+            const Text('Messages',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
