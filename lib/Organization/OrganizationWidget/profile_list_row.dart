@@ -25,7 +25,7 @@ class ProfileRow extends StatelessWidget {
             margin: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 10.0),
             decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(32.0)),
                 border: Border.all(color: Colors.grey.shade300, width: 2.0)
             ),
             child: Padding (

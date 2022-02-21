@@ -107,13 +107,19 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         padding: const EdgeInsets.all(8.0),
     child: TextFormField(
       controller: _organizationNameController,
-      decoration: const InputDecoration(
-        labelText: 'Name',
-          border: OutlineInputBorder(
-            borderRadius:
-            BorderRadius.all(Radius.circular(32.0)),
-          )
-      ),
+      decoration: InputDecoration(
+          label: Center(
+            child: RichText(
+              text: const TextSpan(
+                text: 'Name',
+                style: TextStyle(
+                    color: Colors.black, fontSize: 20.0),
+              ),
+            ),
+          ),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0)),
+          )),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter organization\'s name.';
@@ -132,13 +138,19 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         padding: const EdgeInsets.all(8.0),
     child: TextFormField(
       controller: _phoneNumberController,
-      decoration: const InputDecoration(
-        labelText: 'Phone number',
-          border: OutlineInputBorder(
-            borderRadius:
-            BorderRadius.all(Radius.circular(32.0)),
-          )
-      ),
+      decoration: InputDecoration(
+          label: Center(
+            child: RichText(
+              text: const TextSpan(
+                text: 'Phone Number',
+                style: TextStyle(
+                    color: Colors.black, fontSize: 20.0),
+              ),
+            ),
+          ),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0)),
+          )),
       validator: (value) {
         if (value!.isEmpty) {
           return "Please enter your phone number.";
@@ -167,7 +179,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         onSaved: (value) {
           organization.organizationDescription = value;
         },
-        textAlign: TextAlign.center,
         decoration: InputDecoration(
             label: Center(
               child: RichText(
@@ -192,13 +203,19 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             controller: _gatewayLinkController,
-            decoration: const InputDecoration(
-                labelText: 'Gateway Link',
-                border: OutlineInputBorder(
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(32.0)),
-                )
-            ),
+            decoration: InputDecoration(
+                label: Center(
+                  child: RichText(
+                    text: const TextSpan(
+                      text: 'Gateway Link',
+                      style: TextStyle(
+                          color: Colors.black, fontSize: 20.0),
+                    ),
+                  ),
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                )),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter gateway link.';
@@ -224,8 +241,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
   Widget _buildUnitedStatesEditProfile(){
     return SingleChildScrollView(
       child: Container(
-        // decoration: BoxDecoration(
-        // color: Colors.blueGrey.shade50,),
         margin: const EdgeInsets.all(15),
         child: Form(
           key: _formKey,
@@ -245,8 +260,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
   Widget _buildOutsideUnitedStatesEditProfile(){
     return SingleChildScrollView(
       child: Container(
-        // decoration: BoxDecoration(
-        // color: Colors.blueGrey.shade50,),
         margin: const EdgeInsets.all(15),
         child: Form(
           key: _formKey,

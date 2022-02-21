@@ -104,9 +104,17 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           controller: _firstNameController,
-          decoration: const InputDecoration(
-              labelText: 'First Name',
-              border: OutlineInputBorder(
+          decoration: InputDecoration(
+              label: Center(
+                child: RichText(
+                  text: const TextSpan(
+                    text: 'First Name',
+                    style: TextStyle(
+                        color: Colors.black, fontSize: 20.0),
+                  ),
+                ),
+              ),
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(32.0)),
               )),
           validator: (value) {
@@ -127,9 +135,17 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           controller: _lastNameController,
-          decoration: const InputDecoration(
-              labelText: 'Last Name',
-              border: OutlineInputBorder(
+          decoration: InputDecoration(
+              label: Center(
+                child: RichText(
+                  text: const TextSpan(
+                    text: 'Last Name',
+                    style: TextStyle(
+                        color: Colors.black, fontSize: 20.0),
+                  ),
+                ),
+              ),
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(32.0)),
               )),
           validator: (value) {
@@ -150,9 +166,17 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           controller: _phoneNumberController,
-          decoration: const InputDecoration(
-              labelText: 'Phone number',
-              border: OutlineInputBorder(
+          decoration: InputDecoration(
+              label: Center(
+                child: RichText(
+                  text: const TextSpan(
+                    text: 'Phone Number',
+                    style: TextStyle(
+                        color: Colors.black, fontSize: 20.0),
+                  ),
+                ),
+              ),
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(32.0)),
               )),
           validator: (value) {
@@ -181,8 +205,6 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
   _body() {
     return SingleChildScrollView(
       child: Container(
-        // decoration: BoxDecoration(
-        // color: Colors.blueGrey.shade50,),
         margin: const EdgeInsets.all(15),
         child: Form(
           key: _formKey,

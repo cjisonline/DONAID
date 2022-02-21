@@ -25,8 +25,8 @@ class ProfileRow extends StatelessWidget {
             margin: const EdgeInsets.only(left: 30.0, right: 30.0),
             decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                border: Border.all(color: Colors.grey.shade300, width: 2.0)
+                borderRadius: const BorderRadius.all(Radius.circular(32.0)),
+    border: Border.all(color: Colors.grey.shade300, width: 2.0)
             ),
             child: Padding (
                 padding: const EdgeInsets.all(10.0),
@@ -36,14 +36,17 @@ class ProfileRow extends StatelessWidget {
 
                       Row(
                           mainAxisAlignment: MainAxisAlignment.start,
+
                           children: [
                             Container(
+
                               margin: const EdgeInsets.only(bottom: 10.0),
                               child : Text(
                                 field,
                                 style: TextStyle(fontSize: 20.0),
                               ),
                             )])
+
                     ])
 
             ))
