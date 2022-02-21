@@ -48,39 +48,59 @@ function logoutAdmin(){
     alert("Logged Out");
 }
 
-async function getApprovalData(){
+async function getCaseData(){
     window.onload = async function(){
 
-    const querySnapshot = await getDocs(collection(db, "OrganizationUsers"));
-        querySnapshot.forEach((item) => {
-            if(item.data().approved == false) {
-                document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
-                "<tr><td class='emailTD'>" + item.data().email + 
-                "</td><td>" + item.data().phoneNumber + 
-                "</td><td>" + item.data().organizationName + 
-                "</td><td class='documentTD'>" + item.data().id +
-                "</td><td>" + '<a href=' + item.data().verificationDocumentURL + ' download><button id="docsButton" class="submitButton" type="submit">Download</button></a>' + 
-                "</td><td>" + '<button id="approveButton" class="approveButtonClass">Approve</button>' + "</td></tr>";
-            }
-        });
-
-        $('button.approveButtonClass').click(function() {
-            var $item = $(this).closest("tr")
-            .find('td.documentTD')
-            .text(); 
-
-            $("#resultas").append($item); 
-            var documentID = $item;
-
-            approveTheOrganization(documentID);
+    const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
+    querySnapshot2.forEach((doc) => {
+        let orgNameWithID = [];
+        if(doc.data().approved == true) {  
+            orgNameWithID.push({
+                uid: doc.data().uid,
+                organizationName: doc.data().organizationName
             });
         }
+        console.log(orgNameWithID)
+    })
+
+    const querySnapshot = await getDocs(collection(db, "UrgentCases"));
+    querySnapshot.forEach((item) => {
+        
+        // if(orgNamewithID.uid == item.data().organizationID){
+        //     const orgName = orgNamewithID.organizationName;
+        // }
+
+        if(item.data().approved == false) {
+            document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
+            "<tr><td>" + item.data().title + 
+            "</td><td>" + item.data().category + 
+            "</td><td>" + item.data().organizationID + 
+            "</td><td class='documentTD'>" + item.data().id +
+            "</td><td>" + item.data().goalAmount +  
+            "</td><td>" + item.data().description + 
+            "</td><td>" + '<button id="approveButton" class="approveButtonClass">Approve</button>' + "</td></tr>";
+        }
+    })
+
+
+
+    $('button.approveButtonClass').click(function() {
+        var $item = $(this).closest("tr")
+        .find('td.documentTD')
+        .text(); 
+
+        $("#resultas").append($item); 
+        var documentID = $item;
+
+        approveTheUrgentCase(documentID);
+        });
+    }
 }
 
-function approveTheOrganization(documentID) {
+function approveTheUrgentCase(documentID) {
       
     swal.fire({
-        title: 'Approve this organization?',
+        title: 'Approve this urgent case?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -90,32 +110,32 @@ function approveTheOrganization(documentID) {
     })
     .then((result) => {
         if (result.isConfirmed) { 
-            const approvals = doc(db, "OrganizationUsers", documentID);
+            const approvals = doc(db, "UrgentCases", documentID);
             updateDoc(approvals, {approved: true})
     
             .then(() => {
                 swal.fire('Approved!',
-                'Organization is approved.',
+                'Urgent case is approved.',
                 'success').then(function () {
                     location.reload(); 
                 })
                 
                 .catch((error) => {
-                    console.error("Error approving organization: ", error);
+                    console.error("Error approving urgent case: ", error);
                 })
             })
         }
 
         else {
             swal.fire('Cancelled!',
-            'The organization was not approved.',
+            'The urgent case was not approved.',
             'success');
         }
             
     });
 }
 
-getApprovalData();
+getCaseData();
 
 </script>
 
@@ -130,8 +150,8 @@ getApprovalData();
                 <option value="donor_dashboard.html">Donors</option>
                 <option value="org_dashboard.html">Organizations</option>
                 <option value="beneficiaries.html">Beneficiaries</option>
-                <option value="approvals.html" selected>Approvals</option>
-                <option value="urgent_cases.html">Urgent Cases</option>
+                <option value="approvals.html">Approvals</option>
+                <option value="urgent_cases.html" selected>Urgent Cases</option>
             </select>
             <span class="select-highlight"></span>
             <span class="select-bar"></span>
@@ -141,11 +161,12 @@ getApprovalData();
         <div class="table-responsive-vertical shadow-z-1">
         <table class="table" id="adminTable">
             <thead>
-                <th>Email</th>
-                <th>Phone Number</th>
+                <th>Title</th>
+                <th>Category</th>
                 <th>Organization Name</th>
-                <th>ID</th>
-                <th>Documents</th>
+                <th>Case ID</th>
+                <th>Goal Amount</th>
+                <th>Description</th>
                 <th>Approve</th>
             </thead>
             <tbody>
