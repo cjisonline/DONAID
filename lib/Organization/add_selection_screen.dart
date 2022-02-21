@@ -1,3 +1,5 @@
+import 'package:donaid/Organization/add_beneficiary_screen.dart';
+import 'package:donaid/Organization/add_urgentcase_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +62,7 @@ class _addPage extends State<OrgAddSelection> {
                         ),
                       ),
                       onPressed: () async {
-                        Navigator.pushNamed(context, AddCampaignForm.id);
+                        Navigator.pushNamed(context, AddUrgentCaseForm.id);
                       }))),
           Container(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -76,7 +78,7 @@ class _addPage extends State<OrgAddSelection> {
                         ),
                       ),
                       onPressed: () async {
-                        Navigator.pushNamed(context, AddCampaignForm.id);
+                        Navigator.pushNamed(context, AddBeneficiaryForm.id);
                       })))
         ])
       ]),

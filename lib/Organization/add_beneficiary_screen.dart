@@ -8,23 +8,24 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import 'OrganizationWidget/popup_dialog_success.dart';
 
-class AddCampaignForm extends StatefulWidget {
-  static const id = 'campaign_form_screen';
-  AddCampaignForm({Key? key}) : super(key: key);
+class AddBeneficiaryForm extends StatefulWidget {
+  static const id = 'beneficiary_form_screen';
+  AddBeneficiaryForm({Key? key}) : super(key: key);
 
   @override
-  _AddCampaignFormState createState() => _AddCampaignFormState();
+  _AddBeneficiaryFormState createState() => _AddBeneficiaryFormState();
 }
 
-class _AddCampaignFormState extends State<AddCampaignForm> {
+class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   TextEditingController categoryController = new TextEditingController();
-  TextEditingController descriptionController = new TextEditingController();
+  TextEditingController biographyController = new TextEditingController();
   TextEditingController endDateController = new TextEditingController();
   TextEditingController goalAmountController = new TextEditingController();
-  TextEditingController titleController = new TextEditingController();
+  TextEditingController nameController = new TextEditingController();
   bool showLoadingSpinner = false;
   final _formKey = GlobalKey<FormState>();
-  static final goalRegExp = RegExp("^\$|^(0|([1-9][0-9]{0,3}))(\\.[0-9]{0,2})?\$");
+  static final goalRegExp = RegExp(
+     "^\$|^(0|([1-9][0-9]{0,3}))(\\.[0-9]{0,2})?\$");
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
@@ -56,29 +57,27 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   }
 
 
-
-  Future<void> create(
-      String category, String description, int goalAmount, String title, String endDateController) async {
+  Future<void> create(String category, String biography, int goalAmount,
+      String name, String endDateController) async {
     try {
-      final docRef = await firestore.collection("Campaigns").add({});
+      final docRef = await firestore.collection("Beneficiaries").add({});
 
-      await firestore.collection("Campaigns").doc(docRef.id).set({
-          'active' : true,
-          'amountRaised': 0,
-          'category': category,
-          'dateCreated': FieldValue.serverTimestamp(),
-          'description': description,
-          'endDate': Timestamp.fromDate(DateTime.parse(endDateController)),
-          'goalAmount': goalAmount,
-          'id': docRef.id,
-          'organizationID': loggedInUser?.uid,
-          'title': title
-        });
+      await firestore.collection("Beneficiaries").doc(docRef.id).set({
+        'active': true,
+        'amountRaised': 0,
+        'category': category,
+        'dateCreated': FieldValue.serverTimestamp(),
+        'biography': biography,
+        'endDate': Timestamp.fromDate(DateTime.parse(endDateController)),
+        'goalAmount': goalAmount,
+        'id': docRef.id,
+        'organizationID': loggedInUser?.uid,
+        'name': name
+      });
     } catch (e) {
       print(e);
     }
   }
-
 
 
   @override
@@ -108,7 +107,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                         ),
                         const Center(
                           child: Text(
-                            'Add Campaign',
+                            'Add Beneficiary',
                             style: TextStyle(fontSize: 32.0),
                           ),
                         ),
@@ -127,11 +126,13 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
                             maxLength: 50,
-                            controller: titleController,
-                            inputFormatters: [new LengthLimitingTextInputFormatter(50)],
+                            controller: nameController,
+                            inputFormatters: [
+                              new LengthLimitingTextInputFormatter(50)
+                            ],
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a title.";
+                                return "Please enter a nickname.";
                               } else {
                                 return null;
                               }
@@ -141,23 +142,23 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'Title',
+                                          text: 'Nickname',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
                                           children: const [
-                                        TextSpan(
-                                            text: ' *',
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                      ])),
+                                            TextSpan(
+                                                text: ' *',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                          ])),
                                 ),
                                 border: const OutlineInputBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(32.0)),
+                                  BorderRadius.all(Radius.circular(32.0)),
                                 )),
                           ),
                         ),
@@ -167,10 +168,10 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                             minLines: 2,
                             maxLines: 5,
                             maxLength: 240,
-                            controller: descriptionController,
+                            controller: biographyController,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a description.";
+                                return "Please enter a biography.";
                               } else {
                                 return null;
                               }
@@ -180,7 +181,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'Description',
+                                          text: 'Biography',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -208,7 +209,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Please enter a goal amount.";
-                              }else if (!goalRegExp.hasMatch(value)){
+                              } else if (!goalRegExp.hasMatch(value)) {
                                 return "Please enter a valid goal amount.";
                               }
                               else {
@@ -244,14 +245,14 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
                               controller: endDateController,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Please enter end date.";
-                                  }
-                                  else {
-                                    return null;
-                                  }
-                                },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Please enter end date.";
+                                }
+                                else {
+                                  return null;
+                                }
+                              },
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
                                   label: Center(
@@ -277,17 +278,18 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                   )
                               ),
                               onTap: () async {
-                                var date =  await showDatePicker(
+                                var date = await showDatePicker(
                                     context: context,
-                                    initialDate:DateTime.now(),
-                                    firstDate:DateTime.now(),
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now(),
                                     lastDate: DateTime(2100));
-                                endDateController.text = date.toString().substring(0,10);
+                                endDateController.text =
+                                    date.toString().substring(0, 10);
                               },)),
 
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropdownButtonFormField <String>(
+                            padding: const EdgeInsets.all(8.0),
+                            child: DropdownButtonFormField <String>(
                               decoration: InputDecoration(
                                   label: Center(
                                     child: RichText(
@@ -310,19 +312,22 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(32.0)),
                                   )),
-                            icon: const Icon(Icons.keyboard_arrow_down),
-                            items: category == null? []: category.map((items) {
-                              return DropdownMenuItem<String>(
-                                child: Text(items),
-                                value: items,
-                              );
-                            }).toList(),
-                            onChanged: (val) => setState(() {
-                              categoryController.text = val.toString();
-                            }),
-                              validator: (value) => value == null
-                                 ? 'Please fill in the category.' : null,
-                          )
+                              icon: const Icon(Icons.keyboard_arrow_down),
+                              items: category == null ? [] : category.map((
+                                  items) {
+                                return DropdownMenuItem<String>(
+                                  child: Text(items),
+                                  value: items,
+                                );
+                              }).toList(),
+                              onChanged: (val) =>
+                                  setState(() {
+                                    categoryController.text = val.toString();
+                                  }),
+                              validator: (value) =>
+                              value == null
+                                  ? 'Please fill in the category.' : null,
+                            )
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -343,12 +348,16 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                   setState(() {
                                     showLoadingSpinner = true;
                                   });
-                                  create(categoryController.text,descriptionController.text,
-                                      int.parse(goalAmountController.text), titleController.text, endDateController.text);
+                                  create(categoryController.text,
+                                      biographyController.text,
+                                      int.parse(goalAmountController.text),
+                                      nameController.text,
+                                      endDateController.text);
                                   Navigator.pop(context, true);
                                   showDialog(
                                     context: context,
-                                    builder: (BuildContext context) => PopUpSuccessDialog(),
+                                    builder: (BuildContext context) =>
+                                        PopUpSuccessDialog(),
                                   );
                                 }
                               },
@@ -358,7 +367,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
 
                       ]),
                 )
-                )
+            )
         )
     );
   }
