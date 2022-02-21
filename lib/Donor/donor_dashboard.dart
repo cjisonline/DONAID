@@ -78,7 +78,11 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _getBeneficiaries() async {
-    var ret = await _firestore.collection('Beneficiaries').get();
+    var ret = await _firestore.collection('Beneficiaries')
+        .where('active',isEqualTo: true)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .orderBy('endDate',descending: false)
+        .get();
     for (var element in ret.docs) {
       Beneficiary beneficiary = Beneficiary(
           name: element.data()['name'],
@@ -97,7 +101,13 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _getUrgentCases() async {
-    var ret = await _firestore.collection('UrgentCases').get();
+    var ret = await _firestore.collection('UrgentCases')
+        .where('approved',isEqualTo: true)
+        .where('active', isEqualTo: true)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .orderBy('endDate',descending: false)
+        .get();
+
     for (var element in ret.docs) {
       UrgentCase urgentCase = UrgentCase(
           title: element.data()['title'],
@@ -238,8 +248,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 itemCount: beneficiaries.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
-                  return BeneficiaryCard(
-                      beneficiaries[index].name, beneficiaries[index].biography, beneficiaries[index].goalAmount, beneficiaries[index].amountRaised);
+                  return BeneficiaryCard(beneficiaries[index]);
                 },
               )),
 
