@@ -1,3 +1,4 @@
+import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
 import 'package:donaid/Donor/categories_screen.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:donaid/Registration/registration_screen.dart';
@@ -43,6 +44,7 @@ class Donaid extends StatelessWidget {
         DonorDashboard.id: (context) => const DonorDashboard(),
         OrganizationDashboard.id: (context) => const OrganizationDashboard(),
         CategoriesScreen.id: (context) => const CategoriesScreen(),
+        BeneficiaryExpandedScreen.id: (context) => const BeneficiaryExpandedScreen(),
       },
     );
   }

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Donor/campaign_donate_screen.dart';
-import 'package:donaid/Models/Campaign.dart';
+import 'package:donaid/Donor/beneficiary_donate_screen.dart';
+import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,40 +9,40 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
+import 'beneficiary_donate_screen.dart';
 
-class CategoryCampaignsScreen extends StatefulWidget {
-  final categoryName;
-  const CategoryCampaignsScreen({Key? key, this.categoryName})
+class BeneficiaryExpandedScreen extends StatefulWidget {
+  static const id = 'beneficaries_expanded_screen';
+  const BeneficiaryExpandedScreen({Key? key})
       : super(key: key);
 
   @override
-  _CategoryCampaignsScreenState createState() =>
-      _CategoryCampaignsScreenState();
+  _BeneficiaryExpandedScreenState createState() =>
+      _BeneficiaryExpandedScreenState();
 }
 
-class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
+class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
   final _firestore = FirebaseFirestore.instance;
-  List<Campaign> campaigns = [];
+  List<Beneficiary> beneficiaries = [];
   List<Organization> organizations=[];
 
   @override
   void initState() {
     super.initState();
-    _getCampaigns();
+    _getBeneficiaries();
   }
 
-  _getCampaigns() async {
-    var ret = await _firestore.collection('Campaigns')
-        .where('category', isEqualTo: widget.categoryName)
+  _getBeneficiaries() async {
+    var ret = await _firestore.collection('Beneficiaries')
         .where('active', isEqualTo: true)
         .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
         .orderBy('endDate',descending: false)
         .get();
 
     for (var element in ret.docs) {
-      Campaign campaign = Campaign(
-          title: element.data()['title'],
-          description: element.data()['description'],
+      Beneficiary beneficiary = Beneficiary(
+          name: element.data()['name'],
+          biography: element.data()['biography'],
           goalAmount: element.data()['goalAmount'].toDouble(),
           amountRaised: element.data()['amountRaised'].toDouble(),
           category: element.data()['category'],
@@ -50,16 +50,16 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
           organizationID: element.data()['organizationID']);
-      campaigns.add(campaign);
+      beneficiaries.add(beneficiary);
     }
     setState(() {});
-    _getCampaignOrganizations();
+    _getBeneficiaryOrganizations();
   }
 
-  _getCampaignOrganizations() async{
-    for(var campaign in campaigns){
+  _getBeneficiaryOrganizations() async{
+    for(var beneficiary in beneficiaries){
       var ret = await _firestore.collection('OrganizationUsers')
-          .where('uid', isEqualTo: campaign.organizationID)
+          .where('uid', isEqualTo: beneficiary.organizationID)
           .get();
 
       for(var element in ret.docs){
@@ -96,7 +96,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                 }
               },
               text: 'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment.'
-                      'A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
+                  'A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
               linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
               textAlign: TextAlign.center,
             ),
@@ -113,9 +113,9 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
           );
         });
   }
-  _categoryCampaignsBody() {
+  _beneficiariesBody() {
     return ListView.builder(
-        itemCount: campaigns.length,
+        itemCount: beneficiaries.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
           return Card(
@@ -125,22 +125,22 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                   onTap: () {
                     if(organizations[index].country =='United States'){
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return (CampaignDonateScreen(campaigns[index]));
+                        return (BeneficiaryDonateScreen(beneficiaries[index]));
                       }));
                     }
                     else{
                       _paymentLinkPopUp(organizations[index]);
                     }
                   },
-                  title: Text(campaigns[index].title),
-                  subtitle: Text(campaigns[index].description),
+                  title: Text(beneficiaries[index].name),
+                  subtitle: Text(beneficiaries[index].biography),
                 ),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('\$${(campaigns[index].amountRaised.toStringAsFixed(2))}',
+                  Text('\$${(beneficiaries[index].amountRaised.toStringAsFixed(2))}',
                       textAlign: TextAlign.left,
                       style: const TextStyle(color: Colors.black, fontSize: 15)),
                   Text(
-                    '\$${campaigns[index].goalAmount.toStringAsFixed(2)}',
+                    '\$${beneficiaries[index].goalAmount.toStringAsFixed(2)}',
                     textAlign: TextAlign.start,
                     style: const TextStyle(color: Colors.black, fontSize: 15),
                   ),
@@ -149,7 +149,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                   backgroundColor: Colors.grey,
                   valueColor: AlwaysStoppedAnimation<Color>(
                       Theme.of(context).primaryColor),
-                  value: (campaigns[index].amountRaised/campaigns[index].goalAmount),
+                  value: (beneficiaries[index].amountRaised/beneficiaries[index].goalAmount),
                   minHeight: 10,
                 ),
                 const Divider()
@@ -163,7 +163,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Campaigns - ${widget.categoryName}'),
+        title: Text('Beneficiaries'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -172,7 +172,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
         ),
       ),
       drawer: const DonorDrawer(),
-      body: _categoryCampaignsBody(),
+      body: _beneficiariesBody(),
       bottomNavigationBar: const DonorBottomNavigationBar(),
     );
   }
