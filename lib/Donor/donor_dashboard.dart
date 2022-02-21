@@ -218,8 +218,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 itemCount: organizations.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
-                  return OrganizationCard(
-                      organizations[index].organizationName);
+                  return OrganizationCard(organizations[index]);
                 },
               )),
 
