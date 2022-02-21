@@ -10,8 +10,8 @@ import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
 
 class CampaignDonateScreen extends StatefulWidget {
-  Campaign campaign;
-  CampaignDonateScreen(this.campaign, {Key? key}) : super(key: key);
+  final Campaign campaign;
+  const CampaignDonateScreen(this.campaign, {Key? key}) : super(key: key);
 
   @override
   _CampaignDonateScreenState createState() => _CampaignDonateScreenState();

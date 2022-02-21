@@ -31,7 +31,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
   }
 
   _getUrgentCases() async {
-    var ret = await _firestore.collection('Campaigns')
+    var ret = await _firestore.collection('UrgentCases')
         .where('approved',isEqualTo: true)
         .where('active', isEqualTo: true)
         .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())

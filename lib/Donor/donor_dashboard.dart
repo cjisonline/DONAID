@@ -6,6 +6,7 @@ import 'package:donaid/Donor/DonorWidgets/organization_card.dart';
 import 'package:donaid/Donor/DonorWidgets/urgent_case_card.dart';
 import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
 import 'package:donaid/Donor/categories_screen.dart';
+import 'package:donaid/Donor/organizations_expanded_screen.dart';
 import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/CharityCategory.dart';
@@ -192,16 +193,21 @@ class _DonorDashboardState extends State<DonorDashboard> {
               padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Organizations',
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.start,
                     ),
-                    Text(
-                      'See more >',
-                      style: TextStyle(fontSize: 14),
-                      textAlign: TextAlign.start,
+                    TextButton(
+                      onPressed: (){
+                        Navigator.pushNamed(context, OrganizationsExpandedScreen.id);
+                      },
+                      child: const Text(
+                        'See more >',
+                        style: TextStyle(fontSize: 14),
+                        textAlign: TextAlign.start,
+                      ),
                     ),
                   ]),
             ),
