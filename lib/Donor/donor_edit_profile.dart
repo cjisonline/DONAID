@@ -50,17 +50,13 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
       doc['firstName'],
       doc['lastName'],
       doc['phoneNumber'],
+      doc['id']
     );
     setState(() {});
   }
 
   _updateDonorInformation() async {
-    var ret = await _firestore
-        .collection('DonorUsers')
-        .where('uid', isEqualTo: loggedInUser?.uid)
-        .get();
-    final doc = ret.docs[0];
-    _firestore.collection('DonorUsers').doc(doc.id).update({
+    _firestore.collection('DonorUsers').doc(donor.id).update({
       "firstName": donor.firstName,
       "lastName": donor.lastName,
       "phoneNumber": donor.phoneNumber

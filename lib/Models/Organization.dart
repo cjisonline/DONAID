@@ -6,6 +6,7 @@ class Organization {
   String? organizationDescription;
   String? country;
   String? gatewayLink;
+  String? id;
 
   Organization({
     this.organizationEmail,
@@ -14,7 +15,8 @@ class Organization {
     required this.uid,
     this.organizationDescription,
     this.country,
-    this.gatewayLink
+    this.gatewayLink,
+    this.id
   });
   Organization.c1()
       :organizationEmail="",
@@ -23,6 +25,7 @@ class Organization {
         uid="",
         organizationDescription="",
         country="",
-        gatewayLink=""
+        gatewayLink="",
+        id=""
   ;
 }

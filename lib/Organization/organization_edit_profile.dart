@@ -52,7 +52,8 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         uid: doc['uid'],
         organizationDescription: doc['organizationDescription'],
         country: doc['country'],
-        gatewayLink: doc['gatewayLink']
+        gatewayLink: doc['gatewayLink'],
+        id: doc["id"]
     );
     setState(() {});
   }
@@ -63,7 +64,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         .where('uid', isEqualTo: loggedInUser?.uid)
         .get();
     final doc = ret.docs[0];
-    _firestore.collection('OrganizationUsers').doc(doc.id).update({
+    _firestore.collection('OrganizationUsers').doc(organization.id).update({
       "organizationName": organization.organizationName,
       "phoneNumber": organization.phoneNumber,
       "organizationDescription": organization.organizationDescription,
