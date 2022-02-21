@@ -25,7 +25,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
   TextEditingController? _organizationNameController;
   TextEditingController? _phoneNumberController;
   TextEditingController? _organizationDescriptionController;
-  TextEditingController? _countryController;
   TextEditingController? _gatewayLinkController;
 
   static final phoneNumberRegExp =
@@ -59,16 +58,10 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
   }
 
   _updateOrganizationInformation() async {
-    var ret = await _firestore
-        .collection('OrganizationUsers')
-        .where('uid', isEqualTo: loggedInUser?.uid)
-        .get();
-    final doc = ret.docs[0];
     _firestore.collection('OrganizationUsers').doc(organization.id).update({
       "organizationName": organization.organizationName,
       "phoneNumber": organization.phoneNumber,
       "organizationDescription": organization.organizationDescription,
-      "country": organization.country,
       "gatewayLink": organization.gatewayLink
     }).whenComplete(_goToProfilePage);
   }
@@ -192,54 +185,34 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     );
   }
 
-  Widget _buildCountryField() {
-    _countryController = TextEditingController(text: organization.country);
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextFormField(
-          controller: _countryController,
-          decoration: const InputDecoration(
-              labelText: 'Country',
-              border: OutlineInputBorder(
-                borderRadius:
-                BorderRadius.all(Radius.circular(32.0)),
-              )
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter country.';
-            }
-            return null;
-          },
-          onSaved: (value) {
-            organization.country = value!;
-          },
-        ));
-  }
-
   Widget _buildGatewayLinkField() {
     _gatewayLinkController = TextEditingController(text: organization.gatewayLink);
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextFormField(
-          controller: _gatewayLinkController,
-          decoration: const InputDecoration(
-              labelText: 'Gateway Link',
-              border: OutlineInputBorder(
-                borderRadius:
-                BorderRadius.all(Radius.circular(32.0)),
-              )
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter gateway link.';
-            }
-            return null;
-          },
-          onSaved: (value) {
-            organization.gatewayLink = value!;
-          },
-        ));
+    if(organization.country != "United States") {
+      return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextFormField(
+            controller: _gatewayLinkController,
+            decoration: const InputDecoration(
+                labelText: 'Gateway Link',
+                border: OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.all(Radius.circular(32.0)),
+                )
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter gateway link.';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              organization.gatewayLink = value!;
+            },
+          ));
+    }
+    else{
+      return Container();
+    }
   }
 
   _submitForm(){
@@ -248,12 +221,11 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     }
     _formKey.currentState!.save();
   }
-
-  _body() {
+  Widget _buildUnitedStatesEditProfile(){
     return SingleChildScrollView(
       child: Container(
-      // decoration: BoxDecoration(
-      // color: Colors.blueGrey.shade50,),
+        // decoration: BoxDecoration(
+        // color: Colors.blueGrey.shade50,),
         margin: const EdgeInsets.all(15),
         child: Form(
           key: _formKey,
@@ -263,14 +235,42 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
               _buildOrganizationNameField(),
               _buildPhoneNumberField(),
               _buildOrganizationDescriptionField(),
-              _buildCountryField(),
-              _buildGatewayLinkField()
-
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildOutsideUnitedStatesEditProfile(){
+    return SingleChildScrollView(
+      child: Container(
+        // decoration: BoxDecoration(
+        // color: Colors.blueGrey.shade50,),
+        margin: const EdgeInsets.all(15),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _buildOrganizationNameField(),
+              _buildPhoneNumberField(),
+              _buildOrganizationDescriptionField(),
+              _buildGatewayLinkField()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _body() {
+    if(organization.country == 'United States'){
+      return _buildUnitedStatesEditProfile();
+    }
+    else{
+      return _buildOutsideUnitedStatesEditProfile();
+    }
   }
 
   _bottomNavigationBar() {

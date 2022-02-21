@@ -69,8 +69,7 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }
-
-  _body() {
+  Widget _buildUnitedStatesProfile(){
     return  SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -79,11 +78,33 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
             ProfileRow('NAME', organization?.organizationName??'N/A'),
             ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
             ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
-            ProfileRow('COUNTRY', organization?.country??'N/A'),
+          ],
+        )
+    );
+  }
+  Widget _buildOutsideUnitedStatesProfile(){
+    return  SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children:  [
+            ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
+            ProfileRow('NAME', organization?.organizationName??'N/A'),
+            ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
+            ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
             ProfileRow('GATEWAY LINK', organization?.gatewayLink??'N/A'),
           ],
         )
     );
+  }
+
+
+  _body() {
+    if(organization?.country == 'United States'){
+      return _buildUnitedStatesProfile();
+    }
+    else{
+      return _buildOutsideUnitedStatesProfile();
+    }
   }
 
   _bottomNavigationBar() {
