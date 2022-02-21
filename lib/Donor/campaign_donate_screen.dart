@@ -122,7 +122,6 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                               setState(() {
                                 showLoadingSpinner = true;
                               });
-                              //TODO:Implement Donate function
                               await makePayment();
 
                               setState(() {

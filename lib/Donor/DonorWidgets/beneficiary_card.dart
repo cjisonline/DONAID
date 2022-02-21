@@ -106,7 +106,6 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: (){
-                        //TODO: direct to donate screen
                         if(organization?.country =='United States'){
                           Navigator.push(context, MaterialPageRoute(builder: (context) {
                             return (BeneficiaryDonateScreen(widget.beneficiary));
