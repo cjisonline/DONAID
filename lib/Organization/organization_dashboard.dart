@@ -8,9 +8,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'OrganizationWidget/beneficiary_card.dart';
-import 'OrganizationWidget/button_nav_bar.dart';
+import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'OrganizationWidget/organization_drawer.dart';
 import 'add_selection_screen.dart';
+import 'organization_beneficiaries_expanded_screen.dart';
 
 class OrganizationDashboard extends StatefulWidget {
   static const id = 'organization_dashboard';
@@ -133,7 +134,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       ),
       drawer: const OrganizationDrawer(),
       body: _body(),
-      bottomNavigationBar: ButtomNavigation(),
+      bottomNavigationBar: OrganizationBottomNavigation(),
     );
   }
 
@@ -148,16 +149,21 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Campaign',
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.start,
                     ),
-                    Text(
-                      'See more >',
-                      style: TextStyle(fontSize: 14),
-                      textAlign: TextAlign.start,
+                    TextButton(
+                      onPressed: (){
+                        //Navigator.pushNamed(context, OrganizationCampaignsExpandedScreen.id);
+                      },
+                      child: const Text(
+                        'See more >',
+                        style: TextStyle(fontSize: 14),
+                        textAlign: TextAlign.start,
+                      ),
                     ),
                   ]),
             ),
@@ -179,16 +185,21 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Urgent Cases',
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.start,
                     ),
-                    Text(
-                      'See more >',
-                      style: TextStyle(fontSize: 14),
-                      textAlign: TextAlign.start,
+                    TextButton(
+                      onPressed: (){
+                        //Navigator.pushNamed(context, OrganizationUrgentCasesExpandedScreen.id);
+                      },
+                      child: const Text(
+                        'See more >',
+                        style: TextStyle(fontSize: 14),
+                        textAlign: TextAlign.start,
+                      ),
                     ),
                   ]),
             ),
@@ -210,16 +221,21 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Beneficiary',
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.start,
                     ),
-                    Text(
-                      'See more >',
-                      style: TextStyle(fontSize: 14),
-                      textAlign: TextAlign.start,
+                    TextButton(
+                      onPressed: (){
+                        Navigator.pushNamed(context, OrganizationBeneficiariesExpandedScreen.id);
+                      },
+                      child: const Text(
+                        'See more >',
+                        style: TextStyle(fontSize: 14),
+                        textAlign: TextAlign.start,
+                      ),
                     ),
                   ]),
             ),

@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ButtomNavigation extends StatelessWidget {
-  const ButtomNavigation({Key? key}) : super(key: key);
+class OrganizationBottomNavigation extends StatelessWidget {
+  const OrganizationBottomNavigation({Key? key}) : super(key: key);
 
   ///Author: Raisa Zaman
   @override

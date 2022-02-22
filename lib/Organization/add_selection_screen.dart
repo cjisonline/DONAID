@@ -3,7 +3,7 @@ import 'package:donaid/Organization/add_urgentcase_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'OrganizationWidget/button_nav_bar.dart';
+import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'add_campaigns_screen.dart';
 
 class OrgAddSelection extends StatefulWidget {
@@ -83,7 +83,7 @@ class _addPage extends State<OrgAddSelection> {
         ])
       ]),
 
-      bottomNavigationBar: ButtomNavigation(),
+      bottomNavigationBar: OrganizationBottomNavigation(),
     );
   }
 }
