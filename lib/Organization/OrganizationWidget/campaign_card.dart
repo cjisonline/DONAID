@@ -1,13 +1,16 @@
+import 'package:donaid/Models/Campaign.dart';
 import 'package:flutter/material.dart';
 
-class CampaignCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final double goalAmount;
-  final double amountRaised;
+class CampaignCard extends StatefulWidget {
+  final Campaign campaign;
 
-  const CampaignCard( this.title, this.description, this.goalAmount, this.amountRaised, {Key? key}) : super(key: key);
+  const CampaignCard( this.campaign, {Key? key}) : super(key: key);
 
+  @override
+  State<CampaignCard> createState() => _CampaignCardState();
+}
+
+class _CampaignCardState extends State<CampaignCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,7 +33,7 @@ class CampaignCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text(title,
+              child: Text(widget.campaign.title,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.black,
@@ -40,7 +43,7 @@ class CampaignCard extends StatelessWidget {
             SizedBox(
                 height: 75.0,
                 child: Text(
-                  description,
+                  widget.campaign.description,
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                     color: Colors.black,
@@ -50,11 +53,11 @@ class CampaignCard extends StatelessWidget {
                   maxLines: 3,
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('${((amountRaised/goalAmount)*100).toStringAsFixed(3)}%',
+              Text('\$${widget.campaign.amountRaised.toStringAsFixed(2)}',
                   textAlign: TextAlign.left,
                   style: const TextStyle(color: Colors.black, fontSize: 15)),
               Text(
-                '\$$goalAmount',
+                '\$${widget.campaign.goalAmount}',
                 textAlign: TextAlign.start,
                 style: const TextStyle(color: Colors.black, fontSize: 15),
               ),
@@ -63,7 +66,7 @@ class CampaignCard extends StatelessWidget {
               backgroundColor: Colors.grey,
               valueColor: AlwaysStoppedAnimation<Color>(
                   Theme.of(context).primaryColor),
-              value: (amountRaised/goalAmount),
+              value: (widget.campaign.amountRaised/widget.campaign.goalAmount),
               minHeight: 10,
             ),
           ]),
