@@ -12,6 +12,8 @@ import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'OrganizationWidget/organization_drawer.dart';
 import 'add_selection_screen.dart';
 import 'organization_beneficiaries_expanded_screen.dart';
+import 'organization_campaigns_expanded_screen.dart';
+import 'organization_urgentcases_expanded_screen.dart';
 
 class OrganizationDashboard extends StatefulWidget {
   static const id = 'organization_dashboard';
@@ -157,7 +159,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     ),
                     TextButton(
                       onPressed: (){
-                        //Navigator.pushNamed(context, OrganizationCampaignsExpandedScreen.id);
+                        Navigator.pushNamed(context, OrganizationCampaignsExpandedScreen.id);
                       },
                       child: const Text(
                         'See more >',
@@ -193,7 +195,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     ),
                     TextButton(
                       onPressed: (){
-                        //Navigator.pushNamed(context, OrganizationUrgentCasesExpandedScreen.id);
+                        Navigator.pushNamed(context, OrganizationUrgentCasesExpandedScreen.id);
                       },
                       child: const Text(
                         'See more >',
