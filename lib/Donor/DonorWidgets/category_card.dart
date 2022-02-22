@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class CharityCategoryCard extends StatelessWidget {
   final String name;
 
-  CharityCategoryCard( this.name);
+  const CharityCategoryCard( this.name, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return   Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.blue,
                 borderRadius:
                 BorderRadius.all(Radius.circular(10))),
@@ -27,7 +27,7 @@ class CharityCategoryCard extends StatelessWidget {
                       left: 0.0, right: 10.0),
                   child: Text(name,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 15.0,
                       )),

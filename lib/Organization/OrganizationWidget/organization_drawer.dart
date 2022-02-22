@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../home_screen.dart';
+import '../organization_profile.dart';
 
 class OrganizationDrawer extends StatefulWidget {
   const OrganizationDrawer({Key? key}) : super(key: key);
@@ -38,6 +39,13 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               leading: Icon(Icons.settings),
               title: Text("Settings"),
               onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.account_circle),
+              title: const Text("Profile"),
+              onTap: () {
+                Navigator.pushNamed(context, OrganizationProfile.id);
+              },
             ),
             ListTile(
               leading: Icon(Icons.article_outlined),

@@ -3,9 +3,11 @@ import 'package:donaid/Donor/DonorWidgets/category_card.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
 import 'package:donaid/Donor/DonorWidgets/organization_card.dart';
 import 'package:donaid/Donor/DonorWidgets/urgent_case_card.dart';
+import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
+import 'package:donaid/Donor/DonorWidgets/beneficiary_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +26,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
 
-
+  List<Beneficiary> beneficiaries = [];
   List<UrgentCase> urgentCases = [];
   List<Organization> organizations = [];
   List<CharityCategory> charityCategories = [];
@@ -34,6 +36,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   void initState() {
     super.initState();
     _getCurrentUser();
+    _getBeneficiaries();
     _getUrgentCases();
     _getOrganizationUsers();
     _getCharityCategories();
@@ -45,32 +48,54 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
   _getOrganizationUsers() async {
     var ret = await _firestore.collection('OrganizationUsers').where('approved', isEqualTo: true).get();
-    ret.docs.forEach((element) {
+    for (var element in ret.docs) {
       Organization organization = Organization(
         organizationName: element.data()['organizationName'],
-        uid: element.data()['uid']
+        uid: element.data()['uid'],
+        organizationDescription: element.data()['organizationDescription'],
+        country: element.data()['country'],
+        gatewayLink: element.data()['gatewayLink'],
       );
       organizations.add(organization);
-    });
+    }
     setState(() {});
   }
 
 
   _getCharityCategories() async {
     var ret = await _firestore.collection('CharityCategories').get();
-    ret.docs.forEach((element) {
+    for (var element in ret.docs) {
       CharityCategory charityCategory = CharityCategory(
         name: element.data()['name'],
         id: element.data()['id']
       );
       charityCategories.add(charityCategory);
-    });
+    }
+    setState(() {});
+  }
+
+  _getBeneficiaries() async {
+    var ret = await _firestore.collection('Beneficiaries').get();
+    for (var element in ret.docs) {
+      Beneficiary beneficiary = Beneficiary(
+          name: element.data()['name'],
+          biography: element.data()['biography'],
+          goalAmount: element.data()['goalAmount'],
+          amountRaised: element.data()['amountRaised'],
+          category: element.data()['category'],
+          endDate: element.data()['endDate'],
+          dateCreated: element.data()['dateCreated'],
+          id: element.data()['id'],
+          organizationID: element.data()['organizationID']
+      );
+      beneficiaries.add(beneficiary);
+    }
     setState(() {});
   }
 
   _getUrgentCases() async {
     var ret = await _firestore.collection('UrgentCases').get();
-    ret.docs.forEach((element){
+    for (var element in ret.docs) {
       UrgentCase urgentCase = UrgentCase(
           title: element.data()['title'],
           description: element.data()['description'],
@@ -83,7 +108,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
           organizationID: element.data()['organizationID']
       );
       urgentCases.add(urgentCase);
-    });
+    }
     setState(() {});
   }
 
@@ -170,6 +195,38 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 itemBuilder: (context, int index) {
                   return OrganizationCard(
                       organizations[index].organizationName);
+                },
+              )),
+
+          //beneficiaries list
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text(
+                      'Beneficiaries',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                    Text(
+                      'See more >',
+                      style: TextStyle(fontSize: 14),
+                      textAlign: TextAlign.start,
+                    ),
+                  ]),
+            ),
+          ),
+          SizedBox(
+              height: 325.0,
+              child: ListView.builder(
+                itemCount: beneficiaries.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, int index) {
+                  return BeneficiaryCard(
+                      beneficiaries[index].name, beneficiaries[index].biography, beneficiaries[index].goalAmount, beneficiaries[index].amountRaised);
                 },
               )),
 
