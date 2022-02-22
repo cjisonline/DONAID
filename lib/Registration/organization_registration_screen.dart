@@ -72,23 +72,28 @@ class _OrganizationRegistrationScreenState
 
         if (newUser != null) {
           await uploadFile(newUser);
-          await _firestore.collection('OrganizationUsers').add({
+
+          final docRef = await _firestore.collection('OrganizationUsers').add({});
+
+          await _firestore.collection('OrganizationUsers').doc(docRef.id).set({
+            'id':docRef.id,
             'uid': newUser.user.uid,
             'organizationName': organizationName,
             'organizationDescription': organizationDescription,
             'email': email,
             'phoneNumber': phoneNumber,
             'address':{'street':street,'city':city,'postalCode':postalCode},
-            'password': password,
             'approved': false,
             'country': country,
             'gatewayLink': gatewayLink,
             'verificationDocumentURL': _uploadedFileURL
           });
 
+          final usersDocRef = await _firestore.collection('Users').add({});
           await _firestore
               .collection('Users')
-              .add({'uid': newUser.user.uid, 'email': email, 'userType': 2});
+              .doc(usersDocRef.id)
+              .set({'id': usersDocRef.id,'uid': newUser.user.uid, 'email': email, 'userType': 2});
 
           Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen
               .id)); //remove all screens on the stack and return to home screen
