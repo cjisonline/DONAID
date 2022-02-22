@@ -43,14 +43,16 @@ class _OrganizationCampaignsExpandedScreenState extends State<OrganizationCampai
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+      );
       campaigns.add(campaign);
     }
     setState(() {});
   }
 
 
-  _beneficiariesBody() {
+  _campaignsBody() {
     return ListView.builder(
         itemCount: campaigns.length,
         shrinkWrap: true,
@@ -102,7 +104,7 @@ class _OrganizationCampaignsExpandedScreenState extends State<OrganizationCampai
         ),
       ),
       drawer: const OrganizationDrawer(),
-      body: _beneficiariesBody(),
+      body: _campaignsBody(),
       bottomNavigationBar: const OrganizationBottomNavigation(),
     );
   }

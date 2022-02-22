@@ -43,14 +43,17 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+          approved: element.data()['approved']
+      );
       urgentCases.add(urgentCase);
     }
     setState(() {});
   }
 
 
-  _beneficiariesBody() {
+  _urgentCasesBody() {
     return ListView.builder(
         itemCount: urgentCases.length,
         shrinkWrap: true,
@@ -102,7 +105,7 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
         ),
       ),
       drawer: const OrganizationDrawer(),
-      body: _beneficiariesBody(),
+      body: _urgentCasesBody(),
       bottomNavigationBar: const OrganizationBottomNavigation(),
     );
   }

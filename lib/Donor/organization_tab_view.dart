@@ -47,7 +47,8 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
       );
       beneficiaries.add(beneficiary);
     }
@@ -72,7 +73,9 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+      );
       campaigns.add(campaign);
     }
     setState(() {});

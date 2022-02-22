@@ -48,7 +48,10 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+          approved: element.data()['approved']
+      );
       urgentCases.add(urgentCase);
     }
     setState(() {});

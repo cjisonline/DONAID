@@ -61,7 +61,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+      );
       campaigns.add(campaign);
     }
 
@@ -84,7 +86,10 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+          approved: element.data()['approved']
+      );
       urgentCases.add(urgentCase);
     }
 
@@ -107,8 +112,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID:
-              element.data()['organizationID']); // need to add category
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+      ); // need to add category
       beneficiaries.add(beneficiary);
     }
 
