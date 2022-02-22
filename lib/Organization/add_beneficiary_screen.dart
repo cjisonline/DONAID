@@ -246,6 +246,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
                               controller: endDateController,
+                              readOnly: true,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Please enter end date.";

@@ -247,6 +247,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
                               controller: endDateController,
+                              readOnly: true,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Please enter end date.";
