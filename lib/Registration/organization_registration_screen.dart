@@ -83,7 +83,6 @@ class _OrganizationRegistrationScreenState
             'email': email,
             'phoneNumber': phoneNumber,
             'address':{'street':street,'city':city,'postalCode':postalCode},
-            'password': password,
             'approved': false,
             'country': country,
             'gatewayLink': gatewayLink,
