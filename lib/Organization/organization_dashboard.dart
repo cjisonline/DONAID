@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'OrganizationWidget/beneficiary_card.dart';
+import 'OrganizationWidget/button_nav_bar.dart';
 import 'OrganizationWidget/organization_drawer.dart';
+import 'add_selection_screen.dart';
 
 class OrganizationDashboard extends StatefulWidget {
   static const id = 'organization_dashboard';
@@ -30,13 +32,6 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   List<Beneficiary> beneficiaries = [];
   List<Campaign> campaigns = [];
   List<UrgentCase> urgentCases = [];
-  int currentIndex = 0;
-
-  updateIndex(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-  }
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
@@ -58,7 +53,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
         .collection('Campaigns')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
         .get();
-    ret.docs.forEach((element) {
+    for (var element in ret.docs) {
       Campaign campaign = Campaign(
           title: element.data()['title'],
           description: element.data()['description'],
@@ -70,7 +65,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID']);
       campaigns.add(campaign);
-    });
+    }
 
     setState(() {});
   }
@@ -81,7 +76,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
         .where('organizationID', isEqualTo: loggedInUser?.uid)
         .get();
 
-    ret.docs.forEach((element) {
+    for (var element in ret.docs) {
       UrgentCase urgentCase = UrgentCase(
           title: element.data()['title'],
           description: element.data()['description'],
@@ -93,7 +88,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID']);
       urgentCases.add(urgentCase);
-    });
+    }
 
     setState(() {});
   }
@@ -104,7 +99,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
         .where('organizationID', isEqualTo: loggedInUser?.uid)
         .get();
 
-    ret.docs.forEach((element) {
+    for (var element in ret.docs) {
       Beneficiary beneficiary = Beneficiary(
           name: element.data()['name'],
           biography: element.data()['biography'],
@@ -117,7 +112,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           organizationID:
               element.data()['organizationID']); // need to add category
       beneficiaries.add(beneficiary);
-    });
+    }
 
     print('Beneficiaries list: $beneficiaries');
 
@@ -126,47 +121,28 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.blue,
-        child: SafeArea(
-            child: Scaffold(
-                appBar: AppBar(
-                  title: Text('Dashboard'),
-                  backgroundColor: Colors.blue,
-                  actions: <Widget>[
-                    // IconButton(
-                    //     icon: Icon(
-                    //       Icons.add,
-                    //       size: 30,
-                    //     ),
-                    //     onPressed: () {}),
-                  ],
-                ),
-                drawer: OrganizationDrawer(),
-                body: currentIndex == 0
-                    ? home()
-                    : currentIndex == 1
-                        ? search()
-                        : currentIndex == 2
-                            ? notification()
-                            : messages(),
-                bottomNavigationBar:
-                    _bottomNavigationBar(context, updateIndex))));
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dashboard'),
+        backgroundColor: Colors.blue,
+        actions: <Widget>[
+          IconButton(
+              icon: const Icon(
+                Icons.add,
+                size: 30,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, OrgAddSelection.id);
+              }),
+        ],
+      ),
+      drawer: const OrganizationDrawer(),
+      body: _body(),
+      bottomNavigationBar: ButtomNavigation(),
+    );
   }
 
-  search() {
-    return Container(child: Center(child: Text("Search")));
-  }
-
-  notification() {
-    return Container(child: Center(child: Text("notification")));
-  }
-
-  messages() {
-    return Conversation(loggedInUser!.uid, "DonorUsers");
-  }
-
-  home() {
+  _body() {
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -174,7 +150,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -209,7 +185,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -244,7 +220,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -279,7 +255,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     );
   }
 
-  _bottomNavigationBar(context, onpress) {
+  _bottomNavigationBar() {
     return Container(
       height: 70,
       decoration: BoxDecoration(
@@ -291,45 +267,45 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () => onpress(0),
+              onPressed: () {},
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-            Text('Home',
+            const Text('Home',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () => onpress(1),
+              onPressed: () {},
               icon: const Icon(
                 Icons.search,
                 color: Colors.white,
                 size: 35,
               ),
             ),
-            Text('Search',
+            const Text('Search',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () => onpress(2),
+              onPressed: () {},
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-            Text('Notifications',
+            const Text('Notifications',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () => onpress(3),
+              onPressed: () {},
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-            Text('Messages',
+            const Text('Messages',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),

@@ -18,20 +18,27 @@ dependencies:
   firebase_core: ^1.12.0
   firebase_auth: ^3.3.6
   cloud_firestore: ^3.1.7
+  firebase_storage: ^10.2.7
+
   modal_progress_hud_nsn: ^0.1.0-nullsafety-0
+  country_picker: ^2.0.11
+  image_picker: ^0.8.4+8
+  flutter_linkify: ^5.0.2
+  url_launcher: ^6.0.20
+
+  flutter_stripe: ^2.2.0
+  http: ^0.13.4
   cupertino_icons: ^1.0.2
   get:
   bubble:
   google_fonts:
-  image_picker:
   random_string:
-  firebase_storage:
   firebase_database:
   circle_wheel_scroll:
   flutter_sliding_up_panel: ^2.0.1
   circle_list:
   auto_size_text:
-  bottom_drawer: 
+  bottom_drawer:
   modal_bottom_sheet:
   top_modal_sheet:
 

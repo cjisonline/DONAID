@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:country_picker/country_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 
 import '../home_screen.dart';
 import '../login_screen.dart';
@@ -11,18 +17,21 @@ class OrganizationRegistrationScreen extends StatefulWidget {
   const OrganizationRegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  _OrganizationRegistrationScreenState createState() => _OrganizationRegistrationScreenState();
+  _OrganizationRegistrationScreenState createState() =>
+      _OrganizationRegistrationScreenState();
 }
 
-class _OrganizationRegistrationScreenState extends State<OrganizationRegistrationScreen> {
+class _OrganizationRegistrationScreenState
+    extends State<OrganizationRegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  final _firebaseStorage = FirebaseStorage.instance;
 
   final _formKey = GlobalKey<FormState>();
 
   static final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   static final phoneNumberRegExp =
-  RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+      RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
 
   bool showLoadingSpinner = false;
 
@@ -31,6 +40,16 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   String password = "";
   String passwordConfirm = "";
   String phoneNumber = "";
+  String country = "";
+  String gatewayLink = "";
+  String organizationDescription = "";
+  String street ="";
+  String city="";
+  String postalCode="";
+
+  XFile? _image;
+  String _uploadedFileURL = "";
+  final ImagePicker _imagePicker = ImagePicker();
 
   Future<bool> isEmailAvailable() async {
     //This method checks to make sure the email is not already being used in Firebase
@@ -44,7 +63,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
   }
 
   void createNewOrganizationUser() async {
-    //This method creates the new user in Firebase
+    //This method creates the new user in Firebase and uploads verification docs
     if (await isEmailAvailable()) {
       //If the email is available
       try {
@@ -52,23 +71,34 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
             email: email, password: password);
 
         if (newUser != null) {
-          await _firestore.collection('OrganizationUsers').add({
+          await uploadFile(newUser);
+
+          final docRef = await _firestore.collection('OrganizationUsers').add({});
+
+          await _firestore.collection('OrganizationUsers').doc(docRef.id).set({
+            'id':docRef.id,
             'uid': newUser.user.uid,
             'organizationName': organizationName,
+            'organizationDescription': organizationDescription,
             'email': email,
             'phoneNumber': phoneNumber,
-            'password': password,
-            'approved':false
+            'address':{'street':street,'city':city,'postalCode':postalCode},
+            'approved': false,
+            'country': country,
+            'gatewayLink': gatewayLink,
+            'verificationDocumentURL': _uploadedFileURL
           });
 
-          await _firestore.collection('Users').add({
-            'uid': newUser.user.uid,
-            'email': email,
-            'userType':2
-          });
+          final usersDocRef = await _firestore.collection('Users').add({});
+          await _firestore
+              .collection('Users')
+              .doc(usersDocRef.id)
+              .set({'id': usersDocRef.id,'uid': newUser.user.uid, 'email': email, 'userType': 2});
 
-          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
-          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
+          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen
+              .id)); //remove all screens on the stack and return to home screen
+          Navigator.pushNamed(
+              context, LoginScreen.id); //redirect to login screen
         }
       } catch (signUpError) {
         print(signUpError);
@@ -111,6 +141,89 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
         });
   }
 
+  Future<void> _imageRequiredDialog() async {
+    setState(() {
+      showLoadingSpinner = false;
+    });
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Alert'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'Organizations are required to upload images of documents to verify their organization.'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _countryRequiredDialog() async {
+    setState(() {
+      showLoadingSpinner = false;
+    });
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Alert'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'Organizations are required to specify the country that their organization is based in.'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future chooseFile() async {
+    await _imagePicker.pickImage(source: ImageSource.gallery).then((image) {
+      setState(() {
+        _image = image;
+      });
+    });
+  }
+
+  Future uploadFile(dynamic newUser) async {
+    File file = File(_image!.path);
+
+    final storageReference = _firebaseStorage
+        .ref()
+        .child('verificationDocuments/')
+        .child('${newUser.user.uid}-${Path.basename(file.path)}');
+
+    await storageReference.putFile(file);
+    var fileURL = await storageReference.getDownloadURL();
+    _uploadedFileURL = fileURL;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +231,7 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
         title: const Text('Organization Registration'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
         ),
@@ -145,9 +258,18 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                 const SizedBox(
                   height: 15.0,
                 ),
+                const Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
+                  child: Text(
+                    '* - required fields',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    maxLength: 50,
                     onChanged: (value) {
                       organizationName = value;
                     },
@@ -159,11 +281,50 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                       }
                     },
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Organization Name",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: TextSpan(
+                                  text: 'Organization Name',
+                                  style: TextStyle(
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const [
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    minLines: 2,
+                    maxLines: 5,
+                    maxLength: 240,
+                    onChanged: (value) {
+                      organizationDescription = value;
+                    },
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'Organization Description',
+                              style: TextStyle(
+                                  color: Colors.grey[600], fontSize: 20.0),
+                            ),
+                          ),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
                   ),
                 ),
@@ -184,11 +345,25 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     },
                     keyboardType: TextInputType.emailAddress,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Email",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: TextSpan(
+                                  text: 'Email',
+                                  style: TextStyle(
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const [
+                                    TextSpan(
+                                        text: ' *',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
                   ),
                 ),
@@ -199,9 +374,10 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                       phoneNumber = value;
                     },
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Please enter your phone number.";
-                      } else if (!phoneNumberRegExp.hasMatch(value)) {
+                      if(value!.isEmpty){
+                        return "Please enter a phone number.";
+                      }
+                      if (value.isNotEmpty && !phoneNumberRegExp.hasMatch(value)) {
                         return "Please enter a valid phone number.";
                       } else {
                         return null;
@@ -209,12 +385,143 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     },
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Phone Number",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: TextSpan(
+                                  text: 'Phone Number',
+                                  style: TextStyle(
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const [
+                                    TextSpan(
+                                        text: ' *',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ]
+                                  )),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 24.0,8.0 , 8.0),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      street = value;
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please provide street address.";
+                      } else {
+                        return null;
+                      }
+                    },
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: TextSpan(
+                                  text: 'Street Address',
+                                  style: TextStyle(
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const[
+                                    TextSpan(
+                                        text: ' *',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 8.0,8.0 , 24.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 195,
+                        child: TextFormField(
+                          onChanged: (value) {
+                            city=value;
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please provide city.";
+                            } else {
+                              return null;
+                            }
+                          },
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              label: Center(
+                                child: RichText(
+                                    text: TextSpan(
+                                        text: 'City',
+                                        style: TextStyle(
+                                            color: Colors.grey[600], fontSize: 20.0),
+                                        children: const[
+                                          TextSpan(
+                                              text: ' *',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                        ])),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                              )),
+                        ),
+                      ),
+                      Container(
+                        width: 195,
+                        child: TextFormField(
+                          onChanged: (value) {
+                            postalCode=value;
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please provide postal code.";
+                            } else {
+                              return null;
+                            }
+                          },
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              label: Center(
+                                child: RichText(
+                                    text: TextSpan(
+                                        text: 'Postal Code',
+                                        style: TextStyle(
+                                            color: Colors.grey[600], fontSize: 20.0),
+                                        children: const[
+                                          TextSpan(
+                                              text: ' *',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                        ])),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                              )),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -232,11 +539,25 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     },
                     obscureText: true,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Password",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: TextSpan(
+                                  text: 'Password',
+                                  style: TextStyle(
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const[
+                                    TextSpan(
+                                        text: ' *',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
                   ),
                 ),
@@ -257,12 +578,90 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                     },
                     obscureText: true,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: "Confirm Password",
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
+                    decoration: InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: TextSpan(
+                                  text: 'Confirm Password',
+                                  style: TextStyle(
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  children: const [
+                                    TextSpan(
+                                        text: ' *',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ])),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      gatewayLink = value;
+                    },
+                    validator: (value) {
+                      if (country != 'United States' && value == '') {
+                        return "Countries not based in the United States must provide their own\n gateway.";
+                      } else {
+                        return null;
+                      }
+                    },
+                    textAlign: TextAlign.center,
+                    decoration:  InputDecoration(
+                        label: Center(
+                          child: RichText(
+                              text: TextSpan(
+                                  text: 'Link to Payment Gateway',
+                                  style: TextStyle(
+                                      color: Colors.grey[600], fontSize: 20.0),
+                                  )),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    onPressed: () {
+                      showCountryPicker(
+                          context: context,
+                          onSelect: (Country selectedCountry) {
+                            country = selectedCountry.name;
+                          });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.flag),
+                        Text('Select Country'),
+                        Text(' *', style: TextStyle(color: Colors.red),)
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    onPressed: () async {
+                      chooseFile();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.upload),
+                        Text('Upload document to verify organization.'),
+                        Text(' *', style: TextStyle(color: Colors.red),)
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -280,12 +679,24 @@ class _OrganizationRegistrationScreenState extends State<OrganizationRegistratio
                         ),
                       ),
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (_image == null) {
                           setState(() {
                             showLoadingSpinner = true;
                           });
+                          _imageRequiredDialog();
+                        } else if (country == '') {
+                          setState(() {
+                            showLoadingSpinner = true;
+                          });
+                          _countryRequiredDialog();
+                        } else {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              showLoadingSpinner = true;
+                            });
 
-                          createNewOrganizationUser();
+                            createNewOrganizationUser();
+                          }
                         }
                       },
                     ),

@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Campaign {
   String title;
   String description;
-  int goalAmount;
-  int amountRaised;
+  double goalAmount;
+  double amountRaised;
   String category;
   Timestamp endDate;
   Timestamp dateCreated;

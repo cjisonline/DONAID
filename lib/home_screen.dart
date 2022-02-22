@@ -5,6 +5,8 @@ import 'authentication.dart';
 import 'login_screen.dart';
 import 'Registration/registration_screen.dart';
 
+
+
 class HomeScreen extends StatefulWidget {
   static const id = 'home_screen';
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,49 +27,53 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, LoginScreen.id);
-                  },
-                ),
-              ),
-            ),
+           Padding(
+             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
+             child: Material(
+               elevation: 5.0,
+               color: Colors.blue,
+               borderRadius: BorderRadius.circular(30.0),
+               child: MaterialButton(
+                 height: 60.0,
+                 child: const Text(
+                   'Login',
+                   style: TextStyle(
+                     fontSize: 25.0,
+                     color: Colors.white,
+                   ),
+                 ),
+                 onPressed: (){
+                   Navigator.pushNamed(context, LoginScreen.id);
+                 },
+               ),
+             ),
+           ),
+
             const SizedBox(
               height: 10.0,
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
+              padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
               child: Material(
                 elevation: 5.0,
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
+                  height: 60.0,
                   child: const Text(
                     'Register',
                     style: TextStyle(
+                      fontSize: 25.0,
                       color: Colors.white,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: (){
                     Navigator.pushNamed(context, RegistrationScreen.id);
                   },
                 ),
               ),
             ),
+
             Padding(
                 padding: const EdgeInsets.symmetric(
                     vertical: 10.0, horizontal: 15.0),
@@ -75,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () async => Auth.fbLogin(context))),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
               child: SignInButton(Buttons.Google,
                   onPressed: () => Auth.googleLogin(context)),
             )

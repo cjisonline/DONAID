@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class UrgentCaseCard extends StatelessWidget {
   final String title;
   final String description;
-  final int goalAmount;
-  final int amountRaised;
+  final double goalAmount;
+  final double amountRaised;
 
   const UrgentCaseCard( this.title, this.description, this.goalAmount, this.amountRaised, {Key? key}) : super(key: key);
 
@@ -50,7 +50,7 @@ class UrgentCaseCard extends StatelessWidget {
                   maxLines: 3,
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('${(amountRaised/goalAmount)*100}%',
+              Text('${((amountRaised/goalAmount)*100).toStringAsFixed(3)}%',
                   textAlign: TextAlign.left,
                   style: const TextStyle(color: Colors.black, fontSize: 15)),
               Text(

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 import '../../home_screen.dart';
+import '../donor_profile.dart';
 
 class DonorDrawer extends StatefulWidget {
   const DonorDrawer({Key? key}) : super(key: key);
@@ -42,6 +43,13 @@ class _DonorDrawerState extends State<DonorDrawer> {
               leading: const Icon(Icons.settings),
               title: const Text("Settings"),
               onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.account_circle),
+              title: const Text("Profile"),
+              onTap: () {
+                Navigator.pushNamed(context, DonorProfile.id);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.article_outlined),

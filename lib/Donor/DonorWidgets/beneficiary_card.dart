@@ -1,46 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
+import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Organization.dart';
-import 'package:donaid/Models/UrgentCase.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../urgent_case_donate_screen.dart';
+import '../beneficiary_donate_screen.dart';
 
-class UrgentCaseCard extends StatefulWidget {
-  final UrgentCase urgentCase;
+class BeneficiaryCard extends StatefulWidget {
+  final Beneficiary beneficiary;
 
-  const UrgentCaseCard( this.urgentCase, {Key? key}) : super(key: key);
+  const BeneficiaryCard( this.beneficiary, {Key? key}) : super(key: key);
 
   @override
-  State<UrgentCaseCard> createState() => _UrgentCaseCardState();
+  State<BeneficiaryCard> createState() => _BeneficiaryCardState();
 }
 
-class _UrgentCaseCardState extends State<UrgentCaseCard> {
-  final _firestore = FirebaseFirestore.instance;
+class _BeneficiaryCardState extends State<BeneficiaryCard> {
   Organization? organization;
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    _getUrgentCaseOrganization();
+    _getBeneficiaryOrganization();
   }
 
-  _getUrgentCaseOrganization() async{
+  _getBeneficiaryOrganization() async{
 
-    var ret = await _firestore.collection('OrganizationUsers')
-        .where('uid', isEqualTo: widget.urgentCase.organizationID)
-        .get();
+      var ret = await _firestore.collection('OrganizationUsers')
+          .where('uid', isEqualTo: widget.beneficiary.organizationID)
+          .get();
 
-    for(var element in ret.docs){
-      organization = Organization(
-        organizationName: element.data()['organizationName'],
-        uid: element.data()['uid'],
-        organizationDescription: element.data()['organizationDescription'],
-        country: element.data()['country'],
-        gatewayLink: element.data()['gatewayLink'],
-      );
-    }
+      for(var element in ret.docs){
+        organization = Organization(
+          organizationName: element.data()['organizationName'],
+          uid: element.data()['uid'],
+          organizationDescription: element.data()['organizationDescription'],
+          country: element.data()['country'],
+          gatewayLink: element.data()['gatewayLink'],
+        );
+      }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +59,10 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               border: Border.all(color: Colors.grey.shade300, width: 2.0)),
 
           child: Column(children: [
-              const Icon(Icons.assistant, color: Colors.blue, size: 40,
-            ),
+            Icon(Icons.person, color: Colors.blue, size: 40,),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text(widget.urgentCase.title,
+              child: Text(widget.beneficiary.name,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.black,
@@ -69,7 +72,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
             SizedBox(
                 height: 75.0,
                 child: Text(
-                  widget.urgentCase.description,
+                  widget.beneficiary.biography,
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                     color: Colors.black,
@@ -79,11 +82,11 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                   maxLines: 3,
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('\$${(widget.urgentCase.amountRaised.toStringAsFixed(2))}',
+              Text('\$${(widget.beneficiary.amountRaised.toStringAsFixed(2))}',
                   textAlign: TextAlign.left,
                   style: const TextStyle(color: Colors.black, fontSize: 15)),
               Text(
-                '\$${widget.urgentCase.goalAmount.toStringAsFixed(2)}',
+                '\$${widget.beneficiary.goalAmount.toStringAsFixed(2)}',
                 textAlign: TextAlign.start,
                 style: const TextStyle(color: Colors.black, fontSize: 15),
               ),
@@ -92,7 +95,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               backgroundColor: Colors.grey,
               valueColor: AlwaysStoppedAnimation<Color>(
                   Theme.of(context).primaryColor),
-              value: (widget.urgentCase.amountRaised/widget.urgentCase.goalAmount),
+              value: (widget.beneficiary.amountRaised/widget.beneficiary.goalAmount),
               minHeight: 10,
             ),
             Container(
@@ -105,15 +108,18 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                       onTap: (){
                         if(organization?.country =='United States'){
                           Navigator.push(context, MaterialPageRoute(builder: (context) {
-                            return (UrgentCaseDonateScreen(widget.urgentCase));
+                            return (BeneficiaryDonateScreen(widget.beneficiary));
                           }));
                         }
                         else{
                           DonorAlertDialogs.paymentLinkPopUp(context, organization!);
                         }
+
                       },
-                      child: Row(children: [
-                        const Icon(Icons.favorite,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                         const Icon(Icons.favorite,
                               color: Colors.white, size: 20),
                         Container(
                           margin: const EdgeInsets.only(left: 0.0, right: 10.0),
@@ -131,7 +137,8 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                 decoration: const BoxDecoration(
                   color: Colors.pink,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                ))
+                )),
+
           ]),
         ));
   }
