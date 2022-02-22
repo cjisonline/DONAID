@@ -8,7 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'OrganizationWidget/beneficiary_card.dart';
+import 'OrganizationWidget/button_nav_bar.dart';
 import 'OrganizationWidget/organization_drawer.dart';
+import 'add_selection_screen.dart';
 
 class OrganizationDashboard extends StatefulWidget {
   static const id = 'organization_dashboard';
@@ -125,12 +127,13 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 size: 30,
               ),
               onPressed: () {
+                Navigator.pushNamed(context, OrgAddSelection.id);
               }),
         ],
       ),
       drawer: const OrganizationDrawer(),
       body: _body(),
-      bottomNavigationBar: _bottomNavigationBar(),
+      bottomNavigationBar: ButtomNavigation(),
     );
   }
 
