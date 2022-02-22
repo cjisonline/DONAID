@@ -1,3 +1,7 @@
+import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
+import 'package:donaid/Donor/categories_screen.dart';
+import 'package:donaid/Donor/organizations_expanded_screen.dart';
+import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Organization/add_beneficiary_screen.dart';
 import 'package:donaid/Organization/add_urgentcase_screen.dart';
 import 'package:donaid/Donor/donor_edit_profile.dart';
@@ -18,9 +22,11 @@ import 'Registration/donor_registration_screen.dart';
 import 'Registration/organization_registration_screen.dart';
 import 'Donor/donor_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = 'pk_test_51KTuiGEvfimLlZrsjvlq3mE1JEa8nGiejkGVgw9MvqJd9viDPIXCbUGbWp1QaXf50sQIQs3MNWlVjp99VAruB0qW00xrE9kMs7';
   await Firebase.initializeApp();
   await GetStorage.init();
   await Auth.getCurrentUser();
@@ -47,6 +53,10 @@ class Donaid extends StatelessWidget {
         OrganizationRegistrationScreen.id: (context) => const OrganizationRegistrationScreen(),
         DonorDashboard.id: (context) => const DonorDashboard(),
         OrganizationDashboard.id: (context) => const OrganizationDashboard(),
+        CategoriesScreen.id: (context) => const CategoriesScreen(),
+        BeneficiaryExpandedScreen.id: (context) => const BeneficiaryExpandedScreen(),
+        UrgentCasesExpandedScreen.id: (context) => const UrgentCasesExpandedScreen(),
+        OrganizationsExpandedScreen.id: (context) => const OrganizationsExpandedScreen(),
         OrgAddSelection.id: (context) => OrgAddSelection(),
         AddCampaignForm.id: (context) => AddCampaignForm(),
         AddBeneficiaryForm.id: (context) => AddBeneficiaryForm(),

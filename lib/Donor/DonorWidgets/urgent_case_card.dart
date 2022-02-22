@@ -1,12 +1,46 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
+import 'package:donaid/Models/Organization.dart';
+import 'package:donaid/Models/UrgentCase.dart';
 import 'package:flutter/material.dart';
 
-class UrgentCaseCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final int goalAmount;
-  final int amountRaised;
+import '../urgent_case_donate_screen.dart';
 
-  const UrgentCaseCard( this.title, this.description, this.goalAmount, this.amountRaised, {Key? key}) : super(key: key);
+class UrgentCaseCard extends StatefulWidget {
+  final UrgentCase urgentCase;
+
+  const UrgentCaseCard( this.urgentCase, {Key? key}) : super(key: key);
+
+  @override
+  State<UrgentCaseCard> createState() => _UrgentCaseCardState();
+}
+
+class _UrgentCaseCardState extends State<UrgentCaseCard> {
+  final _firestore = FirebaseFirestore.instance;
+  Organization? organization;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUrgentCaseOrganization();
+  }
+
+  _getUrgentCaseOrganization() async{
+
+    var ret = await _firestore.collection('OrganizationUsers')
+        .where('uid', isEqualTo: widget.urgentCase.organizationID)
+        .get();
+
+    for(var element in ret.docs){
+      organization = Organization(
+        organizationName: element.data()['organizationName'],
+        uid: element.data()['uid'],
+        organizationDescription: element.data()['organizationDescription'],
+        country: element.data()['country'],
+        gatewayLink: element.data()['gatewayLink'],
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +55,11 @@ class UrgentCaseCard extends StatelessWidget {
               border: Border.all(color: Colors.grey.shade300, width: 2.0)),
 
           child: Column(children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.apartment,
-                  color: Colors.blue,
-                  size: 50),
+              const Icon(Icons.assistant, color: Colors.blue, size: 40,
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text(title,
+              child: Text(widget.urgentCase.title,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.black,
@@ -40,7 +69,7 @@ class UrgentCaseCard extends StatelessWidget {
             SizedBox(
                 height: 75.0,
                 child: Text(
-                  description,
+                  widget.urgentCase.description,
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                     color: Colors.black,
@@ -50,11 +79,11 @@ class UrgentCaseCard extends StatelessWidget {
                   maxLines: 3,
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('${(amountRaised/goalAmount)*100}%',
+              Text('\$${(widget.urgentCase.amountRaised.toStringAsFixed(2))}',
                   textAlign: TextAlign.left,
                   style: const TextStyle(color: Colors.black, fontSize: 15)),
               Text(
-                '\$$goalAmount',
+                '\$${widget.urgentCase.goalAmount.toStringAsFixed(2)}',
                 textAlign: TextAlign.start,
                 style: const TextStyle(color: Colors.black, fontSize: 15),
               ),
@@ -63,30 +92,41 @@ class UrgentCaseCard extends StatelessWidget {
               backgroundColor: Colors.grey,
               valueColor: AlwaysStoppedAnimation<Color>(
                   Theme.of(context).primaryColor),
-              value: (amountRaised/goalAmount),
+              value: (widget.urgentCase.amountRaised/widget.urgentCase.goalAmount),
               minHeight: 10,
             ),
             Container(
                 margin: const EdgeInsets.only(top: 10.0),
                 child: FittedBox(
                   fit: BoxFit.contain,
-                  child: Row(children: [
-                    IconButton(
-                      enableFeedback: false,
-                      onPressed: () {},
-                      icon: const Icon(Icons.favorite,
-                          color: Colors.white, size: 20),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: (){
+                        if(organization?.country =='United States'){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return (UrgentCaseDonateScreen(widget.urgentCase));
+                          }));
+                        }
+                        else{
+                          DonorAlertDialogs.paymentLinkPopUp(context, organization!);
+                        }
+                      },
+                      child: Row(children: [
+                        const Icon(Icons.favorite,
+                              color: Colors.white, size: 20),
+                        Container(
+                          margin: const EdgeInsets.only(left: 0.0, right: 10.0),
+                          child: const Text('Donate',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              )),
+                        )
+                      ]),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 0.0, right: 10.0),
-                      child: const Text('Donate',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          )),
-                    )
-                  ]),
+                  ),
                 ),
                 decoration: const BoxDecoration(
                   color: Colors.pink,
