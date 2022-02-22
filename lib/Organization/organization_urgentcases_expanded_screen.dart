@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Organization/organization_urgentcase_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -63,7 +64,9 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
               children: [
                 ListTile(
                   onTap: () {
-                    //TODO: implement on tap
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return (OrganizationUrgentCaseFullScreen(urgentCases[index]));
+                    }));
                   },
                   title: Text(urgentCases[index].title),
                   subtitle: Text(urgentCases[index].description),

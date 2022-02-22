@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Organization/organization_campaign_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -62,6 +63,9 @@ class _OrganizationCampaignsExpandedScreenState
                 ListTile(
                   onTap: () {
                     //TODO: implement on tap
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return (OrganizationCampaignFullScreen(campaigns[index]));
+                    }));
                   },
                   title: Text(campaigns[index].title),
                   subtitle: Text(campaigns[index].description),

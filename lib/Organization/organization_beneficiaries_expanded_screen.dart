@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Organization/organization_beneficiary_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +63,9 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
               children: [
                 ListTile(
                   onTap: () {
-                   //TODO: implement on tap
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return (OrganizationBeneficiaryFullScreen(beneficiaries[index]));
+                    }));
                   },
                   title: Text(beneficiaries[index].name),
                   subtitle: Text(beneficiaries[index].biography),
