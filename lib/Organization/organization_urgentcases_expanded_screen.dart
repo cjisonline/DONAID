@@ -67,6 +67,25 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
                   },
                   title: Text(urgentCases[index].title),
                   subtitle: Text(urgentCases[index].description),
+                  trailing: urgentCases[index].active
+                      ? IconButton(
+                    icon: const Icon(
+                      Icons.stop,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      //TODO: end charity button
+                    },
+                  )
+                      : IconButton(
+                    icon: const Icon(
+                      Icons.play_arrow,
+                      color: Colors.green,
+                    ),
+                    onPressed: (){
+                      //TODO: resume charity button
+                    },
+                  ),
                 ),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   Text('\$${(urgentCases[index].amountRaised.toStringAsFixed(2))}',

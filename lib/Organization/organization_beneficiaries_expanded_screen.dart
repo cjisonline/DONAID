@@ -66,6 +66,25 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
                   },
                   title: Text(beneficiaries[index].name),
                   subtitle: Text(beneficiaries[index].biography),
+                  trailing: beneficiaries[index].active
+                      ? IconButton(
+                    icon: const Icon(
+                      Icons.stop,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      //TODO: end charity button
+                    },
+                  )
+                      : IconButton(
+                    icon: const Icon(
+                      Icons.play_arrow,
+                      color: Colors.green,
+                    ),
+                    onPressed: (){
+                      //TODO: resume charity button
+                    },
+                  ),
                 ),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   Text('\$${(beneficiaries[index].amountRaised.toStringAsFixed(2))}',
