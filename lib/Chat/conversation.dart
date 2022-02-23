@@ -127,8 +127,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
             gatewayLink: org.data()['gatewayLink'],
             id: org.data()['id']);
 
-        if (!orgIDs.contains(element.data()['uid'].toString())) {
-          orgIDs.add(element.data()['uid'].toString());
+        if (!orgIDs.contains(org.data()['uid'].toString())) {
+          orgIDs.add(org.data()['uid'].toString());
           organizations.add(organization);
         }
       }

@@ -102,14 +102,13 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       Beneficiary beneficiary = Beneficiary(
           name: element.data()['name'],
           biography: element.data()['biography'],
-          goalAmount: element.data()['goalAmount'],
-          amountRaised: element.data()['amountRaised'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
           category: element.data()['category'],
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID:
-              element.data()['organizationID']); // need to add category
+          organizationID: element.data()['organizationID']); // need to add category
       beneficiaries.add(beneficiary);
     }
 
