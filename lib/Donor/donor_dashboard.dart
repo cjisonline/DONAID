@@ -59,6 +59,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
         organizationDescription: element.data()['organizationDescription'],
         country: element.data()['country'],
         gatewayLink: element.data()['gatewayLink'],
+        profilePictureDownloadURL: element.data()['profilePictureDownloadURL']
       );
       organizations.add(organization);
     }
@@ -218,6 +219,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 itemCount: organizations.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, int index) {
+                  print('DOWNLOAD URL: ${organizations[index].profilePictureDownloadURL}');
                   return OrganizationCard(organizations[index]);
                 },
               )),

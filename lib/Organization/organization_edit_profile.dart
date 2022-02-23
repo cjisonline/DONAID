@@ -142,7 +142,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           chooseFile();
         },
         child:
-        (organization.profilePictureDownloadURL!.isEmpty && _uploadedFileURL.isEmpty)
+        (organization.profilePictureDownloadURL==null)
         ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
@@ -150,7 +150,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
             Text('Upload profile picture or logo.'),
           ],
         )
-        : (organization.profilePictureDownloadURL!.isNotEmpty && _uploadedFileURL.isEmpty)
+        : (organization.profilePictureDownloadURL != null && organization.profilePictureDownloadURL.toString() != "")
             ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -158,7 +158,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
               width: 250,
               height: 250,
               child: Image.network(
-                organization.profilePictureDownloadURL!,
+                organization.profilePictureDownloadURL.toString(),
                 fit: BoxFit.contain,
               ),),
           ],
