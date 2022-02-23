@@ -71,7 +71,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                     Text(widget.organization.organizationDescription.toString(),
                         textAlign: TextAlign.center,
                         softWrap: true,
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           color: Colors.black,
