@@ -255,7 +255,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
       ),
       drawer: const DonorDrawer(),
       body: _campaignDonateBody(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar:  DonorBottomNavigationBar(),
     );
   }
 }

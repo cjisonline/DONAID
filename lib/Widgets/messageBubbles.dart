@@ -16,7 +16,7 @@ const styleReciver = BubbleStyle(
     nip: BubbleNip.leftTop,
     color: Color.fromRGBO(105, 105, 105, 10));
 
-Widget reciverBubble(message, time, isWheel, context) {
+Widget receiverBubble(message, time, isWheel, context) {
   return Padding(
     padding: EdgeInsets.only(right: Get.width / 5),
     child: Bubble(

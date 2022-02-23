@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Chat/conversation.dart';
 import 'package:donaid/Donor/DonorWidgets/category_card.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
@@ -142,7 +141,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
       ),
       drawer: const DonorDrawer(),
       body: _body(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 

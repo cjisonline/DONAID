@@ -51,7 +51,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       ),
       drawer: const DonorDrawer(),
       body: _categoriesBody(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar:  DonorBottomNavigationBar(),
     );
   }
 

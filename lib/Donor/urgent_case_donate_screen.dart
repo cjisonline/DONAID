@@ -255,7 +255,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
       ),
       drawer: const DonorDrawer(),
       body: _campaignDonateBody(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 }

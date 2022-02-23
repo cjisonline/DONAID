@@ -60,7 +60,7 @@ class _OrganizationsExpandedScreenState extends State<OrganizationsExpandedScree
                     }));
                   },
                   title: Text(organizations[index].organizationName),
-                  subtitle: Text(organizations[index].organizationDescription),
+                  subtitle: Text(organizations[index].organizationDescription.toString()),
                 ),
                 const Divider()
               ],
@@ -83,7 +83,7 @@ class _OrganizationsExpandedScreenState extends State<OrganizationsExpandedScree
       ),
       drawer: const DonorDrawer(),
       body: _organizationsBody(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 }

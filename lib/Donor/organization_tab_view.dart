@@ -192,7 +192,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
             _organizationBeneficiariesBody()
           ],
         ),
-        bottomNavigationBar: const DonorBottomNavigationBar(),
+        bottomNavigationBar:  DonorBottomNavigationBar(),
       ),
     );
   }

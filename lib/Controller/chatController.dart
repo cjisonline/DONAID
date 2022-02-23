@@ -17,9 +17,7 @@ class ChatController extends GetxController {
     currentUserId = id;
   }
   sendMessage(String uiDfriend) async {
-    if (textController.text == "" ||
-        textController.text == " " ||
-        textController.text == "  ") {
+    if (textController.text.trim() == "") {
     } else {
       MessageModel message = MessageModel();
       message.body = textController.text;

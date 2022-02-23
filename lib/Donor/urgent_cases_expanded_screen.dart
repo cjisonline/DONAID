@@ -172,7 +172,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
       ),
       drawer: const DonorDrawer(),
       body: _urgentCasesBody(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 }

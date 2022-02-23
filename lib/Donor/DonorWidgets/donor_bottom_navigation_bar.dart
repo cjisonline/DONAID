@@ -1,7 +1,12 @@
+import 'package:donaid/Chat/conversation.dart';
+import 'package:donaid/Donor/donor_dashboard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DonorBottomNavigationBar extends StatelessWidget {
-  const DonorBottomNavigationBar({Key? key}) : super(key: key);
+  final _auth = FirebaseAuth.instance;
+
+  DonorBottomNavigationBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +21,9 @@ class DonorBottomNavigationBar extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.popUntil(context, ModalRoute.withName(DonorDashboard.id));
+              },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
             const Text('Home',
@@ -51,7 +58,12 @@ class DonorBottomNavigationBar extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return (Conversation(_auth.currentUser!.uid, "OrganizationUsers"));
+                }));
+
+              },
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
             const Text('Messages',

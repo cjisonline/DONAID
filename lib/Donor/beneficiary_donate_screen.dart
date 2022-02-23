@@ -255,7 +255,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
       ),
       drawer: const DonorDrawer(),
       body: _beneficiaryDonateBody(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 }

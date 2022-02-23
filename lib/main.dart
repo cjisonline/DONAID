@@ -41,7 +41,7 @@ class Donaid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       builder: EasyLoading.init(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
