@@ -46,6 +46,15 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     _getBeneficiaries();
   }
 
+  _refreshPage() async{
+    beneficiaries.clear();
+    campaigns.clear();
+    urgentCases.clear();
+    _getCampaign();
+    _getBeneficiaries();
+    _getUrgentCases();
+  }
+
   _getCampaign() async {
     var ret = await _firestore
         .collection('Campaigns')
@@ -118,8 +127,6 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       beneficiaries.add(beneficiary);
     }
 
-    print('Beneficiaries list: $beneficiaries');
-
     setState(() {});
   }
 
@@ -136,7 +143,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 size: 30,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, OrgAddSelection.id);
+                Navigator.push (context, MaterialPageRoute(builder: (context) => OrgAddSelection()),).then((value){
+                  _refreshPage();
+                });
               }),
         ],
       ),
@@ -165,7 +174,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     ),
                     TextButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, OrganizationCampaignsExpandedScreen.id);
+                        Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationCampaignsExpandedScreen()),).then((value){
+                          _refreshPage();
+                        });
                       },
                       child: const Text(
                         'See more >',
@@ -201,7 +212,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     ),
                     TextButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, OrganizationUrgentCasesExpandedScreen.id);
+                        Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationUrgentCasesExpandedScreen()),).then((value){
+                          _refreshPage();
+                        });
                       },
                       child: const Text(
                         'See more >',
@@ -237,7 +250,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     ),
                     TextButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, OrganizationBeneficiariesExpandedScreen.id);
+                        Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationBeneficiariesExpandedScreen()),).then((value){
+                          _refreshPage();
+                        });
                       },
                       child: const Text(
                         'See more >',

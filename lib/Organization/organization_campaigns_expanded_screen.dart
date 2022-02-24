@@ -27,6 +27,13 @@ class _OrganizationCampaignsExpandedScreenState
     _getCampaigns();
   }
 
+  _refreshPage() async{
+    campaigns.clear();
+    _getCampaigns();
+    setState(() {
+
+    });
+  }
   _getCampaigns() async {
     var ret = await _firestore
         .collection('Campaigns')
@@ -63,22 +70,12 @@ class _OrganizationCampaignsExpandedScreenState
               children: [
                 ListTile(
                   onTap: () {
-                    //TODO: implement on tap
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return (OrganizationCampaignFullScreen(campaigns[index]));
-                    }));
+                    })).then((value) => _refreshPage());
                   },
                   title: Text(campaigns[index].title),
                   subtitle: Text(campaigns[index].description),
-                  trailing: IconButton(
-                          icon: const Icon(
-                            Icons.stop,
-                            color: Colors.red,
-                          ),
-                          onPressed: () {
-                            //TODO: end charity button
-                          },
-                        )
                 ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
