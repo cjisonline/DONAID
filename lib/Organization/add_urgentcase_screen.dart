@@ -33,6 +33,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
   final firestore = FirebaseFirestore.instance;
   late DocumentSnapshot documentSnapshot;
   var category = [];
+  int urgentCaseTimeLimit=0;
 
 
   _getCampaign() async {
@@ -46,11 +47,19 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
     setState(() {});
   }
 
+  _getTimeLimit() async {
+    var ret = await firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
+
+    var doc = ret.docs[0];
+    urgentCaseTimeLimit = doc['urgentCases'];
+  }
+
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
     _getCampaign();
+    _getTimeLimit();
   }
 
   void _getCurrentUser() {
@@ -251,6 +260,9 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Please enter end date.";
+                                }
+                                if(DateTime.parse(value).difference(DateTime.now()).inDays > urgentCaseTimeLimit){
+                                  return 'Urgent cases cannot have a duration longer than 6 months.';
                                 }
                                 else {
                                   return null;

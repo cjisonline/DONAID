@@ -33,6 +33,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   final firestore = FirebaseFirestore.instance;
   late DocumentSnapshot documentSnapshot;
   var category = [];
+  int beneficiaryTimeLimit=0;
 
 
   _getCampaign() async {
@@ -46,11 +47,19 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
     setState(() {});
   }
 
+  _getTimeLimit() async {
+    var ret = await firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
+
+    var doc = ret.docs[0];
+    beneficiaryTimeLimit = doc['beneficiaries'];
+  }
+
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
     _getCampaign();
+    _getTimeLimit();
   }
 
   void _getCurrentUser() {
@@ -250,6 +259,9 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Please enter end date.";
+                                }
+                                if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
+                                  return 'Beneficiaries cannot have a duration longer than 1 year.';
                                 }
                                 else {
                                   return null;
