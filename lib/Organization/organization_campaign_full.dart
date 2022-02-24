@@ -19,6 +19,26 @@ class OrganizationCampaignFullScreen extends StatefulWidget {
 class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFullScreen> {
   final _firestore = FirebaseFirestore.instance;
 
+  @override
+  void initState(){
+    super.initState();
+    _refreshCampaign();
+  }
+
+  _refreshCampaign() async{
+    var ret = await _firestore.collection('Campaigns').where('id',isEqualTo: widget.campaign.id).get();
+
+    var doc = ret.docs[0];
+    widget.campaign.title = doc['title'];
+    widget.campaign.description = doc['description'];
+    widget.campaign.category = doc['category'];
+    widget.campaign.goalAmount = doc['goalAmount'];
+    widget.campaign.endDate = doc['endDate'];
+    setState(() {
+    });
+
+  }
+
   _stopCampaign() async {
     await _firestore.collection('Campaigns').doc(widget.campaign.id).set({
       'active': false
@@ -165,7 +185,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                             onPressed: () async {
                               Navigator.push(context, MaterialPageRoute(builder: (context){
                                 return EditCampaign(campaign: widget.campaign);
-                              }));
+                              })).then((value) => _refreshCampaign());
                             })),),
                 Container(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
