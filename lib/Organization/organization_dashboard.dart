@@ -11,7 +11,7 @@ import 'OrganizationWidget/beneficiary_card.dart';
 import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'OrganizationWidget/organization_drawer.dart';
 import 'add_selection_screen.dart';
-import 'organization_beneficiaries_expanded_screen.dart';
+import 'organization_activebeneficiaries_expanded_screen.dart';
 import 'organization_activecampaigns_expanded_screen.dart';
 import 'organization_urgentcases_expanded_screen.dart';
 
