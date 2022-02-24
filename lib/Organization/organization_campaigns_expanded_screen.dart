@@ -31,6 +31,7 @@ class _OrganizationCampaignsExpandedScreenState
     var ret = await _firestore
         .collection('Campaigns')
         .where('organizationID', isEqualTo: _auth.currentUser?.uid)
+        .where('active', isEqualTo: true)
         .orderBy('endDate', descending: false)
         .get();
 
@@ -69,8 +70,7 @@ class _OrganizationCampaignsExpandedScreenState
                   },
                   title: Text(campaigns[index].title),
                   subtitle: Text(campaigns[index].description),
-                  trailing: campaigns[index].active
-                      ? IconButton(
+                  trailing: IconButton(
                           icon: const Icon(
                             Icons.stop,
                             color: Colors.red,
@@ -79,15 +79,6 @@ class _OrganizationCampaignsExpandedScreenState
                             //TODO: end charity button
                           },
                         )
-                      : IconButton(
-                        icon: const Icon(
-                            Icons.play_arrow,
-                            color: Colors.green,
-                          ),
-                        onPressed: (){
-                          //TODO: resume charity button
-                        },
-                      ),
                 ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

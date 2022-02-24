@@ -3,7 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Organization/organization_campaigns_expanded_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'edit_campaign.dart';
 
 class OrganizationCampaignFullScreen extends StatefulWidget {
   final Campaign campaign;
@@ -15,6 +18,98 @@ class OrganizationCampaignFullScreen extends StatefulWidget {
 
 class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFullScreen> {
   final _firestore = FirebaseFirestore.instance;
+
+  _stopCampaign() async {
+    await _firestore.collection('Campaigns').doc(widget.campaign.id).set({
+      'active': false
+    });
+
+
+  }
+
+  _resumeCampaign() async {
+    await _firestore.collection('Campaigns').doc(widget.campaign.id).set({
+      'active': true
+    });
+  }
+
+  Future<void> _stopCharityConfirm() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Are You Sure?'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'Stopping this charity will make it not visible to donors. Once you stop this charity '
+                    'you can reactivate it from the Expired Charities page. Would you like to continue'
+                    'with stopping this charity?'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    _stopCampaign();
+                    Navigator.pushNamed(context, OrganizationCampaignsExpandedScreen.id);
+                  },
+                  child: const Text('Yes'),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _resumeCharityConfirm() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Are You Sure?'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'Resuming this charity will make it visible to donors again. Once you resume this charity '
+                    'you can deactivate it again from the dashboard or the My Campaigns page. Would you like '
+                    'to continue?'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    _resumeCampaign();
+                    //TODO: Navigate to expired charities page
+                  },
+                  child: const Text('Yes'),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
 
   _campaignFullBody() {
     return Center(
@@ -68,11 +163,13 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                               ),
                             ),
                             onPressed: () async {
-                              //TODO: On pressed
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return EditCampaign(campaign: widget.campaign);
+                              }));
                             })),),
                 Container(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                    child: (widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
+                    child: (widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) < 0)
                     ? Material(
                         elevation: 5.0,
                         color: Colors.red,
@@ -85,9 +182,10 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                               ),
                             ),
                             onPressed: () async {
-                              //TODO: On pressed
+                              _stopCharityConfirm();
+
                             }))
-                : (!widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
+                : (!widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) < 0)
                         ? Material(
                         elevation: 5.0,
                         color: Colors.green,
@@ -100,16 +198,19 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                               ),
                             ),
                             onPressed: () async {
-                              //TODO: On pressed
+                              _resumeCharityConfirm();
                             }))
-                  : (!widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) < 0)
-                        ? Center(
-                          child: Container(
-                            child: const Text(
-                              'Charity Has Ended',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
+                  : (widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
+                        ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Container(
+                              child: const Text(
+                                'Note: This charity has expired. To reactive this charity and make it visible to donors again, edit the end date for the charity.',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),
