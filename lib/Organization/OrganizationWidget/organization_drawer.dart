@@ -1,3 +1,5 @@
+import 'package:donaid/Organization/organization_expiredcharities_screen.dart';
+import 'package:donaid/Organization/pending_approvals_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -50,12 +52,26 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
             ListTile(
               leading: Icon(Icons.pending),
               title: Text("Pending Approvals"),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return PendingApprovals();
+                })).then((value){
+                  setState(() {
+                  });
+                });
+              },
             ),
             ListTile(
               leading: Icon(Icons.not_interested),
               title: Text("Expired Charities"),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return ExpiredCharitiesScreen();
+                })).then((value){
+                  setState(() {
+                  });
+                });
+              },
             ),
             ListTile(
               leading: Icon(Icons.help),

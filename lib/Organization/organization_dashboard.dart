@@ -13,7 +13,7 @@ import 'OrganizationWidget/organization_drawer.dart';
 import 'add_selection_screen.dart';
 import 'organization_activebeneficiaries_expanded_screen.dart';
 import 'organization_activecampaigns_expanded_screen.dart';
-import 'organization_urgentcases_expanded_screen.dart';
+import 'organization_activeurgentcases_expanded_screen.dart';
 
 class OrganizationDashboard extends StatefulWidget {
   static const id = 'organization_dashboard';
@@ -88,6 +88,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
         .where('organizationID', isEqualTo: loggedInUser?.uid)
         .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
         .where('active', isEqualTo: true)
+        .where('approved',isEqualTo: true)
         .orderBy('endDate', descending: false)
         .get();
 
