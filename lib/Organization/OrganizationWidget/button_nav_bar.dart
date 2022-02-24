@@ -1,3 +1,4 @@
+import 'package:donaid/Organization/Organization_search_filter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,9 @@ class ButtomNavigation extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, SearchPage.id);
+              },
               icon: const Icon(
                 Icons.search,
                 color: Colors.white,
@@ -44,7 +47,8 @@ class ButtomNavigation extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+              },
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
