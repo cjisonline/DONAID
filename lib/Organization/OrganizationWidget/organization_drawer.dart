@@ -48,13 +48,13 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.article_outlined),
-              title: Text("About"),
+              leading: Icon(Icons.pending),
+              title: Text("Pending Approvals"),
               onTap: () {},
             ),
             ListTile(
               leading: Icon(Icons.not_interested),
-              title: Text("Report"),
+              title: Text("Expired Charities"),
               onTap: () {},
             ),
             ListTile(
