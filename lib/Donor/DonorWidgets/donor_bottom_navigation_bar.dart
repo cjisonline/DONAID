@@ -1,3 +1,4 @@
+import 'package:donaid/Donor/donor_search_screen.dart';
 import 'package:flutter/material.dart';
 
 class DonorBottomNavigationBar extends StatelessWidget {
@@ -26,7 +27,9 @@ class DonorBottomNavigationBar extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, DonorSearchScreen.id);
+              },
               icon: const Icon(
                 Icons.search,
                 color: Colors.white,

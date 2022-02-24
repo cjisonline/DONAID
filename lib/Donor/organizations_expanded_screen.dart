@@ -60,7 +60,7 @@ class _OrganizationsExpandedScreenState extends State<OrganizationsExpandedScree
                     }));
                   },
                   title: Text(organizations[index].organizationName),
-                  subtitle: Text(organizations[index].organizationDescription),
+                  // subtitle: Text(organizations[index].organizationDescription),  // TODO: fix organization description
                 ),
                 const Divider()
               ],

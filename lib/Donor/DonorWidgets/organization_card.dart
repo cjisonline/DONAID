@@ -46,7 +46,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text(widget.organization.organizationDescription,
+                child: Text("widget.organization.organizationDescription", // TODO: fix organization description
                     textAlign: TextAlign.center,
                     softWrap: true,
                     maxLines: 3,
