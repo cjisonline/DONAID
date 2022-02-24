@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UrgentCase {
+class UrgentCase{
   String title;
   String description;
   double goalAmount;
