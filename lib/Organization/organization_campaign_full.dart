@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
-import 'package:donaid/Organization/organization_campaigns_expanded_screen.dart';
+import 'package:donaid/Organization/organization_activecampaigns_expanded_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'edit_campaign.dart';
@@ -32,7 +32,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
     widget.campaign.title = doc['title'];
     widget.campaign.description = doc['description'];
     widget.campaign.category = doc['category'];
-    widget.campaign.goalAmount = doc['goalAmount'];
+    widget.campaign.goalAmount = doc['goalAmount'].toDouble();
     widget.campaign.endDate = doc['endDate'];
     setState(() {
     });
@@ -189,7 +189,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                             })),),
                 Container(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                    child: (widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) < 0)
+                    child: (widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
                     ? Material(
                         elevation: 5.0,
                         color: Colors.red,
@@ -205,7 +205,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                               _stopCharityConfirm();
 
                             }))
-                : (!widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) < 0)
+                : (!widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
                         ? Material(
                         elevation: 5.0,
                         color: Colors.green,
@@ -220,7 +220,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                             onPressed: () async {
                               _resumeCharityConfirm();
                             }))
-                  : (widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
+                  : (widget.campaign.endDate.compareTo(Timestamp.now()) < 0)
                         ? Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Center(

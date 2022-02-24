@@ -12,7 +12,7 @@ import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'OrganizationWidget/organization_drawer.dart';
 import 'add_selection_screen.dart';
 import 'organization_beneficiaries_expanded_screen.dart';
-import 'organization_campaigns_expanded_screen.dart';
+import 'organization_activecampaigns_expanded_screen.dart';
 import 'organization_urgentcases_expanded_screen.dart';
 
 class OrganizationDashboard extends StatefulWidget {
@@ -59,6 +59,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     var ret = await _firestore
         .collection('Campaigns')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .orderBy('endDate', descending: false)
         .get();
     for (var element in ret.docs) {
       Campaign campaign = Campaign(
@@ -83,6 +86,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     var ret = await _firestore
         .collection('UrgentCases')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .orderBy('endDate', descending: false)
         .get();
 
     for (var element in ret.docs) {
@@ -109,6 +115,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     var ret = await _firestore
         .collection('Beneficiaries')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .orderBy('endDate', descending: false)
         .get();
 
     for (var element in ret.docs) {

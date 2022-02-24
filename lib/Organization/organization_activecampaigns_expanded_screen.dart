@@ -38,6 +38,7 @@ class _OrganizationCampaignsExpandedScreenState
     var ret = await _firestore
         .collection('Campaigns')
         .where('organizationID', isEqualTo: _auth.currentUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
         .where('active', isEqualTo: true)
         .orderBy('endDate', descending: false)
         .get();
