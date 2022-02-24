@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorWidgets/search_suggestion_item.dart';
 import 'package:donaid/Models/SearchResult.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
+import 'DonorWidgets/donor_drawer.dart';
+import 'DonorWidgets/search_result_item.dart';
 
 class DonorSearchScreen extends StatefulWidget {
   static const id = 'donor_search_screen';
@@ -95,6 +98,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           centerTitle: true,
           title: const Text('Search'),
       ),
+      drawer: const DonorDrawer(),
       body: _body(),
       bottomNavigationBar: const DonorBottomNavigationBar(),
     );
@@ -147,24 +151,6 @@ class SearchQuery extends SearchDelegate<String>{
   List<SearchResult> data = <SearchResult>[];
   SearchQuery({required this.data,});
 
-  final organizations = [
-    "red cross",
-    "unicef",
-    "blankets for homeless",
-    "united to heal",
-    "doctors without borders",
-    "the nature conservancy",
-    "feeding america",
-    "the salvation army",
-    "united way",
-    "habitat for humanity",
-    "direct relief",
-    "americares",
-    "american cancer society",
-    "samaritan's purse",
-    "homes"
-  ];
-
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [Container()];
@@ -183,19 +169,21 @@ class SearchQuery extends SearchDelegate<String>{
 
   @override
   Widget buildResults(BuildContext context) {
-    // final resultsList = organizations.where((organizationName) => organizationName.contains(query)).toList();
     final resultsList = data.where((currentData) => currentData.title.contains(query)).toList();
     return ListView.builder(
         itemCount: resultsList.length,
         itemBuilder: (context, int index) {
-          if(data[index].collection == "Organizations"){
-            return Text(resultsList[index].title, style: const TextStyle(color: Colors.red));
+          if(resultsList[index].collection == "Organizations"){
+            return SearchResultItem(resultsList[index].title, Icons.apartment);
           }
-          if(data[index].collection == "Beneficiaries"){
-              return Text(resultsList[index].title, style: const TextStyle(color: Colors.blue));
-            }
+          if(resultsList[index].collection == "Beneficiaries"){
+            return SearchResultItem(resultsList[index].title, Icons.person);
+          }
+          if(resultsList[index].collection == "UrgentCases"){
+            return SearchResultItem(resultsList[index].title, Icons.assistant);
+          }
           else{
-            return Text(resultsList[index].title, style: const TextStyle(color: Colors.black));
+            return SearchResultItem(resultsList[index].title, Icons.apartment);
           }
         }
     );
@@ -203,11 +191,34 @@ class SearchQuery extends SearchDelegate<String>{
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList =  data.where((currentData) => currentData.title.contains(query)).toList();
+    List<SearchResult> suggestionList =  data.where((currentData) => currentData.title.contains(query)).toList();
+    // return ListView.builder(
+    //     itemCount: suggestionList.length,
+    //     itemBuilder: (context, int index) {
+    //       if(suggestionList[index].collection == "Organizations"){
+    //         return SearchSuggestionItem(suggestionList[index].title, Icons.apartment);
+    //       }
+    //       if(suggestionList[index].collection == "Beneficiaries"){
+    //         return SearchSuggestionItem(suggestionList[index].title, Icons.person);
+    //       }
+    //       if(suggestionList[index].collection == "UrgentCases"){
+    //         return SearchSuggestionItem(suggestionList[index].title, Icons.assistant);
+    //       }
+    //       else{
+    //         return SearchSuggestionItem(suggestionList[index].title, Icons.apartment);
+    //       }
+    //     },
+    // );
+
     return ListView.builder(
         itemCount: suggestionList.length,
-        itemBuilder: (context, index) =>
-         Text(suggestionList[index].title, style: const TextStyle(color: Colors.red),)
+        itemBuilder: (content, index) => ListTile(
+          onTap: () {
+            query = suggestionList[index].title;
+            buildResults(context);
+            showResults(context);
+          },
+          title: Text(suggestionList[index].title)),
     );
   }
 }
