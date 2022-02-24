@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Models/Campaign.dart';
+import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 
-class EditCampaign extends StatefulWidget {
-  Campaign campaign;
+class EditBeneficiary extends StatefulWidget {
+  Beneficiary beneficiary;
 
-  EditCampaign({Key? key, required this.campaign}) : super(key: key);
+  EditBeneficiary({Key? key, required this.beneficiary}) : super(key: key);
 
   @override
-  _EditCampaignState createState() => _EditCampaignState();
+  _EditBeneficiaryState createState() => _EditBeneficiaryState();
 }
 
-class _EditCampaignState extends State<EditCampaign> {
+class _EditBeneficiaryState extends State<EditBeneficiary> {
   final _firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -21,11 +21,11 @@ class _EditCampaignState extends State<EditCampaign> {
   );
   var category = [];
 
-  TextEditingController? _campaignTitleController;
-  TextEditingController? _campaignDescriptionController;
-  TextEditingController? _campaignGoalAmountController;
-  TextEditingController? _campaignEndDateController;
-  TextEditingController? _campaignCategoryController;
+  TextEditingController? _beneficiaryNameController;
+  TextEditingController? _beneficiaryBiographyController;
+  TextEditingController? _beneficiaryGoalAmountController;
+  TextEditingController? _beneficiaryEndDateController;
+  TextEditingController? _beneficiaryCategoryController;
 
   @override
   void initState(){
@@ -51,22 +51,22 @@ class _EditCampaignState extends State<EditCampaign> {
     _formKey.currentState!.save();
   }
 
-  _updateCampaign() async{
-    _firestore.collection('Campaigns').doc(widget.campaign.id).update({
-      "title": _campaignTitleController?.text,
-      "description": _campaignDescriptionController?.text,
-      "category": _campaignCategoryController?.text,
-      "goalAmount": double.parse(_campaignGoalAmountController!.text.toString()),
-      "endDate": Timestamp.fromDate(DateTime.parse(_campaignEndDateController!.text.toString())),
+  _updateBeneficiary() async{
+    _firestore.collection('Beneficiaries').doc(widget.beneficiary.id).update({
+      "name": _beneficiaryNameController?.text,
+      "biography": _beneficiaryBiographyController?.text,
+      "category": _beneficiaryCategoryController?.text,
+      "goalAmount": double.parse(_beneficiaryGoalAmountController!.text.toString()),
+      "endDate": Timestamp.fromDate(DateTime.parse(_beneficiaryEndDateController!.text.toString())),
     });
-}
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: const Text('Edit Campaign'),
+          title: const Text('Edit Beneficiary'),
           leadingWidth: 80,
           leading: TextButton(
             onPressed: () {
@@ -79,7 +79,7 @@ class _EditCampaignState extends State<EditCampaign> {
             TextButton(
               onPressed: () async {
                 _submitForm();
-                await _updateCampaign();
+                await _updateBeneficiary();
                 Navigator.pop(context,true);
               },
               child: const Text('Save',
@@ -101,8 +101,8 @@ class _EditCampaignState extends State<EditCampaign> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              _buildCampaignTitleField(),
-              _buildCampaignDescriptionField(),
+              _buildCampaignNameField(),
+              _buildBeneficiaryBiographField(),
               _buildGoalAmountField(),
               _buildEndDateField(),
               _buildCategoryField(),
@@ -114,17 +114,17 @@ class _EditCampaignState extends State<EditCampaign> {
     );
   }
 
-  Widget _buildCampaignTitleField() {
-    _campaignTitleController = TextEditingController(text: widget.campaign.title);
+  Widget _buildCampaignNameField() {
+    _beneficiaryNameController = TextEditingController(text: widget.beneficiary.name);
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
-          controller: _campaignTitleController,
+          controller: _beneficiaryNameController,
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
                   text: const TextSpan(
-                    text: 'Title',
+                    text: 'Name',
                     style: TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
@@ -135,19 +135,19 @@ class _EditCampaignState extends State<EditCampaign> {
               )),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter campaign title.';
+              return 'Please enter beneficiary name.';
             }
             return null;
           },
         ));
   }
 
-  Widget _buildCampaignDescriptionField() {
-    _campaignDescriptionController = TextEditingController(text: widget.campaign.description);
+  Widget _buildBeneficiaryBiographField() {
+    _beneficiaryBiographyController = TextEditingController(text: widget.beneficiary.biography);
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        controller: _campaignDescriptionController,
+        controller: _beneficiaryBiographyController,
         minLines: 2,
         maxLines: 5,
         maxLength: 240,
@@ -155,7 +155,7 @@ class _EditCampaignState extends State<EditCampaign> {
             label: Center(
               child: RichText(
                 text: const TextSpan(
-                  text: 'Campaign Description',
+                  text: 'Biography',
                   style: TextStyle(
                       color: Colors.black, fontSize: 20.0),
                 ),
@@ -169,12 +169,12 @@ class _EditCampaignState extends State<EditCampaign> {
   }
 
   Widget _buildGoalAmountField(){
-    _campaignGoalAmountController = TextEditingController(text: widget.campaign.goalAmount.toString());
+    _beneficiaryGoalAmountController = TextEditingController(text: widget.beneficiary.goalAmount.toString());
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         keyboardType: TextInputType.number,
-        controller: _campaignGoalAmountController,
+        controller: _beneficiaryGoalAmountController,
         validator: (value) {
           if (value!.isEmpty) {
             return "Please enter a goal amount.";
@@ -213,12 +213,12 @@ class _EditCampaignState extends State<EditCampaign> {
   }
 
   Widget _buildEndDateField(){
-    var date = DateTime.fromMicrosecondsSinceEpoch(widget.campaign.endDate.microsecondsSinceEpoch);
-    _campaignEndDateController = TextEditingController(text: date.toString().substring(0,10));
+    var date = DateTime.fromMicrosecondsSinceEpoch(widget.beneficiary.endDate.microsecondsSinceEpoch);
+    _beneficiaryEndDateController = TextEditingController(text: date.toString().substring(0,10));
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
-          controller: _campaignEndDateController,
+          controller: _beneficiaryEndDateController,
           readOnly: true,
           validator: (value) {
             if (value!.isEmpty) {
@@ -258,16 +258,16 @@ class _EditCampaignState extends State<EditCampaign> {
                 initialDate:DateTime.now(),
                 firstDate:DateTime.now(),
                 lastDate: DateTime(2100));
-            _campaignEndDateController?.text = date.toString().substring(0,10);
+            _beneficiaryEndDateController?.text = date.toString().substring(0,10);
           },));
   }
 
   Widget _buildCategoryField(){
-    _campaignCategoryController = TextEditingController(text: widget.campaign.category);
+    _beneficiaryCategoryController = TextEditingController(text: widget.beneficiary.category);
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: DropdownButtonFormField <String>(
-          value: _campaignCategoryController?.text,
+          value: _beneficiaryCategoryController?.text,
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
@@ -298,7 +298,7 @@ class _EditCampaignState extends State<EditCampaign> {
             );
           }).toList(),
           onChanged: (val) => setState(() {
-            _campaignCategoryController?.text = val.toString();
+            _beneficiaryCategoryController?.text = val.toString();
           }),
           validator: (value) => value == null
               ? 'Please fill in the category.' : null,
