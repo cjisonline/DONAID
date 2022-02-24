@@ -1,3 +1,6 @@
+import 'package:donaid/Organization/organization_expiredcharities_screen.dart';
+import 'package:donaid/Organization/organization_inactivecharities_screen.dart';
+import 'package:donaid/Organization/pending_approvals_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +15,12 @@ class OrganizationDrawer extends StatefulWidget {
 }
 
 class _OrganizationDrawerState extends State<OrganizationDrawer> {
+
+  @override
+  void initState(){
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,19 +57,39 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.article_outlined),
-              title: Text("About"),
-              onTap: () {},
+              leading: Icon(Icons.pending),
+              title: Text("Pending Approvals"),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return PendingApprovals();
+                })).then((value){
+                  setState(() {
+                  });
+                });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.watch_later_outlined),
+              title: Text("Expired Charities"),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return ExpiredCharitiesScreen();
+                })).then((value){
+                  setState(() {
+                  });
+                });
+              },
             ),
             ListTile(
               leading: Icon(Icons.not_interested),
-              title: Text("Report"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.help),
-              title: Text("Help"),
-              onTap: () {},
+              title: Text("Inactive Charities"),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return InactiveCharitiesScreen();
+                })).then((value){
+                  setState(() {});
+                });
+              },
             ),
             ListTile(
               leading: Icon(Icons.logout),

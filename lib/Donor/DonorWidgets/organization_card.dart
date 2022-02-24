@@ -23,7 +23,11 @@ class _OrganizationCardState extends State<OrganizationCard> {
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return (OrganizationTabViewScreen(organization: widget.organization));
-        }));
+        })).then((value){
+          setState(() {
+
+          });
+        });
       },
       child: Padding(
           padding: const EdgeInsets.fromLTRB(10.0,0,10.0,10.0),
