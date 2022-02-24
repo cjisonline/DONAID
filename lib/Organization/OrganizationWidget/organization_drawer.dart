@@ -15,6 +15,12 @@ class OrganizationDrawer extends StatefulWidget {
 }
 
 class _OrganizationDrawerState extends State<OrganizationDrawer> {
+
+  @override
+  void initState(){
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -81,8 +87,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 Navigator.push(context, MaterialPageRoute(builder: (context){
                   return InactiveCharitiesScreen();
                 })).then((value){
-                  setState(() {
-                  });
+                  setState(() {});
                 });
               },
             ),
