@@ -34,13 +34,14 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
     widget.beneficiary.category = doc['category'];
     widget.beneficiary.goalAmount = doc['goalAmount'].toDouble();
     widget.beneficiary.endDate = doc['endDate'];
+    widget.beneficiary.active = doc['active'];
     setState(() {
     });
 
   }
 
   _stopBeneficiary() async {
-    await _firestore.collection('Beneficiaries').doc(widget.beneficiary.id).set({
+    await _firestore.collection('Beneficiaries').doc(widget.beneficiary.id).update({
       'active': false
     });
 
@@ -48,7 +49,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
   }
 
   _resumeBeneficiary() async {
-    await _firestore.collection('Beneficiaries').doc(widget.beneficiary.id).set({
+    await _firestore.collection('Beneficiaries').doc(widget.beneficiary.id).update({
       'active': true
     });
   }
@@ -67,14 +68,15 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
             ),
             content: const Text(
                 'Stopping this charity will make it not visible to donors. Once you stop this charity '
-                    'you can reactivate it from the Expired Charities page. Would you like to continue'
+                    'you can reactivate it from the Inactive Charities page. Would you like to continue'
                     'with stopping this charity?'),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     _stopBeneficiary();
-                    Navigator.pushNamed(context, OrganizationBeneficiariesExpandedScreen.id);
+                    Navigator.pop(context);
+                    _refreshBeneficiary();
                   },
                   child: const Text('Yes'),
                 ),
@@ -113,7 +115,9 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                 child: TextButton(
                   onPressed: () {
                     _resumeBeneficiary();
-                    //TODO: Navigate to expired charities page
+                    Navigator.pop(context);
+                    _refreshBeneficiary();
+
                   },
                   child: const Text('Yes'),
                 ),
@@ -169,7 +173,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                 children: [
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
-                    child: (!widget.beneficiary.active && widget.beneficiary.endDate.compareTo(Timestamp.now()) > 0)
+                    child: (widget.beneficiary.endDate.compareTo(Timestamp.now()) < 0)
                         ? Container()
                         : Material(
                         elevation: 5.0,

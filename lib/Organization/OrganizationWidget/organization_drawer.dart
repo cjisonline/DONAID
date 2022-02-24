@@ -1,4 +1,5 @@
 import 'package:donaid/Organization/organization_expiredcharities_screen.dart';
+import 'package:donaid/Organization/organization_inactivecharities_screen.dart';
 import 'package:donaid/Organization/pending_approvals_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.not_interested),
+              leading: Icon(Icons.watch_later_outlined),
               title: Text("Expired Charities"),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context){
@@ -74,9 +75,16 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.help),
-              title: Text("Help"),
-              onTap: () {},
+              leading: Icon(Icons.not_interested),
+              title: Text("Inactive Charities"),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return InactiveCharitiesScreen();
+                })).then((value){
+                  setState(() {
+                  });
+                });
+              },
             ),
             ListTile(
               leading: Icon(Icons.logout),

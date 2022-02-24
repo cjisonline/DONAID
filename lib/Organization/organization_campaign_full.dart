@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
-import 'package:donaid/Organization/organization_activecampaigns_expanded_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'edit_campaign.dart';
@@ -34,13 +32,14 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
     widget.campaign.category = doc['category'];
     widget.campaign.goalAmount = doc['goalAmount'].toDouble();
     widget.campaign.endDate = doc['endDate'];
+    widget.campaign.active = doc['active'];
     setState(() {
     });
 
   }
 
   _stopCampaign() async {
-    await _firestore.collection('Campaigns').doc(widget.campaign.id).set({
+    await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
       'active': false
     });
 
@@ -48,7 +47,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
   }
 
   _resumeCampaign() async {
-    await _firestore.collection('Campaigns').doc(widget.campaign.id).set({
+    await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
       'active': true
     });
   }
@@ -67,14 +66,15 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
             ),
             content: const Text(
                 'Stopping this charity will make it not visible to donors. Once you stop this charity '
-                    'you can reactivate it from the Expired Charities page. Would you like to continue'
+                    'you can reactivate it from the Inactive Charities page. Would you like to continue '
                     'with stopping this charity?'),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     _stopCampaign();
-                    Navigator.pushNamed(context, OrganizationCampaignsExpandedScreen.id);
+                    Navigator.pop(context);
+                    _refreshCampaign();
                   },
                   child: const Text('Yes'),
                 ),
@@ -113,7 +113,8 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                 child: TextButton(
                   onPressed: () {
                     _resumeCampaign();
-                    //TODO: Navigate to expired charities page
+                    Navigator.pop(context);
+                    _refreshCampaign();
                   },
                   child: const Text('Yes'),
                 ),
@@ -169,7 +170,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
               children: [
                 Container(
                     padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
-                    child: (!widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
+                    child: (widget.campaign.endDate.compareTo(Timestamp.now()) < 0)
                         ? Container()
                         : Material(
                         elevation: 5.0,
