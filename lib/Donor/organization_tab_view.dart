@@ -29,6 +29,14 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
     _getOrganizationCampaigns();
     _getOrganizationBeneficiaries();
   }
+  
+  _refreshPage(){
+    beneficiaries.clear();
+    campaigns.clear();
+    _getOrganizationCampaigns();
+    _getOrganizationBeneficiaries();
+  }
+  
   _getOrganizationBeneficiaries() async {
     var ret = await _firestore.collection('Beneficiaries')
         .where('organizationID', isEqualTo: widget.organization.uid)
@@ -94,7 +102,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                     if(widget.organization.country =='United States'){
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (CampaignDonateScreen(campaigns[index]));
-                      }));
+                      })).then((value) => _refreshPage());
                     }
                     else{
                       DonorAlertDialogs.paymentLinkPopUp(context, widget.organization);
@@ -140,7 +148,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                     if(widget.organization.country =='United States'){
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (BeneficiaryDonateScreen(beneficiaries[index]));
-                      }));
+                      })).then((value) => _refreshPage());
                     }
                     else{
                       DonorAlertDialogs.paymentLinkPopUp(context, widget.organization);

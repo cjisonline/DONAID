@@ -106,7 +106,11 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                         if(organization?.country =='United States'){
                           Navigator.push(context, MaterialPageRoute(builder: (context) {
                             return (UrgentCaseDonateScreen(widget.urgentCase));
-                          }));
+                          })).then((value){
+                            setState(() {
+
+                            });
+                          });
                         }
                         else{
                           DonorAlertDialogs.paymentLinkPopUp(context, organization!);

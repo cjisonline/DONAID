@@ -30,6 +30,14 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
     _getUrgentCases();
   }
 
+  _refreshPage(){
+    urgentCases.clear();
+    _getUrgentCases();
+    setState(() {
+
+    });
+  }
+
   _getUrgentCases() async {
     var ret = await _firestore.collection('UrgentCases')
         .where('approved',isEqualTo: true)
@@ -128,7 +136,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                     if(organizations[index].country =='United States'){
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (UrgentCaseDonateScreen(urgentCases[index]));
-                      }));
+                      })).then((value) => _refreshPage());
                     }
                     else{
                       _paymentLinkPopUp(organizations[index]);

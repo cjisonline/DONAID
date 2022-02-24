@@ -30,6 +30,14 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
     _getCampaigns();
   }
 
+  _refreshPage(){
+    campaigns.clear();
+    _getCampaigns();
+    setState(() {
+
+    });
+  }
+
   _getCampaigns() async {
     var ret = await _firestore.collection('Campaigns')
         .where('category', isEqualTo: widget.categoryName)
@@ -127,7 +135,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                     if(organizations[index].country =='United States'){
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (CampaignDonateScreen(campaigns[index]));
-                      }));
+                      })).then((value) => _refreshPage());
                     }
                     else{
                       _paymentLinkPopUp(organizations[index]);
