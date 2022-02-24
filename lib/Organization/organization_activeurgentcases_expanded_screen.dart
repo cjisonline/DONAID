@@ -28,10 +28,21 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
     _getUrgentCases();
   }
 
+  _refreshPage() async{
+    urgentCases.clear();
+    _getUrgentCases();
+    setState(() {
+
+    });
+  }
+
   _getUrgentCases() async {
     var ret = await _firestore.collection('UrgentCases')
         .where('organizationID', isEqualTo: _auth.currentUser?.uid)
-        .orderBy('endDate',descending: false)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .where('approved',isEqualTo: true)
+        .orderBy('endDate', descending: false)
         .get();
 
     for (var element in ret.docs) {
@@ -66,29 +77,10 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return (OrganizationUrgentCaseFullScreen(urgentCases[index]));
-                    }));
+                    })).then((value) => _refreshPage());
                   },
                   title: Text(urgentCases[index].title),
                   subtitle: Text(urgentCases[index].description),
-                  trailing: urgentCases[index].active
-                      ? IconButton(
-                    icon: const Icon(
-                      Icons.stop,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      //TODO: end charity button
-                    },
-                  )
-                      : IconButton(
-                    icon: const Icon(
-                      Icons.play_arrow,
-                      color: Colors.green,
-                    ),
-                    onPressed: (){
-                      //TODO: resume charity button
-                    },
-                  ),
                 ),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   Text('\$${(urgentCases[index].amountRaised.toStringAsFixed(2))}',
