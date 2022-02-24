@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,6 +32,11 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
     _getOrganizationInformation();
   }
 
+  _refreshPage(){
+    _getOrganizationInformation();
+    setState(() {});
+  }
+
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
@@ -58,7 +64,7 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, OrganizationEditProfile.id);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationEditProfile())).then((value) => _refreshPage());
               },
               child: const Text('Edit',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
@@ -66,7 +72,7 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
           ]),
       drawer: const OrganizationDrawer(),
       body: _body(),
-      bottomNavigationBar: _bottomNavigationBar(),
+      bottomNavigationBar: OrganizationBottomNavigation()
     );
   }
   Widget _buildUnitedStatesProfile(){
@@ -107,64 +113,4 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
     }
   }
 
-  _bottomNavigationBar() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {
-                Navigator.pushNamed(context, OrganizationDashboard.id);
-              },
-              icon: const Icon(Icons.home, color: Colors.white, size: 35),
-            ),
-            const Text('Home',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 35,
-              ),
-            ),
-            const Text('Search',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.notifications,
-                  color: Colors.white, size: 35),
-            ),
-            const Text('Notifications',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.message, color: Colors.white, size: 35),
-            ),
-            const Text('Messages',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-        ],
-      ),
-    );
-  }
 }
