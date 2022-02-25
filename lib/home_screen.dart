@@ -80,12 +80,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding:
                 EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
                 child: Material(
+
                     elevation: 5.0,
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(30.0),
                     child: MaterialButton(
+                        height: 60.0,
                         child: Text('Guest Login',
-                            style: TextStyle(color: Colors.white)),
+                            style: TextStyle(fontSize: 25,color: Colors.white)),
                         onPressed: () async {
                           try {
                             UserCredential newUser = await FirebaseAuth
