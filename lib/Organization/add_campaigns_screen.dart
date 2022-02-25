@@ -222,7 +222,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'Goal',
+                                          text: '\u0024 Goal',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -326,6 +326,14 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                               validator: (value) => value == null
                                  ? 'Please fill in the category.' : null,
                           )
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                             vertical: 25.0, horizontal: 5.0),
+                          child: Text(
+                            'Urgent cases need to be approved by the admin before made visible to donors.',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(

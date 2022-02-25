@@ -222,7 +222,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'Goal',
+                                          text: '\u0024 Goal',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
