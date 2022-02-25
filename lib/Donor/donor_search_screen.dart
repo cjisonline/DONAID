@@ -48,10 +48,13 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
       SearchResult searchResult = SearchResult(
         title: element.data()['organizationName'],
         id: element.data()['id'],
-        collection: "OrganizationUsers"
+        collection: "OrganizationUsers",
+        description: element.data()['organizationDescription'],
+
       );
       data.add(searchResult);
     }
+
     setState(() {});
   }
 
@@ -65,10 +68,14 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
       SearchResult searchResult = SearchResult(
           title: element.data()['name'],
           id: element.data()['id'],
-          collection: "Beneficiaries"
+          collection: "Beneficiaries",
+          description: element.data()['biography'],
       );
       data.add(searchResult);
+
     }
+    print(data[0].description);
+
     setState(() {});
   }
 
@@ -84,10 +91,14 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
       SearchResult searchResult = SearchResult(
           title: element.data()['title'],
           id: element.data()['id'],
-          collection: "UrgentCases"
+          collection: "UrgentCases",
+          description: element.data()['description'],
+
       );
       data.add(searchResult);
+
     }
+
     setState(() {});
   }
 
@@ -174,16 +185,16 @@ class SearchQuery extends SearchDelegate<String>{
         itemCount: resultsList.length,
         itemBuilder: (context, int index) {
           if(resultsList[index].collection == "Organizations"){
-            return SearchResultItem(resultsList[index].title, Icons.apartment);
+            return SearchResultItem(resultsList[index], Icons.apartment);
           }
           if(resultsList[index].collection == "Beneficiaries"){
-            return SearchResultItem(resultsList[index].title, Icons.person);
+            return SearchResultItem(resultsList[index], Icons.person);
           }
           if(resultsList[index].collection == "UrgentCases"){
-            return SearchResultItem(resultsList[index].title, Icons.assistant);
+            return SearchResultItem(resultsList[index], Icons.assistant);
           }
           else{
-            return SearchResultItem(resultsList[index].title, Icons.apartment);
+            return SearchResultItem(resultsList[index], Icons.apartment);
           }
         }
     );
@@ -191,7 +202,9 @@ class SearchQuery extends SearchDelegate<String>{
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<SearchResult> suggestionList =  data.where((currentData) => currentData.title.contains(query)).toList();
+    List<SearchResult> suggestionList =  data.where((currentData)
+              => currentData.title.toLowerCase().startsWith(query.toLowerCase())).toList();
+
     // return ListView.builder(
     //     itemCount: suggestionList.length,
     //     itemBuilder: (context, int index) {
