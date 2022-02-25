@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'Donor/donor_dashboard.dart';
 import 'authentication.dart';
 import 'login_screen.dart';
 import 'Registration/registration_screen.dart';
@@ -73,6 +76,54 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+            Padding(
+                padding:
+                EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
+                child: Material(
+                    elevation: 5.0,
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(30.0),
+                    child: MaterialButton(
+                        child: Text('Guest Login',
+                            style: TextStyle(color: Colors.white)),
+                        onPressed: () async {
+                          try {
+                            UserCredential newUser = await FirebaseAuth
+                                .instance
+                                .signInAnonymously();
+                            if (newUser.user != null) {
+                              await FirebaseFirestore.instance
+                                  .collection('DonorUsers')
+                                  .add({
+                                'uid': newUser.user!.uid,
+                                'firstName': "Guest",
+                                'lastName': "",
+                                'email': "",
+                                'phoneNumber': "",
+                                'password': ""
+                              });
+                              await FirebaseFirestore.instance
+                                  .collection('Users')
+                                  .add({
+                                'uid': newUser.user!.uid,
+                                'email': "",
+                                'userType': 1
+                              });
+                              Navigator.of(context).popUntil(
+                                  ModalRoute.withName(HomeScreen
+                                      .id)); //remove all screens on the stack and return to home screen
+                              Navigator.pushNamed(
+                                  context,
+                                  DonorDashboard
+                                      .id); //redirect to login screen
+                            }
+                          } catch (signUpError) {
+                            print(signUpError);
+                          }
+                        }))),
+
+
+
 
             Padding(
                 padding: const EdgeInsets.symmetric(
