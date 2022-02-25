@@ -16,6 +16,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get_storage/get_storage.dart';
 import 'Organization/add_campaigns_screen.dart';
 import 'Organization/add_selection_screen.dart';
+import 'Organization/organization_search_screen.dart';
 import 'authentication.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
@@ -66,7 +67,7 @@ class Donaid extends StatelessWidget {
         DonorEditProfile.id: (context) => const DonorEditProfile(),
         OrganizationProfile.id: (context) => const OrganizationProfile(),
         OrganizationEditProfile.id: (context) => const OrganizationEditProfile(),
-        SearchPage.id: (context) => const SearchPage(),
+        OrganizationSearch.id: (context) => const OrganizationSearch(),
       },
     );
   }

@@ -2,6 +2,8 @@ import 'package:donaid/Organization/Organization_search_filter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../organization_search_screen.dart';
+
 class ButtomNavigation extends StatelessWidget {
   const ButtomNavigation({Key? key}) : super(key: key);
 
@@ -32,7 +34,7 @@ class ButtomNavigation extends StatelessWidget {
             IconButton(
               enableFeedback: false,
               onPressed: () {
-                Navigator.pushNamed(context, SearchPage.id);
+                Navigator.pushNamed(context, OrganizationSearch.id);
               },
               icon: const Icon(
                 Icons.search,
