@@ -166,123 +166,128 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   }
 
   _body() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Campaign',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationCampaignsExpandedScreen()),).then((value){
-                          _refreshPage();
-                        });
-                      },
-                      child: const Text(
-                        'See more >',
-                        style: TextStyle(fontSize: 14),
+    return RefreshIndicator(
+      onRefresh: ()async{
+        _refreshPage();
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Campaign',
+                        style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
-                    ),
-                  ]),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationCampaignsExpandedScreen()),).then((value){
+                            _refreshPage();
+                          });
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(
-              height: 325.0,
-              child: ListView.builder(
-                itemCount: campaigns.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return CampaignCard(campaigns[index]);
-                },
-              )),
+            SizedBox(
+                height: 325.0,
+                child: ListView.builder(
+                  itemCount: campaigns.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return CampaignCard(campaigns[index]);
+                  },
+                )),
 
-          // organization list
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Urgent Cases',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationUrgentCasesExpandedScreen()),).then((value){
-                          _refreshPage();
-                        });
-                      },
-                      child: const Text(
-                        'See more >',
-                        style: TextStyle(fontSize: 14),
+            // organization list
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Urgent Cases',
+                        style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
-                    ),
-                  ]),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationUrgentCasesExpandedScreen()),).then((value){
+                            _refreshPage();
+                          });
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(
-              height: 325.0,
-              child: ListView.builder(
-                itemCount: urgentCases.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return UrgentCaseCard(urgentCases[index]);
-                },
-              )),
+            SizedBox(
+                height: 325.0,
+                child: ListView.builder(
+                  itemCount: urgentCases.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return UrgentCaseCard(urgentCases[index]);
+                  },
+                )),
 
-          // urgent case list
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Beneficiary',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationBeneficiariesExpandedScreen()),).then((value){
-                          _refreshPage();
-                        });
-                      },
-                      child: const Text(
-                        'See more >',
-                        style: TextStyle(fontSize: 14),
+            // urgent case list
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Beneficiary',
+                        style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
-                    ),
-                  ]),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationBeneficiariesExpandedScreen()),).then((value){
+                            _refreshPage();
+                          });
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(
-              height: 325.0,
-              child: ListView.builder(
-                itemCount: beneficiaries.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return BeneficiaryCard(beneficiaries[index]);
-                },
-              )),
-        ],
+            SizedBox(
+                height: 325.0,
+                child: ListView.builder(
+                  itemCount: beneficiaries.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return BeneficiaryCard(beneficiaries[index]);
+                  },
+                )),
+          ],
+        ),
       ),
     );
   }

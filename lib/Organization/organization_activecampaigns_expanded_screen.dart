@@ -62,50 +62,55 @@ class _OrganizationCampaignsExpandedScreenState
   }
 
   _campaignsBody() {
-    return ListView.builder(
-        itemCount: campaigns.length,
-        shrinkWrap: true,
-        itemBuilder: (context, int index) {
-          return Card(
-            child: Column(
-              children: [
-                ListTile(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return (OrganizationCampaignFullScreen(campaigns[index]));
-                    })).then((value) => _refreshPage());
-                  },
-                  title: Text(campaigns[index].title),
-                  subtitle: Text(campaigns[index].description),
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          '\$${(campaigns[index].amountRaised.toStringAsFixed(2))}',
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 15)),
-                      Text(
-                        '\$${campaigns[index].goalAmount.toStringAsFixed(2)}',
-                        textAlign: TextAlign.start,
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                    ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (campaigns[index].amountRaised /
-                      campaigns[index].goalAmount),
-                  minHeight: 10,
-                ),
-                const Divider()
-              ],
-            ),
-          );
-        });
+    return RefreshIndicator(
+      onRefresh: ()async{
+        _refreshPage();
+      },
+      child: ListView.builder(
+          itemCount: campaigns.length,
+          shrinkWrap: true,
+          itemBuilder: (context, int index) {
+            return Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return (OrganizationCampaignFullScreen(campaigns[index]));
+                      })).then((value) => _refreshPage());
+                    },
+                    title: Text(campaigns[index].title),
+                    subtitle: Text(campaigns[index].description),
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            '\$${(campaigns[index].amountRaised.toStringAsFixed(2))}',
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$${campaigns[index].goalAmount.toStringAsFixed(2)}',
+                          textAlign: TextAlign.start,
+                          style:
+                              const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                  LinearProgressIndicator(
+                    backgroundColor: Colors.grey,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).primaryColor),
+                    value: (campaigns[index].amountRaised /
+                        campaigns[index].goalAmount),
+                    minHeight: 10,
+                  ),
+                  const Divider()
+                ],
+              ),
+            );
+          }),
+    );
   }
 
   @override
