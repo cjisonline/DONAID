@@ -1,12 +1,15 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Donor/DonorWidgets/search_suggestion_item.dart';
 import 'package:donaid/Models/SearchResult.dart';
+import 'package:filter_list/filter_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'DonorWidgets/search_result_item.dart';
+
 
 class DonorSearchScreen extends StatefulWidget {
   static const id = 'donor_search_screen';
@@ -160,11 +163,49 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
 
 class SearchQuery extends SearchDelegate<String>{
   List<SearchResult> data = <SearchResult>[];
+  List<SearchResult> resultsList = <SearchResult>[];
   SearchQuery({required this.data,});
+
+  List<String> filterOptions = [
+    "Organizations",
+    "Beneficiaries",
+    "Urgent Cases"
+  ];
+  List<String> selectedFilters = [];
+
+  void openFilterDialog(BuildContext context) async {
+    await FilterListDialog.display<String>(
+      context,
+      listData: filterOptions,
+      selectedListData: selectedFilters,
+      choiceChipLabel: (filter) => filter,
+      validateSelectedItem: (list, val) => list!.contains(val),
+      onItemSearch: (filter, query) {
+        return filter.toLowerCase().contains(query.toLowerCase());
+      },
+      onApplyButtonClick: (list) {
+        selectedFilters = List.from(list!);
+        filterByOrganizations();
+        buildResults(context);
+        showResults(context);
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  void filterByOrganizations(){
+    resultsList = data.where((currentData) => currentData.collection.contains("OrganizationUsers")).toList();
+  }
 
   @override
   List<Widget>? buildActions(BuildContext context) {
-    return [Container()];
+    return [IconButton(
+      icon: const Icon(Icons.sort),
+      onPressed: () {
+        // close(context, "closing search");
+        openFilterDialog(context);
+      },
+    )];
   }
 
   @override
@@ -180,7 +221,13 @@ class SearchQuery extends SearchDelegate<String>{
 
   @override
   Widget buildResults(BuildContext context) {
-    final resultsList = data.where((currentData) => currentData.title.contains(query)).toList();
+
+    resultsList = data.where((currentData) => currentData.title.contains(query)).toList();
+    // resultsList = data.where((currentData) =>
+    //     currentData.title.contains(query) &&
+    //     currentData.collection.contains("OrganizationUsers")
+    // ).toList();
+
     return ListView.builder(
         itemCount: resultsList.length,
         itemBuilder: (context, int index) {
