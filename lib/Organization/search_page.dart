@@ -113,9 +113,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
     setState(() {});
     _getAllData();
   }
-  // This holds a list of fiction users
-  // You can use data fetched from a database or a server as well
-
 
   _getAllData(){
     for(var i=0; i < urgentCases.length; i++){
@@ -195,12 +192,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                   elevation: 4,
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   child: ListTile(
-                    leading: Text(
-                      _foundUsers[index]["name"].toString(),
-                      style: const TextStyle(fontSize: 24),
-                    ),
-                    title: Text(_foundUsers[index]['goal']),
-                    subtitle: Text(_foundUsers[index]["endDate"].toString()),
+                    title: Text(_foundUsers[index]["name"].toString(),textScaleFactor: 1.5,),
+                      subtitle: Text(_foundUsers[index]['goal']),
+                      trailing: Text(_foundUsers[index]["endDate"].toString()),
                   ),
                 ),
               )
