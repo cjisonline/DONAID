@@ -1,8 +1,9 @@
-import 'package:donaid/Organization/Organization_search_filter.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../organization_search_screen.dart';
+import '../organization_dashboard.dart';
+import '../search_page.dart';
 
 class ButtomNavigation extends StatelessWidget {
   const ButtomNavigation({Key? key}) : super(key: key);
@@ -23,7 +24,9 @@ class ButtomNavigation extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, OrganizationDashboard.id);
+              },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
             Text('Home',
@@ -34,7 +37,7 @@ class ButtomNavigation extends StatelessWidget {
             IconButton(
               enableFeedback: false,
               onPressed: () {
-                Navigator.pushNamed(context, OrganizationSearch.id);
+                Navigator.pushNamed(context, OrgSearchPage.id);
               },
               icon: const Icon(
                 Icons.search,
