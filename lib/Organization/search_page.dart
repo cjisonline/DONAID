@@ -36,8 +36,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   initState() {
     _getCurrentUser();
     _getCampaign();
-    _getUrgentCases();
-    _getBeneficiaries();
     _foundUsers = _allUsers;
     super.initState();
   }
@@ -62,7 +60,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
       campaigns.add(campaign);
       print(campaign.title);
     }
-
+    _getUrgentCases();
     setState(() {});
   }
 
@@ -86,6 +84,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
       urgentCases.add(urgentCase);
       print(urgentCase.title);
     }
+    _getBeneficiaries();
 
     setState(() {});
   }
@@ -111,8 +110,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
       beneficiaries.add(beneficiary);
       print(beneficiary.name);
     }
-    _getAllData();
     setState(() {});
+    _getAllData();
   }
   // This holds a list of fiction users
   // You can use data fetched from a database or a server as well
