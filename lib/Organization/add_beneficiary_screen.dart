@@ -58,7 +58,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   }
 
 
-  Future<void> create(String category, String biography, int goalAmount,
+  Future<void> addBeneficiary(String category, String biography, int goalAmount,
       String name, String endDateController) async {
     try {
       final docRef = await firestore.collection("Beneficiaries").add({});
@@ -350,7 +350,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   setState(() {
                                     showLoadingSpinner = true;
                                   });
-                                  create(categoryController.text,
+                                  addBeneficiary(categoryController.text,
                                       biographyController.text,
                                       int.parse(goalAmountController.text),
                                       nameController.text,
