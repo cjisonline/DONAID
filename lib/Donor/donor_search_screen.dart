@@ -77,8 +77,6 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
       data.add(searchResult);
 
     }
-    print(data[0].description);
-
     setState(() {});
   }
 
@@ -167,9 +165,9 @@ class SearchQuery extends SearchDelegate<String>{
   SearchQuery({required this.data,});
 
   List<String> filterOptions = [
-    "Organizations",
+    "OrganizationUsers",
     "Beneficiaries",
-    "Urgent Cases"
+    "UrgentCases"
   ];
   List<String> selectedFilters = [];
 
@@ -185,7 +183,6 @@ class SearchQuery extends SearchDelegate<String>{
       },
       onApplyButtonClick: (list) {
         selectedFilters = List.from(list!);
-        filterByOrganizations();
         buildResults(context);
         showResults(context);
         Navigator.pop(context);
@@ -197,12 +194,22 @@ class SearchQuery extends SearchDelegate<String>{
     resultsList = data.where((currentData) => currentData.collection.contains("OrganizationUsers")).toList();
   }
 
+  void filterResultsList(){
+      resultsList = resultsList.where((currentData) {
+        bool includeFilter = false;
+        for (int i = 0; i < selectedFilters.length; i++) {
+          includeFilter = includeFilter || currentData.collection.contains(selectedFilters[i]);
+        }
+        return includeFilter;
+      }
+      ).toList();
+  }
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [IconButton(
       icon: const Icon(Icons.sort),
       onPressed: () {
-        // close(context, "closing search");
         openFilterDialog(context);
       },
     )];
@@ -216,17 +223,16 @@ class SearchQuery extends SearchDelegate<String>{
         close(context, "closing search");
       },
     );
-
   }
+
+
 
   @override
   Widget buildResults(BuildContext context) {
-
     resultsList = data.where((currentData) => currentData.title.contains(query)).toList();
-    // resultsList = data.where((currentData) =>
-    //     currentData.title.contains(query) &&
-    //     currentData.collection.contains("OrganizationUsers")
-    // ).toList();
+    if(selectedFilters.isNotEmpty){
+      filterResultsList();
+    }
 
     return ListView.builder(
         itemCount: resultsList.length,
