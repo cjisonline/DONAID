@@ -108,8 +108,8 @@ class SearchQuery extends SearchDelegate<String> {
     );
   }
 
-  void filterResultsList() {
-    resultsList = resultsList.where((currentData) {
+  List<SearchResult> filterList(List<SearchResult> currentList) {
+    currentList = currentList.where((currentData) {
       bool includeCurrentData = false;
       for (int i = 0; i < selectedFilters.length; i++) {
         includeCurrentData = includeCurrentData ||
@@ -117,7 +117,9 @@ class SearchQuery extends SearchDelegate<String> {
       }
       return includeCurrentData;
     }).toList();
+    return currentList;
   }
+
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -154,7 +156,7 @@ class SearchQuery extends SearchDelegate<String> {
     resultsList =
         data.where((currentData) => currentData.title.contains(query)).toList();
     if (selectedFilters.isNotEmpty) {
-      filterResultsList();
+      resultsList = filterList(resultsList);
     }
 
     return ListView.builder(
@@ -180,6 +182,9 @@ class SearchQuery extends SearchDelegate<String> {
         .where((currentData) =>
             currentData.title.toLowerCase().startsWith(query.toLowerCase()))
         .toList();
+    if (selectedFilters.isNotEmpty) {
+      suggestionList = filterList(suggestionList);
+    }
 
     // return ListView.builder(
     //     itemCount: suggestionList.length,
