@@ -28,7 +28,8 @@ class DonorBottomNavigationBar extends StatelessWidget {
             IconButton(
               enableFeedback: false,
               onPressed: () {
-                Navigator.pushNamed(context, DonorSearchScreen.id);
+                showSearch(
+                    context: context, delegate: SearchQuery());
               },
               icon: const Icon(
                 Icons.search,
