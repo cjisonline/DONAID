@@ -67,7 +67,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
   }
 
 
-  Future<void> create(String category, String description, int goalAmount,
+  Future<void> addUrgentCase(String category, String description, double goalAmount,
       String title, String endDateController) async {
     try {
       final docRef = await firestore.collection("UrgentCases").add({});
@@ -232,7 +232,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'Goal',
+                                          text: '\u0024 Goal',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -384,9 +384,9 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                   setState(() {
                                     showLoadingSpinner = true;
                                   });
-                                  create(categoryController.text,
+                                  addUrgentCase(categoryController.text,
                                       descriptionController.text,
-                                      int.parse(goalAmountController.text),
+                                      int.parse(goalAmountController.text).toDouble(),
                                       titleController.text,
                                       endDateController.text);
                                   Navigator.pop(context, true);

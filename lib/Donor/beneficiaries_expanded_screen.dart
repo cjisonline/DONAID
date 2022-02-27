@@ -182,7 +182,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
       ),
       drawer: const DonorDrawer(),
       body: _beneficiariesBody(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 }

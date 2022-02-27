@@ -68,8 +68,8 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
 
 
 
-  Future<void> create(
-      String category, String description, int goalAmount, String title, String endDateController) async {
+  Future<void> addCampaign(
+      String category, String description, double goalAmount, String title, String endDateController) async {
     try {
       final docRef = await firestore.collection("Campaigns").add({});
 
@@ -231,7 +231,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'Goal',
+                                          text: '\u0024 Goal',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -340,6 +340,14 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                           )
                         ),
                         Padding(
+                          padding: EdgeInsets.symmetric(
+                             vertical: 25.0, horizontal: 5.0),
+                          child: Text(
+                            'Urgent cases need to be approved by the admin before made visible to donors.',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                        Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 25.0, horizontal: 5.0),
                           child: Material(
@@ -358,8 +366,8 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                   setState(() {
                                     showLoadingSpinner = true;
                                   });
-                                  create(categoryController.text,descriptionController.text,
-                                      int.parse(goalAmountController.text), titleController.text, endDateController.text);
+                                  addCampaign(categoryController.text,descriptionController.text,
+                                      int.parse(goalAmountController.text).toDouble(), titleController.text, endDateController.text);
                                   Navigator.pop(context, true);
                                   showDialog(
                                     context: context,

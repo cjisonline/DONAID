@@ -182,7 +182,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
       ),
       drawer: const DonorDrawer(),
       body: _categoryCampaignsBody(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 }
