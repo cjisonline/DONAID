@@ -1,3 +1,4 @@
+import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Chat/conversation.dart';
 import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +23,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
             IconButton(
               enableFeedback: false,
               onPressed: () {
-                Navigator.popUntil(context, ModalRoute.withName(DonorDashboard.id));
+                Navigator.of(context).popUntil(ModalRoute.withName(DonorDashboard.id));
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),

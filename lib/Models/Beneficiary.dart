@@ -10,15 +10,19 @@ class Beneficiary {
   Timestamp dateCreated;
   String id;
   String organizationID;
+  bool active;
 
   Beneficiary(
-      {required this.name,
-      required this.biography,
-      required this.goalAmount,
-      required this.amountRaised,
-      required this.category,
-      required this.endDate,
-      required this.dateCreated,
-      required this.id,
-      required this.organizationID});
+      {
+        required this.name,
+        required this.biography,
+        required this.goalAmount,
+        required this.amountRaised,
+        required this.category,
+        required this.endDate,
+        required this.dateCreated,
+        required this.id,
+        required this.organizationID,
+        required this.active,
+      });
 }

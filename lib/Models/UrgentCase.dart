@@ -10,6 +10,8 @@ class UrgentCase {
   Timestamp dateCreated;
   String id;
   String organizationID;
+  bool active;
+  bool approved;
 
   UrgentCase(
       {
@@ -22,5 +24,7 @@ class UrgentCase {
         required this.dateCreated,
         required this.id,
         required this.organizationID,
+        required this.active,
+        required this.approved,
       });
 }

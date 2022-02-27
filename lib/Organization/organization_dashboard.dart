@@ -10,9 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'OrganizationWidget/beneficiary_card.dart';
-import 'OrganizationWidget/button_nav_bar.dart';
+import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'OrganizationWidget/organization_drawer.dart';
 import 'add_selection_screen.dart';
+import 'organization_activebeneficiaries_expanded_screen.dart';
+import 'organization_activecampaigns_expanded_screen.dart';
+import 'organization_activeurgentcases_expanded_screen.dart';
 
 class OrganizationDashboard extends StatefulWidget {
   static const id = 'organization_dashboard';
@@ -47,10 +50,22 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     Get.find<ChatService>().listenFriend(loggedInUser!.uid, 1);
   }
 
+  _refreshPage() async{
+    beneficiaries.clear();
+    campaigns.clear();
+    urgentCases.clear();
+    _getCampaign();
+    _getBeneficiaries();
+    _getUrgentCases();
+  }
+
   _getCampaign() async {
     var ret = await _firestore
         .collection('Campaigns')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .orderBy('endDate', descending: false)
         .get();
     for (var element in ret.docs) {
       Campaign campaign = Campaign(
@@ -62,7 +77,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+      );
       campaigns.add(campaign);
     }
 
@@ -73,6 +90,10 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     var ret = await _firestore
         .collection('UrgentCases')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .where('approved',isEqualTo: true)
+        .orderBy('endDate', descending: false)
         .get();
 
     for (var element in ret.docs) {
@@ -85,7 +106,10 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+          approved: element.data()['approved']
+      );
       urgentCases.add(urgentCase);
     }
 
@@ -96,6 +120,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     var ret = await _firestore
         .collection('Beneficiaries')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .orderBy('endDate', descending: false)
         .get();
 
     for (var element in ret.docs) {
@@ -108,7 +135,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']); // need to add category
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+      ); // need to add category
       beneficiaries.add(beneficiary);
     }
 
@@ -130,127 +159,142 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 size: 30,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, OrgAddSelection.id);
+                Navigator.push (context, MaterialPageRoute(builder: (context) => OrgAddSelection()),).then((value){
+                  _refreshPage();
+                });
               }),
         ],
       ),
       drawer: const OrganizationDrawer(),
       body: _body(),
-      bottomNavigationBar: ButtomNavigation(),
+      bottomNavigationBar: OrganizationBottomNavigation(),
     );
   }
 
   _body() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Campaign',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      'See more >',
-                      style: TextStyle(fontSize: 14),
-                      textAlign: TextAlign.start,
-                    ),
-                  ]),
+    return RefreshIndicator(
+      onRefresh: ()async{
+        _refreshPage();
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Campaign',
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.start,
+                      ),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationCampaignsExpandedScreen()),).then((value){
+                            _refreshPage();
+                          });
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(
-              height: 325.0,
-              child: ListView.builder(
-                itemCount: campaigns.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return CampaignCard(
-                      campaigns[index].title,
-                      campaigns[index].description,
-                      campaigns[index].goalAmount,
-                      campaigns[index].amountRaised);
-                },
-              )),
+            SizedBox(
+                height: 325.0,
+                child: ListView.builder(
+                  itemCount: campaigns.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return CampaignCard(campaigns[index]);
+                  },
+                )),
 
-          // organization list
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Urgent Cases',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      'See more >',
-                      style: TextStyle(fontSize: 14),
-                      textAlign: TextAlign.start,
-                    ),
-                  ]),
+            // organization list
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Urgent Cases',
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.start,
+                      ),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationUrgentCasesExpandedScreen()),).then((value){
+                            _refreshPage();
+                          });
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(
-              height: 325.0,
-              child: ListView.builder(
-                itemCount: urgentCases.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return UrgentCaseCard(
-                      urgentCases[index].title,
-                      urgentCases[index].description,
-                      urgentCases[index].goalAmount,
-                      urgentCases[index].amountRaised);
-                },
-              )),
+            SizedBox(
+                height: 325.0,
+                child: ListView.builder(
+                  itemCount: urgentCases.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return UrgentCaseCard(urgentCases[index]);
+                  },
+                )),
 
-          // urgent case list
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Beneficiary',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      'See more >',
-                      style: TextStyle(fontSize: 14),
-                      textAlign: TextAlign.start,
-                    ),
-                  ]),
+            // urgent case list
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Beneficiary',
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.start,
+                      ),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationBeneficiariesExpandedScreen()),).then((value){
+                            _refreshPage();
+                          });
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(
-              height: 325.0,
-              child: ListView.builder(
-                itemCount: beneficiaries.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return BeneficiaryCard(
-                      beneficiaries[index].name,
-                      beneficiaries[index].biography,
-                      beneficiaries[index].goalAmount,
-                      beneficiaries[index].amountRaised);
-                },
-              )),
-        ],
+            SizedBox(
+                height: 325.0,
+                child: ListView.builder(
+                  itemCount: beneficiaries.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return BeneficiaryCard(beneficiaries[index]);
+                  },
+                )),
+          ],
+        ),
       ),
     );
   }
-
 }

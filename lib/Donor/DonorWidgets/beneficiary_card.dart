@@ -3,8 +3,6 @@ import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../beneficiary_donate_screen.dart';
 
@@ -27,6 +25,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
     super.initState();
     _getBeneficiaryOrganization();
   }
+
 
   _getBeneficiaryOrganization() async{
 
@@ -109,7 +108,11 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                         if(organization?.country =='United States'){
                           Navigator.push(context, MaterialPageRoute(builder: (context) {
                             return (BeneficiaryDonateScreen(widget.beneficiary));
-                          }));
+                          })).then((value){
+                            setState(() {
+
+                            });
+                          });
                         }
                         else{
                           DonorAlertDialogs.paymentLinkPopUp(context, organization!);

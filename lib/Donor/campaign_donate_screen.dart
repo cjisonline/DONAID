@@ -27,6 +27,18 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   String donationAmount = "";
   bool showLoadingSpinner = false;
 
+  @override
+  void initState(){
+    super.initState();
+  }
+
+  _refreshPage() async {
+    var ret = await _firestore.collection('Campaigns').where('id',isEqualTo: widget.campaign.id).get();
+
+    var doc = ret.docs[0];
+    widget.campaign.amountRaised = doc['amountRaised'];
+  }
+
   _campaignDonateBody() {
     return ModalProgressHUD(
       inAsyncCall: showLoadingSpinner,
@@ -205,6 +217,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
 
       createDonationDocument();
       updateCampaign();
+      await _refreshPage();
 
     }on StripeException catch (e) {
       print('Stripe Exception: ${e.toString()}');
