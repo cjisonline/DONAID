@@ -1,3 +1,4 @@
+import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:flutter/material.dart';
 
 class DonorBottomNavigationBar extends StatelessWidget {
@@ -16,7 +17,9 @@ class DonorBottomNavigationBar extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).popUntil(ModalRoute.withName(DonorDashboard.id));
+              },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
             const Text('Home',

@@ -27,6 +27,19 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   String donationAmount = "";
   bool showLoadingSpinner = false;
 
+  @override
+  void initState(){
+    super.initState();
+
+  }
+
+  _refreshPage() async {
+    var ret = await _firestore.collection('UrgentCases').where('id',isEqualTo: widget.urgentCase.id).get();
+
+    var doc = ret.docs[0];
+    widget.urgentCase.amountRaised = doc['amountRaised'];
+  }
+
   _campaignDonateBody() {
     return ModalProgressHUD(
       inAsyncCall: showLoadingSpinner,
@@ -151,15 +164,15 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
 
   }
 
-  void updateCampaign() async{
+  void updateUrgentCase() async{
     if(widget.urgentCase.amountRaised+double.parse(donationAmount) >= widget.urgentCase.goalAmount){
-      await _firestore.collection('Campaigns').doc(widget.urgentCase.id).update({
+      await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).update({
         'amountRaised': widget.urgentCase.amountRaised+double.parse(donationAmount),
         'active':false
       });
     }
     else{
-      await _firestore.collection('Campaigns').doc(widget.urgentCase.id).update({
+      await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).update({
         'amountRaised': widget.urgentCase.amountRaised+double.parse(donationAmount)
       });
     }
@@ -204,7 +217,8 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
           .showSnackBar(const SnackBar(content: Text('Paid successfully!')));
 
       createDonationDocument();
-      updateCampaign();
+      updateUrgentCase();
+      await _refreshPage();
 
     }on StripeException catch (e) {
       print('Stripe Exception: ${e.toString()}');

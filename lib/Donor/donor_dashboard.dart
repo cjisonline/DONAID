@@ -46,6 +46,19 @@ class _DonorDashboardState extends State<DonorDashboard> {
     _getCharityCategories();
   }
 
+  _refreshPage() {
+    beneficiaries.clear();
+    urgentCases.clear();
+    organizations.clear();
+    charityCategories.clear();
+    _getCurrentUser();
+    _getBeneficiaries();
+    _getUrgentCases();
+    _getOrganizationUsers();
+    _getCharityCategories();
+    setState(() {});
+}
+
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
@@ -95,7 +108,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active']
       );
       beneficiaries.add(beneficiary);
     }
@@ -120,7 +134,9 @@ class _DonorDashboardState extends State<DonorDashboard> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+          approved: element.data()['approved']
       );
       urgentCases.add(urgentCase);
     }
@@ -164,7 +180,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     ),
                     TextButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, CategoriesScreen.id);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesScreen())).then((value) => _refreshPage());
                       },
                       child: const Text(
                         'See more >',
@@ -201,7 +217,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     ),
                     TextButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, OrganizationsExpandedScreen.id);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationsExpandedScreen())).then((value) => _refreshPage());
                       },
                       child: const Text(
                         'See more >',
@@ -237,7 +253,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     ),
                     TextButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, BeneficiaryExpandedScreen.id);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => BeneficiaryExpandedScreen())).then((value) => _refreshPage());
                       },
                       child: const Text(
                         'See more >',
@@ -273,7 +289,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     ),
                     TextButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, UrgentCasesExpandedScreen.id);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => UrgentCasesExpandedScreen())).then((value) => _refreshPage());
                       },
                       child: const Text(
                         'See more >',

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/beneficiary_donate_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Organization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,6 +30,14 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
     super.initState();
     _getBeneficiaries();
   }
+  
+  _refreshPage(){
+    beneficiaries.clear();
+    _getBeneficiaries();
+    setState(() {
+      
+    });
+  }
 
   _getBeneficiaries() async {
     var ret = await _firestore.collection('Beneficiaries')
@@ -49,7 +56,9 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active']
+      );
       beneficiaries.add(beneficiary);
     }
     setState(() {});
@@ -126,7 +135,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                     if(organizations[index].country =='United States'){
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (BeneficiaryDonateScreen(beneficiaries[index]));
-                      }));
+                      })).then((value) => _refreshPage());
                     }
                     else{
                       _paymentLinkPopUp(organizations[index]);

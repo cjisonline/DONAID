@@ -60,12 +60,9 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
       "firstName": donor.firstName,
       "lastName": donor.lastName,
       "phoneNumber": donor.phoneNumber
-    }).whenComplete(_goToProfilePage);
+    });
   }
 
-  _goToProfilePage() {
-    Navigator.pushNamed(context, DonorProfile.id);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +82,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
             TextButton(
               onPressed: () {
                 _submitForm();
-                Navigator.pushNamed(context, DonorProfile.id);
+                Navigator.pop(context);
               },
               child: const Text('Save',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
