@@ -55,38 +55,41 @@ async function getCategories(){
     querySnapshot.forEach((item) => {
         
             document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
-            "<tr><td>" + item.data().name + 
-            "</td><td class='documentTD'>" + item.data().id +
+            "<tr><td class='nameTD'>" + item.data().name + 
+            "</td><td>" + item.data().id + 
+            "</td><td class='documentTD' style='display:none'>" + item.data().iconDownloadURL + 
             "</td><td>" + '<button id="approveButton" class="approveButtonClass">View</button>' + "</td></tr>";
         
     })
 
     $('button.approveButtonClass').click(function() {
-        var $item = $(this).closest("tr")
+        var $iconImage = $(this).closest("tr")
         .find('td.documentTD')
         .text(); 
 
-        $("#resultas").append($item); 
-        var documentID = $item;
+        $("#resultas").append($iconImage); 
+        var catIcon = $iconImage;
 
-        var imageCreate = document.createElement("IMG");
-        imageCreate.setAttribute()
+        var $categoryName = $(this).closest("tr")
+        .find('td.nameTD')
+        .text(); 
 
-        viewCategoryIcon(documentID);
+        $("#resultas").append($categoryName); 
+        var catName = $categoryName;
+
+        viewCategoryIcon(catIcon, catName);
         });
     }
 }
 
-function viewCategoryIcon(documentID) {
+function viewCategoryIcon(catIcon, catName) {
       
     swal.fire({
-        title: 'Category Icon',
-        icon: 'warning',
-        showCancelButton: false,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes'
-
+        title: catName,
+        imageUrl: catIcon,
+        imageWidth: 400,
+        imageHeight: 400,
+        imageAlt: 'Category Icon',
     })
 }
 
@@ -107,7 +110,7 @@ getCategories();
                 <option value="beneficiaries.html">Beneficiaries</option>
                 <option value="approvals.html">Approvals</option>
                 <option value="urgent_cases.html">Urgent Cases</option>
-                <option value="categories.html" selected>Urgent Cases</option>
+                <option value="categories.html" selected>Categories</option>
             </select>
             <span class="select-highlight"></span>
             <span class="select-bar"></span>
@@ -117,13 +120,9 @@ getCategories();
         <div class="table-responsive-vertical shadow-z-1">
         <table class="table" id="adminTable">
             <thead>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Organization Name</th>
-                <th>Case ID</th>
-                <th>Goal Amount</th>
-                <th>Description</th>
-                <th>Approve</th>
+                <th>Name</th>
+                <th>Category ID</th>
+                <th>Icon</th>
             </thead>
             <tbody>
             </tbody>
