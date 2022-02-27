@@ -29,6 +29,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   List<Map<String, dynamic>> _foundUsers = [];
   final List<Map<String, dynamic>> _allUsers = [];
   var f = NumberFormat("###,###.0#", "en_US");
+  var searchFieldController = TextEditingController();
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
@@ -181,8 +182,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               ),
               TextField(
                 onChanged: (value) => _searchResults(value),
-                decoration: const InputDecoration(
-                    labelText: 'Search', suffixIcon: Icon(Icons.search)),
+                controller: searchFieldController,
+                decoration: InputDecoration(
+                    labelText: 'Search', suffix: IconButton(icon: Icon(Icons.search), onPressed: (){_searchResults(searchFieldController.text);},)),
               ),
               const SizedBox(
                 height: 20,
