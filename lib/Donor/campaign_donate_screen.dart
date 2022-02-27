@@ -153,12 +153,18 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   }
 
   void createDonationDocument() async{
-    await _firestore.collection('Donations').add({
+    final docRef = await _firestore.collection('Donations').add({});
+
+    await _firestore.collection('Donations').doc(docRef.id).set({
+      'id':docRef.id,
       'donorID': _auth.currentUser?.uid,
       'organizationID': widget.campaign.organizationID,
       'charityID': widget.campaign.id,
+      'charityName':widget.campaign.title,
       'donationAmount': donationAmount,
-      'donatedAt':Timestamp.now()
+      'donatedAt':Timestamp.now(),
+      'charityType':'Campaigns',
+      'category':widget.campaign.category
     });
 
   }

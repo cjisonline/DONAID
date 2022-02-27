@@ -154,12 +154,19 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
   }
 
   void createDonationDocument() async{
-    await _firestore.collection('Donations').add({
+
+    final docRef = await _firestore.collection('Donations').add({});
+
+    await _firestore.collection('Donations').doc(docRef.id).set({
+      'id':docRef.id,
       'donorID': _auth.currentUser?.uid,
       'organizationID': widget.beneficiary.organizationID,
       'charityID': widget.beneficiary.id,
+      'charityName':widget.beneficiary.name,
       'donationAmount': donationAmount,
-      'donatedAt':Timestamp.now()
+      'donatedAt':Timestamp.now(),
+      'charityType':'Beneficiaries',
+      'category':widget.beneficiary.category
     });
 
   }

@@ -154,12 +154,18 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   }
 
   void createDonationDocument() async{
-    await _firestore.collection('Donations').add({
+    final docRef = await _firestore.collection('Donations').add({});
+
+    await _firestore.collection('Donations').doc(docRef.id).set({
+      'id':docRef.id,
       'donorID': _auth.currentUser?.uid,
       'organizationID': widget.urgentCase.organizationID,
       'charityID': widget.urgentCase.id,
+      'charityName':widget.urgentCase.title,
       'donationAmount': donationAmount,
-      'donatedAt':Timestamp.now()
+      'donatedAt':Timestamp.now(),
+      'charityType':'UrgentCases',
+      'category':widget.urgentCase.category
     });
 
   }
