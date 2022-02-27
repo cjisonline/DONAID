@@ -3,11 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/UrgentCase.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'OrganizationWidget/button_nav_bar.dart';
 
 //Start here
 class OrgSearchPage extends StatefulWidget {
@@ -57,7 +57,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active']);
       campaigns.add(campaign);
       print(campaign.title);
     }
@@ -81,7 +82,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+          approved: element.data()['approved']);
       urgentCases.add(urgentCase);
       print(urgentCase.title);
     }
@@ -106,8 +109,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID:
-              element.data()['organizationID']); // need to add category
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active']); // need to add category
       beneficiaries.add(beneficiary);
       print(beneficiary.name);
     }
@@ -218,6 +221,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
             ],
           ),
         ),
-        bottomNavigationBar: ButtomNavigation());
+        bottomNavigationBar: OrganizationBottomNavigation());
   }
 }
