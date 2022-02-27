@@ -4,8 +4,10 @@ import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/campaign_card.dart';
 import 'package:donaid/Organization/OrganizationWidget/urgent_case_card.dart';
+import 'package:donaid/Services/chatServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'OrganizationWidget/beneficiary_card.dart';
 import 'OrganizationWidget/organization_bottom_navigation.dart';
@@ -44,6 +46,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     _getCampaign();
     _getUrgentCases();
     _getBeneficiaries();
+    Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
+    Get.find<ChatService>().listenFriend(loggedInUser!.uid, 1);
   }
 
   _refreshPage() async{
@@ -136,6 +140,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       ); // need to add category
       beneficiaries.add(beneficiary);
     }
+
+    print('Beneficiaries list: $beneficiaries');
 
     setState(() {});
   }
@@ -291,5 +297,4 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       ),
     );
   }
-
 }

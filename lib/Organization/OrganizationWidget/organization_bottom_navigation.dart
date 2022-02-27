@@ -1,11 +1,18 @@
+import 'package:donaid/Chat/conversation.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../home_screen.dart';
-
-class OrganizationBottomNavigation extends StatelessWidget {
+class OrganizationBottomNavigation extends StatefulWidget {
   const OrganizationBottomNavigation({Key? key}) : super(key: key);
 
+  @override
+  State<OrganizationBottomNavigation> createState() => _OrganizationBottomNavigationState();
+}
+
+class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigation> {
+  final _auth = FirebaseAuth.instance;
   ///Author: Raisa Zaman
   @override
   Widget build(BuildContext context) {
@@ -23,7 +30,7 @@ class OrganizationBottomNavigation extends StatelessWidget {
             IconButton(
               enableFeedback: false,
               onPressed: () {
-                Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
+                Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
@@ -48,7 +55,8 @@ class OrganizationBottomNavigation extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+              },
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
@@ -59,7 +67,11 @@ class OrganizationBottomNavigation extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return(Conversation(_auth.currentUser!.uid, "DonorUsers"));
+                }));
+              },
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
             Text('Messages',

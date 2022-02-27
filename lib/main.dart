@@ -10,8 +10,10 @@ import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:donaid/Organization/organization_edit_profile.dart';
 import 'package:donaid/Organization/organization_profile.dart';
 import 'package:donaid/Registration/registration_screen.dart';
+import 'package:donaid/Services/chatServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'Organization/add_campaigns_screen.dart';
 import 'Organization/add_selection_screen.dart';
@@ -33,6 +35,7 @@ void main() async {
   await Firebase.initializeApp();
   await GetStorage.init();
   await Auth.getCurrentUser();
+  Get.put(ChatService());
   runApp(const Donaid());
 }
 
@@ -41,7 +44,7 @@ class Donaid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       builder: EasyLoading.init(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
