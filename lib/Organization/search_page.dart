@@ -4,9 +4,13 @@ import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
+import 'package:donaid/Organization/organization_beneficiary_full.dart';
+import 'package:donaid/Organization/organization_urgentcase_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'organization_campaign_full.dart';
 
 
 //Start here
@@ -24,8 +28,11 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries = [];
+  List<String> beneficiariesID=[];
   List<Campaign> campaigns = [];
+  List<String> campaignsID=[];
   List<UrgentCase> urgentCases = [];
+  List<String> urgentCasesID=[];
   List<Map<String, dynamic>> _foundUsers = [];
   final List<Map<String, dynamic>> _allUsers = [];
   var f = NumberFormat("###,###.0#", "en_US");
@@ -62,6 +69,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           active: element.data()['active']);
       campaigns.add(campaign);
       print(campaign.title);
+
+      campaignsID.add(element.data()['id']);
     }
     _getUrgentCases();
     setState(() {});
@@ -88,6 +97,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           approved: element.data()['approved']);
       urgentCases.add(urgentCase);
       print(urgentCase.title);
+
+      urgentCasesID.add(element.data()['id']);
     }
     _getBeneficiaries();
 
@@ -114,6 +125,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           active: element.data()['active']); // need to add category
       beneficiaries.add(beneficiary);
       print(beneficiary.name);
+
+      beneficiariesID.add(element.data()['id']);
     }
     setState(() {});
     _getAllData();
@@ -122,6 +135,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   _getAllData() {
     for (var i = 0; i < urgentCases.length; i++) {
       _allUsers.add({
+        "id":urgentCases[i].id,
         "name": urgentCases[i].title,
         "goal": f.format(urgentCases[i].goalAmount).toString(),
         "endDate": urgentCases[i].endDate.toDate().toString().substring(
@@ -130,6 +144,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
     }
     for (var i = 0; i < campaigns.length; i++) {
       _allUsers.add({
+        "id":campaigns[i].id,
         "name": campaigns[i].title,
         "goal": f.format(campaigns[i].goalAmount).toString(),
         "endDate": campaigns[i]
@@ -141,6 +156,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
     }
     for (var i = 0; i < beneficiaries.length; i++) {
       _allUsers.add({
+        "id":beneficiaries[i].id,
         "name": beneficiaries[i].name,
         "goal": f.format(beneficiaries[i].goalAmount).toString(),
         "endDate": beneficiaries[i].endDate.toDate().toString().substring(
@@ -165,6 +181,65 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
     setState(() {
       _foundUsers = results;
     });
+  }
+
+  _goToChosenCampaign(String id)async {
+    var ret = await _firestore.collection('Campaigns').where('id',isEqualTo: id).get();
+    var doc = ret.docs[0];
+    Campaign campaign = Campaign(
+          title: doc.data()['title'],
+          description: doc.data()['description'],
+          goalAmount: doc.data()['goalAmount'].toDouble(),
+          amountRaised: doc.data()['amountRaised'].toDouble(),
+          category: doc.data()['category'],
+          endDate: doc.data()['endDate'],
+          dateCreated: doc.data()['dateCreated'],
+          id: doc.data()['id'],
+          organizationID: doc.data()['organizationID'],
+          active: doc.data()['active']);
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return (OrganizationCampaignFullScreen(campaign));
+    }));
+  }
+
+  _goToChosenBeneficiary(String id)async {
+    var ret = await _firestore.collection('Beneficiaries').where('id',isEqualTo: id).get();
+    var doc = ret.docs[0];
+    Beneficiary beneficiary = Beneficiary(
+        name: doc.data()['name'],
+        biography: doc.data()['biography'],
+        goalAmount: doc.data()['goalAmount'].toDouble(),
+        amountRaised: doc.data()['amountRaised'].toDouble(),
+        category: doc.data()['category'],
+        endDate: doc.data()['endDate'],
+        dateCreated: doc.data()['dateCreated'],
+        id: doc.data()['id'],
+        organizationID: doc.data()['organizationID'],
+        active: doc.data()['active']);
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return (OrganizationBeneficiaryFullScreen(beneficiary));
+    }));
+  }
+
+  _goToChosenUrgentCase(String id)async {
+    var ret = await _firestore.collection('UrgentCases').where('id',isEqualTo: id).get();
+    var doc = ret.docs[0];
+    UrgentCase urgentCase = UrgentCase(
+        title: doc.data()['title'],
+        description: doc.data()['description'],
+        goalAmount: doc.data()['goalAmount'].toDouble(),
+        amountRaised: doc.data()['amountRaised'].toDouble(),
+        category: doc.data()['category'],
+        endDate: doc.data()['endDate'],
+        dateCreated: doc.data()['dateCreated'],
+        id: doc.data()['id'],
+        organizationID: doc.data()['organizationID'],
+        active: doc.data()['active'],
+        approved: doc.data()['approved']
+    );
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return (OrganizationUrgentCaseFullScreen(urgentCase));
+    }));
   }
 
   @override
@@ -206,6 +281,16 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                             trailing:
                                 Text(_foundUsers[index]["endDate"].toString()),
                             onTap: () {
+                              if(campaignsID.contains(_foundUsers[index]['id'])){
+                                _goToChosenCampaign(_foundUsers[index]['id']);
+
+                              }
+                              else if(beneficiariesID.contains(_foundUsers[index]['id'])){
+                                _goToChosenBeneficiary(_foundUsers[index]['id']);
+                              }
+                              else if(urgentCasesID.contains(_foundUsers[index]['id'])){
+                                _goToChosenUrgentCase(_foundUsers[index]['id']);
+                              }
                               setState(() {
                                 //Add the extended view page here
                               });
