@@ -193,13 +193,11 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         itemCount: _foundUsers.length,
                         itemBuilder: (context, index) => Card(
                           key: ValueKey(_foundUsers[index]["name"]),
-                          color: Colors.white,
-                          elevation: 4,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          child: ListTile(
+
+                          child: Column(children:[
+                            ListTile(
                             title: Text(
                               _foundUsers[index]["name"].toString(),
-                              textScaleFactor: 1.5,
                             ),
                             subtitle:
                                 Text("\u0024 " + _foundUsers[index]['goal']),
@@ -211,6 +209,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                               });
                             },
                           ),
+                          const Divider()])
                         ),
                       )
                     : const Text(
