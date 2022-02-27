@@ -2,21 +2,16 @@ import 'package:donaid/Chat/conversation.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:flutter/material.dart';
 
-class ButtomNavigation extends StatefulWidget {
-  const ButtomNavigation({Key? key}) : super(key: key);
-import '../../home_screen.dart';
-
-class OrganizationBottomNavigation extends StatelessWidget {
+class OrganizationBottomNavigation extends StatefulWidget {
   const OrganizationBottomNavigation({Key? key}) : super(key: key);
 
   @override
-  State<ButtomNavigation> createState() => _ButtomNavigationState();
+  State<OrganizationBottomNavigation> createState() => _OrganizationBottomNavigationState();
 }
 
-class _ButtomNavigationState extends State<ButtomNavigation> {
+class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigation> {
   final _auth = FirebaseAuth.instance;
   ///Author: Raisa Zaman
   @override
