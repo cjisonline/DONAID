@@ -63,50 +63,55 @@ class _OrganizationBeneficiariesExpandedScreenState
   }
 
   _beneficiariesBody() {
-    return ListView.builder(
-        itemCount: beneficiaries.length,
-        shrinkWrap: true,
-        itemBuilder: (context, int index) {
-          return Card(
-            child: Column(
-              children: [
-                ListTile(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return (OrganizationBeneficiaryFullScreen(beneficiaries[index]));
-                    })).then((value) => _refreshPage());
-                  },
-                  title: Text(beneficiaries[index].name),
-                  subtitle: Text(beneficiaries[index].biography),
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          '\$${(beneficiaries[index].amountRaised.toStringAsFixed(2))}',
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 15)),
-                      Text(
-                        '\$${beneficiaries[index].goalAmount.toStringAsFixed(2)}',
-                        textAlign: TextAlign.start,
-                        style:
-                        const TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                    ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (beneficiaries[index].amountRaised /
-                      beneficiaries[index].goalAmount),
-                  minHeight: 10,
-                ),
-                const Divider()
-              ],
-            ),
-          );
-        });
+    return RefreshIndicator(
+      onRefresh: ()async{
+        _refreshPage();
+      },
+      child: ListView.builder(
+          itemCount: beneficiaries.length,
+          shrinkWrap: true,
+          itemBuilder: (context, int index) {
+            return Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return (OrganizationBeneficiaryFullScreen(beneficiaries[index]));
+                      })).then((value) => _refreshPage());
+                    },
+                    title: Text(beneficiaries[index].name),
+                    subtitle: Text(beneficiaries[index].biography),
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            '\$${(beneficiaries[index].amountRaised.toStringAsFixed(2))}',
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$${beneficiaries[index].goalAmount.toStringAsFixed(2)}',
+                          textAlign: TextAlign.start,
+                          style:
+                          const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                  LinearProgressIndicator(
+                    backgroundColor: Colors.grey,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).primaryColor),
+                    value: (beneficiaries[index].amountRaised /
+                        beneficiaries[index].goalAmount),
+                    minHeight: 10,
+                  ),
+                  const Divider()
+                ],
+              ),
+            );
+          }),
+    );
   }
 
   @override

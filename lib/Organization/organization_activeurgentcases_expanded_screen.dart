@@ -66,44 +66,49 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
 
 
   _urgentCasesBody() {
-    return ListView.builder(
-        itemCount: urgentCases.length,
-        shrinkWrap: true,
-        itemBuilder: (context, int index) {
-          return Card(
-            child: Column(
-              children: [
-                ListTile(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return (OrganizationUrgentCaseFullScreen(urgentCases[index]));
-                    })).then((value) => _refreshPage());
-                  },
-                  title: Text(urgentCases[index].title),
-                  subtitle: Text(urgentCases[index].description),
-                ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('\$${(urgentCases[index].amountRaised.toStringAsFixed(2))}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(color: Colors.black, fontSize: 15)),
-                  Text(
-                    '\$${urgentCases[index].goalAmount.toStringAsFixed(2)}',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+    return RefreshIndicator(
+      onRefresh: ()async{
+        _refreshPage();
+      },
+      child: ListView.builder(
+          itemCount: urgentCases.length,
+          shrinkWrap: true,
+          itemBuilder: (context, int index) {
+            return Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return (OrganizationUrgentCaseFullScreen(urgentCases[index]));
+                      })).then((value) => _refreshPage());
+                    },
+                    title: Text(urgentCases[index].title),
+                    subtitle: Text(urgentCases[index].description),
                   ),
-                ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (urgentCases[index].amountRaised/urgentCases[index].goalAmount),
-                  minHeight: 10,
-                ),
-                const Divider()
-              ],
-            ),
-          );
-        });
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    Text('\$${(urgentCases[index].amountRaised.toStringAsFixed(2))}',
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(color: Colors.black, fontSize: 15)),
+                    Text(
+                      '\$${urgentCases[index].goalAmount.toStringAsFixed(2)}',
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(color: Colors.black, fontSize: 15),
+                    ),
+                  ]),
+                  LinearProgressIndicator(
+                    backgroundColor: Colors.grey,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).primaryColor),
+                    value: (urgentCases[index].amountRaised/urgentCases[index].goalAmount),
+                    minHeight: 10,
+                  ),
+                  const Divider()
+                ],
+              ),
+            );
+          }),
+    );
   }
 
   @override
