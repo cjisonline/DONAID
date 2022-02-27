@@ -35,7 +35,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   var category = [];
 
 
-  _getCampaign() async {
+  _getCategories() async {
     var ret = await firestore
         .collection('CharityCategories')
         .get();
@@ -50,7 +50,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   void initState() {
     super.initState();
     _getCurrentUser();
-    _getCampaign();
+    _getCategories();
   }
 
   void _getCurrentUser() {

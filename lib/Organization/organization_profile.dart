@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'OrganizationWidget/button_nav_bar.dart';
 import 'OrganizationWidget/profile_list_row.dart';
 import 'organization_edit_profile.dart';
 
@@ -29,6 +29,11 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
     super.initState();
     _getCurrentUser();
     _getOrganizationInformation();
+  }
+
+  _refreshPage(){
+    _getOrganizationInformation();
+    setState(() {});
   }
 
   void _getCurrentUser() {
@@ -58,7 +63,7 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, OrganizationEditProfile.id);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationEditProfile())).then((value) => _refreshPage());
               },
               child: const Text('Edit',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
@@ -66,7 +71,7 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
           ]),
       drawer: const OrganizationDrawer(),
       body: _body(),
-      bottomNavigationBar: ButtomNavigation(),
+      bottomNavigationBar: OrganizationBottomNavigation()
     );
   }
   Widget _buildUnitedStatesProfile(){

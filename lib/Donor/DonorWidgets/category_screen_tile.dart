@@ -22,7 +22,11 @@ class _CategoryScreenTileState extends State<CategoryScreenTile> {
           builder: (context){
             return(CategoryCampaignsScreen(categoryName: widget.charityCategory.name));
         }
-        ));
+        )).then((value){
+          setState(() {
+
+          });
+        });
       },
       child: Padding(
           padding: const EdgeInsets.all(10.0),

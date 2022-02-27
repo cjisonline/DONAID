@@ -83,7 +83,7 @@ class _OrganizationsExpandedScreenState extends State<OrganizationsExpandedScree
       ),
       drawer: const DonorDrawer(),
       body: _organizationsBody(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 }

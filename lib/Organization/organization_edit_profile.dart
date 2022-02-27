@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/organization_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'OrganizationWidget/button_nav_bar.dart';
 
 class OrganizationEditProfile extends StatefulWidget {
   static const id = 'organization_edit_profile';
@@ -64,12 +63,9 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
       "phoneNumber": organization.phoneNumber,
       "organizationDescription": organization.organizationDescription,
       "gatewayLink": organization.gatewayLink
-    }).whenComplete(_goToProfilePage);
+    });
   }
 
-  _goToProfilePage(){
-    Navigator.pushNamed(context, OrganizationProfile.id);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,13 +86,14 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
               onPressed: () {
                 _submitForm();
                 _updateOrganizationInformation();
+                Navigator.pop(context);
               },
               child: const Text('Save',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
       body: _body(),
-      bottomNavigationBar: ButtomNavigation(),
+      bottomNavigationBar: OrganizationBottomNavigation(),
     );
   }
 
