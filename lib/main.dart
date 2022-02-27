@@ -17,6 +17,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'Organization/add_campaigns_screen.dart';
 import 'Organization/add_selection_screen.dart';
+import 'Organization/search_page.dart';
 import 'Organization/organization_activebeneficiaries_expanded_screen.dart';
 import 'Organization/organization_activecampaigns_expanded_screen.dart';
 import 'Organization/organization_activeurgentcases_expanded_screen.dart';
@@ -74,6 +75,7 @@ class Donaid extends StatelessWidget {
         OrganizationBeneficiariesExpandedScreen.id: (context) => const OrganizationBeneficiariesExpandedScreen(),
         OrganizationUrgentCasesExpandedScreen.id: (context) => const OrganizationUrgentCasesExpandedScreen(),
         OrganizationCampaignsExpandedScreen.id: (context) => const OrganizationCampaignsExpandedScreen(),
+        OrgSearchPage.id: (context) => const OrgSearchPage(),
       },
     );
   }

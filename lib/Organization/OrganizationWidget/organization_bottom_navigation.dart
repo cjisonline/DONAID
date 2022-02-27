@@ -1,8 +1,12 @@
+
 import 'package:donaid/Chat/conversation.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../organization_dashboard.dart';
+import '../search_page.dart';
 
 class OrganizationBottomNavigation extends StatefulWidget {
   const OrganizationBottomNavigation({Key? key}) : super(key: key);
@@ -41,7 +45,9 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, OrgSearchPage.id);
+              },
               icon: const Icon(
                 Icons.search,
                 color: Colors.white,
