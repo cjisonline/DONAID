@@ -58,7 +58,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
   }
 
 
-  Future<void> addUrgentCase(String category, String description, int goalAmount,
+  Future<void> addUrgentCase(String category, String description, double goalAmount,
       String title, String endDateController) async {
     try {
       final docRef = await firestore.collection("UrgentCases").add({});
@@ -353,7 +353,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                   });
                                   addUrgentCase(categoryController.text,
                                       descriptionController.text,
-                                      int.parse(goalAmountController.text),
+                                      int.parse(goalAmountController.text).toDouble(),
                                       titleController.text,
                                       endDateController.text);
                                   Navigator.pop(context, true);

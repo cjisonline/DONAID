@@ -60,7 +60,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
 
 
   Future<void> addCampaign(
-      String category, String description, int goalAmount, String title, String endDateController) async {
+      String category, String description, double goalAmount, String title, String endDateController) async {
     try {
       final docRef = await firestore.collection("Campaigns").add({});
 
@@ -355,7 +355,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                     showLoadingSpinner = true;
                                   });
                                   addCampaign(categoryController.text,descriptionController.text,
-                                      int.parse(goalAmountController.text), titleController.text, endDateController.text);
+                                      int.parse(goalAmountController.text).toDouble(), titleController.text, endDateController.text);
                                   Navigator.pop(context, true);
                                   showDialog(
                                     context: context,
