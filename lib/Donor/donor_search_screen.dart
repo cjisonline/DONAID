@@ -3,6 +3,7 @@ import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
+import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:intl/intl.dart';
 
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
+import 'organization_tab_view.dart';
 
 class DonorSearchScreen extends StatefulWidget {
   static const id = 'donor_search_screen';
@@ -30,6 +32,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
   List<String> campaignsID=[];
   List<UrgentCase> urgentCases = [];
   List<String> urgentCasesID=[];
+  List<Organization> organizations = [];
+  List<String> organizationsID=[];
   List<Map<String, dynamic>> _foundUsers = [];
   final List<Map<String, dynamic>> _allUsers = [];
   var f = NumberFormat("###,###.0#", "en_US");
@@ -42,9 +46,26 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
   @override
   initState() {
     _getCurrentUser();
-    _getCampaign();
+    _getOrganizationUsers();
     _foundUsers = _allUsers;
     super.initState();
+  }
+  _getOrganizationUsers() async {
+    var ret = await _firestore.collection('OrganizationUsers').where('approved', isEqualTo: true).get();
+    for (var element in ret.docs) {
+      Organization organization = Organization(
+        organizationName: element.data()['organizationName'],
+        uid: element.data()['uid'],
+        id: element.data()['id'],
+        organizationDescription: element.data()['organizationDescription'],
+        country: element.data()['country'],
+        gatewayLink: element.data()['gatewayLink'],
+      );
+      organizations.add(organization);
+      organizationsID.add(element.data()['id']);
+    }
+    _getCampaign() ;
+      setState(() {});
   }
 
   _getCampaign() async {
@@ -128,6 +149,14 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
   }
 
   _getAllData() {
+    for (var i = 0; i < organizations.length; i++) {
+      _allUsers.add({
+        "id":organizations[i].id,
+        "name": organizations[i].organizationName,
+        "goal": "",
+        "endDate": ""
+      });
+    }
     for (var i = 0; i < urgentCases.length; i++) {
       _allUsers.add({
         "id":urgentCases[i].id,
@@ -178,6 +207,21 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     });
   }
 
+  _goToChosenOrganization(String id)async {
+    var ret = await _firestore.collection('OrganizationUsers').where('approved', isEqualTo: true).get();
+    var doc = ret.docs[0];
+    Organization organization = Organization(
+        organizationName: doc.data()['organizationName'],
+        uid: doc.data()['uid'],
+        id: doc.data()['id'],
+        organizationDescription: doc.data()['organizationDescription'],
+        country: doc.data()['country'],
+        gatewayLink: doc.data()['gatewayLink'],
+      );
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return (OrganizationTabViewScreen(organization: organization));
+    }));
+  }
   _goToChosenCampaign(String id)async {
     var ret = await _firestore.collection('Campaigns').where('id',isEqualTo: id).get();
     var doc = ret.docs[0];
@@ -276,9 +320,11 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                           trailing:
                           Text(_foundUsers[index]["endDate"].toString()),
                           onTap: () {
-                            if(campaignsID.contains(_foundUsers[index]['id'])){
+                            if(organizationsID.contains(_foundUsers[index]['id'])){
+                              _goToChosenOrganization(_foundUsers[index]['id']);
+                            }
+                            else if(campaignsID.contains(_foundUsers[index]['id'])){
                               _goToChosenCampaign(_foundUsers[index]['id']);
-
                             }
                             else if(beneficiariesID.contains(_foundUsers[index]['id'])){
                               _goToChosenBeneficiary(_foundUsers[index]['id']);
