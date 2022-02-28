@@ -77,7 +77,8 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 25.0),
-                child: Form(
+                child: (widget.urgentCase.active == true && (widget.urgentCase.endDate).compareTo(Timestamp.now())>0)
+                  ? Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -146,7 +147,8 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                           ),
                         ),
                       ],
-                    )),
+                    ))
+                : Text('Urgent case is no longer available to donate to.'),
               )
             ]),
           )),

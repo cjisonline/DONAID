@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/urgent_case_donate_screen.dart';
 import 'package:donaid/Models/Donation.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:donaid/Models/UrgentCase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -26,10 +28,16 @@ class _DonationHistoryState extends State<DonationHistory> {
   @override
   void initState() {
     super.initState();
-    _getdonationHistory();
+    _getDonationHistory();
   }
 
-  _getdonationHistory() async {
+  _refreshPage(){
+    donations.clear();
+    organizations.clear();
+    _getDonationHistory();
+  }
+
+  _getDonationHistory() async {
     var ret = await _firestore
         .collection('Donations')
         .where('donorID', isEqualTo: _auth.currentUser?.uid)
@@ -73,6 +81,28 @@ class _DonationHistoryState extends State<DonationHistory> {
     setState(() {});
   }
 
+  _goToChosenUrgentCase(String id)async{
+    var ret = await _firestore.collection('UrgentCases').where('id',isEqualTo: id).get();
+    var doc = ret.docs[0];
+    UrgentCase urgentCase = UrgentCase(
+        title: doc.data()['title'],
+        description: doc.data()['description'],
+        goalAmount: doc.data()['goalAmount'].toDouble(),
+        amountRaised: doc.data()['amountRaised'].toDouble(),
+        category: doc.data()['category'],
+        endDate: doc.data()['endDate'],
+        dateCreated: doc.data()['dateCreated'],
+        id: doc.data()['id'],
+        organizationID: doc.data()['organizationID'],
+        active: doc.data()['active'],
+        approved: doc.data()['approved']
+    );
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return (UrgentCaseDonateScreen(urgentCase));
+    })).then((value) => _refreshPage());
+  }
+
   _donationHistoryBody() {
     return ListView.builder(
         itemCount: donations.length,
@@ -84,7 +114,7 @@ class _DonationHistoryState extends State<DonationHistory> {
               (donations[index].charityType == 'UrgentCases')
                   ? ListTile(
                       onTap: () {
-                        //TODO: Implement on Tap
+                        _goToChosenUrgentCase(donations[index].charityID.toString());
                       },
                       title: Text(donations[index].charityName),
                       subtitle: Text('Urgent Case\n' +

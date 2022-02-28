@@ -61,7 +61,6 @@ class _DonorDrawerState extends State<DonorDrawer> {
               leading: const Icon(Icons.history),
               title: const Text("Donation History"),
               onTap: () {
-                //TODO: Navigate to Donation history
                 Navigator.pushNamed(context, DonationHistory.id);
               },
             ),
