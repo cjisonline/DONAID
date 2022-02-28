@@ -73,7 +73,7 @@ class Donaid extends StatelessWidget {
         DonorEditProfile.id: (context) => const DonorEditProfile(),
         OrganizationProfile.id: (context) => const OrganizationProfile(),
         OrganizationEditProfile.id: (context) => const OrganizationEditProfile(),
-        DonorSearchScreen.id: (context) => const DonorSearchScreen()
+        DonorSearchScreen.id: (context) => const DonorSearchScreen(),
         OrganizationBeneficiariesExpandedScreen.id: (context) => const OrganizationBeneficiariesExpandedScreen(),
         OrganizationUrgentCasesExpandedScreen.id: (context) => const OrganizationUrgentCasesExpandedScreen(),
         OrganizationCampaignsExpandedScreen.id: (context) => const OrganizationCampaignsExpandedScreen(),
