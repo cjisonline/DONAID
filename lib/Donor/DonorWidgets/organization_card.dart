@@ -19,7 +19,11 @@ class _OrganizationCardState extends State<OrganizationCard> {
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return (OrganizationTabViewScreen(organization: widget.organization));
-        }));
+        })).then((value){
+          setState(() {
+
+          });
+        });
       },
       child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -46,7 +50,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text("widget.organization.organizationDescription", // TODO: fix organization description
+                child: Text(widget.organization.organizationDescription.toString(),
                     textAlign: TextAlign.center,
                     softWrap: true,
                     maxLines: 3,

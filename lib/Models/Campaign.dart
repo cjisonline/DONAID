@@ -10,6 +10,7 @@ class Campaign  {
   Timestamp dateCreated;
   String id;
   String organizationID;
+  bool active;
 
   Campaign(
       {
@@ -22,5 +23,6 @@ class Campaign  {
         required this.dateCreated,
         required this.id,
         required this.organizationID,
+        required this.active,
       });
 }
