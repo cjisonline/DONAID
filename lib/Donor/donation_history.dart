@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
+import 'package:donaid/Models/Beneficiary.dart';
+import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/Donation.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
@@ -9,6 +11,9 @@ import 'package:flutter/material.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:intl/intl.dart';
+
+import 'beneficiary_donate_screen.dart';
+import 'campaign_donate_screen.dart';
 
 class DonationHistory extends StatefulWidget {
   static const id = 'donation_history';
@@ -103,6 +108,52 @@ class _DonationHistoryState extends State<DonationHistory> {
     })).then((value) => _refreshPage());
   }
 
+  _goToChosenCampaign(String id)async {
+    var ret = await _firestore.collection('Campaigns')
+        .where('id', isEqualTo: id)
+        .get();
+    var doc = ret.docs[0];
+    Campaign campaign = Campaign(
+      title: doc.data()['title'],
+      description: doc.data()['description'],
+      goalAmount: doc.data()['goalAmount'].toDouble(),
+      amountRaised: doc.data()['amountRaised'].toDouble(),
+      category: doc.data()['category'],
+      endDate: doc.data()['endDate'],
+      dateCreated: doc.data()['dateCreated'],
+      id: doc.data()['id'],
+      organizationID: doc.data()['organizationID'],
+      active: doc.data()['active'],
+    );
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return (CampaignDonateScreen(campaign));
+    })).then((value) => _refreshPage());
+  }
+
+  _goToChosenBeneficiary(String id)async {
+    var ret = await _firestore.collection('Beneficiaries')
+        .where('id', isEqualTo: id)
+        .get();
+    var doc = ret.docs[0];
+    Beneficiary beneficiary = Beneficiary(
+      name: doc.data()['name'],
+      biography: doc.data()['biography'],
+      goalAmount: doc.data()['goalAmount'].toDouble(),
+      amountRaised: doc.data()['amountRaised'].toDouble(),
+      category: doc.data()['category'],
+      endDate: doc.data()['endDate'],
+      dateCreated: doc.data()['dateCreated'],
+      id: doc.data()['id'],
+      organizationID: doc.data()['organizationID'],
+      active: doc.data()['active'],
+    );
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return (BeneficiaryDonateScreen(beneficiary));
+    })).then((value) => _refreshPage());
+  }
+
   _donationHistoryBody() {
     return ListView.builder(
         itemCount: donations.length,
@@ -125,7 +176,7 @@ class _DonationHistoryState extends State<DonationHistory> {
                   : (donations[index].charityType == 'Campaigns')
                       ? ListTile(
                           onTap: () {
-                            //TODO: Implement on Tap
+                            _goToChosenCampaign(donations[index].charityID.toString());
                           },
                           title: Text(donations[index].charityName),
                           subtitle: Text('Campaign\n' +
@@ -135,7 +186,7 @@ class _DonationHistoryState extends State<DonationHistory> {
                         )
                       : ListTile(
                 onTap: () {
-                  //TODO: Implement on Tap
+                  _goToChosenBeneficiary(donations[index].charityID.toString());
                 },
                 title: Text(donations[index].charityName),
                 subtitle: Text('Beneficiary\n' +
