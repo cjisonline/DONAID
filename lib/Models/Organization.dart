@@ -1,3 +1,4 @@
+
 class Organization {
   String? organizationEmail;
   String organizationName;

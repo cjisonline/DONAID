@@ -21,7 +21,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
           return (OrganizationTabViewScreen(organization: widget.organization));
         })).then((value){
           setState(() {
-            
+
           });
         });
       },

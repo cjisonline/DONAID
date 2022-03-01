@@ -1,7 +1,9 @@
-import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Chat/conversation.dart';
+import 'package:donaid/Donor/donor_search_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../donor_dashboard.dart';
 
 class DonorBottomNavigationBar extends StatelessWidget {
   final _auth = FirebaseAuth.instance;
@@ -34,7 +36,9 @@ class DonorBottomNavigationBar extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, DonorSearchScreen.id);
+              },
               icon: const Icon(
                 Icons.search,
                 color: Colors.white,
@@ -65,7 +69,10 @@ class DonorBottomNavigationBar extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, DonorSearchScreen.id);
+
+              },
               icon: const Icon(
                 Icons.search,
                 color: Colors.white,
