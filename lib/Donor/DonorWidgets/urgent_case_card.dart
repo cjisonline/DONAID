@@ -30,7 +30,6 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
     var ret = await _firestore.collection('OrganizationUsers')
         .where('uid', isEqualTo: widget.urgentCase.organizationID)
         .get();
-
     for(var element in ret.docs){
       organization = Organization(
         organizationName: element.data()['organizationName'],
