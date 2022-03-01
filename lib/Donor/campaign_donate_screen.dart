@@ -76,7 +76,8 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 25.0),
-            child: Form(
+            child: (widget.campaign.active == true && (widget.campaign.endDate).compareTo(Timestamp.now()) > 0)
+              ? Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -145,7 +146,9 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                       ),
                     ),
                   ],
-                )),
+                )
+            )
+                : const Text('Campaign is no longer available to donate to.'),
           )
         ]),
       )),
@@ -153,12 +156,18 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   }
 
   void createDonationDocument() async{
-    await _firestore.collection('Donations').add({
+    final docRef = await _firestore.collection('Donations').add({});
+
+    await _firestore.collection('Donations').doc(docRef.id).set({
+      'id':docRef.id,
       'donorID': _auth.currentUser?.uid,
       'organizationID': widget.campaign.organizationID,
       'charityID': widget.campaign.id,
+      'charityName':widget.campaign.title,
       'donationAmount': donationAmount,
-      'donatedAt':Timestamp.now()
+      'donatedAt':Timestamp.now(),
+      'charityType':'Campaigns',
+      'category':widget.campaign.category
     });
 
   }

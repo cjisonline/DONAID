@@ -277,7 +277,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                               _foundUsers[index]["name"].toString(),
                             ),
                             subtitle:
-                                Text("\u0024 " + _foundUsers[index]['goal']),
+                                Text("\u0024" + _foundUsers[index]['goal']),
                             trailing:
                                 Text(_foundUsers[index]["endDate"].toString()),
                             onTap: () {
