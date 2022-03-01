@@ -22,7 +22,7 @@
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-storage.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
 <script type="module">
-import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-storage.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-storage.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
 import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc, addDoc } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
@@ -89,7 +89,7 @@ async function getCategories(){
 }
 
 async function createCategory() {
-const categories3 = await getDocs(collection(db, "CharityCategories"));
+
 const { value: formValues } = await Swal.fire({
     title: 'Create a Category',
     html:
@@ -110,31 +110,40 @@ const { value: formValues } = await Swal.fire({
     }
 })
 .then((result) => {
-if (result.isConfirmed) { 
-    var catName = document.getElementById('catName-input').value;
-    var uploadedIcon = document.getElementById('catName-input2').files[0];
-    const categories2 = addDoc(collection(db, "CharityCategories"), {
-        name: catName,
-    })
-    .then(()=>{
+    if (result.isConfirmed) { 
+        var catName = document.getElementById('catName-input').value;
+        var uploadedIcon = document.getElementById('catName-input2').files[0];
         const storage = getStorage();
         const iconImagesRef = ref(storage, 'icons/'+catName+'.png');
-        uploadBytes(iconImagesRef, uploadedIcon).then((snapshot) => {
-        console.log('Uploaded a file!');
-        });
-    })
-    .then(()=>{ 
-        categories3.forEach((item) => {
-            if(item.data().name == catName) {
-                const urlRetrieve = getDownloadURL(ref(storage, 'icons/' + catName + '.png'));
-                const categoryUpload = addDoc(doc(db, "CharityCategories", item.data().id), {
-                    iconDownloadURL: urlRetrieve,
-                    id: item.data().id,
-                })
+        const uploadTask = uploadBytesResumable(iconImagesRef, uploadedIcon);
+            
+        uploadTask.on('state_changed', (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+            case 'paused':
+                console.log('Upload is paused');
+                break;
+            case 'running':
+                console.log('Upload is running');
+                break;
             }
+        },
+
+        (error) => {
+        }, 
+
+        () => {
+
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+
+            const categories2 = setDoc(doc(db, "CharityCategories", catName+'ID'), {
+            name: catName,
+            id: catName+'ID',
+            iconDownloadURL: downloadURL,
+        });
         })
-    })
-    .then(() => {
         swal.fire('Added!',
         catName + ' has been added in the DONAID app.',
         'success').then(function () {
@@ -144,17 +153,19 @@ if (result.isConfirmed) {
         .catch((error) => {
             console.error("Error adding this category: ", error);
         })
+    
     })
     
 }
-else {
-    swal.fire('Cancelled!',
-    'The category was not created.',
-    'success');
-}
+    else {
+        swal.fire('Cancelled!',
+        'The category was not created.',
+        'success');
+    }
 })
 
 }
+
 
 function viewCategoryIcon(catIcon, catName) {
       
