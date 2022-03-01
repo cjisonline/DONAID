@@ -1,5 +1,6 @@
 import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
 import 'package:donaid/Donor/categories_screen.dart';
+import 'package:donaid/Donor/donor_search_screen.dart';
 import 'package:donaid/Donor/organizations_expanded_screen.dart';
 import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Organization/add_beneficiary_screen.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'Donor/donation_history.dart';
 import 'Organization/add_campaigns_screen.dart';
 import 'Organization/add_selection_screen.dart';
 import 'Organization/search_page.dart';
@@ -72,10 +74,12 @@ class Donaid extends StatelessWidget {
         DonorEditProfile.id: (context) => const DonorEditProfile(),
         OrganizationProfile.id: (context) => const OrganizationProfile(),
         OrganizationEditProfile.id: (context) => const OrganizationEditProfile(),
+        DonorSearchScreen.id: (context) => const DonorSearchScreen(),
         OrganizationBeneficiariesExpandedScreen.id: (context) => const OrganizationBeneficiariesExpandedScreen(),
         OrganizationUrgentCasesExpandedScreen.id: (context) => const OrganizationUrgentCasesExpandedScreen(),
         OrganizationCampaignsExpandedScreen.id: (context) => const OrganizationCampaignsExpandedScreen(),
         OrgSearchPage.id: (context) => const OrgSearchPage(),
+        DonationHistory.id: (context) => const DonationHistory(),
       },
     );
   }

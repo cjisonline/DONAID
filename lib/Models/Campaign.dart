@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Campaign {
+class Campaign  {
   String title;
   String description;
   double goalAmount;

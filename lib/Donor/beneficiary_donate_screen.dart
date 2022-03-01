@@ -77,7 +77,8 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 25.0),
-                child: Form(
+                child: (widget.beneficiary.active == true && (widget.beneficiary.endDate).compareTo(Timestamp.now()) > 0)
+                  ? Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -146,7 +147,8 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                           ),
                         ),
                       ],
-                    )),
+                    ))
+                    : const Text('Beneficiary is no longer available to donate to.'),
               )
             ]),
           )),
@@ -154,12 +156,19 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
   }
 
   void createDonationDocument() async{
-    await _firestore.collection('Donations').add({
+
+    final docRef = await _firestore.collection('Donations').add({});
+
+    await _firestore.collection('Donations').doc(docRef.id).set({
+      'id':docRef.id,
       'donorID': _auth.currentUser?.uid,
       'organizationID': widget.beneficiary.organizationID,
       'charityID': widget.beneficiary.id,
+      'charityName':widget.beneficiary.name,
       'donationAmount': donationAmount,
-      'donatedAt':Timestamp.now()
+      'donatedAt':Timestamp.now(),
+      'charityType':'Beneficiaries',
+      'category':widget.beneficiary.category
     });
 
   }
