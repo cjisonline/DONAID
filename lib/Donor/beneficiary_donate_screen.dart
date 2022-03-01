@@ -77,7 +77,8 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 25.0),
-                child: Form(
+                child: (widget.beneficiary.active == true && (widget.beneficiary.endDate).compareTo(Timestamp.now()) > 0)
+                  ? Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -146,7 +147,8 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                           ),
                         ),
                       ],
-                    )),
+                    ))
+                    : const Text('Beneficiary is no longer available to donate to.'),
               )
             ]),
           )),
