@@ -48,74 +48,86 @@ function logoutAdmin(){
     alert("Logged Out");
 }
 
-async function getApprovalData(){
+async function getSettings(){
     window.onload = async function(){
 
-    const querySnapshot = await getDocs(collection(db, "OrganizationUsers"));
-        querySnapshot.forEach((item) => {
-            if(item.data().approved == false) {
+    const querySnapshot = await getDoc(doc(db, "AdminRestrictions", "CharityDurationLimits"));
+        
                 document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
-                "<tr><td class='emailTD'>" + item.data().email + 
-                "</td><td>" + item.data().phoneNumber + 
-                "</td><td>" + item.data().organizationName + 
-                "</td><td class='documentTD'>" + item.data().id +
-                "</td><td>" + '<a href=' + item.data().verificationDocumentURL + ' download><button id="docsButton" class="submitButton" type="submit">Download</button></a>' + 
-                "</td><td>" + '<button id="approveButton" class="approveButtonClass">Approve</button>' + "</td></tr>";
-            }
+                "<tr><td>" + querySnapshot.data().beneficiaries + 
+                "</td><td>" + querySnapshot.data().campaigns + 
+                "</td><td>" + querySnapshot.data().urgentCases + 
+                "</td><td>" + '<button id="approveButton" class="editButtonClass">Edit</button>' + "</td></tr>";
+            
+        $('button.editButtonClass').click(function() {
+            editSettings();
         });
-
-        $('button.approveButtonClass').click(function() {
-            var $item = $(this).closest("tr")
-            .find('td.documentTD')
-            .text(); 
-
-            $("#resultas").append($item); 
-            var documentID = $item;
-
-            approveTheOrganization(documentID);
-            });
-        }
+    }
 }
 
-function approveTheOrganization(documentID) {
+async function editSettings() {
+    const querySnapshot = await getDoc(doc(db, "AdminRestrictions", "CharityDurationLimits"));
+    const settingsEdit = doc(db, "AdminRestrictions", "CharityDurationLimits");
       
-    swal.fire({
-        title: 'Approve this organization?',
-        icon: 'warning',
+    const { value: formValues } = await Swal.fire({
+        title: 'Organization Limits',
+        html:
+            'Enter Beneficiary Limit:' +
+            '<input id="catName-input" class="swal2-input" value='+querySnapshot.data().beneficiaries+'>' +
+            '<br><br>Enter Campaign Limit:' +
+            '<input id="catName-input2" class="swal2-input" value='+querySnapshot.data().campaigns+'>' +
+            '<br><br>Enter Urgent Case Limit:' +
+            '<input id="catName-input3" class="swal2-input" value='+querySnapshot.data().urgentCases+'>',
+        focusConfirm: false,
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes'
+        confirmButtonText: 'Apply',
+        preConfirm: () => {
+        return [
+            document.getElementById('catName-input').value,
+            document.getElementById('catName-input2').value,
+            document.getElementById('catName-input3').value,
+        ]
+        }
 
     })
+    
     .then((result) => {
         if (result.isConfirmed) { 
-            const approvals = doc(db, "OrganizationUsers", documentID);
-            updateDoc(approvals, {approved: true})
+            var benficiaryLimit = document.getElementById('catName-input').value;
+            var campaignLimit = document.getElementById('catName-input2').value;
+            var urgentCaseLimit = document.getElementById('catName-input3').value;
+
+            updateDoc(settingsEdit, {
+                beneficiaries: benficiaryLimit,
+                campaigns: campaignLimit,
+                urgentCases: urgentCaseLimit,
+            })
     
             .then(() => {
-                swal.fire('Approved!',
-                'Organization is approved.',
+                swal.fire('Applied!',
+                'Settings have changed.',
                 'success').then(function () {
                     location.reload(); 
                 })
                 
                 .catch((error) => {
-                    console.error("Error approving organization: ", error);
+                    console.error("Error changing settings: ", error);
                 })
             })
         }
 
         else {
             swal.fire('Cancelled!',
-            'The organization was not approved.',
+            'No changes have been made.',
             'success');
         }
             
     });
 }
 
-getApprovalData();
+getSettings();
 
 </script>
 
@@ -130,9 +142,10 @@ getApprovalData();
                 <option value="donor_dashboard.html">Donors</option>
                 <option value="org_dashboard.html">Organizations</option>
                 <option value="beneficiaries.html">Beneficiaries</option>
-                <option value="approvals.html" selected>Approvals</option>
+                <option value="approvals.html">Approvals</option>
                 <option value="urgent_cases.html">Urgent Cases</option>
-                <option value="categories.html">Categories</option>
+                <option value="urgent_cases.html">Categories</option>
+                <option value="approvals.html" selected>Settings</option>
             </select>
             <span class="select-highlight"></span>
             <span class="select-bar"></span>
@@ -142,12 +155,10 @@ getApprovalData();
         <div class="table-responsive-vertical shadow-z-1">
         <table class="table" id="adminTable">
             <thead>
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Organization Name</th>
-                <th>ID</th>
-                <th>Documents</th>
-                <th>Approve</th>
+                <th>Beneficiary Limit</th>
+                <th>Campaign Limit</th>
+                <th>Urgent Case Limit</th>
+                <th> </th>
             </thead>
             <tbody>
             </tbody>

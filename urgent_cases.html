@@ -52,32 +52,21 @@ async function getCaseData(){
     window.onload = async function(){
     var orgNameWithID = [];
     const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
-    querySnapshot2.forEach((doc) => {
-        if(doc.data().approved == true) {  
-            orgNameWithID = [{
-                uid: doc.data().uid,
-                organizationName: doc.data().organizationName
-            }]
-        }
-        orgNameWithID.forEach(o => console.log(o));
-    })
 
     const querySnapshot = await getDocs(collection(db, "UrgentCases"));
     querySnapshot.forEach((item) => {
 
-        // orgNameWithID.forEach((doc)=>{
-
         
-        
-        // if(item.data().uid == doc.data().uid){
-        //     const orgName = doc.data().organizationName;
-        // }})
 
         if(item.data().approved == false) {
+            if (querySnapshot2.uid == item.data().organizationID){
+                var orgName = querySnapshot2.organizationName;
+                console.log(orgName);
+            }
             document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
             "<tr><td>" + item.data().title + 
             "</td><td>" + item.data().category + 
-            "</td><td>" + item.data().organizationName + 
+            "</td><td>" + item.data().orgName + 
             "</td><td class='documentTD' style='display:none'>" + item.data().id +
             "</td><td>" + item.data().goalAmount +  
             "</td><td>" + item.data().description + 
@@ -154,7 +143,7 @@ getCaseData();
                 <option value="beneficiaries.html">Beneficiaries</option>
                 <option value="approvals.html">Approvals</option>
                 <option value="urgent_cases.html" selected>Urgent Cases</option>
-                <option value="urgent_cases.html">Categories</option>
+                <option value="categories.html">Categories</option>
             </select>
             <span class="select-highlight"></span>
             <span class="select-bar"></span>
