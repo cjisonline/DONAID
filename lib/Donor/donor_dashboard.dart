@@ -77,6 +77,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
         organizationDescription: element.data()['organizationDescription'],
         country: element.data()['country'],
         gatewayLink: element.data()['gatewayLink'],
+        profilePictureDownloadURL: element.data()['profilePictureDownloadURL']
       );
       organizations.add(organization);
     }
@@ -211,41 +212,41 @@ class _DonorDashboardState extends State<DonorDashboard> {
                   },
                 )),
 
-            // organization list
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Organizations',
-                        style: TextStyle(fontSize: 20),
+          // organization list
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Organizations',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                    TextButton(
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationsExpandedScreen())).then((value) => _refreshPage());
+                      },
+                      child: const Text(
+                        'See more >',
+                        style: TextStyle(fontSize: 14),
                         textAlign: TextAlign.start,
                       ),
-                      TextButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationsExpandedScreen())).then((value) => _refreshPage());
-                        },
-                        child: const Text(
-                          'See more >',
-                          style: TextStyle(fontSize: 14),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                    ]),
-              ),
+                    ),
+                  ]),
             ),
-            SizedBox(
-                height: 200.0,
-                child: ListView.builder(
-                  itemCount: organizations.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, int index) {
-                    return OrganizationCard(organizations[index]);
-                  },
-                )),
+          ),
+          SizedBox(
+              height: 200.0,
+              child: ListView.builder(
+                itemCount: organizations.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, int index) {
+                  return OrganizationCard(organizations[index]);
+                },
+              )),
 
             //beneficiaries list
             Align(

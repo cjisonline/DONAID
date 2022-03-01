@@ -8,6 +8,7 @@ class Organization {
   String? country;
   String? gatewayLink;
   String? id;
+  String? profilePictureDownloadURL;
 
   Organization({
     this.organizationEmail,
@@ -17,7 +18,8 @@ class Organization {
     this.organizationDescription,
     this.country,
     this.gatewayLink,
-    this.id
+    this.id,
+    this.profilePictureDownloadURL
   });
   Organization.c1()
       :organizationEmail="",
@@ -27,6 +29,7 @@ class Organization {
         organizationDescription="",
         country="",
         gatewayLink="",
-        id=""
+        id="",
+        profilePictureDownloadURL=""
   ;
 }

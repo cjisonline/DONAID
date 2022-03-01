@@ -50,7 +50,8 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
       uid: doc['uid'],
       organizationDescription: doc['organizationDescription'],
       country: doc['country'],
-      gatewayLink: doc['gatewayLink']
+      gatewayLink: doc['gatewayLink'],
+      profilePictureDownloadURL: doc['profilePictureDownloadURL']
     );
     setState(() {});
   }
@@ -74,11 +75,42 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
       bottomNavigationBar: OrganizationBottomNavigation()
     );
   }
+
+  Widget _buildProfilePictureDisplay(){
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
+      child: (organization?.profilePictureDownloadURL==null)
+          ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+        SizedBox(
+        width: 250,
+        height: 250,
+        child: Icon(Icons.person),
+        ),])
+          : (organization?.profilePictureDownloadURL!=null)
+          ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 250,
+            height: 250,
+            child: Image.network(
+              organization!.profilePictureDownloadURL.toString(),
+              fit: BoxFit.contain,
+            ),),
+        ],
+      )
+          : Container(),
+    );
+  }
+
   Widget _buildUnitedStatesProfile(){
     return  SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children:  [
+            _buildProfilePictureDisplay(),
             ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
             ProfileRow('NAME', organization?.organizationName??'N/A'),
             ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
@@ -92,6 +124,7 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
         scrollDirection: Axis.vertical,
         child: Column(
           children:  [
+            _buildProfilePictureDisplay(),
             ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
             ProfileRow('NAME', organization?.organizationName??'N/A'),
             ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
