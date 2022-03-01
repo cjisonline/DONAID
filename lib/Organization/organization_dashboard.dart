@@ -4,13 +4,18 @@ import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/campaign_card.dart';
 import 'package:donaid/Organization/OrganizationWidget/urgent_case_card.dart';
+import 'package:donaid/Services/chatServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'OrganizationWidget/beneficiary_card.dart';
-import 'OrganizationWidget/button_nav_bar.dart';
+import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'OrganizationWidget/organization_drawer.dart';
 import 'add_selection_screen.dart';
+import 'organization_activebeneficiaries_expanded_screen.dart';
+import 'organization_activecampaigns_expanded_screen.dart';
+import 'organization_activeurgentcases_expanded_screen.dart';
 
 class OrganizationDashboard extends StatefulWidget {
   static const id = 'organization_dashboard';
@@ -41,24 +46,40 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     _getCampaign();
     _getUrgentCases();
     _getBeneficiaries();
+    Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
+    Get.find<ChatService>().listenFriend(loggedInUser!.uid, 1);
+  }
+
+  _refreshPage() async{
+    beneficiaries.clear();
+    campaigns.clear();
+    urgentCases.clear();
+    _getCampaign();
+    _getBeneficiaries();
+    _getUrgentCases();
   }
 
   _getCampaign() async {
     var ret = await _firestore
         .collection('Campaigns')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .orderBy('endDate', descending: false)
         .get();
     for (var element in ret.docs) {
       Campaign campaign = Campaign(
           title: element.data()['title'],
           description: element.data()['description'],
-          goalAmount: element.data()['goalAmount'],
-          amountRaised: element.data()['amountRaised'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
           category: element.data()['category'],
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+      );
       campaigns.add(campaign);
     }
 
@@ -69,19 +90,26 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     var ret = await _firestore
         .collection('UrgentCases')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .where('approved',isEqualTo: true)
+        .orderBy('endDate', descending: false)
         .get();
 
     for (var element in ret.docs) {
       UrgentCase urgentCase = UrgentCase(
           title: element.data()['title'],
           description: element.data()['description'],
-          goalAmount: element.data()['goalAmount'],
-          amountRaised: element.data()['amountRaised'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
           category: element.data()['category'],
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+          approved: element.data()['approved']
+      );
       urgentCases.add(urgentCase);
     }
 
@@ -92,20 +120,24 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     var ret = await _firestore
         .collection('Beneficiaries')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .orderBy('endDate', descending: false)
         .get();
 
     for (var element in ret.docs) {
       Beneficiary beneficiary = Beneficiary(
           name: element.data()['name'],
           biography: element.data()['biography'],
-          goalAmount: element.data()['goalAmount'],
-          amountRaised: element.data()['amountRaised'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
           category: element.data()['category'],
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID:
-              element.data()['organizationID']); // need to add category
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+      ); // need to add category
       beneficiaries.add(beneficiary);
     }
 
@@ -127,184 +159,141 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 size: 30,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, OrgAddSelection.id);
+                Navigator.push (context, MaterialPageRoute(builder: (context) => OrgAddSelection()),).then((value){
+                  _refreshPage();
+                });
               }),
         ],
       ),
       drawer: const OrganizationDrawer(),
       body: _body(),
-      bottomNavigationBar: ButtomNavigation(),
+      bottomNavigationBar: OrganizationBottomNavigation(),
     );
   }
 
   _body() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Campaign',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      'See more >',
-                      style: TextStyle(fontSize: 14),
-                      textAlign: TextAlign.start,
-                    ),
-                  ]),
-            ),
-          ),
-          SizedBox(
-              height: 325.0,
-              child: ListView.builder(
-                itemCount: campaigns.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return CampaignCard(
-                      campaigns[index].title,
-                      campaigns[index].description,
-                      campaigns[index].goalAmount,
-                      campaigns[index].amountRaised);
-                },
-              )),
-
-          // organization list
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Urgent Cases',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      'See more >',
-                      style: TextStyle(fontSize: 14),
-                      textAlign: TextAlign.start,
-                    ),
-                  ]),
-            ),
-          ),
-          SizedBox(
-              height: 325.0,
-              child: ListView.builder(
-                itemCount: urgentCases.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return UrgentCaseCard(
-                      urgentCases[index].title,
-                      urgentCases[index].description,
-                      urgentCases[index].goalAmount,
-                      urgentCases[index].amountRaised);
-                },
-              )),
-
-          // urgent case list
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Beneficiary',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      'See more >',
-                      style: TextStyle(fontSize: 14),
-                      textAlign: TextAlign.start,
-                    ),
-                  ]),
-            ),
-          ),
-          SizedBox(
-              height: 325.0,
-              child: ListView.builder(
-                itemCount: beneficiaries.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return BeneficiaryCard(
-                      beneficiaries[index].name,
-                      beneficiaries[index].biography,
-                      beneficiaries[index].goalAmount,
-                      beneficiaries[index].amountRaised);
-                },
-              )),
-        ],
-      ),
-    );
-  }
-
-  _bottomNavigationBar() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.home, color: Colors.white, size: 35),
-            ),
-            const Text('Home',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 35,
+    return RefreshIndicator(
+      onRefresh: ()async{
+        _refreshPage();
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Campaign',
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.start,
+                      ),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationCampaignsExpandedScreen()),).then((value){
+                            _refreshPage();
+                          });
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
               ),
             ),
-            const Text('Search',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.notifications,
-                  color: Colors.white, size: 35),
+            SizedBox(
+                height: 325.0,
+                child: ListView.builder(
+                  itemCount: campaigns.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return CampaignCard(campaigns[index]);
+                  },
+                )),
+
+            // organization list
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Urgent Cases',
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.start,
+                      ),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationUrgentCasesExpandedScreen()),).then((value){
+                            _refreshPage();
+                          });
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-            const Text('Notifications',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.message, color: Colors.white, size: 35),
+            SizedBox(
+                height: 325.0,
+                child: ListView.builder(
+                  itemCount: urgentCases.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return UrgentCaseCard(urgentCases[index]);
+                  },
+                )),
+
+            // urgent case list
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Beneficiary',
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.start,
+                      ),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationBeneficiariesExpandedScreen()),).then((value){
+                            _refreshPage();
+                          });
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-            const Text('Messages',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-        ],
+            SizedBox(
+                height: 325.0,
+                child: ListView.builder(
+                  itemCount: beneficiaries.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return BeneficiaryCard(beneficiaries[index]);
+                  },
+                )),
+          ],
+        ),
       ),
     );
   }

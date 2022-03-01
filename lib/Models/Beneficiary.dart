@@ -10,6 +10,7 @@ class Beneficiary {
   Timestamp dateCreated;
   String id;
   String organizationID;
+  bool active;
 
   Beneficiary(
       {
@@ -22,5 +23,6 @@ class Beneficiary {
         required this.dateCreated,
         required this.id,
         required this.organizationID,
+        required this.active,
       });
 }

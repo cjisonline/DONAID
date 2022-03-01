@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/campaign_donate_screen.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/Organization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,6 +30,14 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
     _getCampaigns();
   }
 
+  _refreshPage(){
+    campaigns.clear();
+    _getCampaigns();
+    setState(() {
+
+    });
+  }
+
   _getCampaigns() async {
     var ret = await _firestore.collection('Campaigns')
         .where('category', isEqualTo: widget.categoryName)
@@ -49,7 +56,9 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
           endDate: element.data()['endDate'],
           dateCreated: element.data()['dateCreated'],
           id: element.data()['id'],
-          organizationID: element.data()['organizationID']);
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active']
+      );
       campaigns.add(campaign);
     }
     setState(() {});
@@ -126,7 +135,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                     if(organizations[index].country =='United States'){
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (CampaignDonateScreen(campaigns[index]));
-                      }));
+                      })).then((value) => _refreshPage());
                     }
                     else{
                       _paymentLinkPopUp(organizations[index]);
@@ -173,7 +182,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
       ),
       drawer: const DonorDrawer(),
       body: _categoryCampaignsBody(),
-      bottomNavigationBar: const DonorBottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 }

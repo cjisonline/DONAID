@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/organization_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -63,12 +63,9 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
       "phoneNumber": organization.phoneNumber,
       "organizationDescription": organization.organizationDescription,
       "gatewayLink": organization.gatewayLink
-    }).whenComplete(_goToProfilePage);
+    });
   }
 
-  _goToProfilePage(){
-    Navigator.pushNamed(context, OrganizationProfile.id);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,13 +86,14 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
               onPressed: () {
                 _submitForm();
                 _updateOrganizationInformation();
+                Navigator.pop(context);
               },
               child: const Text('Save',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
       body: _body(),
-      bottomNavigationBar: _bottomNavigationBar(),
+      bottomNavigationBar: OrganizationBottomNavigation(),
     );
   }
 
@@ -286,64 +284,4 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     }
   }
 
-  _bottomNavigationBar() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {
-                Navigator.pushNamed(context, DonorDashboard.id);
-              },
-              icon: const Icon(Icons.home, color: Colors.white, size: 35),
-            ),
-            const Text('Home',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 35,
-              ),
-            ),
-            const Text('Search',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.notifications,
-                  color: Colors.white, size: 35),
-            ),
-            const Text('Notifications',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.message, color: Colors.white, size: 35),
-            ),
-            const Text('Messages',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-        ],
-      ),
-    );
-  }
 }
