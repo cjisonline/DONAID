@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'DonorWidgets/donor_drawer.dart';
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
 import 'organization_tab_view.dart';
@@ -154,7 +155,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
         "id":organizations[i].id,
         "name": organizations[i].organizationName,
         "goal": "",
-        "endDate": ""
+        "endDate": "",
+        "collection" : "OrganizationUsers"
       });
     }
     for (var i = 0; i < urgentCases.length; i++) {
@@ -163,7 +165,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
         "name": urgentCases[i].title,
         "goal": f.format(urgentCases[i].goalAmount).toString(),
         "endDate": urgentCases[i].endDate.toDate().toString().substring(
-            0, urgentCases[i].endDate.toDate().toString().indexOf(' '))
+            0, urgentCases[i].endDate.toDate().toString().indexOf(' ')),
+        "collection": "UrgentCases"
       });
     }
     for (var i = 0; i < campaigns.length; i++) {
@@ -175,7 +178,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
             .endDate
             .toDate()
             .toString()
-            .substring(0, campaigns[i].endDate.toDate().toString().indexOf(' '))
+            .substring(0, campaigns[i].endDate.toDate().toString().indexOf(' ')),
+        "collection": "Campaigns"
       });
     }
     for (var i = 0; i < beneficiaries.length; i++) {
@@ -184,10 +188,10 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
         "name": beneficiaries[i].name,
         "goal": f.format(beneficiaries[i].goalAmount).toString(),
         "endDate": beneficiaries[i].endDate.toDate().toString().substring(
-            0, beneficiaries[i].endDate.toDate().toString().indexOf(' '))
+            0, beneficiaries[i].endDate.toDate().toString().indexOf(' ')),
+        "collection": "Beneficiaries"
       });
     }
-    print("\n\n all users Length: " + _allUsers.length.toString());
   }
 
   void _searchResults(String enteredKeyword) {
@@ -287,6 +291,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
         appBar: AppBar(
           title: const Text('DONAID'),
         ),
+        drawer: const DonorDrawer(),
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -307,38 +312,68 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                 child: _foundUsers.isNotEmpty
                     ? ListView.builder(
                   itemCount: _foundUsers.length,
-                  itemBuilder: (context, index) => Card(
-                      key: ValueKey(_foundUsers[index]["name"]),
+                  itemBuilder: (context, index) {
+                    if (_foundUsers[index]["collection"] == "OrganizationUsers") {
+                      return Card(
+                          key: ValueKey(_foundUsers[index]["name"]),
+                          child: Column(children: [
+                            ListTile(
+                              title: Text(
+                                _foundUsers[index]["name"].toString(),
+                              ),
+                              onTap: () {
+                                if (organizationsID.contains(
+                                    _foundUsers[index]['id'])) {
+                                  _goToChosenOrganization(
+                                      _foundUsers[index]['id']);
+                                }
+                                setState(() {
+                                  //Add the extended view page here
+                                });
+                              },
+                            ),
+                            const Divider()])
+                      );
+                    }
+                    else {
+                      return Card(
+                          key: ValueKey(_foundUsers[index]["name"]),
+                          child: Column(children: [
+                            ListTile(
+                              title: Text(
+                                _foundUsers[index]["name"].toString(),
+                              ),
+                              subtitle:
+                              Text("\u0024 " + _foundUsers[index]['goal']),
+                              trailing:
+                              Text(_foundUsers[index]["endDate"].toString()),
+                              onTap: () {
+                                if (campaignsID.contains(
+                                    _foundUsers[index]['id'])) {
+                                  _goToChosenCampaign(_foundUsers[index]['id']);
+                                }
+                                else if (beneficiariesID.contains(
+                                    _foundUsers[index]['id'])) {
+                                  _goToChosenBeneficiary(
+                                      _foundUsers[index]['id']);
+                                }
+                                else if (urgentCasesID.contains(
+                                    _foundUsers[index]['id'])) {
+                                  _goToChosenUrgentCase(
+                                      _foundUsers[index]['id']);
+                                }
+                                setState(() {
+                                  //Add the extended view page here
+                                });
+                              },
+                            ),
+                            const Divider()])
+                      );
+                    }
+                  }
 
-                      child: Column(children:[
-                        ListTile(
-                          title: Text(
-                            _foundUsers[index]["name"].toString(),
-                          ),
-                          subtitle:
-                          Text("\u0024 " + _foundUsers[index]['goal']),
-                          trailing:
-                          Text(_foundUsers[index]["endDate"].toString()),
-                          onTap: () {
-                            if(organizationsID.contains(_foundUsers[index]['id'])){
-                              _goToChosenOrganization(_foundUsers[index]['id']);
-                            }
-                            else if(campaignsID.contains(_foundUsers[index]['id'])){
-                              _goToChosenCampaign(_foundUsers[index]['id']);
-                            }
-                            else if(beneficiariesID.contains(_foundUsers[index]['id'])){
-                              _goToChosenBeneficiary(_foundUsers[index]['id']);
-                            }
-                            else if(urgentCasesID.contains(_foundUsers[index]['id'])){
-                              _goToChosenUrgentCase(_foundUsers[index]['id']);
-                            }
-                            setState(() {
-                              //Add the extended view page here
-                            });
-                          },
-                        ),
-                        const Divider()])
-                  ),
+
+
                 )
                     : const Text(
                   'No results found',
