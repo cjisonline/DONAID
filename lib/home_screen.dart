@@ -89,32 +89,39 @@ class _HomeScreenState extends State<HomeScreen> {
                             UserCredential newUser = await FirebaseAuth
                                 .instance
                                 .signInAnonymously();
-                            if (newUser.user != null) {
-                              await FirebaseFirestore.instance
-                                  .collection('DonorUsers')
-                                  .add({
-                                'uid': newUser.user!.uid,
-                                'firstName': "Guest",
-                                'lastName': "",
-                                'email': "",
-                                'phoneNumber': "",
-                                'password': ""
-                              });
-                              await FirebaseFirestore.instance
-                                  .collection('Users')
-                                  .add({
-                                'uid': newUser.user!.uid,
-                                'email': "",
-                                'userType': 1
-                              });
-                              Navigator.of(context).popUntil(
-                                  ModalRoute.withName(HomeScreen
-                                      .id)); //remove all screens on the stack and return to home screen
-                              Navigator.pushNamed(
-                                  context,
-                                  DonorDashboard
-                                      .id); //redirect to login screen
-                            }
+                            Navigator.of(context).popUntil(
+                                ModalRoute.withName(HomeScreen
+                                    .id)); //remove all screens on the stack and return to home screen
+                            Navigator.pushNamed(
+                                context,
+                                DonorDashboard
+                                    .id);
+                            // if (newUser.user != null) {
+                            //   await FirebaseFirestore.instance
+                            //       .collection('DonorUsers')
+                            //       .add({
+                            //     'uid': newUser.user!.uid,
+                            //     'firstName': "Guest",
+                            //     'lastName': "",
+                            //     'email': "",
+                            //     'phoneNumber': "",
+                            //     'password': ""
+                            //   });
+                            //   await FirebaseFirestore.instance
+                            //       .collection('Users')
+                            //       .add({
+                            //     'uid': newUser.user!.uid,
+                            //     'email': "",
+                            //     'userType': 1
+                            //   });
+                            //   Navigator.of(context).popUntil(
+                            //       ModalRoute.withName(HomeScreen
+                            //           .id)); //remove all screens on the stack and return to home screen
+                            //   Navigator.pushNamed(
+                            //       context,
+                            //       DonorDashboard
+                            //           .id); //redirect to login screen
+                            // }
                           } catch (signUpError) {
                             print(signUpError);
                           }
