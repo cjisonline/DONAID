@@ -402,14 +402,10 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         appBar: AppBar(
           title: const Text('DONAID'),
           actions: <Widget>[
-            IconButton(
-                icon: const Icon(
-                  Icons.delete,
-                  size: 30,
-                ),
-                onPressed: () {
-                  _reset;
-                  })
+            FlatButton(
+              onPressed: _reset,
+              child: Text('RESET'),
+            ),
             ],
         ),
           //automaticallyImplyLeading: false,
