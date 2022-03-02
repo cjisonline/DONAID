@@ -90,6 +90,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
 
       campaignsID.add(element.data()['id']);
       monayRaisedChoices.add(element.data()['amountRaised'].toString());
+
     }
     _getUrgentCases();
     setState(() {});
@@ -230,18 +231,34 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
       switch(choiceNum){
         case 1:
           {
-            results = _allUsers
-                .where((user) =>
-                user["category"].contains(enteredKeyword))
-                .toList();
+            if(_foundUsers.isNotEmpty){
+              results = _foundUsers
+                  .where((user) =>
+                  user["category"].contains(enteredKeyword))
+                  .toList();
+            }
+            else if(_foundUsers.isEmpty){
+              results = _allUsers
+                  .where((user) =>
+                  user["category"].contains(enteredKeyword))
+                  .toList();
+            }
           }
           break;
         case 2:
           {
-            results = _allUsers
-                .where((user) =>
-                user["charityType"].contains(enteredKeyword))
-                .toList();
+            if(_foundUsers.isNotEmpty){
+              results = _foundUsers
+                  .where((user) =>
+                  user["charityType"].contains(enteredKeyword))
+                  .toList();
+            }
+            else if(_foundUsers.isEmpty){
+              results = _allUsers
+                  .where((user) =>
+                  user["charityType"].contains(enteredKeyword))
+                  .toList();
+            }
           }
           break;
         case 3:
@@ -368,131 +385,146 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               ),
               Row(
                 children: <Widget>[
-                  Container(child: Text("Item 1")
+                  Container(
+                      width: 180.0,
+                      height: 50,
+                      child: DropdownButtonFormField <String>(
+                        decoration: InputDecoration(
+                            label: Center(
+                              child: RichText(
+                                  text: TextSpan(
+                                    text: 'Category',
+                                    style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 20.0),
+                                  )),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(12.0)),
+                            )),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: campaignCategory == null? []: campaignCategory.map((items) {
+                          return DropdownMenuItem<String>(
+                            child: Text(items),
+                            value: items,
+                          );
+                        }).toList(),
+                        onChanged: (val) => setState(() {
+                          categoryFilterController.text = val.toString();
+                          _filterResults(categoryFilterController.text,1);
+                        }),
+                      )
                   ),
-                  Container(child: Text("Item 2")),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Container(
+                      width: 180.0,
+                      height: 50,
+                      child:DropdownButtonFormField <String>(
+                        decoration: InputDecoration(
+                            label: Center(
+                              child: RichText(
+                                  text: TextSpan(
+                                    text: 'Charity Type',
+                                    style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 20.0),
+                                  )),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(12.0)),
+                            )),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: campaignType == null? []: campaignType.map((items) {
+                          return DropdownMenuItem<String>(
+                            child: Text(items),
+                            value: items,
+                          );
+                        }).toList(),
+                        onChanged: (val) => setState(() {
+                          charityTypeFilterController.text = val.toString();
+                          _filterResults(charityTypeFilterController.text,2);
+                        }),
+                      )
+                  ),
                 ],
               ),
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: DropdownButtonFormField <String>(
-                    decoration: InputDecoration(
-                        label: Center(
-                          child: RichText(
-                              text: TextSpan(
-                                  text: 'Category',
-                                  style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontSize: 20.0),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                      width: 180.0,
+                      height: 50,
+                      child: DropdownButtonFormField <String>(
+                        decoration: InputDecoration(
+                            label: Center(
+                              child: RichText(
+                                  text: TextSpan(
+                                    text: '\u0024 Raised',
+                                    style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 20.0),
                                   )),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(12.0)),
-                        )),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: campaignCategory == null? []: campaignCategory.map((items) {
-                      return DropdownMenuItem<String>(
-                        child: Text(items),
-                        value: items,
-                      );
-                    }).toList(),
-                    onChanged: (val) => setState(() {
-                      categoryFilterController.text = val.toString();
-                      _filterResults(categoryFilterController.text,1);
-                    }),
-                  )
+                            ),
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(12.0)),
+                            )),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: monayRaisedChoices == null? []: monayRaisedChoices.map((items) {
+                          return DropdownMenuItem<String>(
+                            child: Text(items),
+                            value: items,
+                          );
+                        }).toList(),
+                        onChanged: (val) => setState(() {
+                          moneyRaisedFilterController.text = val.toString();
+                          _filterResults(moneyRaisedFilterController.text,3);
+                        }),
+                      )
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Container(
+                      width: 180.0,
+                      height: 50,
+                      child:DropdownButtonFormField <String>(
+                        decoration: InputDecoration(
+                            label: Center(
+                              child: RichText(
+                                  text: TextSpan(
+                                    text: 'End Date',
+                                    style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 20.0),
+                                  )),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(12.0)),
+                            )),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: campaignCategory == null? []: campaignCategory.map((items) {
+                          return DropdownMenuItem<String>(
+                            child: Text(items),
+                            value: items,
+                          );
+                        }).toList(),
+                        onChanged: (val) => setState(() {
+                          categoryFilterController.text = val.toString();
+                          _filterResults(categoryFilterController.text,1);
+                        }),
+                      )
+                  ),
+                ],
               ),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DropdownButtonFormField <String>(
-                    decoration: InputDecoration(
-                        label: Center(
-                          child: RichText(
-                              text: TextSpan(
-                                text: 'Charity Type',
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 20.0),
-                              )),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(12.0)),
-                        )),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: campaignType == null? []: campaignType.map((items) {
-                      return DropdownMenuItem<String>(
-                        child: Text(items),
-                        value: items,
-                      );
-                    }).toList(),
-                    onChanged: (val) => setState(() {
-                      charityTypeFilterController.text = val.toString();
-                      _filterResults(charityTypeFilterController.text,2);
-                    }),
-                  )
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DropdownButtonFormField <String>(
-                    decoration: InputDecoration(
-                        label: Center(
-                          child: RichText(
-                              text: TextSpan(
-                                text: 'Money Raised',
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 20.0),
-                              )),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(12.0)),
-                        )),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: monayRaisedChoices == null? []: monayRaisedChoices.map((items) {
-                      return DropdownMenuItem<String>(
-                        child: Text(items),
-                        value: items,
-                      );
-                    }).toList(),
-                    onChanged: (val) => setState(() {
-                      moneyRaisedFilterController.text = val.toString();
-                      _filterResults(moneyRaisedFilterController.text,3);
-                    }),
-                  )
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DropdownButtonFormField <String>(
-                    decoration: InputDecoration(
-                        label: Center(
-                          child: RichText(
-                              text: TextSpan(
-                                text: 'Category',
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 20.0),
-                              )),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(12.0)),
-                        )),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: campaignCategory == null? []: campaignCategory.map((items) {
-                      return DropdownMenuItem<String>(
-                        child: Text(items),
-                        value: items,
-                      );
-                    }).toList(),
-                    onChanged: (val) => setState(() {
-                      categoryFilterController.text = val.toString();
-                      _filterResults(categoryFilterController.text,1);
-                    }),
-                  )
-              ),
+
               Expanded(
                 child: _foundUsers.isNotEmpty
                     ? ListView.builder(
