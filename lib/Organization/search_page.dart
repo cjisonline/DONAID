@@ -11,6 +11,11 @@ import 'package:intl/intl.dart';
 
 import 'organization_campaign_full.dart';
 
+class DummyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => OrgSearchPage();
+}
+
 //Start here
 class OrgSearchPage extends StatefulWidget {
   static const id = 'search_page';
@@ -42,6 +47,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   var campaignCategory = [];
   var campaignType = ["Urgent Case","Campaign","Beneficiary"];
   var monayRaisedChoices = [];
+  var endDateChoices = [];
 
 
   void _getCurrentUser() {
@@ -90,6 +96,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
 
       campaignsID.add(element.data()['id']);
       monayRaisedChoices.add(element.data()['amountRaised'].toString());
+      endDateChoices.add(element.data()['endDate'].toDate().toString().substring(
+          0, element.data()['endDate'].toDate().toString().indexOf(' ')));
 
     }
     _getUrgentCases();
@@ -121,6 +129,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
 
       urgentCasesID.add(element.data()['id']);
       monayRaisedChoices.add(element.data()['amountRaised'].toString());
+      endDateChoices.add(element.data()['endDate'].toDate().toString().substring(
+          0, element.data()['endDate'].toDate().toString().indexOf(' ')));
     }
     _getBeneficiaries();
 
@@ -150,6 +160,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
 
       beneficiariesID.add(element.data()['id']);
       monayRaisedChoices.add(element.data()['amountRaised'].toString());
+      endDateChoices.add(element.data()['endDate'].toDate().toString().substring(
+          0, element.data()['endDate'].toDate().toString().indexOf(' ')));
+
     }
     setState(() {});
     _getAllData();
@@ -163,7 +176,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "name": urgentCases[i].title,
         "category":urgentCases[i].category,
         "goal": f.format(urgentCases[i].goalAmount).toString(),
-        "amountRaised": f.format(urgentCases[i].amountRaised).toString(),
+        "amountRaised": urgentCases[i].amountRaised,
         "endDate": urgentCases[i].endDate.toDate().toString().substring(
             0, urgentCases[i].endDate.toDate().toString().indexOf(' '))
       });
@@ -174,7 +187,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "id": campaigns[i].id,
         "name": campaigns[i].title,
         "category":campaigns[i].category,
-        "amountRaised": f.format(campaigns[i].amountRaised).toString(),
+        "amountRaised": campaigns[i].amountRaised,
         "goal": f.format(campaigns[i].goalAmount).toString(),
         "endDate": campaigns[i]
             .endDate
@@ -189,7 +202,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "id": beneficiaries[i].id,
         "name": beneficiaries[i].name,
         "category":beneficiaries[i].category,
-        "amountRaised": f.format(beneficiaries[i].amountRaised).toString(),
+        "amountRaised": beneficiaries[i].amountRaised,
         "goal": f.format(beneficiaries[i].goalAmount).toString(),
         "endDate": beneficiaries[i].endDate.toDate().toString().substring(
             0, beneficiaries[i].endDate.toDate().toString().indexOf(' '))
@@ -263,18 +276,35 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           break;
         case 3:
           {
-            results = _allUsers
-                .where((user) =>
-                user["amountRaised"].contains(enteredKeyword))
-                .toList();
+            if (_foundUsers.isNotEmpty) {
+              results = _foundUsers
+                  .where((user) =>
+              (user["amountRaised"] - double.parse(enteredKeyword)) == 0)
+                  .toList();
+            }
+            else if (_foundUsers.isEmpty) {
+              results = _allUsers
+                  .where((user) =>
+              (user["amountRaised"] - double.parse(enteredKeyword)) == 0)
+                  .toList();
+            }
           }
           break;
         case 4:
           {
-            results = _allUsers
-                .where((user) =>
-                user["endDate"].contains(enteredKeyword))
-                .toList();
+            if (_foundUsers.isNotEmpty) {
+              results = _foundUsers
+                  .where((user) =>
+                  user["endDate"].contains(enteredKeyword))
+                  .toList();
+            }
+            else if (_foundUsers.isEmpty) {
+              results = _allUsers
+                  .where((user) =>
+                  user["endDate"].contains(enteredKeyword))
+                  .toList();
+            }
+
           }
           break;
 
@@ -355,19 +385,40 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
     }));
   }
 
+  void _reset() {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration.zero,
+        pageBuilder: (_, __, ___) => DummyWidget(),
+      ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text('DONAID'),
+          actions: <Widget>[
+            IconButton(
+                icon: const Icon(
+                  Icons.delete,
+                  size: 30,
+                ),
+                onPressed: () {
+                  _reset;
+                  })
+            ],
         ),
+          //automaticallyImplyLeading: false,
+
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              const SizedBox(
-                height: 20,
-              ),
+
               TextField(
                 onChanged: (value) => _searchResults(value),
                 controller: searchFieldController,
@@ -387,7 +438,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                 children: <Widget>[
                   Container(
                       width: 180.0,
-                      height: 50,
+                      height: 60,
                       child: DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -421,7 +472,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                   ),
                   Container(
                       width: 180.0,
-                      height: 50,
+                      height: 60,
                       child:DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -459,7 +510,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                 children: <Widget>[
                   Container(
                       width: 180.0,
-                      height: 50,
+                      height: 60,
                       child: DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -493,7 +544,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                   ),
                   Container(
                       width: 180.0,
-                      height: 50,
+                      height: 60,
                       child:DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -510,15 +561,15 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                               BorderRadius.all(Radius.circular(12.0)),
                             )),
                         icon: const Icon(Icons.keyboard_arrow_down),
-                        items: campaignCategory == null? []: campaignCategory.map((items) {
+                        items: endDateChoices == null? []: endDateChoices.map((items) {
                           return DropdownMenuItem<String>(
                             child: Text(items),
                             value: items,
                           );
                         }).toList(),
                         onChanged: (val) => setState(() {
-                          categoryFilterController.text = val.toString();
-                          _filterResults(categoryFilterController.text,1);
+                          endDateFilterController.text = val.toString();
+                          _filterResults(endDateFilterController.text,4);
                         }),
                       )
                   ),
