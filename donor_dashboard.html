@@ -6,6 +6,14 @@
 <!-- CSS Loads -->
 <link rel="stylesheet" href="login.css">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.material.min.css">
+
+<!-- JQuery Loads -->
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.material.min.js"></script>
+
 <!-- JS Loads -->
 <script src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
 <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css" />
@@ -41,51 +49,31 @@ function logoutAdmin(){
     alert("Logged Out");
 }
 
-var tbody = document.getElementById('donorsTable');
-
-function createTable(email, phoneNumber, lastName, firstName) {
-    let trow = document.createElement("tr");
-    let td1 = document.createElement('td');
-    let td2 = document.createElement('td');
-    let td3 = document.createElement('td');
-    let td4 = document.createElement('td');
-    let td5 = document.createElement('td');
-
-    td1.innerHTML = email;
-    td2.innerHTML = phoneNumber;
-    td3.innerHTML = lastName;
-    td4.innerHTML = firstName;
-    td5.innerHTML = '<button class="submitButton" type="submit">Edit</button>';
-
-    trow.appendChild(td1);
-    trow.appendChild(td2);
-    trow.appendChild(td3);
-    trow.appendChild(td4);
-    trow.appendChild(td5);
-
-    tbody.appendChild(trow);
-
-}
-
-function populateTable(DonorUsers) {
-    tbody.innerHTML="";
-    DonorUsers.forEach(element => {
-        createTable(element.email, element.phoneNumber, element.lastName, element.firstName);
-    })
-}
-
 async function getDonorData(){
     window.onload = async function(){
-        // const dbRef = ref(db);
-        //const querySnapshot = getDocs(collection(db, "DonorUsers"));
-        const querySnapshot = await getDocs(collection(db, "DonorUsers"));
-        var donors = [];
 
-        querySnapshot.forEach((doc) => {
-        donors.push(doc.data())
-    })
-    console.log(donors)
-    populateTable(donors);
+        const querySnapshot = await getDocs(collection(db, "DonorUsers"));
+            querySnapshot.forEach((item) => {
+                // if(item.data().approved == true) {
+                    document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
+                    "<tr><td class='emailTD'>" + item.data().email + 
+                    "</td><td>" + item.data().phoneNumber + 
+                    "</td><td>" + item.data().lastName + 
+                    "</td><td>" + item.data().firstName + "</td></tr>";
+                // }
+            })
+
+        $('#adminTable').DataTable({
+            autoWidth: false,
+            columnDefs: [
+                {
+                    targets: ['_all'],
+                    className: 'mdc-data-table__cell',
+                }
+            ],
+            "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
+            "info": false,
+        })
     }
 }
 getDonorData();
@@ -119,9 +107,8 @@ getDonorData();
                 <th>Phone Number</th>
                 <th>Last Name</th>
                 <th>First Name</th>
-                <th>Edit</th>
             </thead>
-            <tbody id="donorsTable">
+            <tbody>
             </tbody>
         </table>
     </div>
