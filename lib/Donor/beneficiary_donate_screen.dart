@@ -8,6 +8,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class BeneficiaryDonateScreen extends StatefulWidget {
   Beneficiary beneficiary;
@@ -26,6 +27,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
   Map<String, dynamic>? paymentIntentData;
   String donationAmount = "";
   bool showLoadingSpinner = false;
+  var f = NumberFormat("###,###.0#", "en_US");
 
   @override
   void initState(){
@@ -47,20 +49,20 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(widget.beneficiary.name),
-              Text(widget.beneficiary.biography),
+              Text(widget.beneficiary.name, style: TextStyle(fontSize: 35),),
+              Text(widget.beneficiary.biography, style: TextStyle(fontSize: 20),),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '\$${(widget.beneficiary.amountRaised.toStringAsFixed(2))}',
-                        style: const TextStyle(color: Colors.black, fontSize: 15),
+                        '\$'+f.format(widget.beneficiary.amountRaised),
+                        style: const TextStyle(color: Colors.black, fontSize: 18),
                       ),
                       Text(
-                        '\$${widget.beneficiary.goalAmount.toStringAsFixed(2)}',
-                        style: const TextStyle(color: Colors.black, fontSize: 15),
+                        '\$'+f.format(widget.beneficiary.goalAmount),
+                        style: const TextStyle(color: Colors.black, fontSize: 18),
                       ),
                     ]),
               ),
@@ -69,10 +71,10 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                 child: LinearProgressIndicator(
                   backgroundColor: Colors.grey,
                   valueColor:
-                  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                  const AlwaysStoppedAnimation<Color>(Colors.green),
                   value:
                   (widget.beneficiary.amountRaised / widget.beneficiary.goalAmount),
-                  minHeight: 10,
+                  minHeight: 20,
                 ),
               ),
               Padding(
@@ -128,6 +130,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                               child: const Text(
                                 'Donate',
                                 style: TextStyle(
+                                  fontSize: 25,
                                   color: Colors.white,
                                 ),
                               ),
