@@ -231,107 +231,178 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
 
   void _filterResults(List<Choice> choices) {
     List<Map<String, dynamic>> results = [];
+    bool exit = false;
     for (int i = 0; i < choices.length; i++) {
       print("In the for loop " + choices[i].choice + " "+ choices[i].caseNumber.toString());
-      switch (choices[i].caseNumber) {
-        case 0:
-          {
-            print("In case 0");
-            if (_foundUsers.isNotEmpty) {
-              results = _foundUsers
-                  .where((user) =>
-                  user["name"].toLowerCase().contains(
-                      choices[i].choice.toLowerCase()))
-                  .toList();
+        switch (choices[i].caseNumber) {
+          case 0:
+            {
+              print("In case 0");
+              if (_foundUsers.isNotEmpty && exit != true) {
+                if(_foundUsers
+                    .where((user) =>
+                    user["name"].toLowerCase().contains(
+                        choices[i].choice.toLowerCase()))
+                    .toList() == false){
+                  _foundUsers.clear();
+                  exit = true;
+                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
+
+                }
+                else{
+                  results = _foundUsers
+                      .where((user) =>
+                      user["name"].toLowerCase().contains(
+                          choices[i].choice.toLowerCase()))
+                      .toList();
+                  _foundUsers = results;
+                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
+                }
+              }
+              else if (_foundUsers.isEmpty && exit != true) {
+                results = _allUsers
+                    .where((user) =>
+                    user["name"].toLowerCase().contains(
+                        choices[i].choice.toLowerCase()))
+                    .toList();
+                _foundUsers = results;
+                print("results" + _foundUsers.length.toString() + " " + exit.toString());
+              }
             }
-            else if (_foundUsers.isEmpty) {
-              results = _allUsers
-                  .where((user) =>
-                  user["name"].toLowerCase().contains(
-                      choices[i].choice.toLowerCase()))
-                  .toList();
+            break;
+          case 1:
+            {
+              print("In case 1");
+              if (_foundUsers.isNotEmpty && exit != true) {
+                print("Found is not empty case1");
+                if (_foundUsers
+                    .where((user) =>
+                    user["category"].contains(choices[i].choice))
+                    .toList() == false) {
+                  _foundUsers.clear();
+                  exit = true;
+                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
+
+                }
+                else {
+                  results = _foundUsers
+                      .where((user) =>
+                      user["category"].contains(choices[i].choice))
+                      .toList();
+                  _foundUsers = results;
+                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
+                }
+              }
+              else if (_foundUsers.isEmpty && exit != true) {
+                results = _allUsers
+                    .where((user) =>
+                    user["category"].contains(choices[i].choice))
+                    .toList();
+                _foundUsers = results;
+                print("results" + _foundUsers.length.toString() + " " + exit.toString() );
+              }
             }
-          }
-          _foundUsers = results;
-          break;
-        case 1:
-          {
-            print("In case 1");
-            if (_foundUsers.isNotEmpty) {
-              results = _foundUsers
-                  .where((user) =>
-                  user["category"].contains(choices[i].choice))
-                  .toList();
+            break;
+          case 2:
+            {
+              print("In case 2");
+              if (_foundUsers.isNotEmpty && exit != true) {
+                if (_foundUsers
+                    .where((user) =>
+                    user["charityType"].contains(choices[i].choice))
+                    .toList() == false) {
+                  _foundUsers.clear();
+                  exit = true;
+                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
+                }
+                else {
+                  results = _foundUsers
+                      .where((user) =>
+                      user["charityType"].contains(choices[i].choice))
+                      .toList();
+                  _foundUsers = results;
+                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
+                }
+              }
+              else if (_foundUsers.isEmpty && exit != true) {
+                results = _allUsers
+                    .where((user) =>
+                    user["charityType"].contains(choices[i].choice))
+                    .toList();
+                _foundUsers = results;
+                print("results" + _foundUsers.length.toString() + " " + exit.toString());
+              }
             }
-            else if (_foundUsers.isEmpty) {
-              results = _allUsers
-                  .where((user) =>
-                  user["category"].contains(choices[i].choice))
-                  .toList();
+            break;
+          case 3:
+            {
+              print("In case 3");
+              if (_foundUsers.isNotEmpty && exit != true) {
+                if (_foundUsers
+                    .where((user) =>
+                (user["amountRaised"] - double.parse(choices[i].choice)) == 0)
+                    .toList()== false) {
+                  _foundUsers.clear();
+                  exit = true;
+                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
+                }
+                else {
+                  results = _foundUsers
+                      .where((user) =>
+                  (user["amountRaised"] - double.parse(choices[i].choice)) == 0)
+                      .toList();
+                  _foundUsers = results;
+                  print("results" + _foundUsers.length.toString() + exit.toString() );
+                }
+              }
+              else if (_foundUsers.isEmpty && exit != true) {
+                results = _allUsers
+                    .where((user) =>
+                (user["amountRaised"] - double.parse(choices[i].choice)) == 0)
+                    .toList();
+                _foundUsers = results;
+                print("results" + _foundUsers.length.toString() + " " + exit.toString());
+              }
             }
-          }
-          _foundUsers = results;
-          break;
-        case 2:
-          {
-            print("In case 2");
-            if (_foundUsers.isNotEmpty) {
-              results = _foundUsers
-                  .where((user) =>
-                  user["charityType"].contains(choices[i].choice))
-                  .toList();
+            break;
+          case 4:
+            {
+              print("In case 4");
+              if (_foundUsers.isNotEmpty) {
+                if (_foundUsers
+                    .where((user) =>
+                    user["endDate"].contains(choices[i].choice))
+                    .toList() == false) {
+                  _foundUsers.clear();
+                  exit = true;
+                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
+                }
+                else {
+                  results = _foundUsers
+                      .where((user) =>
+                      user["endDate"].contains(choices[i].choice))
+                      .toList();
+                  _foundUsers = results;
+                  print("results" + _foundUsers.length.toString()  + exit.toString());
+                }
+              }
+              else if (_foundUsers.isEmpty && exit != true) {
+                results = _allUsers
+                    .where((user) =>
+                    user["endDate"].contains(choices[i].choice))
+                    .toList();
+                _foundUsers = results;
+                print("results" + _foundUsers.length.toString()  + exit.toString());
+              }
             }
-            else if (_foundUsers.isEmpty) {
-              results = _allUsers
-                  .where((user) =>
-                  user["charityType"].contains(choices[i].choice))
-                  .toList();
-            }
-          }
-          _foundUsers = results;
-          break;
-        case 3:
-          {
-            print("In case 3");
-            if (_foundUsers.isNotEmpty) {
-              results = _foundUsers
-                  .where((user) =>
-              (user["amountRaised"] - double.parse(choices[i].choice)) == 0)
-                  .toList();
-            }
-            else if (_foundUsers.isEmpty) {
-              results = _allUsers
-                  .where((user) =>
-              (user["amountRaised"] - double.parse(choices[i].choice)) == 0)
-                  .toList();
-            }
-          }
-          _foundUsers = results;
-          break;
-        case 4:
-          {
-            print("In case 4");
-            if (_foundUsers.isNotEmpty) {
-              results = _foundUsers
-                  .where((user) =>
-                  user["endDate"].contains(choices[i].choice))
-                  .toList();
-            }
-            else if (_foundUsers.isEmpty) {
-              results = _allUsers
-                  .where((user) =>
-                  user["endDate"].contains(choices[i].choice))
-                  .toList();
-            }
-          }
-          _foundUsers = results;
-          break;
-      }
+            break;
+        }
       print("Outside the switch case");
     }
     print("Outside the for loop");
     setState(() {
       _foundUsers = results;
+      print("results" + _foundUsers.length.toString() + exit.toString());
     });
     // Refresh the UI
   }
@@ -596,10 +667,15 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               RaisedButton(
                 child: Text('SUBMIT'),
                 onPressed: () {
-                  searchFieldController.text;
-                  Choice choice = Choice(searchFieldController.text,0);
-                  choices.add(choice);
-                  _filterResults(choices);
+                  if(searchFieldController.text.isNotEmpty){
+                    searchFieldController.text;
+                    Choice choice = Choice(searchFieldController.text,0);
+                    choices.add(choice);
+                    _filterResults(choices);
+                  }
+                  else{
+                    _filterResults(choices);
+                  }
                 },
               ),
 
