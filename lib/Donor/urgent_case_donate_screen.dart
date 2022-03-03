@@ -8,6 +8,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class UrgentCaseDonateScreen extends StatefulWidget {
   UrgentCase urgentCase;
@@ -26,6 +27,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   Map<String, dynamic>? paymentIntentData;
   String donationAmount = "";
   bool showLoadingSpinner = false;
+  var f = NumberFormat("###,###.0#", "en_US");
 
   @override
   void initState(){
@@ -47,32 +49,41 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(widget.urgentCase.title),
-              Text(widget.urgentCase.description),
+              SizedBox(
+                  height: 100,
+                  child: Image.asset('assets/DONAID_LOGO.png')
+              ),
+              Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
+              Text(widget.urgentCase.description, style: TextStyle(fontSize: 18),),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '\$${(widget.urgentCase.amountRaised.toStringAsFixed(2))}',
-                        style: const TextStyle(color: Colors.black, fontSize: 15),
+                        '\$'+f.format(widget.urgentCase.amountRaised),
+                        style: const TextStyle(color: Colors.black, fontSize: 18),
                       ),
                       Text(
-                        '\$${widget.urgentCase.goalAmount.toStringAsFixed(2)}',
-                        style: const TextStyle(color: Colors.black, fontSize: 15),
+                        '\$'+f.format(widget.urgentCase.goalAmount),
+                        style: const TextStyle(color: Colors.black, fontSize: 18),
                       ),
                     ]),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor:
-                  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                  value:
-                  (widget.urgentCase.amountRaised / widget.urgentCase.goalAmount),
-                  minHeight: 10,
+                child: Container(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: LinearProgressIndicator(
+                      backgroundColor: Colors.grey,
+                      valueColor:
+                      const AlwaysStoppedAnimation<Color>(Colors.green),
+                      value:
+                      (widget.urgentCase.amountRaised / widget.urgentCase.goalAmount),
+                      minHeight: 25,
+                    ),
+                  ),
                 ),
               ),
               Padding(
@@ -128,6 +139,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                               child: const Text(
                                 'Donate',
                                 style: TextStyle(
+                                  fontSize: 25,
                                   color: Colors.white,
                                 ),
                               ),

@@ -55,8 +55,8 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                 child: Image.asset('assets/DONAID_LOGO.png')
               ),
               SizedBox(height:10),
-              Text(widget.beneficiary.name, style: TextStyle(fontSize: 35),),
-              Text(widget.beneficiary.biography, style: TextStyle(fontSize: 20),),
+              Text(widget.beneficiary.name, style: TextStyle(fontSize: 25),),
+              Text(widget.beneficiary.biography, style: TextStyle(fontSize: 18),),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
