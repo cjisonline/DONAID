@@ -443,14 +443,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                 controller: searchFieldController,
                 decoration: InputDecoration(
                     labelText: 'Search',
-                    suffix: IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                       searchFieldController.text;
-                       Choice choice = Choice(searchFieldController.text,0);
-                       choices.add(choice);
-                      },
-                    )),
+                    ),
               ),
               const SizedBox(
                 height: 20,
@@ -603,6 +596,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               RaisedButton(
                 child: Text('SUBMIT'),
                 onPressed: () {
+                  searchFieldController.text;
+                  Choice choice = Choice(searchFieldController.text,0);
+                  choices.add(choice);
                   _filterResults(choices);
                 },
               ),
