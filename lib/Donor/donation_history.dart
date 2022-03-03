@@ -28,7 +28,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   final _auth = FirebaseAuth.instance;
   List<Donation> donations = [];
   List<Organization> organizations = [];
-  var f = NumberFormat("###,###.0#", "en_US");
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {

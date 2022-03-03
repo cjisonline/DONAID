@@ -37,7 +37,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
   List<String> organizationsID=[];
   List<Map<String, dynamic>> _foundUsers = [];
   final List<Map<String, dynamic>> _allUsers = [];
-  var f = NumberFormat("###,###.0#", "en_US");
+  var f = NumberFormat("###,##0.00", "en_US");
   var searchFieldController = TextEditingController();
 
   void _getCurrentUser() {

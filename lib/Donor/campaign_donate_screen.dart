@@ -27,7 +27,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   Map<String, dynamic>? paymentIntentData;
   String donationAmount = "";
   bool showLoadingSpinner = false;
-  var f = NumberFormat("###,###.0#", "en_US");
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState(){

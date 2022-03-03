@@ -5,7 +5,7 @@ import 'package:donaid/Models/Organization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:intl/intl.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 
@@ -23,6 +23,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
   final _firestore = FirebaseFirestore.instance;
   List<Campaign> campaigns = [];
   List<Organization> organizations=[];
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
@@ -144,23 +145,34 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                   title: Text(campaigns[index].title),
                   subtitle: Text(campaigns[index].description),
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('\$${(campaigns[index].amountRaised.toStringAsFixed(2))}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(color: Colors.black, fontSize: 15)),
-                  Text(
-                    '\$${campaigns[index].goalAmount.toStringAsFixed(2)}',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text('\$'+f.format(campaigns[index].amountRaised),
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$'+f.format(campaigns[index].goalAmount),
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Colors.green),
+                          value: (campaigns[index].amountRaised/campaigns[index].goalAmount),
+                          minHeight: 10,
+                        ),
+                      ),
+                    ],
                   ),
-                ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (campaigns[index].amountRaised/campaigns[index].goalAmount),
-                  minHeight: 10,
                 ),
+
                 const Divider()
               ],
             ),

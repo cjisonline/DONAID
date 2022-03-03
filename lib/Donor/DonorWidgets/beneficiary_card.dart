@@ -3,7 +3,7 @@ import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../beneficiary_donate_screen.dart';
 
 class BeneficiaryCard extends StatefulWidget {
@@ -18,10 +18,10 @@ class BeneficiaryCard extends StatefulWidget {
 class _BeneficiaryCardState extends State<BeneficiaryCard> {
   Organization? organization;
   final _firestore = FirebaseFirestore.instance;
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getBeneficiaryOrganization();
   }
@@ -81,21 +81,26 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                   maxLines: 3,
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('\$${(widget.beneficiary.amountRaised.toStringAsFixed(2))}',
+              Text('\$'+f.format(widget.beneficiary.amountRaised),
                   textAlign: TextAlign.left,
                   style: const TextStyle(color: Colors.black, fontSize: 15)),
               Text(
-                '\$${widget.beneficiary.goalAmount.toStringAsFixed(2)}',
+              '\$'+f.format(widget.beneficiary.goalAmount),
                 textAlign: TextAlign.start,
                 style: const TextStyle(color: Colors.black, fontSize: 15),
               ),
             ]),
-            LinearProgressIndicator(
-              backgroundColor: Colors.grey,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).primaryColor),
-              value: (widget.beneficiary.amountRaised/widget.beneficiary.goalAmount),
-              minHeight: 10,
+            Container(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: LinearProgressIndicator(
+                  backgroundColor: Colors.grey,
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                      Colors.green),
+                  value: (widget.beneficiary.amountRaised/widget.beneficiary.goalAmount),
+                  minHeight: 10,
+                ),
+              ),
             ),
             Container(
                 margin: const EdgeInsets.only(top: 10.0),

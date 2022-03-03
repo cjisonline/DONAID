@@ -5,7 +5,7 @@ import 'package:donaid/Models/UrgentCase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:intl/intl.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 
@@ -23,6 +23,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
   final _firestore = FirebaseFirestore.instance;
   List<UrgentCase> urgentCases = [];
   List<Organization> organizations=[];
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
@@ -145,22 +146,32 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                   title: Text(urgentCases[index].title),
                   subtitle: Text(urgentCases[index].description),
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('\$${(urgentCases[index].amountRaised.toStringAsFixed(2))}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(color: Colors.black, fontSize: 15)),
-                  Text(
-                    '\$${urgentCases[index].goalAmount.toStringAsFixed(2)}',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text('\$'+f.format(urgentCases[index].amountRaised),
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$'+f.format(urgentCases[index].goalAmount),
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Colors.green),
+                          value: (urgentCases[index].amountRaised/urgentCases[index].goalAmount),
+                          minHeight: 10,
+                        ),
+                      ),
+                    ],
                   ),
-                ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (urgentCases[index].amountRaised/urgentCases[index].goalAmount),
-                  minHeight: 10,
                 ),
                 const Divider()
               ],
