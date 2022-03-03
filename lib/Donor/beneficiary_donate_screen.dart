@@ -10,6 +10,7 @@ import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+
 class BeneficiaryDonateScreen extends StatefulWidget {
   Beneficiary beneficiary;
   BeneficiaryDonateScreen(this.beneficiary, {Key? key}) : super(key: key);
@@ -49,6 +50,11 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SizedBox(
+                height: 100,
+                child: Image.asset('assets/DONAID_LOGO.png')
+              ),
+              SizedBox(height:10),
               Text(widget.beneficiary.name, style: TextStyle(fontSize: 35),),
               Text(widget.beneficiary.biography, style: TextStyle(fontSize: 20),),
               Padding(
@@ -68,13 +74,18 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor:
-                  const AlwaysStoppedAnimation<Color>(Colors.green),
-                  value:
-                  (widget.beneficiary.amountRaised / widget.beneficiary.goalAmount),
-                  minHeight: 20,
+                child: Container(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: LinearProgressIndicator(
+                      backgroundColor: Colors.grey,
+                      valueColor:
+                      const AlwaysStoppedAnimation<Color>(Colors.green),
+                      value:
+                      (widget.beneficiary.amountRaised / widget.beneficiary.goalAmount),
+                      minHeight: 25,
+                    ),
+                  ),
                 ),
               ),
               Padding(
