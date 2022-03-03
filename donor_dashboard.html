@@ -59,10 +59,10 @@ async function getDonorData(){
 
         const querySnapshot = await getDocs(collection(db, "DonorUsers"));
             querySnapshot.forEach((item) => {
-                if(item.data().approved == true) {
+                if(item.data().enabled == true) {
                     userStatus = "Enabled";
                 }
-                else if (item.data().approved == false) {
+                else if (item.data().enabled == false) {
                     userStatus = "Disabled";
                 }
                 else {
@@ -135,7 +135,7 @@ async function userStatusEnable(documentID, fullName) {
       .then((result) => {
           if (result.isConfirmed) { 
               const donorStatus = doc(db, "DonorUsers", documentID);
-              updateDoc(donorStatus, {approved: true})
+              updateDoc(donorStatus, {enabled: true})
       
               .then(() => {
                   swal.fire('Approved!',
@@ -174,7 +174,7 @@ async function userStatusDisable(documentID, fullName) {
       .then((result) => {
           if (result.isConfirmed) { 
               const donorStatus = doc(db, "DonorUsers", documentID);
-              updateDoc(donorStatus, {approved: false})
+              updateDoc(donorStatus, {enabled: false})
       
               .then(() => {
                   swal.fire('Disabled!',
