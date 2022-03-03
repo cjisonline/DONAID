@@ -20,7 +20,7 @@ html {
     align-items: center;
     background-color: #DAE3ED;
     border-radius: 20px;
-    box-shadow: 0px 0px 5px 2px #036AFC;
+    box-shadow: 0px 0px 5px 2px #6804ec;
   }
   
  .inputWrapper {
@@ -50,9 +50,10 @@ html {
     border-radius: 5px;
     color: white;
     font-weight: bold;
-    background-color: #036AFC;
+    background-color: #6804ec;
     cursor: pointer;
     outline: none;
+    padding: 6px 1.6rem;
   }
 
   .submitButton:hover {
@@ -72,9 +73,10 @@ html {
     border-radius: 5px;
     color: white;
     font-weight: bold;
-    background-color: #036AFC;
+    background-color: #6804ec;
     cursor: pointer;
     outline: none;
+    padding: 6px 1.6rem;
   }
 
   .approveButtonClass:hover, .createButtonClass:hover {
@@ -86,6 +88,12 @@ html {
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
     -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
          box-shadow: inset 0px 0px 5px #c1c1c1;
+  }
+
+  .shadow-z-1 {
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
   }
 
   .table {
@@ -109,7 +117,6 @@ html {
   .table > tfoot > tr > td {
     text-align: left;
     padding: 1.6rem;
-    vertical-align: top;
     border-top: 0;
     -webkit-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
@@ -119,11 +126,11 @@ html {
     font-weight: 400;
     color: #3D4B60;
     vertical-align: bottom;
-    border-bottom: 1px solid #036AFC;
+    border-bottom: 1px solid #6804ec;
   }
 
   tr:hover td {
-    background:#036AFC;
+    background:#6804ec;
     color: #fff;
   }
 
@@ -186,7 +193,7 @@ html {
   }
   
   .select-text:focus ~ .select-label, .select-text:valid ~ .select-label {
-    color: #036AFC;
+    color: #6804ec;
     top: -20px;
     transition: 0.2s ease all;
     font-size: 14px;
