@@ -67,7 +67,7 @@ html {
          box-shadow: inset 0px 0px 5px #c1c1c1;
   }
 
-  .approveButtonClass,.createButtonClass {
+  .approveButtonClass,.createButtonClass,.editButtonClass {
     width: 100%;
     border: none;
     border-radius: 5px;
@@ -79,12 +79,12 @@ html {
     padding: 6px 1.6rem;
   }
 
-  .approveButtonClass:hover, .createButtonClass:hover {
+  .approveButtonClass:hover, .createButtonClass:hover, .editButtonClass:hover {
       background-color: #54647A;
       transition: background-color 0.5s;
   }
 
-  .approveButtonClass:active, .createButtonClass:active {
+  .approveButtonClass:active, .createButtonClass:active, .editButtonClass:active {
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
     -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
          box-shadow: inset 0px 0px 5px #c1c1c1;
@@ -134,67 +134,7 @@ html {
     color: #fff;
   }
 
-  .select {
-    font-family:
-      'Roboto','Helvetica','Arial',sans-serif;
-    position: relative;
-    width: 350px;
-    background: #fff;
-    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
-    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
-  }
-  
-  .select-text {
-    position: relative;
-    font-family: inherit;
-    background-color: transparent;
-    width: 350px;
-    padding: 10px 10px 10px 0;
-    font-size: 18px;
-    border-radius: 0;
-    border: none;
-    border-bottom: 1px solid rgba(0,0,0, 0.12);
-  }
-  
-  .select-text:focus {
-    outline: none;
-    border-bottom: 1px solid rgba(0,0,0, 0);
-  }
-  
-  .select .select-text {
-    appearance: none;
-    -webkit-appearance:none
-  }
-  
-  .select:after {
-    position: absolute;
-    top: 18px;
-    right: 10px;
-    width: 0;
-    height: 0;
-    padding: 0;
-    content: '';
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 6px solid rgba(0, 0, 0, 0.12);
-    pointer-events: none;
-  }
-  
-  .select-label {
-    color: rgba(0,0,0, 0.26);
-    font-size: 18px;
-    font-weight: normal;
-    position: absolute;
-    pointer-events: none;
-    left: 0;
-    top: 10px;
-    transition: 0.2s ease all;
-  }
-  
-  .select-text:focus ~ .select-label, .select-text:valid ~ .select-label {
-    color: #6804ec;
-    top: -20px;
-    transition: 0.2s ease all;
-    font-size: 14px;
+  .mdc-data-table {
+    display: flex !important;
+    overflow-x: hidden !important;
   }
