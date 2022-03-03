@@ -8,6 +8,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class CampaignDonateScreen extends StatefulWidget {
   final Campaign campaign;
@@ -26,6 +27,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   Map<String, dynamic>? paymentIntentData;
   String donationAmount = "";
   bool showLoadingSpinner = false;
+  var f = NumberFormat("###,###.0#", "en_US");
 
   @override
   void initState(){
@@ -46,32 +48,41 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
           child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(widget.campaign.title),
-          Text(widget.campaign.description),
+          SizedBox(
+              height: 100,
+              child: Image.asset('assets/DONAID_LOGO.png')
+          ),
+          Text(widget.campaign.title, style: TextStyle(fontSize: 25)),
+          Text(widget.campaign.description, style: TextStyle(fontSize: 18)),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '\$${(widget.campaign.amountRaised.toStringAsFixed(2))}',
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                    '\$'+f.format(widget.campaign.amountRaised),
+                    style: const TextStyle(color: Colors.black, fontSize: 18),
                   ),
                   Text(
-                    '\$${widget.campaign.goalAmount.toStringAsFixed(2)}',
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                    '\$'+f.format(widget.campaign.goalAmount),
+                    style: const TextStyle(color: Colors.black, fontSize: 18),
                   ),
                 ]),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: LinearProgressIndicator(
-              backgroundColor: Colors.grey,
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-              value:
-                  (widget.campaign.amountRaised / widget.campaign.goalAmount),
-              minHeight: 10,
+            child: Container(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: LinearProgressIndicator(
+                  backgroundColor: Colors.grey,
+                  valueColor:
+                     const AlwaysStoppedAnimation<Color>(Colors.green),
+                  value:
+                      (widget.campaign.amountRaised / widget.campaign.goalAmount),
+                  minHeight: 25,
+                ),
+              ),
             ),
           ),
           Padding(
@@ -127,6 +138,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                           child: const Text(
                             'Donate',
                             style: TextStyle(
+                              fontSize: 25,
                               color: Colors.white,
                             ),
                           ),
