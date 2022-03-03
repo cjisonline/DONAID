@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
@@ -11,7 +13,7 @@ import 'package:intl/intl.dart';
 
 import 'organization_campaign_full.dart';
 
-class DummyWidget extends StatelessWidget {
+class ResetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => OrgSearchPage();
 }
@@ -164,8 +166,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           0, element.data()['endDate'].toDate().toString().indexOf(' ')));
 
     }
-    setState(() {});
     _getAllData();
+    setState(() {});
   }
 
   _getAllData() {
@@ -209,109 +211,96 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
       });
     }
     print("Length: " + _allUsers.length.toString());
+    _removeDublicate();
   }
 
-  void _searchResults(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-    if (enteredKeyword.isEmpty) {
-      results = _allUsers;
-    } else {
-      if(_foundUsers.isNotEmpty){
-        results = _foundUsers
-            .where((user) =>
-            user["name"].toLowerCase().contains(enteredKeyword.toLowerCase()))
-            .toList();
-      }
-      else if(_foundUsers.isEmpty){
-        results = _allUsers
-            .where((user) =>
-            user["name"].toLowerCase().contains(enteredKeyword.toLowerCase()))
-            .toList();
-      }
-    }
-
-    // Refresh the UI
-    setState(() {
-      _foundUsers = results;
-    });
-  }
 
   void _filterResults(String enteredKeyword, int choiceNum) {
     List<Map<String, dynamic>> results = [];
-    if (enteredKeyword.isEmpty) {
-      results = _allUsers;
-    } else {
-      switch(choiceNum){
-        case 1:
-          {
-            if(_foundUsers.isNotEmpty){
-              results = _foundUsers
-                  .where((user) =>
-                  user["category"].contains(enteredKeyword))
-                  .toList();
-            }
-            else if(_foundUsers.isEmpty){
-              results = _allUsers
-                  .where((user) =>
-                  user["category"].contains(enteredKeyword))
-                  .toList();
-            }
+    switch (choiceNum) {
+      case 0:
+        {
+          if (_foundUsers.isNotEmpty) {
+            results = _foundUsers
+                .where((user) =>
+                user["name"].toLowerCase().contains(
+                    enteredKeyword.toLowerCase()))
+                .toList();
           }
-          break;
-        case 2:
-          {
-            if(_foundUsers.isNotEmpty){
-              results = _foundUsers
-                  .where((user) =>
-                  user["charityType"].contains(enteredKeyword))
-                  .toList();
-            }
-            else if(_foundUsers.isEmpty){
-              results = _allUsers
-                  .where((user) =>
-                  user["charityType"].contains(enteredKeyword))
-                  .toList();
-            }
+          else if (_foundUsers.isEmpty) {
+            results = _allUsers
+                .where((user) =>
+                user["name"].toLowerCase().contains(
+                    enteredKeyword.toLowerCase()))
+                .toList();
           }
-          break;
-        case 3:
-          {
-            if (_foundUsers.isNotEmpty) {
-              results = _foundUsers
-                  .where((user) =>
-              (user["amountRaised"] - double.parse(enteredKeyword)) == 0)
-                  .toList();
-            }
-            else if (_foundUsers.isEmpty) {
-              results = _allUsers
-                  .where((user) =>
-              (user["amountRaised"] - double.parse(enteredKeyword)) == 0)
-                  .toList();
-            }
+        }
+        break;
+      case 1:
+        {
+          if (_foundUsers.isNotEmpty) {
+            results = _foundUsers
+                .where((user) =>
+                user["category"].contains(enteredKeyword))
+                .toList();
           }
-          break;
-        case 4:
-          {
-            if (_foundUsers.isNotEmpty) {
-              results = _foundUsers
-                  .where((user) =>
-                  user["endDate"].contains(enteredKeyword))
-                  .toList();
-            }
-            else if (_foundUsers.isEmpty) {
-              results = _allUsers
-                  .where((user) =>
-                  user["endDate"].contains(enteredKeyword))
-                  .toList();
-            }
-
+          else if (_foundUsers.isEmpty) {
+            results = _allUsers
+                .where((user) =>
+                user["category"].contains(enteredKeyword))
+                .toList();
           }
-          break;
-
-      }
-
+        }
+        break;
+      case 2:
+        {
+          if (_foundUsers.isNotEmpty) {
+            results = _foundUsers
+                .where((user) =>
+                user["charityType"].contains(enteredKeyword))
+                .toList();
+          }
+          else if (_foundUsers.isEmpty) {
+            results = _allUsers
+                .where((user) =>
+                user["charityType"].contains(enteredKeyword))
+                .toList();
+          }
+        }
+        break;
+      case 3:
+        {
+          if (_foundUsers.isNotEmpty) {
+            results = _foundUsers
+                .where((user) =>
+            (user["amountRaised"] - double.parse(enteredKeyword)) == 0)
+                .toList();
+          }
+          else if (_foundUsers.isEmpty) {
+            results = _allUsers
+                .where((user) =>
+            (user["amountRaised"] - double.parse(enteredKeyword)) == 0)
+                .toList();
+          }
+        }
+        break;
+      case 4:
+        {
+          if (_foundUsers.isNotEmpty) {
+            results = _foundUsers
+                .where((user) =>
+                user["endDate"].contains(enteredKeyword))
+                .toList();
+          }
+          else if (_foundUsers.isEmpty) {
+            results = _allUsers
+                .where((user) =>
+                user["endDate"].contains(enteredKeyword))
+                .toList();
+          }
+        }
+        break;
     }
-
     // Refresh the UI
     setState(() {
       _foundUsers = results;
@@ -390,10 +379,17 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
       context,
       PageRouteBuilder(
         transitionDuration: Duration.zero,
-        pageBuilder: (_, __, ___) => DummyWidget(),
+        pageBuilder: (_, __, ___) => ResetWidget(),
       ),
     );
   }
+
+  void _removeDublicate(){
+    endDateChoices =endDateChoices.toSet().toList();
+    monayRaisedChoices =monayRaisedChoices.toSet().toList();
+  }
+
+
 
 
   @override
@@ -408,7 +404,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
             ),
             ],
         ),
-          //automaticallyImplyLeading: false,
 
         body: Padding(
           padding: const EdgeInsets.all(10),
@@ -416,14 +411,13 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
             children: [
 
               TextField(
-                onChanged: (value) => _searchResults(value),
                 controller: searchFieldController,
                 decoration: InputDecoration(
                     labelText: 'Search',
                     suffix: IconButton(
                       icon: Icon(Icons.search),
                       onPressed: () {
-                        _searchResults(searchFieldController.text);
+                        _filterResults(searchFieldController.text,0);
                       },
                     )),
               ),
