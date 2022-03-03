@@ -18,6 +18,18 @@ class ResetWidget extends StatelessWidget {
   Widget build(BuildContext context) => OrgSearchPage();
 }
 
+class Choice {
+  String choice;
+  int caseNumber;
+
+  Choice(this.choice, this.caseNumber);
+
+  @override
+  String toString() {
+    return '{ ${this.choice}, ${this.caseNumber} }';
+  }
+}
+
 //Start here
 class OrgSearchPage extends StatefulWidget {
   static const id = 'search_page';
@@ -33,6 +45,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries = [];
+  List<Choice> choices = [];
   List<String> beneficiariesID = [];
   List<Campaign> campaigns = [];
   List<String> campaignsID = [];
@@ -47,7 +60,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   var charityTypeFilterController = TextEditingController();
   var endDateFilterController = TextEditingController();
   var campaignCategory = [];
-  var campaignType = ["Urgent Case","Campaign","Beneficiary"];
+  var campaignType = ["Urgent Case", "Campaign", "Beneficiary"];
   var monayRaisedChoices = [];
   var endDateChoices = [];
 
@@ -98,9 +111,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
 
       campaignsID.add(element.data()['id']);
       monayRaisedChoices.add(element.data()['amountRaised'].toString());
-      endDateChoices.add(element.data()['endDate'].toDate().toString().substring(
-          0, element.data()['endDate'].toDate().toString().indexOf(' ')));
-
+      endDateChoices.add(
+          element.data()['endDate'].toDate().toString().substring(
+              0, element.data()['endDate'].toDate().toString().indexOf(' ')));
     }
     _getUrgentCases();
     setState(() {});
@@ -131,8 +144,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
 
       urgentCasesID.add(element.data()['id']);
       monayRaisedChoices.add(element.data()['amountRaised'].toString());
-      endDateChoices.add(element.data()['endDate'].toDate().toString().substring(
-          0, element.data()['endDate'].toDate().toString().indexOf(' ')));
+      endDateChoices.add(
+          element.data()['endDate'].toDate().toString().substring(
+              0, element.data()['endDate'].toDate().toString().indexOf(' ')));
     }
     _getBeneficiaries();
 
@@ -162,9 +176,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
 
       beneficiariesID.add(element.data()['id']);
       monayRaisedChoices.add(element.data()['amountRaised'].toString());
-      endDateChoices.add(element.data()['endDate'].toDate().toString().substring(
-          0, element.data()['endDate'].toDate().toString().indexOf(' ')));
-
+      endDateChoices.add(
+          element.data()['endDate'].toDate().toString().substring(
+              0, element.data()['endDate'].toDate().toString().indexOf(' ')));
     }
     _getAllData();
     setState(() {});
@@ -176,7 +190,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "charityType": "Urgent Case",
         "id": urgentCases[i].id,
         "name": urgentCases[i].title,
-        "category":urgentCases[i].category,
+        "category": urgentCases[i].category,
         "goal": f.format(urgentCases[i].goalAmount).toString(),
         "amountRaised": urgentCases[i].amountRaised,
         "endDate": urgentCases[i].endDate.toDate().toString().substring(
@@ -188,7 +202,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "charityType": "Campaign",
         "id": campaigns[i].id,
         "name": campaigns[i].title,
-        "category":campaigns[i].category,
+        "category": campaigns[i].category,
         "amountRaised": campaigns[i].amountRaised,
         "goal": f.format(campaigns[i].goalAmount).toString(),
         "endDate": campaigns[i]
@@ -203,7 +217,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "charityType": "Beneficiary",
         "id": beneficiaries[i].id,
         "name": beneficiaries[i].name,
-        "category":beneficiaries[i].category,
+        "category": beneficiaries[i].category,
         "amountRaised": beneficiaries[i].amountRaised,
         "goal": f.format(beneficiaries[i].goalAmount).toString(),
         "endDate": beneficiaries[i].endDate.toDate().toString().substring(
@@ -215,96 +229,111 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   }
 
 
-  void _filterResults(String enteredKeyword, int choiceNum) {
+  void _filterResults(List<Choice> choices) {
     List<Map<String, dynamic>> results = [];
-    switch (choiceNum) {
-      case 0:
-        {
-          if (_foundUsers.isNotEmpty) {
-            results = _foundUsers
-                .where((user) =>
-                user["name"].toLowerCase().contains(
-                    enteredKeyword.toLowerCase()))
-                .toList();
+    for (int i = 0; i < choices.length; i++) {
+      print("In the for loop " + choices[i].choice + " "+ choices[i].caseNumber.toString());
+      switch (choices[i].caseNumber) {
+        case 0:
+          {
+            print("In case 0");
+            if (_foundUsers.isNotEmpty) {
+              results = _foundUsers
+                  .where((user) =>
+                  user["name"].toLowerCase().contains(
+                      choices[i].choice.toLowerCase()))
+                  .toList();
+            }
+            else if (_foundUsers.isEmpty) {
+              results = _allUsers
+                  .where((user) =>
+                  user["name"].toLowerCase().contains(
+                      choices[i].choice.toLowerCase()))
+                  .toList();
+            }
           }
-          else if (_foundUsers.isEmpty) {
-            results = _allUsers
-                .where((user) =>
-                user["name"].toLowerCase().contains(
-                    enteredKeyword.toLowerCase()))
-                .toList();
+          _foundUsers = results;
+          break;
+        case 1:
+          {
+            print("In case 1");
+            if (_foundUsers.isNotEmpty) {
+              results = _foundUsers
+                  .where((user) =>
+                  user["category"].contains(choices[i].choice))
+                  .toList();
+            }
+            else if (_foundUsers.isEmpty) {
+              results = _allUsers
+                  .where((user) =>
+                  user["category"].contains(choices[i].choice))
+                  .toList();
+            }
           }
-        }
-        break;
-      case 1:
-        {
-          if (_foundUsers.isNotEmpty) {
-            results = _foundUsers
-                .where((user) =>
-                user["category"].contains(enteredKeyword))
-                .toList();
+          _foundUsers = results;
+          break;
+        case 2:
+          {
+            print("In case 2");
+            if (_foundUsers.isNotEmpty) {
+              results = _foundUsers
+                  .where((user) =>
+                  user["charityType"].contains(choices[i].choice))
+                  .toList();
+            }
+            else if (_foundUsers.isEmpty) {
+              results = _allUsers
+                  .where((user) =>
+                  user["charityType"].contains(choices[i].choice))
+                  .toList();
+            }
           }
-          else if (_foundUsers.isEmpty) {
-            results = _allUsers
-                .where((user) =>
-                user["category"].contains(enteredKeyword))
-                .toList();
+          _foundUsers = results;
+          break;
+        case 3:
+          {
+            print("In case 3");
+            if (_foundUsers.isNotEmpty) {
+              results = _foundUsers
+                  .where((user) =>
+              (user["amountRaised"] - double.parse(choices[i].choice)) == 0)
+                  .toList();
+            }
+            else if (_foundUsers.isEmpty) {
+              results = _allUsers
+                  .where((user) =>
+              (user["amountRaised"] - double.parse(choices[i].choice)) == 0)
+                  .toList();
+            }
           }
-        }
-        break;
-      case 2:
-        {
-          if (_foundUsers.isNotEmpty) {
-            results = _foundUsers
-                .where((user) =>
-                user["charityType"].contains(enteredKeyword))
-                .toList();
+          _foundUsers = results;
+          break;
+        case 4:
+          {
+            print("In case 4");
+            if (_foundUsers.isNotEmpty) {
+              results = _foundUsers
+                  .where((user) =>
+                  user["endDate"].contains(choices[i].choice))
+                  .toList();
+            }
+            else if (_foundUsers.isEmpty) {
+              results = _allUsers
+                  .where((user) =>
+                  user["endDate"].contains(choices[i].choice))
+                  .toList();
+            }
           }
-          else if (_foundUsers.isEmpty) {
-            results = _allUsers
-                .where((user) =>
-                user["charityType"].contains(enteredKeyword))
-                .toList();
-          }
-        }
-        break;
-      case 3:
-        {
-          if (_foundUsers.isNotEmpty) {
-            results = _foundUsers
-                .where((user) =>
-            (user["amountRaised"] - double.parse(enteredKeyword)) == 0)
-                .toList();
-          }
-          else if (_foundUsers.isEmpty) {
-            results = _allUsers
-                .where((user) =>
-            (user["amountRaised"] - double.parse(enteredKeyword)) == 0)
-                .toList();
-          }
-        }
-        break;
-      case 4:
-        {
-          if (_foundUsers.isNotEmpty) {
-            results = _foundUsers
-                .where((user) =>
-                user["endDate"].contains(enteredKeyword))
-                .toList();
-          }
-          else if (_foundUsers.isEmpty) {
-            results = _allUsers
-                .where((user) =>
-                user["endDate"].contains(enteredKeyword))
-                .toList();
-          }
-        }
-        break;
+          _foundUsers = results;
+          break;
+      }
+      print("Outside the switch case");
     }
-    // Refresh the UI
+    print("Outside the for loop");
     setState(() {
       _foundUsers = results;
     });
+    // Refresh the UI
   }
 
   _goToChosenCampaign(String id) async {
@@ -402,7 +431,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               onPressed: _reset,
               child: Text('RESET'),
             ),
-            ],
+          ],
         ),
 
         body: Padding(
@@ -417,7 +446,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                     suffix: IconButton(
                       icon: Icon(Icons.search),
                       onPressed: () {
-                        _filterResults(searchFieldController.text,0);
+                       searchFieldController.text;
+                       Choice choice = Choice(searchFieldController.text,0);
+                       choices.add(choice);
                       },
                     )),
               ),
@@ -453,7 +484,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         }).toList(),
                         onChanged: (val) => setState(() {
                           categoryFilterController.text = val.toString();
-                          _filterResults(categoryFilterController.text,1);
+                          Choice choice = Choice(categoryFilterController.text ,1);
+                          choices.add(choice);
                         }),
                       )
                   ),
@@ -487,7 +519,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         }).toList(),
                         onChanged: (val) => setState(() {
                           charityTypeFilterController.text = val.toString();
-                          _filterResults(charityTypeFilterController.text,2);
+                          Choice choice = Choice( charityTypeFilterController.text ,2);
+                          choices.add(choice);
                         }),
                       )
                   ),
@@ -525,7 +558,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         }).toList(),
                         onChanged: (val) => setState(() {
                           moneyRaisedFilterController.text = val.toString();
-                          _filterResults(moneyRaisedFilterController.text,3);
+                          Choice choice = Choice(  moneyRaisedFilterController.text ,3);
+                          choices.add(choice);
                         }),
                       )
                   ),
@@ -559,54 +593,61 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         }).toList(),
                         onChanged: (val) => setState(() {
                           endDateFilterController.text = val.toString();
-                          _filterResults(endDateFilterController.text,4);
+                          Choice choice = Choice(endDateFilterController.text ,4);
+                          choices.add(choice);
                         }),
                       )
                   ),
                 ],
               ),
+              RaisedButton(
+                child: Text('SUBMIT'),
+                onPressed: () {
+                  _filterResults(choices);
+                },
+              ),
 
               Expanded(
                 child: _foundUsers.isNotEmpty
                     ? ListView.builder(
-                        itemCount: _foundUsers.length,
-                        itemBuilder: (context, index) => Card(
-                            key: ValueKey(_foundUsers[index]["name"]),
-                            child: Column(children: [
-                              ListTile(
-                                title: Text(
-                                  _foundUsers[index]["name"].toString(),
-                                ),
-                                subtitle: Text(
-                                    "\u0024 " + _foundUsers[index]['goal']),
-                                trailing: Text(
-                                    _foundUsers[index]["endDate"].toString()),
-                                onTap: () {
-                                  if (campaignsID
-                                      .contains(_foundUsers[index]['id'])) {
-                                    _goToChosenCampaign(
-                                        _foundUsers[index]['id']);
-                                  } else if (beneficiariesID
-                                      .contains(_foundUsers[index]['id'])) {
-                                    _goToChosenBeneficiary(
-                                        _foundUsers[index]['id']);
-                                  } else if (urgentCasesID
-                                      .contains(_foundUsers[index]['id'])) {
-                                    _goToChosenUrgentCase(
-                                        _foundUsers[index]['id']);
-                                  }
-                                  setState(() {
-                                    //Add the extended view page here
-                                  });
-                                },
-                              ),
-                              const Divider()
-                            ])),
-                      )
+                  itemCount: _foundUsers.length,
+                  itemBuilder: (context, index) => Card(
+                      key: ValueKey(_foundUsers[index]["name"]),
+                      child: Column(children: [
+                        ListTile(
+                          title: Text(
+                            _foundUsers[index]["name"].toString(),
+                          ),
+                          subtitle: Text(
+                              "\u0024 " + _foundUsers[index]['goal']),
+                          trailing: Text(
+                              _foundUsers[index]["endDate"].toString()),
+                          onTap: () {
+                            if (campaignsID
+                                .contains(_foundUsers[index]['id'])) {
+                              _goToChosenCampaign(
+                                  _foundUsers[index]['id']);
+                            } else if (beneficiariesID
+                                .contains(_foundUsers[index]['id'])) {
+                              _goToChosenBeneficiary(
+                                  _foundUsers[index]['id']);
+                            } else if (urgentCasesID
+                                .contains(_foundUsers[index]['id'])) {
+                              _goToChosenUrgentCase(
+                                  _foundUsers[index]['id']);
+                            }
+                            setState(() {
+                              //Add the extended view page here
+                            });
+                          },
+                        ),
+                        const Divider()
+                      ])),
+                )
                     : const Text(
-                        'No results found',
-                        style: TextStyle(fontSize: 24),
-                      ),
+                  'No results found',
+                  style: TextStyle(fontSize: 24),
+                ),
               ),
             ],
           ),
