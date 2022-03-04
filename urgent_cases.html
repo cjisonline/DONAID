@@ -27,7 +27,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
-import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
+import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
     const firebaseConfig = {
     apiKey: "AIzaSyAZIToR8oHIIgWmayz0PncWAaiwmJ5n_64",
     authDomain: "donaid-d3244.firebaseapp.com",
@@ -54,22 +54,36 @@ function logoutAdmin(){
 
 async function getCaseData(){
     window.onload = async function(){
-    var orgNameWithID = [];
+
+/*         var orgInfo = [];
     const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
+    querySnapshot2.forEach((item) => {
+        var orgPush = {
+            orgUID: item.data().uid,
+            orgName: item.data().organizationName
+        }
+
+        orgInfo.push(orgPush);
+    })
+    console.log(orgInfo);
+    var orgName2; */
+
+    
+
+var orgInfo = [];
+    const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
+        querySnapshot2.forEach((doc) => {
+        orgInfo.push(doc.id, " => ", doc.data());
+    })
 
     const querySnapshot = await getDocs(collection(db, "UrgentCases"));
     querySnapshot.forEach((item) => {
-
         if(item.data().approved == false) {
-            // if (querySnapshot2.uid == item.data().organizationID){
-            //     var orgName = querySnapshot2.organizationName;
-            //     console.log(orgName);
-            // }
-            
+            var orgName = orgInfo.find(t=>t.uid === item.data().organizationID).organizationName;
             document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
             "<tr><td>" + item.data().title + 
             "</td><td>" + item.data().category + 
-            "</td><td>" + item.data().orgName + 
+            "</td><td>" + orgName + 
             "</td><td class='documentTD'>" + item.data().id +
             "</td><td>" + item.data().goalAmount +  
             "</td><td>" + item.data().description + 

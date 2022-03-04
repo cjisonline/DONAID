@@ -55,12 +55,19 @@ function logoutAdmin(){
 async function getBeneficiaryData(){
     window.onload = async function(){
 
+    var orgInfo = [];
+    const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
+        querySnapshot2.forEach((doc) => {
+        orgInfo.push(doc.id, " => ", doc.data());
+    })
+
     const querySnapshot = await getDocs(collection(db, "Beneficiaries"));
         querySnapshot.forEach((item) => {
             if(item.data().active == true) {
+                var orgName = orgInfo.find(t=>t.uid === item.data().organizationID).organizationName;
                 document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
                 "<tr><td>" + item.data().name + 
-                "</td><td>" + item.data().organizationName + 
+                "</td><td>" + orgName + 
                 "</td><td>" + item.data().category + 
                 "</td><td>" + item.data().goalAmount + 
                 "</td><td>" + item.data().biography + "</td></tr>";
