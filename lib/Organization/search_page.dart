@@ -62,6 +62,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   var campaignCategory = [];
   var campaignType = ["Urgent Case", "Campaign", "Beneficiary"];
   List<String> moneyPercentChoice=['0-25%','25-50%','50-75%', '75-99%'];
+  List<String> endDateRangeChoices=['This Week', 'This Month','3 months', '6 months'];
   var monayRaisedChoices = [];
   var endDateChoices = [];
 
@@ -182,15 +183,11 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "category": urgentCases[i].category,
         "goal": urgentCases[i].goalAmount,
         "amountRaised": urgentCases[i].amountRaised,
-        "endDate": urgentCases[i].endDate.toDate().toString().substring(
-            0, urgentCases[i].endDate.toDate().toString().indexOf(' ')),
+        "endDate": urgentCases[i].endDate,
         "amountRaisedPrecent": ((urgentCases[i].amountRaised/urgentCases[i].goalAmount)*100).toStringAsFixed(0),
         "endDateFromNow" :(DateTime.parse((urgentCases[i].endDate.toDate().toString().substring(
             0, urgentCases[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString()
       });
-      monayRaisedChoices.add(((urgentCases[i].amountRaised/urgentCases[i].goalAmount)*100).toStringAsFixed(0));
-      endDateChoices.add((DateTime.parse((urgentCases[i].endDate.toDate().toString().substring(
-         0, urgentCases[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString());
     }
     for (var i = 0; i < campaigns.length; i++) {
       _allUsers.add({
@@ -200,19 +197,12 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "category": campaigns[i].category,
         "amountRaised": campaigns[i].amountRaised,
         "goal":campaigns[i].goalAmount,
-        "endDate": campaigns[i]
-            .endDate
-            .toDate()
-            .toString()
-            .substring(0, campaigns[i].endDate.toDate().toString().indexOf(' ')),
+        "endDate": campaigns[i].endDate,
         "amountRaisedPrecent": ((campaigns[i].amountRaised/campaigns[i].goalAmount)*100).toStringAsFixed(0),
         "endDateFromNow" :(DateTime.parse((campaigns[i].endDate.toDate().toString().substring(
             0, campaigns[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString()
 
       });
-      monayRaisedChoices.add(((campaigns[i].amountRaised/campaigns[i].goalAmount)*100).toStringAsFixed(0));
-      endDateChoices.add((DateTime.parse((campaigns[i].endDate.toDate().toString().substring(
-          0, campaigns[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString());
     }
     for (var i = 0; i < beneficiaries.length; i++) {
       _allUsers.add({
@@ -222,19 +212,13 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "category": beneficiaries[i].category,
         "amountRaised": beneficiaries[i].amountRaised,
         "goal": beneficiaries[i].goalAmount,
-        "endDate": beneficiaries[i].endDate.toDate().toString().substring(
-            0, beneficiaries[i].endDate.toDate().toString().indexOf(' ')),
+        "endDate": beneficiaries[i].endDate,
         "amountRaisedPrecent": ((beneficiaries[i].amountRaised/beneficiaries[i].goalAmount)*100).toStringAsFixed(0),
         "endDateFromNow" :(DateTime.parse((beneficiaries[i].endDate.toDate().toString().substring(
             0, beneficiaries[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString()
 
       });
-      monayRaisedChoices.add(((beneficiaries[i].amountRaised/beneficiaries[i].goalAmount)*100).toStringAsFixed(0));
-      endDateChoices.add((DateTime.parse((beneficiaries[i].endDate.toDate().toString().substring(
-          0, beneficiaries[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString());
     }
-    print("Length: " + _allUsers.length.toString());
-    _removeDublicate();
   }
 
 
@@ -357,63 +341,22 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               if(moneyRaisedFilterController.text == '75-99%'){
                 results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.75 && (user['amountRaised']/user['goal'])<=0.99).toList();
               }
-              // print("In case 3");
-              // if (_foundUsers.isNotEmpty && exit != true) {
-              //   if (_foundUsers
-              //       .where((user) =>
-              //   int.parse (user["amountRaisedPrecent"]) - int.parse(choices[i].choice) == 0)
-              //       .toList()== false) {
-              //     _foundUsers.clear();
-              //     exit = true;
-              //     print("results" + _foundUsers.length.toString() + " " + exit.toString());
-              //   }
-              //   else {
-              //     results = _foundUsers
-              //         .where((user) =>
-              //     int.parse (user["amountRaisedPrecent"]) - int.parse(choices[i].choice) == 0)
-              //         .toList();
-              //     _foundUsers = results;
-              //     print("results" + _foundUsers.length.toString() + exit.toString() );
-              //   }
-              // }
-              // else if (_foundUsers.isEmpty && exit != true) {
-              //   results = _allUsers
-              //       .where((user) =>
-              //   int.parse (user["amountRaisedPrecent"]) - int.parse(choices[i].choice) == 0)
-              //       .toList();
-              //   _foundUsers = results;
-              //   print("results" + _foundUsers.length.toString() + " " + exit.toString());
-              // }
             }
             break;
           case 4:
             {
               print("In case 4");
-              if (_foundUsers.isNotEmpty) {
-                if (_foundUsers
-                    .where((user) =>
-                int.parse (user["endDateFromNow"]) - int.parse(choices[i].choice) == 0)
-                    .toList() == false) {
-                  _foundUsers.clear();
-                  exit = true;
-                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
-                }
-                else {
-                  results = _foundUsers
-                      .where((user) =>
-                  int.parse (user["endDateFromNow"]) - int.parse(choices[i].choice) == 0)
-                      .toList();
-                  _foundUsers = results;
-                  print("results" + _foundUsers.length.toString()  + exit.toString());
-                }
+              if(endDateFilterController.text == 'This Week'){
+                results = _foundUsers.where((user)=> Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays<=7).toList();
               }
-              else if (_foundUsers.isEmpty && exit != true) {
-                results = _allUsers
-                    .where((user) =>
-                int.parse (user["endDateFromNow"]) - int.parse(choices[i].choice) == 0)
-                    .toList();
-                _foundUsers = results;
-                print("results" + _foundUsers.length.toString()  + exit.toString());
+              if(endDateFilterController.text == 'This Month'){
+                results = _foundUsers.where((user)=> Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays<=30).toList();
+              }
+              if(endDateFilterController.text == '3 Months'){
+                results = _foundUsers.where((user)=> Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays<=90).toList();
+              }
+              if(endDateFilterController.text == '6 Months'){
+                results = _foundUsers.where((user)=> Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays<=180).toList();
               }
             }
             break;
@@ -504,12 +447,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
       ),
     );
   }
-
-  void _removeDublicate(){
-    endDateChoices =endDateChoices.toSet().toList();
-    monayRaisedChoices =monayRaisedChoices.toSet().toList();
-  }
-
 
 
 
@@ -671,9 +608,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                               BorderRadius.all(Radius.circular(12.0)),
                             )),
                         icon: const Icon(Icons.keyboard_arrow_down),
-                        items: endDateChoices == null? []: endDateChoices.map((items) {
+                        items: endDateRangeChoices.map((items) {
                           return DropdownMenuItem<String>(
-                            child: Text("in " + items + " Days"),
+                            child: Text(items),
                             value: items,
                           );
                         }).toList(),
@@ -714,7 +651,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                           ),
                           subtitle: Text('\$'+f.format(_foundUsers[index]['goal'])),
                           trailing: Text(
-                              _foundUsers[index]["endDate"].toString()),
+                              DateFormat('yyyy-MM-dd').format((_foundUsers[index]["endDate"].toDate()))),
                           onTap: () {
                             if (campaignsID
                                 .contains(_foundUsers[index]['id'])) {
