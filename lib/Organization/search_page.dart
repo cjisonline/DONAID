@@ -61,6 +61,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   var endDateFilterController = TextEditingController();
   var campaignCategory = [];
   var campaignType = ["Urgent Case", "Campaign", "Beneficiary"];
+  List<String> moneyPercentChoice=['0-25%','25-50%','50-75%', '75-99%'];
   var monayRaisedChoices = [];
   var endDateChoices = [];
 
@@ -179,7 +180,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "id": urgentCases[i].id,
         "name": urgentCases[i].title,
         "category": urgentCases[i].category,
-        "goal": f.format(urgentCases[i].goalAmount).toString(),
+        "goal": urgentCases[i].goalAmount,
         "amountRaised": urgentCases[i].amountRaised,
         "endDate": urgentCases[i].endDate.toDate().toString().substring(
             0, urgentCases[i].endDate.toDate().toString().indexOf(' ')),
@@ -189,7 +190,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
       });
       monayRaisedChoices.add(((urgentCases[i].amountRaised/urgentCases[i].goalAmount)*100).toStringAsFixed(0));
       endDateChoices.add((DateTime.parse((urgentCases[i].endDate.toDate().toString().substring(
-          0, urgentCases[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString());
+         0, urgentCases[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString());
     }
     for (var i = 0; i < campaigns.length; i++) {
       _allUsers.add({
@@ -198,7 +199,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "name": campaigns[i].title,
         "category": campaigns[i].category,
         "amountRaised": campaigns[i].amountRaised,
-        "goal": f.format(campaigns[i].goalAmount).toString(),
+        "goal":campaigns[i].goalAmount,
         "endDate": campaigns[i]
             .endDate
             .toDate()
@@ -220,7 +221,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         "name": beneficiaries[i].name,
         "category": beneficiaries[i].category,
         "amountRaised": beneficiaries[i].amountRaised,
-        "goal": f.format(beneficiaries[i].goalAmount).toString(),
+        "goal": beneficiaries[i].goalAmount,
         "endDate": beneficiaries[i].endDate.toDate().toString().substring(
             0, beneficiaries[i].endDate.toDate().toString().indexOf(' ')),
         "amountRaisedPrecent": ((beneficiaries[i].amountRaised/beneficiaries[i].goalAmount)*100).toStringAsFixed(0),
@@ -344,33 +345,45 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
             break;
           case 3:
             {
-              print("In case 3");
-              if (_foundUsers.isNotEmpty && exit != true) {
-                if (_foundUsers
-                    .where((user) =>
-                int.parse (user["amountRaisedPrecent"]) - int.parse(choices[i].choice) == 0)
-                    .toList()== false) {
-                  _foundUsers.clear();
-                  exit = true;
-                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
-                }
-                else {
-                  results = _foundUsers
-                      .where((user) =>
-                  int.parse (user["amountRaisedPrecent"]) - int.parse(choices[i].choice) == 0)
-                      .toList();
-                  _foundUsers = results;
-                  print("results" + _foundUsers.length.toString() + exit.toString() );
-                }
+              if(moneyRaisedFilterController.text == '0-25%'){
+                results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=0 && (user['amountRaised']/user['goal'])<=0.25).toList();
               }
-              else if (_foundUsers.isEmpty && exit != true) {
-                results = _allUsers
-                    .where((user) =>
-                int.parse (user["amountRaisedPrecent"]) - int.parse(choices[i].choice) == 0)
-                    .toList();
-                _foundUsers = results;
-                print("results" + _foundUsers.length.toString() + " " + exit.toString());
+              if(moneyRaisedFilterController.text == '25-50%'){
+                results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.25 && (user['amountRaised']/user['goal'])<=0.50).toList();
               }
+              if(moneyRaisedFilterController.text == '50-75%'){
+                results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.50 && (user['amountRaised']/user['goal'])<=0.75).toList();
+              }
+              if(moneyRaisedFilterController.text == '75-99%'){
+                results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.75 && (user['amountRaised']/user['goal'])<=0.99).toList();
+              }
+              // print("In case 3");
+              // if (_foundUsers.isNotEmpty && exit != true) {
+              //   if (_foundUsers
+              //       .where((user) =>
+              //   int.parse (user["amountRaisedPrecent"]) - int.parse(choices[i].choice) == 0)
+              //       .toList()== false) {
+              //     _foundUsers.clear();
+              //     exit = true;
+              //     print("results" + _foundUsers.length.toString() + " " + exit.toString());
+              //   }
+              //   else {
+              //     results = _foundUsers
+              //         .where((user) =>
+              //     int.parse (user["amountRaisedPrecent"]) - int.parse(choices[i].choice) == 0)
+              //         .toList();
+              //     _foundUsers = results;
+              //     print("results" + _foundUsers.length.toString() + exit.toString() );
+              //   }
+              // }
+              // else if (_foundUsers.isEmpty && exit != true) {
+              //   results = _allUsers
+              //       .where((user) =>
+              //   int.parse (user["amountRaisedPrecent"]) - int.parse(choices[i].choice) == 0)
+              //       .toList();
+              //   _foundUsers = results;
+              //   print("results" + _foundUsers.length.toString() + " " + exit.toString());
+              // }
             }
             break;
           case 4:
@@ -622,9 +635,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                               BorderRadius.all(Radius.circular(12.0)),
                             )),
                         icon: const Icon(Icons.keyboard_arrow_down),
-                        items: monayRaisedChoices == null? []: monayRaisedChoices.map((items) {
+                        items: moneyPercentChoice.map((items) {
                           return DropdownMenuItem<String>(
-                            child: Text(items + " %"),
+                            child: Text(items),
                             value: items,
                           );
                         }).toList(),
@@ -699,8 +712,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                           title: Text(
                             _foundUsers[index]["name"].toString(),
                           ),
-                          subtitle: Text(
-                              "\u0024 " + _foundUsers[index]['goal']),
+                          subtitle: Text('\$'+f.format(_foundUsers[index]['goal'])),
                           trailing: Text(
                               _foundUsers[index]["endDate"].toString()),
                           onTap: () {
