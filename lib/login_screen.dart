@@ -48,7 +48,15 @@ class _LoginScreenState extends State<LoginScreen> {
       final userType = await getUserType();
       if (userType == 1) {
         //If user logging in is a donor user
-        Navigator.pushNamed(context, DonorDashboard.id);
+        final donorUser = await _firestore.collection('DonorUsers').where('email', isEqualTo: email).get();
+        final enabled = donorUser.docs[0]['enabled'];
+
+        if(enabled) {
+          Navigator.pushNamed(context, DonorDashboard.id);
+        }
+        else{
+          _accountDisabledDialog();
+        }
       } else if (userType == 2) {
         //If user logging in is an organization user
         final organizationUser = await _firestore
@@ -63,20 +71,20 @@ class _LoginScreenState extends State<LoginScreen> {
           _accountNotApprovedDialog();
         }
       } else {
-        return _accountNotFoundDialog();
+        return _invalidCredentials();
       }
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       if (e.code == 'wrong-password') {
-        _wrongPasswordDialog();
+        _invalidCredentials();
       }
       if (e.code == 'user-not-found') {
-        _accountNotFoundDialog();
+        _invalidCredentials();
       }
     }
   }
 
-  Future<void> _wrongPasswordDialog() async {
+  Future<void> _invalidCredentials() async {
     setState(() {
       showLoadingSpinner = false;
     });
@@ -92,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
               borderRadius: BorderRadius.circular(32.0),
             ),
             content: const Text(
-                'That password doesn\'t match that email. Please try again!'),
+                'Cannot log in with that email and password. Please enter valid credentials.'),
             actions: [
               Center(
                 child: TextButton(
@@ -107,29 +115,6 @@ class _LoginScreenState extends State<LoginScreen> {
         });
   }
 
-  Future<void> _accountNotFoundDialog() async {
-    setState(() {
-      showLoadingSpinner = false;
-    });
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: const Center(child: Text('Alert')),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32.0)),
-              content: Text('No account with this email could be found.'),
-              actions: [
-                Center(
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('OK')))
-              ]);
-        });
-  }
 
   Future<void> _accountNotApprovedDialog() async {
     setState(() {
@@ -141,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Center(
-              child: Text('Alert'),
+              child: Text('Hang on!'),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
@@ -149,6 +134,38 @@ class _LoginScreenState extends State<LoginScreen> {
             content: const Text(
                 'Your organization account has not yet been approved by the admin. You must wait for '
                     'approval before you can login to this account.'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _accountDisabledDialog() async {
+    setState(() {
+      showLoadingSpinner = false;
+    });
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Hang on!'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'Your donor account has been disabled by the administrator. If you think this may have been a mistake,'
+                    'please send an email to donaidmobileapp1@gmail.com'),
             actions: [
               Center(
                 child: TextButton(
