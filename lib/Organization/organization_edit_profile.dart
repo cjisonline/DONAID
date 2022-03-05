@@ -140,7 +140,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           chooseFile();
         },
         child:
-        (organization.profilePictureDownloadURL==null)
+        (organization.profilePictureDownloadURL.toString().isEmpty)
         ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
@@ -148,7 +148,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
             Text('Upload profile picture or logo.'),
           ],
         )
-        : (organization.profilePictureDownloadURL != null && organization.profilePictureDownloadURL.toString() != "")
+        : (organization.profilePictureDownloadURL.toString().isNotEmpty)
             ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
