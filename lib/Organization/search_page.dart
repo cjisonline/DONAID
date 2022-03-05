@@ -218,72 +218,88 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
     }
   }
 
-  void _searchResults(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-      results = _foundUsers
+  void _searchResults(String enteredKeyword, List<Map<String, dynamic>> results) {
+      if(searchFieldController.text.isEmpty){
+        return;
+      }
+      else{
+        results = _foundUsers
+            .where((user) =>
+            user["name"].toLowerCase().contains(enteredKeyword.toLowerCase()))
+            .toList();
+        print("results " + _foundUsers.length.toString());
+        searchFieldController.clear();
+        setState(() {
+          _foundUsers = results;
+        });
+      }
+  }
+
+  void _charityTypeResult(String enteredKeyword, List<Map<String, dynamic>> results) {
+   if(charityTypeFilterController.text.isEmpty){
+     return;
+   }
+   else{
+     results = _foundUsers
+         .where((user) =>
+         user["charityType"].contains(enteredKeyword.toString()))
+         .toList();
+     print("results " + _foundUsers.length.toString());
+     charityTypeFilterController.clear();
+     setState(() {
+       _foundUsers = results;
+     });
+   }
+  }
+
+  void _categoryResult(String enteredKeyword, List<Map<String, dynamic>> results) {
+    if(moneyRaisedFilterController.text.isEmpty){
+      return;
+    }
+    else{
+      results = _allUsers
           .where((user) =>
-          user["name"].toLowerCase().contains(enteredKeyword.toLowerCase()))
+          user["category"].contains(enteredKeyword.toString()))
           .toList();
       print("results " + _foundUsers.length.toString());
-
-    setState(() {
-      _foundUsers = results;
-      print("results2 " + _foundUsers.length.toString());
-    });
+      categoryFilterController.clear();
+      setState(() {
+        _foundUsers = results;
+      });
+    }
   }
 
-  void _charityTypeResult(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-    results = _foundUsers
-        .where((user) =>
-        user["charityType"].contains(enteredKeyword.toString()))
-        .toList();
-    print("results " + _foundUsers.length.toString());
-
-    setState(() {
-      _foundUsers = results;
-      print("results2 " + _foundUsers.length.toString());
-    });
+  void _goalAmountResults(String enteredKeyword, List<Map<String, dynamic>> results) {
+   if(moneyRaisedFilterController.text.isEmpty){
+     return;
+   }
+   else{
+     if(moneyRaisedFilterController.text == '0-25%'){
+       results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=0 && (user['amountRaised']/user['goal'])<=0.25).toList();
+     }
+     if(moneyRaisedFilterController.text == '25-50%'){
+       results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.25 && (user['amountRaised']/user['goal'])<=0.50).toList();
+     }
+     if(moneyRaisedFilterController.text == '50-75%'){
+       results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.50 && (user['amountRaised']/user['goal'])<=0.75).toList();
+     }
+     if(moneyRaisedFilterController.text == '75-99%'){
+       results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.75 && (user['amountRaised']/user['goal'])<=0.99).toList();
+     }
+     print("results " + _foundUsers.length.toString());
+     moneyRaisedFilterController.clear();
+     setState(() {
+       _foundUsers = results;
+     });
+   }
   }
 
-  void _categoryResult(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-    results = _allUsers
-        .where((user) =>
-        user["category"].contains(enteredKeyword.toString()))
-        .toList();
-    print("results " + _foundUsers.length.toString());
-    setState(() {
-      _foundUsers = results;
-      print("results2 " + _foundUsers.length.toString());
-    });
+  void _endDateResults(String enteredKeyword, List<Map<String, dynamic>> results) {
+
+  if(endDateFilterController.text.isEmpty){
+    return;
   }
-
-  void _goalAmountResults(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-    if(moneyRaisedFilterController.text == '0-25%'){
-      results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=0 && (user['amountRaised']/user['goal'])<=0.25).toList();
-    }
-    if(moneyRaisedFilterController.text == '25-50%'){
-      results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.25 && (user['amountRaised']/user['goal'])<=0.50).toList();
-    }
-    if(moneyRaisedFilterController.text == '50-75%'){
-      results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.50 && (user['amountRaised']/user['goal'])<=0.75).toList();
-    }
-    if(moneyRaisedFilterController.text == '75-99%'){
-      results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.75 && (user['amountRaised']/user['goal'])<=0.99).toList();
-    }
-    print("results " + _foundUsers.length.toString());
-    setState(() {
-      _foundUsers = results;
-      print("results2 " + _foundUsers.length.toString());
-    });
-  }
-
-  void _endDateResults(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-
-    print(_foundUsers[0]['name'] +" " +(_foundUsers[0]['endDate'].toDate().difference(Timestamp.now().toDate()).inDays).toString());
+  else{
     if(endDateFilterController.text == 'This Week'){
       results = _foundUsers.where((user)=>((user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays<=7))&&(user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays>0)).toList();
     }
@@ -297,11 +313,26 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
       results = _foundUsers.where((user)=> ((user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays<=180))&&(user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays>0)).toList();
     }
     print("results " + _foundUsers.length.toString());
+    endDateFilterController.clear();
     setState(() {
       _foundUsers = results;
-      print("results2 " + _foundUsers.length.toString());
     });
   }
+  }
+
+  void _setResult(List<Map<String, dynamic>> results) {
+    if(searchFieldController.toString().isEmpty&&categoryFilterController.toString().isEmpty
+        &&campaignCategory.toString().isEmpty&&moneyRaisedFilterController.toString().isEmpty&&
+        endDateFilterController.toString().isEmpty){
+      print("They are all empty....");
+      setState(() {
+        _foundUsers = results;
+      });
+    }
+    else{
+      return;
+    }
+}
 
 
 
@@ -323,6 +354,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                           choices[i].choice.toLowerCase()))
                       .toList();
                   _foundUsers = results;
+
                   print("results" + _foundUsers.length.toString() + " " + exit.toString());
             }
             break;
@@ -646,6 +678,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               RaisedButton(
                 child: Text('SUBMIT'),
                 onPressed: () {
+                  List<Map<String, dynamic>> results = [];
                   if(searchFieldController.toString().isEmpty&&categoryFilterController.toString().isEmpty
                       &&campaignCategory.toString().isEmpty&&moneyRaisedFilterController.toString().isEmpty&&
                   endDateFilterController.toString().isEmpty){
@@ -654,13 +687,13 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                       print("results2 " + _foundUsers.length.toString());
                     });
                   }
-                  //  else(){
-                    //_searchResults(searchFieldController.text);
-                     //_categoryResult(categoryFilterController.text);
-                    //_charityTypeResult(charityTypeFilterController.text);
-                    // _goalAmountResults(moneyRaisedFilterController.text);
-                     _endDateResults(endDateFilterController.text);
-                  // };
+                   else(){
+                    _searchResults(searchFieldController.text,results);
+                     _categoryResult(categoryFilterController.text,results);
+                    _charityTypeResult(charityTypeFilterController.text,results);
+                     _goalAmountResults(moneyRaisedFilterController.text,results);
+                      _endDateResults(endDateFilterController.text, results);
+                  };
                 },
               ),
 
