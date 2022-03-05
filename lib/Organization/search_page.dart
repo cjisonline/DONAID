@@ -63,9 +63,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   var campaignType = ["Urgent Case", "Campaign", "Beneficiary"];
   List<String> moneyPercentChoice=['0-25%','25-50%','50-75%', '75-99%'];
   List<String> endDateRangeChoices=['This Week', 'This Month','3 months', '6 months'];
-  var monayRaisedChoices = [];
-  var endDateChoices = [];
-
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
@@ -221,28 +218,105 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
     }
   }
 
+  void _searchResults(String enteredKeyword) {
+    List<Map<String, dynamic>> results = [];
+      results = _foundUsers
+          .where((user) =>
+          user["name"].toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+      print("results " + _foundUsers.length.toString());
+
+    setState(() {
+      _foundUsers = results;
+      print("results2 " + _foundUsers.length.toString());
+    });
+  }
+
+  void _charityTypeResult(String enteredKeyword) {
+    List<Map<String, dynamic>> results = [];
+    results = _foundUsers
+        .where((user) =>
+        user["charityType"].contains(enteredKeyword.toString()))
+        .toList();
+    print("results " + _foundUsers.length.toString());
+
+    setState(() {
+      _foundUsers = results;
+      print("results2 " + _foundUsers.length.toString());
+    });
+  }
+
+  void _categoryResult(String enteredKeyword) {
+    List<Map<String, dynamic>> results = [];
+    results = _allUsers
+        .where((user) =>
+        user["category"].contains(enteredKeyword.toString()))
+        .toList();
+    print("results " + _foundUsers.length.toString());
+    setState(() {
+      _foundUsers = results;
+      print("results2 " + _foundUsers.length.toString());
+    });
+  }
+
+  void _goalAmountResults(String enteredKeyword) {
+    List<Map<String, dynamic>> results = [];
+    if(moneyRaisedFilterController.text == '0-25%'){
+      results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=0 && (user['amountRaised']/user['goal'])<=0.25).toList();
+    }
+    if(moneyRaisedFilterController.text == '25-50%'){
+      results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.25 && (user['amountRaised']/user['goal'])<=0.50).toList();
+    }
+    if(moneyRaisedFilterController.text == '50-75%'){
+      results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.50 && (user['amountRaised']/user['goal'])<=0.75).toList();
+    }
+    if(moneyRaisedFilterController.text == '75-99%'){
+      results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.75 && (user['amountRaised']/user['goal'])<=0.99).toList();
+    }
+    print("results " + _foundUsers.length.toString());
+    setState(() {
+      _foundUsers = results;
+      print("results2 " + _foundUsers.length.toString());
+    });
+  }
+
+  void _endDateResults(String enteredKeyword) {
+    List<Map<String, dynamic>> results = [];
+
+    print(_foundUsers[0]['name'] +" " +(_foundUsers[0]['endDate'].toDate().difference(Timestamp.now().toDate()).inDays).toString());
+    if(endDateFilterController.text == 'This Week'){
+      results = _foundUsers.where((user)=>((user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays<=7))&&(user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays>0)).toList();
+    }
+    else if(endDateFilterController.text == 'This Month'){
+      results = _foundUsers.where((user)=>((user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays<=30))&&(user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays>0)).toList();
+    }
+    else if(endDateFilterController.text == '3 months'){
+      results = _foundUsers.where((user)=>((user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays<=90))&&(user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays>0)).toList();
+    }
+    else if(endDateFilterController.text == '6 months'){
+      results = _foundUsers.where((user)=> ((user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays<=180))&&(user['endDate'].toDate().difference(Timestamp.now().toDate()).inDays>0)).toList();
+    }
+    print("results " + _foundUsers.length.toString());
+    setState(() {
+      _foundUsers = results;
+      print("results2 " + _foundUsers.length.toString());
+    });
+  }
+
+
+
+
 
   void _filterResults(List<Choice> choices) {
     List<Map<String, dynamic>> results = [];
     bool exit = false;
+    print(_foundUsers.length);
     for (int i = 0; i < choices.length; i++) {
       print("In the for loop " + choices[i].choice + " "+ choices[i].caseNumber.toString());
         switch (choices[i].caseNumber) {
           case 0:
             {
               print("In case 0");
-              if (_foundUsers.isNotEmpty && exit != true) {
-                if(_foundUsers
-                    .where((user) =>
-                    user["name"].toLowerCase().contains(
-                        choices[i].choice.toLowerCase()))
-                    .toList() == false){
-                  _foundUsers.clear();
-                  exit = true;
-                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
-
-                }
-                else{
                   results = _foundUsers
                       .where((user) =>
                       user["name"].toLowerCase().contains(
@@ -250,81 +324,29 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                       .toList();
                   _foundUsers = results;
                   print("results" + _foundUsers.length.toString() + " " + exit.toString());
-                }
-              }
-              else if (_foundUsers.isEmpty && exit != true) {
-                results = _allUsers
-                    .where((user) =>
-                    user["name"].toLowerCase().contains(
-                        choices[i].choice.toLowerCase()))
-                    .toList();
-                _foundUsers = results;
-                print("results" + _foundUsers.length.toString() + " " + exit.toString());
-              }
             }
             break;
           case 1:
             {
               print("In case 1");
-              if (_foundUsers.isNotEmpty && exit != true) {
-                print("Found is not empty case1");
-                if (_foundUsers
-                    .where((user) =>
-                    user["category"].contains(choices[i].choice))
-                    .toList() == false) {
-                  _foundUsers.clear();
-                  exit = true;
-                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
-
-                }
-                else {
                   results = _foundUsers
                       .where((user) =>
                       user["category"].contains(choices[i].choice))
                       .toList();
-                  _foundUsers = results;
                   print("results" + _foundUsers.length.toString() + " " + exit.toString());
-                }
-              }
-              else if (_foundUsers.isEmpty && exit != true) {
-                results = _allUsers
-                    .where((user) =>
-                    user["category"].contains(choices[i].choice))
-                    .toList();
-                _foundUsers = results;
-                print("results" + _foundUsers.length.toString() + " " + exit.toString() );
-              }
+
             }
             break;
           case 2:
             {
               print("In case 2");
-              if (_foundUsers.isNotEmpty && exit != true) {
-                if (_foundUsers
-                    .where((user) =>
-                    user["charityType"].contains(choices[i].choice))
-                    .toList() == false) {
-                  _foundUsers.clear();
-                  exit = true;
-                  print("results" + _foundUsers.length.toString() + " " + exit.toString());
-                }
-                else {
                   results = _foundUsers
                       .where((user) =>
                       user["charityType"].contains(choices[i].choice))
                       .toList();
                   _foundUsers = results;
                   print("results" + _foundUsers.length.toString() + " " + exit.toString());
-                }
-              }
-              else if (_foundUsers.isEmpty && exit != true) {
-                results = _allUsers
-                    .where((user) =>
-                    user["charityType"].contains(choices[i].choice))
-                    .toList();
-                _foundUsers = results;
-                print("results" + _foundUsers.length.toString() + " " + exit.toString());
-              }
+
             }
             break;
           case 3:
@@ -341,6 +363,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               if(moneyRaisedFilterController.text == '75-99%'){
                 results = _foundUsers.where((user)=> (user['amountRaised']/user['goal'])>=.75 && (user['amountRaised']/user['goal'])<=0.99).toList();
               }
+              print("results" + _foundUsers.length.toString() + " " + exit.toString());
+              _foundUsers = results;
+              print("results" + _foundUsers.length.toString() + " " + exit.toString());
             }
             break;
           case 4:
@@ -350,14 +375,17 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                 results = _foundUsers.where((user)=> Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays<=7).toList();
               }
               if(endDateFilterController.text == 'This Month'){
-                results = _foundUsers.where((user)=> Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays<=30).toList();
+                results = _foundUsers.where((user)=>(Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays<=30) && (Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays>7)).toList();
               }
               if(endDateFilterController.text == '3 Months'){
-                results = _foundUsers.where((user)=> Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays<=90).toList();
+                results = _foundUsers.where((user)=> (Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays<=90) && (Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays>30)).toList();
               }
               if(endDateFilterController.text == '6 Months'){
                 results = _foundUsers.where((user)=> Timestamp.now().toDate().difference(user['endDate'].toDate()).inDays<=180).toList();
               }
+              print("results" + _foundUsers.length.toString() + " " + exit.toString());
+              _foundUsers = results;
+              print("results" + _foundUsers.length.toString() + " " + exit.toString());
             }
             break;
         }
@@ -506,8 +534,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         }).toList(),
                         onChanged: (val) => setState(() {
                           categoryFilterController.text = val.toString();
-                          Choice choice = Choice(categoryFilterController.text ,1);
-                          choices.add(choice);
                         }),
                       )
                   ),
@@ -541,8 +567,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         }).toList(),
                         onChanged: (val) => setState(() {
                           charityTypeFilterController.text = val.toString();
-                          Choice choice = Choice( charityTypeFilterController.text ,2);
-                          choices.add(choice);
                         }),
                       )
                   ),
@@ -580,8 +604,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         }).toList(),
                         onChanged: (val) => setState(() {
                           moneyRaisedFilterController.text = val.toString();
-                          Choice choice = Choice(  moneyRaisedFilterController.text ,3);
-                          choices.add(choice);
                         }),
                       )
                   ),
@@ -616,8 +638,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         }).toList(),
                         onChanged: (val) => setState(() {
                           endDateFilterController.text = val.toString();
-                          Choice choice = Choice(endDateFilterController.text ,4);
-                          choices.add(choice);
                         }),
                       )
                   ),
@@ -626,15 +646,21 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               RaisedButton(
                 child: Text('SUBMIT'),
                 onPressed: () {
-                  if(searchFieldController.text.isNotEmpty){
-                    searchFieldController.text;
-                    Choice choice = Choice(searchFieldController.text,0);
-                    choices.add(choice);
-                    _filterResults(choices);
+                  if(searchFieldController.toString().isEmpty&&categoryFilterController.toString().isEmpty
+                      &&campaignCategory.toString().isEmpty&&moneyRaisedFilterController.toString().isEmpty&&
+                  endDateFilterController.toString().isEmpty){
+                    setState(() {
+                      _foundUsers = _allUsers;
+                      print("results2 " + _foundUsers.length.toString());
+                    });
                   }
-                  else{
-                    _filterResults(choices);
-                  }
+                  //  else(){
+                    //_searchResults(searchFieldController.text);
+                     //_categoryResult(categoryFilterController.text);
+                    //_charityTypeResult(charityTypeFilterController.text);
+                    // _goalAmountResults(moneyRaisedFilterController.text);
+                     _endDateResults(endDateFilterController.text);
+                  // };
                 },
               ),
 
