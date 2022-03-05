@@ -407,7 +407,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                 children: <Widget>[
                   Container(
                       width: 180.0,
-                      height: 60,
+                      height: 50,
                       child: DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -416,7 +416,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                                     text: 'Category',
                                     style: TextStyle(
                                         color: Colors.grey[600],
-                                        fontSize: 20.0),
+                                        fontSize: 12.0),
                                   )),
                             ),
                             border: const OutlineInputBorder(
@@ -441,7 +441,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                   ),
                   Container(
                       width: 180.0,
-                      height: 60,
+                      height: 50,
                       child:DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -450,7 +450,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                                     text: 'Charity Type',
                                     style: TextStyle(
                                         color: Colors.grey[600],
-                                        fontSize: 20.0),
+                                        fontSize: 12.0),
                                   )),
                             ),
                             border: const OutlineInputBorder(
@@ -479,7 +479,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                 children: <Widget>[
                   Container(
                       width: 180.0,
-                      height: 60,
+                      height: 50,
                       child: DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -488,7 +488,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                                     text: '% Raised',
                                     style: TextStyle(
                                         color: Colors.grey[600],
-                                        fontSize: 20.0),
+                                        fontSize: 12.0),
                                   )),
                             ),
                             border: const OutlineInputBorder(
@@ -513,7 +513,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                   ),
                   Container(
                       width: 180.0,
-                      height: 60,
+                      height: 50,
                       child:DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -522,7 +522,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                                     text: 'End Date',
                                     style: TextStyle(
                                         color: Colors.grey[600],
-                                        fontSize: 20.0
+                                        fontSize: 12.0
                                     ),
                                   )),
                             ),
