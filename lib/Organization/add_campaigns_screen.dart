@@ -33,6 +33,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   final firestore = FirebaseFirestore.instance;
   late DocumentSnapshot documentSnapshot;
   var category = [];
+  int campaignTimeLimit=0;
 
 
   _getCategories() async {
@@ -46,11 +47,19 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
     setState(() {});
   }
 
+  _getTimeLimit() async {
+    var ret = await firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
+
+    var doc = ret.docs[0];
+    campaignTimeLimit = doc['campaigns'];
+  }
+
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
     _getCategories();
+    _getTimeLimit();
   }
 
   void _getCurrentUser() {
@@ -250,6 +259,9 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return "Please enter end date.";
+                                  }
+                                  if(DateTime.parse(value).difference(DateTime.now()).inDays > campaignTimeLimit){
+                                    return 'Campaigns cannot have a duration longer than 1 year.';
                                   }
                                   else {
                                     return null;

@@ -42,4 +42,31 @@ class DonorAlertDialogs{
           );
         });
   }
+
+  static Future<void> showFullOrganizationDetails(context, Organization organization) async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(
+              child: Text(organization.organizationName),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: Text(organization.organizationDescription.toString()),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
 }

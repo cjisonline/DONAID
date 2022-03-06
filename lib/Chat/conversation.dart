@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Chat/chat.dart';
 import 'package:donaid/Controller/conController.dart';
+import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Widgets/conversation.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -79,6 +81,7 @@ class Conversation extends StatelessWidget {
             )
           ],
         ),
+        bottomNavigationBar: (this.type == "OrganizationUsers") ? DonorBottomNavigationBar() : OrganizationBottomNavigation(),
       ),
     );
   }
@@ -167,5 +170,3 @@ class _ConversationScreenState extends State<ConversationScreen> {
             }));
   }
 }
-
-class Firebaseauth {}

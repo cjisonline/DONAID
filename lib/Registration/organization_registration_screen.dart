@@ -86,7 +86,8 @@ class _OrganizationRegistrationScreenState
             'approved': false,
             'country': country,
             'gatewayLink': gatewayLink,
-            'verificationDocumentURL': _uploadedFileURL
+            'verificationDocumentURL': _uploadedFileURL,
+            'profilePictureDownloadURL':''
           });
 
           final usersDocRef = await _firestore.collection('Users').add({});

@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/organization_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class OrganizationEditProfile extends StatefulWidget {
   static const id = 'organization_edit_profile';
@@ -17,10 +21,15 @@ class OrganizationEditProfile extends StatefulWidget {
 class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
+  final _firebaseStorage = FirebaseStorage.instance;
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   Organization organization = Organization.c1();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final ImagePicker _imagePicker = ImagePicker();
+  XFile? _profilePicture;
+  String _uploadedFileURL="";
 
   TextEditingController? _organizationNameController;
   TextEditingController? _phoneNumberController;
@@ -41,6 +50,27 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     loggedInUser = _auth.currentUser;
   }
 
+  Future chooseFile() async {
+    await _imagePicker.pickImage(source: ImageSource.gallery).then((image) {
+      setState(() {
+        _profilePicture = image;
+      });
+    });
+  }
+
+  Future uploadFile() async {
+    File file = File(_profilePicture!.path);
+
+    final storageReference = _firebaseStorage
+        .ref()
+        .child('profilePictures/')
+        .child('${_auth.currentUser?.uid}');
+
+    await storageReference.putFile(file);
+    var fileURL = await storageReference.getDownloadURL();
+    _uploadedFileURL = fileURL;
+  }
+
   _getOrganizationInformation() async {
     var ret = await _firestore.collection('OrganizationUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
@@ -52,17 +82,21 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         organizationDescription: doc['organizationDescription'],
         country: doc['country'],
         gatewayLink: doc['gatewayLink'],
-        id: doc["id"]
+        id: doc["id"],
+        profilePictureDownloadURL: doc['profilePictureDownloadURL']
     );
     setState(() {});
   }
 
   _updateOrganizationInformation() async {
+    await uploadFile();
+
     _firestore.collection('OrganizationUsers').doc(organization.id).update({
       "organizationName": organization.organizationName,
       "phoneNumber": organization.phoneNumber,
       "organizationDescription": organization.organizationDescription,
-      "gatewayLink": organization.gatewayLink
+      "gatewayLink": organization.gatewayLink,
+      "profilePictureDownloadURL": _uploadedFileURL
     });
   }
 
@@ -98,7 +132,39 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
   }
 
 
-
+  Widget _buildProfilePictureUploadField(){
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
+      child: GestureDetector(
+        onTap: () async{
+          chooseFile();
+        },
+        child:
+        (organization.profilePictureDownloadURL==null)
+        ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.upload),
+            Text('Upload profile picture or logo.'),
+          ],
+        )
+        : (organization.profilePictureDownloadURL != null && organization.profilePictureDownloadURL.toString() != "")
+            ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 250,
+              height: 250,
+              child: Image.network(
+                organization.profilePictureDownloadURL.toString(),
+                fit: BoxFit.contain,
+              ),),
+          ],
+        )
+            : Container(),
+      ),
+    );
+  }
   Widget _buildOrganizationNameField() {
     _organizationNameController = TextEditingController(text: organization.organizationName);
     return Padding(
@@ -245,6 +311,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              _buildProfilePictureUploadField(),
               _buildOrganizationNameField(),
               _buildPhoneNumberField(),
               _buildOrganizationDescriptionField(),
@@ -264,6 +331,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              _buildProfilePictureUploadField(),
               _buildOrganizationNameField(),
               _buildPhoneNumberField(),
               _buildOrganizationDescriptionField(),

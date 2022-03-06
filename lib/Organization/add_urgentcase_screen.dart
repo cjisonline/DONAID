@@ -33,6 +33,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
   final firestore = FirebaseFirestore.instance;
   late DocumentSnapshot documentSnapshot;
   var category = [];
+  int urgentCaseTimeLimit=0;
 
 
   _getCampaign() async {
@@ -46,11 +47,19 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
     setState(() {});
   }
 
+  _getTimeLimit() async {
+    var ret = await firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
+
+    var doc = ret.docs[0];
+    urgentCaseTimeLimit = doc['urgentCases'];
+  }
+
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
     _getCampaign();
+    _getTimeLimit();
   }
 
   void _getCurrentUser() {
@@ -252,6 +261,9 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 if (value!.isEmpty) {
                                   return "Please enter end date.";
                                 }
+                                if(DateTime.parse(value).difference(DateTime.now()).inDays > urgentCaseTimeLimit){
+                                  return 'Urgent cases cannot have a duration longer than 6 months.';
+                                }
                                 else {
                                   return null;
                                 }
@@ -333,11 +345,24 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                             )
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 5.0),
-                          child: Text(
-                            'Urgent cases need to be approved by the admin before made visible to donors.',
-                            style: TextStyle(color: Colors.black),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Center(
+                              child: RichText(
+                                  text: const TextSpan(
+                                      text: 'Note: ',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 15.0),
+                                      children: [
+                                        TextSpan(
+                                            text: 'Urgent cases must receive approval from an administrator before they are displayed to donors.',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15.0
+                                            )),
+                                      ])),
+                            ),
                           ),
                         ),
                         Padding(

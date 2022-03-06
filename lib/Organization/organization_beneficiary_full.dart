@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
-import 'package:donaid/Organization/organization_activebeneficiaries_expanded_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'edit_beneficiary.dart';
@@ -173,9 +172,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                 children: [
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
-                    child: (widget.beneficiary.endDate.compareTo(Timestamp.now()) < 0)
-                        ? Container()
-                        : Material(
+                    child: Material(
                         elevation: 5.0,
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(32.0),

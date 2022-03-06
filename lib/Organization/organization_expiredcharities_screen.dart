@@ -36,7 +36,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
   _refreshPage(){
     beneficiaries.clear();
     campaigns.clear();
-    beneficiaries.clear();
+    urgentCases.clear();
     _getExpiredCampaigns();
     _getExpiredBeneficiaries();
     _getExpiredUrgentCases();
