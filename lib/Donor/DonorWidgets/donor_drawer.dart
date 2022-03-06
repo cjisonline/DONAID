@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 import '../../home_screen.dart';
+import '../donation_history.dart';
 import '../donor_profile.dart';
 
 class DonorDrawer extends StatefulWidget {
@@ -57,9 +58,11 @@ class _DonorDrawerState extends State<DonorDrawer> {
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(Icons.not_interested),
-              title: const Text("Report"),
-              onTap: () {},
+              leading: const Icon(Icons.history),
+              title: const Text("Donation History"),
+              onTap: () {
+                Navigator.pushNamed(context, DonationHistory.id);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.help),
