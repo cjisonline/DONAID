@@ -52,7 +52,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     '3 months',
     '6 months'
   ];
-  var f = NumberFormat("###,###.0#", "en_US");
+  var f = NumberFormat("###,###.00#", "en_US");
   var searchFieldController = TextEditingController();
   var categoryFilterController = TextEditingController();
   var moneyRaisedFilterController = TextEditingController();
@@ -302,110 +302,124 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     });
   }
 
-  void _charityTypeResult(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-
-    results = _foundUsers
-        .where(
-            (user) => user["charityType"].contains(enteredKeyword.toString()))
-        .toList();
-    setState(() {
-      _foundUsers = results;
-    });
+  void _charityTypeResult() {
+    if(charityTypeFilterController.text.isNotEmpty){
+      List<Map<String, dynamic>> results = [];
+      results = _foundUsers
+          .where(
+              (user) => user["charityType"].contains(charityTypeFilterController.text))
+          .toList();
+      setState(() {
+        _foundUsers = results;
+      });
+    }
   }
 
-  void _categoryResult(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-    results = _foundUsers
-        .where((user) => (user['collection'] != 'OrganizationUsers'))
-        .where((user) => user["category"].contains(enteredKeyword.toString()))
-        .toList();
-    setState(() {
-      _foundUsers = results;
-    });
+  void _categoryResult() {
+    if(categoryFilterController.text.isNotEmpty){
+      List<Map<String, dynamic>> results = [];
+      results = _foundUsers
+          .where((user) => (user['collection'] != 'OrganizationUsers'))
+          .where((user) => user["category"].contains(categoryFilterController.text))
+          .toList();
+      setState(() {
+        _foundUsers = results;
+      });
+    }
   }
 
-  void _goalAmountResults(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-    if (moneyRaisedFilterController.text == '0-25%') {
-      results = _foundUsers
-          .where((user) => (user['collection'] != 'OrganizationUsers'))
-          .where((user) =>
-              (user['amountRaised'] / user['goal']) >= 0 &&
-              (user['amountRaised'] / user['goal']) <= 0.25)
-          .toList();
+  void _goalAmountResults() {
+    if(moneyRaisedFilterController.text.isNotEmpty){
+      List<Map<String, dynamic>> results = [];
+      if (moneyRaisedFilterController.text == '0-25%') {
+        results = _foundUsers
+            .where((user) => (user['collection'] != 'OrganizationUsers'))
+            .where((user) =>
+        (user['amountRaised'] / user['goal']) >= 0 &&
+            (user['amountRaised'] / user['goal']) <= 0.25)
+            .toList();
+      }
+      if (moneyRaisedFilterController.text == '25-50%') {
+        results = _foundUsers
+            .where((user) => (user['collection'] != 'OrganizationUsers'))
+            .where((user) =>
+        (user['amountRaised'] / user['goal']) >= .25 &&
+            (user['amountRaised'] / user['goal']) <= 0.50)
+            .toList();
+      }
+      if (moneyRaisedFilterController.text == '50-75%') {
+        results = _foundUsers
+            .where((user) => (user['collection'] != 'OrganizationUsers'))
+            .where((user) =>
+        (user['amountRaised'] / user['goal']) >= .50 &&
+            (user['amountRaised'] / user['goal']) <= 0.75)
+            .toList();
+      }
+      if (moneyRaisedFilterController.text == '75-99%') {
+        results = _foundUsers
+            .where((user) => (user['collection'] != 'OrganizationUsers'))
+            .where((user) =>
+        (user['amountRaised'] / user['goal']) >= .75 &&
+            (user['amountRaised'] / user['goal']) <= 0.99)
+            .toList();
+      }
+      setState(() {
+        _foundUsers = results;
+      });
     }
-    if (moneyRaisedFilterController.text == '25-50%') {
-      results = _foundUsers
-          .where((user) => (user['collection'] != 'OrganizationUsers'))
-          .where((user) =>
-              (user['amountRaised'] / user['goal']) >= .25 &&
-              (user['amountRaised'] / user['goal']) <= 0.50)
-          .toList();
-    }
-    if (moneyRaisedFilterController.text == '50-75%') {
-      results = _foundUsers
-          .where((user) => (user['collection'] != 'OrganizationUsers'))
-          .where((user) =>
-              (user['amountRaised'] / user['goal']) >= .50 &&
-              (user['amountRaised'] / user['goal']) <= 0.75)
-          .toList();
-    }
-    if (moneyRaisedFilterController.text == '75-99%') {
-      results = _foundUsers
-          .where((user) => (user['collection'] != 'OrganizationUsers'))
-          .where((user) =>
-              (user['amountRaised'] / user['goal']) >= .75 &&
-              (user['amountRaised'] / user['goal']) <= 0.99)
-          .toList();
-    }
-    setState(() {
-      _foundUsers = results;
-    });
   }
 
-  void _endDateResults(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-    if (endDateFilterController.text == 'This Week') {
-      results = _foundUsers
-          .where((user) => (user['collection'] != 'OrganizationUsers'))
-          .where((user) => ((user['endDate']
-                  .toDate()
-                  .difference(Timestamp.now().toDate())
-                  .inDays <=
-              7)))
-          .toList();
-    } else if (endDateFilterController.text == 'This Month') {
-      results = _foundUsers
-          .where((user) => (user['collection'] != 'OrganizationUsers'))
-          .where((user) => ((user['endDate']
-                  .toDate()
-                  .difference(Timestamp.now().toDate())
-                  .inDays <=
-              30)))
-          .toList();
-    } else if (endDateFilterController.text == '3 months') {
-      results = _foundUsers
-          .where((user) => (user['collection'] != 'OrganizationUsers'))
-          .where((user) => ((user['endDate']
-                  .toDate()
-                  .difference(Timestamp.now().toDate())
-                  .inDays <=
-              90)))
-          .toList();
-    } else if (endDateFilterController.text == '6 months') {
-      results = _foundUsers
-          .where((user) => (user['collection'] != 'OrganizationUsers'))
-          .where((user) => ((user['endDate']
-                  .toDate()
-                  .difference(Timestamp.now().toDate())
-                  .inDays <=
-              180)))
-          .toList();
+  void _endDateResults() {
+    if (endDateFilterController.text.isNotEmpty){
+      List<Map<String, dynamic>> results = [];
+      if (endDateFilterController.text == 'This Week') {
+        results = _foundUsers
+            .where((user) => (user['collection'] != 'OrganizationUsers'))
+            .where((user) => ((user['endDate']
+            .toDate()
+            .difference(Timestamp.now().toDate())
+            .inDays <=
+            7)))
+            .toList();
+      } else if (endDateFilterController.text == 'This Month') {
+        results = _foundUsers
+            .where((user) => (user['collection'] != 'OrganizationUsers'))
+            .where((user) => ((user['endDate']
+            .toDate()
+            .difference(Timestamp.now().toDate())
+            .inDays <=
+            30)))
+            .toList();
+      } else if (endDateFilterController.text == '3 months') {
+        results = _foundUsers
+            .where((user) => (user['collection'] != 'OrganizationUsers'))
+            .where((user) => ((user['endDate']
+            .toDate()
+            .difference(Timestamp.now().toDate())
+            .inDays <=
+            90)))
+            .toList();
+      } else if (endDateFilterController.text == '6 months') {
+        results = _foundUsers
+            .where((user) => (user['collection'] != 'OrganizationUsers'))
+            .where((user) => ((user['endDate']
+            .toDate()
+            .difference(Timestamp.now().toDate())
+            .inDays <=
+            180)))
+            .toList();
+      }
+      setState(() {
+        _foundUsers = results;
+      });
     }
-    setState(() {
-      _foundUsers = results;
-    });
+  }
+  _filterResults(){
+    _foundUsers = _allUsers;
+    _charityTypeResult();
+    _categoryResult();
+    _goalAmountResults();
+    _endDateResults();
   }
 
   _goToChosenOrganization(String id) async {
@@ -561,7 +575,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                               }).toList(),
                         onChanged: (val) => setState(() {
                           categoryFilterController.text = val.toString();
-                          _categoryResult(val.toString());
+                          _filterResults();
                         }),
                       )),
                   const SizedBox(
@@ -593,7 +607,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                               }).toList(),
                         onChanged: (val) => setState(() {
                           charityTypeFilterController.text = val.toString();
-                          _charityTypeResult(val.toString());
+                          _filterResults();
                         }),
                       )),
                 ],
@@ -627,7 +641,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                         }).toList(),
                         onChanged: (val) => setState(() {
                           moneyRaisedFilterController.text = val.toString();
-                          _goalAmountResults(val.toString());
+                          _filterResults();
                         }),
                       )),
                   const SizedBox(
@@ -657,7 +671,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                         }).toList(),
                         onChanged: (val) => setState(() {
                           endDateFilterController.text = val.toString();
-                          _endDateResults(val.toString());
+                          _filterResults();
+
                         }),
                       )),
                 ],
