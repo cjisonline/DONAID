@@ -18,18 +18,6 @@ class ResetWidget extends StatelessWidget {
   Widget build(BuildContext context) => OrgSearchPage();
 }
 
-class Choice {
-  String choice;
-  int caseNumber;
-
-  Choice(this.choice, this.caseNumber);
-
-  @override
-  String toString() {
-    return '{ ${this.choice}, ${this.caseNumber} }';
-  }
-}
-
 //Start here
 class OrgSearchPage extends StatefulWidget {
   static const id = 'search_page';
@@ -45,7 +33,6 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries = [];
-  List<Choice> choices = [];
   List<String> beneficiariesID = [];
   List<Campaign> campaigns = [];
   List<String> campaignsID = [];
