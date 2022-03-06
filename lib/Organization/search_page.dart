@@ -53,7 +53,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   List<String> urgentCasesID = [];
   List<Map<String, dynamic>> _foundUsers = [];
   final List<Map<String, dynamic>> _allUsers = [];
-  var f = NumberFormat("###,###.0#", "en_US");
+  var f = NumberFormat("###,###.00#", "en_US");
   var searchFieldController = TextEditingController();
   var categoryFilterController = TextEditingController();
   var moneyRaisedFilterController = TextEditingController();

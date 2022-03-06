@@ -333,8 +333,16 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                             )
                         ),
                         Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 5.0),
+                          child: Text(
+                            'Urgent cases need to be approved by the admin before made visible to donors.',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                        Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 25.0, horizontal: 5.0),
+                              vertical: 20.0, horizontal: 5.0),
                           child: Material(
                             elevation: 5.0,
                             color: Colors.blue,
