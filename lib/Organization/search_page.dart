@@ -407,7 +407,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                 children: <Widget>[
                   Container(
                       width: 180.0,
-                      height: 50,
+                      height: 55,
                       child: DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -426,7 +426,12 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: campaignCategory == null? []: campaignCategory.map((items) {
                           return DropdownMenuItem<String>(
-                            child: Text(items),
+                            child: new Text(
+                              items,
+                              style: new TextStyle(
+                                fontSize: 12.0,
+                              ),
+                            ),
                             value: items,
                           );
                         }).toList(),
@@ -441,7 +446,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                   ),
                   Container(
                       width: 180.0,
-                      height: 50,
+                      height: 55,
                       child:DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -460,7 +465,12 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: campaignType == null? []: campaignType.map((items) {
                           return DropdownMenuItem<String>(
-                            child: Text(items),
+                            child: new Text(
+                              items,
+                              style: new TextStyle(
+                                fontSize: 12.0,
+                              ),
+                            ),
                             value: items,
                           );
                         }).toList(),
@@ -479,7 +489,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                 children: <Widget>[
                   Container(
                       width: 180.0,
-                      height: 50,
+                      height: 55,
                       child: DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -498,7 +508,12 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: moneyPercentChoice.map((items) {
                           return DropdownMenuItem<String>(
-                            child: Text(items),
+                            child: new Text(
+                              items,
+                              style: new TextStyle(
+                                fontSize: 12.0,
+                              ),
+                            ),
                             value: items,
                           );
                         }).toList(),
@@ -513,7 +528,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                   ),
                   Container(
                       width: 180.0,
-                      height: 50,
+                      height: 55,
                       child:DropdownButtonFormField <String>(
                         decoration: InputDecoration(
                             label: Center(
@@ -533,7 +548,12 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: endDateRangeChoices.map((items) {
                           return DropdownMenuItem<String>(
-                            child: Text(items),
+                            child: new Text(
+                              items,
+                              style: new TextStyle(
+                                fontSize: 12.0,
+                              ),
+                            ),
                             value: items,
                           );
                         }).toList(),
