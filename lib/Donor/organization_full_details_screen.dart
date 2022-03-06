@@ -14,8 +14,8 @@ class OrganizationFullDetailsScreen extends StatefulWidget {
 
 class _OrganizationFullDetailsScreenState extends State<OrganizationFullDetailsScreen> {
   final _firestore = FirebaseFirestore.instance;
-  int? beneficiaryCount;
-  int? campaignCount;
+  int beneficiaryCount=0;
+  int campaignCount=0;
 
   @override
   void initState(){
@@ -30,6 +30,7 @@ class _OrganizationFullDetailsScreenState extends State<OrganizationFullDetailsS
     var beneficiariesRet = await _firestore.collection('Beneficiaries').where('organizationID', isEqualTo: widget.organization.uid).get();
     beneficiaryCount = beneficiariesRet.docs.length;
 
+    setState(() {});
   }
 
   Widget _buildProfilePictureDisplay(){
