@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Models/Organization.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
@@ -43,7 +45,7 @@ class _OrganizationFullDetailsScreenState extends State<OrganizationFullDetailsS
             SizedBox(
               width: 150,
               height: 150,
-              child: Icon(Icons.person,size: 150),
+              child: Icon(Icons.apartment,size: 150, color: Colors.blue,),
             ),])
           : (widget.organization.profilePictureDownloadURL.toString().isNotEmpty)
           ? Column(
@@ -79,12 +81,25 @@ class _OrganizationFullDetailsScreenState extends State<OrganizationFullDetailsS
                 style: const TextStyle(fontSize: 18),
               ),
             ),
+        Linkify(
+          onOpen: (link) async {
+            if (await canLaunch(link.url)) {
+              await launch(link.url);
+            } else {
+              throw 'Could not launch $link';
+            }
+          },
+          text: widget.organization.gatewayLink.toString(),
+          textScaleFactor: 1.25,
+          linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+          textAlign: TextAlign.center,
+        ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.person, size: 50),
+                  Icon(Icons.person, size: 50, color: Colors.blue),
                   Text('${beneficiaryCount} Beneficiaries', style: TextStyle(fontSize: 18),)
                 ],
               ),
@@ -94,7 +109,7 @@ class _OrganizationFullDetailsScreenState extends State<OrganizationFullDetailsS
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.campaign, size: 50,),
+                  Icon(Icons.campaign, size: 50, color: Colors.blue),
                   Text('${campaignCount} Campaigns', style: TextStyle(fontSize: 18),)
                 ],
               ),
