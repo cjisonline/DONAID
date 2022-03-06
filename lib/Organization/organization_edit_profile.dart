@@ -89,15 +89,25 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
   }
 
   _updateOrganizationInformation() async {
-    await uploadFile();
+    if(_profilePicture!=null) {
+      await uploadFile();
 
-    _firestore.collection('OrganizationUsers').doc(organization.id).update({
-      "organizationName": organization.organizationName,
-      "phoneNumber": organization.phoneNumber,
-      "organizationDescription": organization.organizationDescription,
-      "gatewayLink": organization.gatewayLink,
-      "profilePictureDownloadURL": _uploadedFileURL
-    });
+      _firestore.collection('OrganizationUsers').doc(organization.id).update({
+        "organizationName": organization.organizationName,
+        "phoneNumber": organization.phoneNumber,
+        "organizationDescription": organization.organizationDescription,
+        "gatewayLink": organization.gatewayLink,
+        "profilePictureDownloadURL": _uploadedFileURL
+      });
+    }
+    else{
+      _firestore.collection('OrganizationUsers').doc(organization.id).update({
+        "organizationName": organization.organizationName,
+        "phoneNumber": organization.phoneNumber,
+        "organizationDescription": organization.organizationDescription,
+        "gatewayLink": organization.gatewayLink,
+      });
+    }
   }
 
 
@@ -153,8 +163,8 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              width: 250,
-              height: 250,
+              width: 150,
+              height: 150,
               child: Image.network(
                 organization.profilePictureDownloadURL.toString(),
                 fit: BoxFit.contain,

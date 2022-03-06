@@ -270,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             barrierDismissible: false,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                  title: Center(child: Text('Alert')),
+                                  title: Center(child: Text('Reset Link Sent!')),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(32.0)),
                                   content:

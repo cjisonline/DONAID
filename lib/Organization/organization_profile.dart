@@ -93,8 +93,8 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: 250,
-            height: 250,
+            width: 150,
+            height: 150,
             child: Image.network(
               organization!.profilePictureDownloadURL.toString(),
               fit: BoxFit.contain,
