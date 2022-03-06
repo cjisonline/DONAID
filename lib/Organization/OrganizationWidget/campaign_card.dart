@@ -1,6 +1,7 @@
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Organization/organization_campaign_full.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CampaignCard extends StatefulWidget {
   final Campaign campaign;
@@ -12,6 +13,8 @@ class CampaignCard extends StatefulWidget {
 }
 
 class _CampaignCardState extends State<CampaignCard> {
+  var f = NumberFormat("###,##0.00", "en_US");
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -62,21 +65,26 @@ class _CampaignCardState extends State<CampaignCard> {
                     maxLines: 3,
                   )),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('\$${widget.campaign.amountRaised.toStringAsFixed(2)}',
+                Text('\$'+f.format(widget.campaign.amountRaised),
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.black, fontSize: 15)),
                 Text(
-                  '\$${widget.campaign.goalAmount}',
+                  '\$'+f.format(widget.campaign.goalAmount),
                   textAlign: TextAlign.start,
                   style: const TextStyle(color: Colors.black, fontSize: 15),
                 ),
               ]),
-              LinearProgressIndicator(
-                backgroundColor: Colors.grey,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).primaryColor),
-                value: (widget.campaign.amountRaised/widget.campaign.goalAmount),
-                minHeight: 10,
+              Container(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.grey,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                        Colors.green),
+                    value: (widget.campaign.amountRaised/widget.campaign.goalAmount),
+                    minHeight: 10,
+                  ),
+                ),
               ),
             ]),
           )),

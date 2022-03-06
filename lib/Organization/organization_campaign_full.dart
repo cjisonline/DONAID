@@ -3,7 +3,7 @@ import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import 'edit_campaign.dart';
 
 class OrganizationCampaignFullScreen extends StatefulWidget {
@@ -16,6 +16,7 @@ class OrganizationCampaignFullScreen extends StatefulWidget {
 
 class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFullScreen> {
   final _firestore = FirebaseFirestore.instance;
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState(){
@@ -137,32 +138,41 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text(widget.campaign.title),
-            Text(widget.campaign.description),
+            SizedBox(
+                height: 100,
+                child: Image.asset('assets/DONAID_LOGO.png')
+            ),
+            Text(widget.campaign.title, style: TextStyle(fontSize: 25)),
+            Text(widget.campaign.description, style: TextStyle(fontSize: 18)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$${(widget.campaign.amountRaised.toStringAsFixed(2))}',
-                      style: const TextStyle(color: Colors.black, fontSize: 15),
+                      '\$'+f.format(widget.campaign.amountRaised),
+                      style: const TextStyle(color: Colors.black, fontSize: 18),
                     ),
                     Text(
-                      '\$${widget.campaign.goalAmount.toStringAsFixed(2)}',
-                      style: const TextStyle(color: Colors.black, fontSize: 15),
+                      '\$'+f.format(widget.campaign.goalAmount),
+                      style: const TextStyle(color: Colors.black, fontSize: 18),
                     ),
                   ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: LinearProgressIndicator(
-                backgroundColor: Colors.grey,
-                valueColor:
-                AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                value:
-                (widget.campaign.amountRaised / widget.campaign.goalAmount),
-                minHeight: 10,
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.grey,
+                    valueColor:
+                    const AlwaysStoppedAnimation<Color>(Colors.green),
+                    value:
+                    (widget.campaign.amountRaised / widget.campaign.goalAmount),
+                    minHeight: 25,
+                  ),
+                ),
               ),
             ),
             Column(
@@ -178,6 +188,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                             child: const Text(
                               'Edit',
                               style: TextStyle(
+                                fontSize: 25,
                                 color: Colors.white,
                               ),
                             ),
@@ -197,6 +208,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                             child: const Text(
                               'Stop Charity',
                               style: TextStyle(
+                                fontSize: 25,
                                 color: Colors.white,
                               ),
                             ),
@@ -213,6 +225,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                             child: const Text(
                               'Resume Charity',
                               style: TextStyle(
+                                fontSize: 25,
                                 color: Colors.white,
                               ),
                             ),

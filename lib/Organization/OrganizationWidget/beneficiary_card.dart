@@ -1,6 +1,7 @@
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Organization/organization_beneficiary_full.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class BeneficiaryCard extends StatefulWidget {
   final Beneficiary beneficiary;
@@ -12,6 +13,8 @@ class BeneficiaryCard extends StatefulWidget {
 }
 
 class _BeneficiaryCardState extends State<BeneficiaryCard> {
+  var f = NumberFormat("###,##0.00", "en_US");
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -62,21 +65,26 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                     maxLines: 3,
                   )),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text(('\$${widget.beneficiary.amountRaised.toStringAsFixed(2)}'),
+                Text('\$'+f.format(widget.beneficiary.amountRaised),
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.black, fontSize: 15)),
                 Text(
-                  '\$${widget.beneficiary.goalAmount.toStringAsFixed(2)}',
+                  '\$'+f.format(widget.beneficiary.goalAmount),
                   textAlign: TextAlign.start,
                   style: const TextStyle(color: Colors.black, fontSize: 15),
                 ),
               ]),
-              LinearProgressIndicator(
-                backgroundColor: Colors.grey,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).primaryColor),
-                value: (widget.beneficiary.amountRaised/widget.beneficiary.goalAmount),
-                minHeight: 10,
+              Container(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.grey,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                        Colors.green),
+                    value: (widget.beneficiary.amountRaised/widget.beneficiary.goalAmount),
+                    minHeight: 10,
+                  ),
+                ),
               ),
             ]),
           )),

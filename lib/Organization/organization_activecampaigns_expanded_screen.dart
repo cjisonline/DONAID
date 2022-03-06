@@ -5,6 +5,7 @@ import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart'
 import 'package:donaid/Organization/organization_campaign_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class OrganizationCampaignsExpandedScreen extends StatefulWidget {
   static const id = 'organization_campaigns_expanded_screen';
@@ -20,6 +21,7 @@ class _OrganizationCampaignsExpandedScreenState
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   List<Campaign> campaigns = [];
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
@@ -82,28 +84,32 @@ class _OrganizationCampaignsExpandedScreenState
                     title: Text(campaigns[index].title),
                     subtitle: Text(campaigns[index].description),
                   ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
                       children: [
-                        Text(
-                            '\$${(campaigns[index].amountRaised.toStringAsFixed(2))}',
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 15)),
-                        Text(
-                          '\$${campaigns[index].goalAmount.toStringAsFixed(2)}',
-                          textAlign: TextAlign.start,
-                          style:
-                              const TextStyle(color: Colors.black, fontSize: 15),
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          Text('\$'+f.format(campaigns[index].amountRaised),
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(color: Colors.black, fontSize: 15)),
+                          Text(
+                            '\$'+f.format(campaigns[index].goalAmount),
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(color: Colors.black, fontSize: 15),
+                          ),
+                        ]),
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          child: LinearProgressIndicator(
+                            backgroundColor: Colors.grey,
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                                Colors.green),
+                            value: (campaigns[index].amountRaised/campaigns[index].goalAmount),
+                            minHeight: 10,
+                          ),
                         ),
-                      ]),
-                  LinearProgressIndicator(
-                    backgroundColor: Colors.grey,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).primaryColor),
-                    value: (campaigns[index].amountRaised /
-                        campaigns[index].goalAmount),
-                    minHeight: 10,
+                      ],
+                    ),
                   ),
                   const Divider()
                 ],

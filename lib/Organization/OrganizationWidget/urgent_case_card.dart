@@ -1,6 +1,7 @@
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/organization_urgentcase_full.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class UrgentCaseCard extends StatefulWidget {
   final UrgentCase urgentCase;
@@ -12,6 +13,8 @@ class UrgentCaseCard extends StatefulWidget {
 }
 
 class _UrgentCaseCardState extends State<UrgentCaseCard> {
+  var f = NumberFormat("###,##0.00", "en_US");
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -62,21 +65,26 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                     maxLines: 3,
                   )),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('\$${widget.urgentCase.amountRaised.toStringAsFixed(2)}',
+                Text('\$'+f.format(widget.urgentCase.amountRaised),
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.black, fontSize: 15)),
                 Text(
-                  '\$${widget.urgentCase.goalAmount}',
+                  '\$'+f.format(widget.urgentCase.goalAmount),
                   textAlign: TextAlign.start,
                   style: const TextStyle(color: Colors.black, fontSize: 15),
                 ),
               ]),
-              LinearProgressIndicator(
-                backgroundColor: Colors.grey,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).primaryColor),
-                value: (widget.urgentCase.amountRaised/widget.urgentCase.goalAmount),
-                minHeight: 10,
+              Container(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.grey,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                        Colors.green),
+                    value: (widget.urgentCase.amountRaised/widget.urgentCase.goalAmount),
+                    minHeight: 10,
+                  ),
+                ),
               ),
             ]),
           )),
