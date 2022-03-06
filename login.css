@@ -129,9 +129,21 @@ html {
     border-bottom: 1px solid #6804ec;
   }
 
+  thead > tr > th {
+    background-color: #dfc8fe !important;
+    border: 1px solid #6804ec !important;
+    background-clip: padding-box !important;
+  }
+
   tr:hover td {
-    background:#6804ec;
+    background-color:#6804ec;
+    transition: background-color 0.5s;
     color: #fff;
+  }
+  tr:hover th {
+    background-color:#b37bfd !important;
+    transition: background-color 0.5s !important;
+    color: #fff !important;
   }
 
   .mdc-data-table {
