@@ -98,14 +98,11 @@ async function editSettings() {
     })
     .then((result) => {
         if (result.isConfirmed) { 
-            var benficiaryLimit = document.getElementById('catName-input').value;
-            var campaignLimit = document.getElementById('catName-input2').value;
-            var urgentCaseLimit = document.getElementById('catName-input3').value;
 
             updateDoc(settingsEdit, {
-                beneficiaries: benficiaryLimit,
-                campaigns: campaignLimit,
-                urgentCases: urgentCaseLimit,
+                'beneficiaries': parseInt(document.getElementById('catName-input').value),
+                'campaigns': parseInt(document.getElementById('catName-input2').value),
+                'urgentCases': parseInt(document.getElementById('catName-input3').value),
             })
     
             .then(() => {
