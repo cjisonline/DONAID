@@ -3,6 +3,7 @@ import 'package:donaid/Donor/categories_screen.dart';
 import 'package:donaid/Donor/donor_search_screen.dart';
 import 'package:donaid/Donor/organizations_expanded_screen.dart';
 import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
+import 'package:donaid/Organization/add_adoption.dart';
 import 'package:donaid/Organization/add_beneficiary_screen.dart';
 import 'package:donaid/Organization/add_urgentcase_screen.dart';
 import 'package:donaid/Donor/donor_edit_profile.dart';
@@ -80,6 +81,7 @@ class Donaid extends StatelessWidget {
         OrganizationCampaignsExpandedScreen.id: (context) => const OrganizationCampaignsExpandedScreen(),
         OrgSearchPage.id: (context) => const OrgSearchPage(),
         DonationHistory.id: (context) => const DonationHistory(),
+        AddAdoptionForm.id: (context) => AddAdoptionForm(),
       },
     );
   }
