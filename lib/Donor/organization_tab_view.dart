@@ -91,7 +91,8 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
   }
 
   _organizationCampaignsBody(){
-    return ListView.builder(
+    return campaigns.isNotEmpty
+    ? ListView.builder(
         itemCount: campaigns.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -143,11 +144,13 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('This organization doesn\'t have any \nactive campaigns at this time.', style: TextStyle(fontSize: 18),));
   }
 
   _organizationBeneficiariesBody(){
-    return ListView.builder(
+    return beneficiaries.isNotEmpty
+    ? ListView.builder(
         itemCount: beneficiaries.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -199,7 +202,8 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('This organization doesn\'t have any \nactive beneficiaries at this time.', style: TextStyle(fontSize: 18),));
   }
 
   @override

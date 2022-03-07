@@ -124,7 +124,8 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
         });
   }
   _categoryCampaignsBody() {
-    return ListView.builder(
+    return campaigns.isNotEmpty
+    ? ListView.builder(
         itemCount: campaigns.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -177,7 +178,8 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('No campaigns in this category.', style: TextStyle(fontSize: 18),));
   }
 
   @override

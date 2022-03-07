@@ -124,7 +124,8 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
         });
   }
   _beneficiariesBody() {
-    return ListView.builder(
+    return beneficiaries.isNotEmpty
+    ? ListView.builder(
         itemCount: beneficiaries.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -176,7 +177,8 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('No active beneficiaries to show.', style: TextStyle(fontSize: 18),));
   }
 
   @override
