@@ -107,7 +107,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                 }
               },
               text: 'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment.'
-                  'A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
+                  ' A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
               linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
               textAlign: TextAlign.center,
             ),

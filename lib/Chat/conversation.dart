@@ -10,19 +10,42 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Conversation extends StatelessWidget {
+class ResetWidget extends StatelessWidget {
+  String currentUid="",type="";
+  ResetWidget(this.currentUid,this.type);
+  @override
+  Widget build(BuildContext context) => Conversation(currentUid, type);
+}
+
+class Conversation extends StatefulWidget {
   String currentUid = "", type = "";
   Conversation(this.currentUid, this.type);
 
   @override
+  State<Conversation> createState() => _ConversationState();
+}
+
+class _ConversationState extends State<Conversation> {
+
+  _refresh(){
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration.zero,
+        pageBuilder: (_, __, ___) => ResetWidget(widget.currentUid, widget.type),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<ConController>(
-      init: ConController(type),
+      init: ConController(widget.type),
       builder: (homeCon) => Scaffold(
         appBar: AppBar(
           title: const Text('Messages'),
           actions: <Widget>[
-            this.type == "OrganizationUsers"
+            this.widget.type == "OrganizationUsers"
                 ? IconButton(
                     icon: const Icon(
                       Icons.add,
@@ -31,57 +54,62 @@ class Conversation extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return ConversationScreen(currentUid, type);
+                        return ConversationScreen(widget.currentUid, widget.type);
                       }));
                     })
                 : Container(),
           ],
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0)),
-                ),
-                child: Obx(
-                  () => ListView(
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                      children: homeCon.friendList
-                          .map(
-                            (e) => Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  conversation(
-                                      e.organizationName
-                                              .toString()
-                                              .split('.')[0]
-                                              .capitalizeFirst ??
-                                          "",
-                                      MyGlobals.allMessages
-                                          .where((p0) => p0.receiverId == e.uid)
-                                          .toList()
-                                          .last
-                                          .body, () {
-                                    Get.to(Chat(
-                                        e.uid, e.organizationName, currentUid));
-                                  }, messageSeen: false),
-                                  Divider(color: Colors.grey)
-                                ],
+        body: RefreshIndicator(
+          onRefresh: ()async{
+            _refresh();
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0)),
+                  ),
+                  child: Obx(
+                    () => ListView(
+                        padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                        children: homeCon.friendList
+                            .map(
+                              (e) => Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    conversation(
+                                        e.organizationName
+                                                .toString()
+                                                .split('.')[0]
+                                                .capitalizeFirst ??
+                                            "",
+                                        MyGlobals.allMessages
+                                            .where((p0) => p0.receiverId == e.uid)
+                                            .toList()
+                                            .last
+                                            .body, () {
+                                      Get.to(Chat(
+                                          e.uid, e.organizationName, widget.currentUid));
+                                    }, messageSeen: false),
+                                    Divider(color: Colors.grey)
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
-                          .toList()),
+                            )
+                            .toList()),
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
-        bottomNavigationBar: (this.type == "OrganizationUsers") ? DonorBottomNavigationBar() : OrganizationBottomNavigation(),
+        bottomNavigationBar: (this.widget.type == "OrganizationUsers") ? DonorBottomNavigationBar() : OrganizationBottomNavigation(),
       ),
     );
   }
