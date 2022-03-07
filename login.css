@@ -164,6 +164,7 @@ html {
 
   #sidebar a:hover {
     background-color: #6804ec;
+    transition: background-color 0.5s;
     color: white;
   }
 
