@@ -71,7 +71,8 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
       onRefresh: ()async{
         _refreshPage();
       },
-      child: ListView.builder(
+      child: urgentCases.isNotEmpty
+        ? ListView.builder(
           itemCount: urgentCases.length,
           shrinkWrap: true,
           itemBuilder: (context, int index) {
@@ -118,7 +119,8 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
                 ],
               ),
             );
-          }),
+          })
+      : const Center(child: Text('No active urgent cases to show.', style: TextStyle(fontSize: 18),)),
     );
   }
 

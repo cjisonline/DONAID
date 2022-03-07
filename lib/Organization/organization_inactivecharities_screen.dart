@@ -128,7 +128,8 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
   }
 
   _beneficiariesBody(){
-    return ListView.builder(
+    return beneficiaries.isNotEmpty
+    ? ListView.builder(
         itemCount: beneficiaries.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -175,11 +176,13 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('No inactive beneficiaries to show.', style: TextStyle(fontSize: 18),));
   }
 
   _campaignsBody(){
-    return ListView.builder(
+    return campaigns.isNotEmpty
+    ? ListView.builder(
         itemCount: campaigns.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -226,11 +229,13 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
               ],
             ),
           );
-        });
+        })
+        : const Center(child:  Text('No inactive campaigns to show.', style: TextStyle(fontSize: 18),));
   }
 
   _urgentCasesBody(){
-    return ListView.builder(
+    return urgentCases.isNotEmpty
+    ? ListView.builder(
         itemCount: urgentCases.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -277,7 +282,8 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('No inactive urgent cases to show.', style: TextStyle(fontSize: 18),));
   }
   @override
   Widget build(BuildContext context) {

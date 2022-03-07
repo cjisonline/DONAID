@@ -68,7 +68,8 @@ class _OrganizationCampaignsExpandedScreenState
       onRefresh: ()async{
         _refreshPage();
       },
-      child: ListView.builder(
+      child: campaigns.isNotEmpty
+        ? ListView.builder(
           itemCount: campaigns.length,
           shrinkWrap: true,
           itemBuilder: (context, int index) {
@@ -115,7 +116,8 @@ class _OrganizationCampaignsExpandedScreenState
                 ],
               ),
             );
-          }),
+          })
+      : const Center(child: Text('No active campaigns to show.', style: TextStyle(fontSize: 18),)),
     );
   }
 

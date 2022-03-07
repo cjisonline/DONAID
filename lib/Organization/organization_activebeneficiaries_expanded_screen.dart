@@ -67,7 +67,8 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
       onRefresh: ()async{
         _refreshPage();
       },
-      child: ListView.builder(
+      child: beneficiaries.isNotEmpty
+        ? ListView.builder(
           itemCount: beneficiaries.length,
           shrinkWrap: true,
           itemBuilder: (context, int index) {
@@ -114,7 +115,8 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
                 ],
               ),
             );
-          }),
+          })
+      : const Center(child: Text('No active beneficiaries to show.', style: TextStyle(fontSize: 18),)),
     );
   }
 

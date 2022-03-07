@@ -64,7 +64,8 @@ class _PendingApprovalsState extends State<PendingApprovals> {
 
 
   _urgentCasesBody() {
-    return ListView.builder(
+    return urgentCases.isNotEmpty
+    ? ListView.builder(
         itemCount: urgentCases.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -111,7 +112,8 @@ class _PendingApprovalsState extends State<PendingApprovals> {
               ],
             ),
           );
-        });
+        })
+        : const Center(child: Text('No pending urgent cases to show.', style: TextStyle(fontSize: 18),));
   }
 
   @override
