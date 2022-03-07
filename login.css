@@ -150,3 +150,24 @@ html {
     display: flex !important;
     overflow-x: hidden !important;
   }
+
+  #sidebar, #sidebar-nav {
+    background-color: #dfc8fe;
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+  }
+
+  #sidebar a {
+    background-color: #dfc8fe;
+  }
+
+  #sidebar a:hover {
+    background-color: #6804ec;
+    color: white;
+  }
+
+  #nav-active {
+    background-color: #6804ec !important;
+    color: white;
+  }
