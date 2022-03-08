@@ -339,14 +339,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                  ? 'Please fill in the category.' : null,
                           )
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                             vertical: 25.0, horizontal: 5.0),
-                          child: Text(
-                            'Urgent cases need to be approved by the admin before made visible to donors.',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
+
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 25.0, horizontal: 5.0),
