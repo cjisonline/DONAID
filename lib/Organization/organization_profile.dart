@@ -31,8 +31,8 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
     _getOrganizationInformation();
   }
 
-  _refreshPage(){
-    _getOrganizationInformation();
+  _refreshPage()async{
+    await _getOrganizationInformation();
     setState(() {});
   }
 
@@ -106,32 +106,40 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
   }
 
   Widget _buildUnitedStatesProfile(){
-    return  SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children:  [
-            _buildProfilePictureDisplay(),
-            ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
-            ProfileRow('NAME', organization?.organizationName??'N/A'),
-            ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
-            ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
-          ],
-        )
+    return  RefreshIndicator(
+      onRefresh: ()async{_refreshPage();},
+      child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children:  [
+              _buildProfilePictureDisplay(),
+              ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
+              ProfileRow('NAME', organization?.organizationName??'N/A'),
+              ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
+              ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
+            ],
+          )
+      ),
     );
   }
   Widget _buildOutsideUnitedStatesProfile(){
-    return  SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children:  [
-            _buildProfilePictureDisplay(),
-            ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
-            ProfileRow('NAME', organization?.organizationName??'N/A'),
-            ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
-            ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
-            ProfileRow('GATEWAY LINK', organization?.gatewayLink??'N/A'),
-          ],
-        )
+    return  RefreshIndicator(
+      onRefresh: ()async{
+        _refreshPage();
+      },
+      child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children:  [
+              _buildProfilePictureDisplay(),
+              ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
+              ProfileRow('NAME', organization?.organizationName??'N/A'),
+              ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
+              ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
+              ProfileRow('GATEWAY LINK', organization?.gatewayLink??'N/A'),
+            ],
+          )
+      ),
     );
   }
 
