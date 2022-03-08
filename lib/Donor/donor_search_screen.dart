@@ -425,7 +425,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
   _goToChosenOrganization(String id) async {
     var ret = await _firestore
         .collection('OrganizationUsers')
-        .where('approved', isEqualTo: true)
+        .where('id', isEqualTo: id)
         .get();
     var doc = ret.docs[0];
     Organization organization = Organization(
