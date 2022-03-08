@@ -4,7 +4,7 @@ import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'beneficiary_donate_screen.dart';
@@ -22,6 +22,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries=[];
   List<Campaign> campaigns=[];
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
@@ -90,7 +91,8 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
   }
 
   _organizationCampaignsBody(){
-    return ListView.builder(
+    return campaigns.isNotEmpty
+    ? ListView.builder(
         itemCount: campaigns.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -111,32 +113,44 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                   title: Text(campaigns[index].title),
                   subtitle: Text(campaigns[index].description),
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('\$${(campaigns[index].amountRaised.toStringAsFixed(2))}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(color: Colors.black, fontSize: 15)),
-                  Text(
-                    '\$${campaigns[index].goalAmount.toStringAsFixed(2)}',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text('\$'+f.format(campaigns[index].amountRaised),
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$'+f.format(campaigns[index].goalAmount),
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Colors.green),
+                          value: (campaigns[index].amountRaised/campaigns[index].goalAmount),
+                          minHeight: 10,
+                        ),
+                      ),
+                    ],
                   ),
-                ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (campaigns[index].amountRaised/campaigns[index].goalAmount),
-                  minHeight: 10,
                 ),
                 const Divider()
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('This organization doesn\'t have any \nactive campaigns at this time.', style: TextStyle(fontSize: 18),));
   }
 
   _organizationBeneficiariesBody(){
-    return ListView.builder(
+    return beneficiaries.isNotEmpty
+    ? ListView.builder(
         itemCount: beneficiaries.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -157,28 +171,39 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                   title: Text(beneficiaries[index].name),
                   subtitle: Text(beneficiaries[index].biography),
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('\$${(beneficiaries[index].amountRaised.toStringAsFixed(2))}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(color: Colors.black, fontSize: 15)),
-                  Text(
-                    '\$${beneficiaries[index].goalAmount.toStringAsFixed(2)}',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text('\$'+f.format(beneficiaries[index].amountRaised),
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$'+f.format(beneficiaries[index].goalAmount),
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Colors.green),
+                          value: (beneficiaries[index].amountRaised/beneficiaries[index].goalAmount),
+                          minHeight: 10,
+                        ),
+                      ),
+                    ],
                   ),
-                ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (beneficiaries[index].amountRaised/beneficiaries[index].goalAmount),
-                  minHeight: 10,
                 ),
                 const Divider()
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('This organization doesn\'t have any \nactive beneficiaries at this time.', style: TextStyle(fontSize: 18),));
   }
 
   @override

@@ -8,7 +8,7 @@ import 'package:donaid/Organization/organization_beneficiary_full.dart';
 import 'package:donaid/Organization/organization_campaign_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import 'organization_urgentcase_full.dart';
 
 class ExpiredCharitiesScreen extends StatefulWidget {
@@ -24,6 +24,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
   List<Beneficiary> beneficiaries=[];
   List<Campaign> campaigns=[];
   List<UrgentCase> urgentCases=[];
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
@@ -124,7 +125,8 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
   }
 
   _beneficiariesBody(){
-    return ListView.builder(
+    return beneficiaries.isNotEmpty
+    ? ListView.builder(
         itemCount: beneficiaries.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -140,32 +142,44 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
                   title: Text(beneficiaries[index].name),
                   subtitle: Text(beneficiaries[index].biography),
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('\$${(beneficiaries[index].amountRaised.toStringAsFixed(2))}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(color: Colors.black, fontSize: 15)),
-                  Text(
-                    '\$${beneficiaries[index].goalAmount.toStringAsFixed(2)}',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text('\$'+f.format(beneficiaries[index].amountRaised),
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$'+f.format(beneficiaries[index].goalAmount),
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Colors.green),
+                          value: (beneficiaries[index].amountRaised/beneficiaries[index].goalAmount),
+                          minHeight: 10,
+                        ),
+                      ),
+                    ],
                   ),
-                ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (beneficiaries[index].amountRaised/beneficiaries[index].goalAmount),
-                  minHeight: 10,
                 ),
                 const Divider()
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('No expired beneficiaries to show.', style: TextStyle(fontSize: 18),));
   }
   
   _campaignsBody(){
-    return ListView.builder(
+    return campaigns.isNotEmpty
+    ? ListView.builder(
         itemCount: campaigns.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -181,32 +195,44 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
                   title: Text(campaigns[index].title),
                   subtitle: Text(campaigns[index].description),
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('\$${(campaigns[index].amountRaised.toStringAsFixed(2))}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(color: Colors.black, fontSize: 15)),
-                  Text(
-                    '\$${campaigns[index].goalAmount.toStringAsFixed(2)}',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text('\$'+f.format(campaigns[index].amountRaised),
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$'+f.format(campaigns[index].goalAmount),
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Colors.green),
+                          value: (campaigns[index].amountRaised/campaigns[index].goalAmount),
+                          minHeight: 10,
+                        ),
+                      ),
+                    ],
                   ),
-                ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (campaigns[index].amountRaised/campaigns[index].goalAmount),
-                  minHeight: 10,
                 ),
                 const Divider()
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('No expired campaigns to show.', style: TextStyle(fontSize: 18),));
   }
   
   _urgentCasesBody(){
-    return ListView.builder(
+    return urgentCases.isNotEmpty
+    ? ListView.builder(
         itemCount: urgentCases.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -222,28 +248,39 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
                   title: Text(urgentCases[index].title),
                   subtitle: Text(urgentCases[index].description),
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('\$${(urgentCases[index].amountRaised.toStringAsFixed(2))}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(color: Colors.black, fontSize: 15)),
-                  Text(
-                    '\$${urgentCases[index].goalAmount.toStringAsFixed(2)}',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text('\$'+f.format(urgentCases[index].amountRaised),
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$'+f.format(urgentCases[index].goalAmount),
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Colors.green),
+                          value: (urgentCases[index].amountRaised/urgentCases[index].goalAmount),
+                          minHeight: 10,
+                        ),
+                      ),
+                    ],
                   ),
-                ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (urgentCases[index].amountRaised/urgentCases[index].goalAmount),
-                  minHeight: 10,
                 ),
                 const Divider()
               ],
             ),
           );
-        });
+        })
+    : const Center(child: Text('No expired urgent cases to show.', style: TextStyle(fontSize: 18),));
   }
   @override
   Widget build(BuildContext context) {

@@ -28,7 +28,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   final _auth = FirebaseAuth.instance;
   List<Donation> donations = [];
   List<Organization> organizations = [];
-  var f = NumberFormat("###,###.0#", "en_US");
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
@@ -155,7 +155,8 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _donationHistoryBody() {
-    return ListView.builder(
+    return donations.isNotEmpty
+    ? ListView.builder(
         itemCount: donations.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -197,7 +198,14 @@ class _DonationHistoryState extends State<DonationHistory> {
               const Divider()
             ],
           ));
-        });
+        })
+    : Center(child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('No donation history.', style: TextStyle(fontSize: 18),),
+        Text('Make a donation to see it here!', style: TextStyle(fontSize: 18),),
+      ],
+    ));
   }
 
   @override

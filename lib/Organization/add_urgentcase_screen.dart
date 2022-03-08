@@ -1,12 +1,11 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-
-import 'OrganizationWidget/popup_dialog_success.dart';
 
 class AddUrgentCaseForm extends StatefulWidget {
   static const id = 'urgentcase_form_screen';
@@ -389,12 +388,10 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                       int.parse(goalAmountController.text).toDouble(),
                                       titleController.text,
                                       endDateController.text);
-                                  Navigator.pop(context, true);
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        PopUpSuccessDialog(),
-                                  );
+                                  Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(content: Text('Urgent case submitted!')));
                                 }
                               },
                             ),

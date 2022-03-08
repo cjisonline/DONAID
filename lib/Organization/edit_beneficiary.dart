@@ -15,6 +15,7 @@ class EditBeneficiary extends StatefulWidget {
 class _EditBeneficiaryState extends State<EditBeneficiary> {
   final _firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  int beneficiaryTimeLimit=0;
 
   static final goalRegExp = RegExp(
       r"^(?!0\.00)\d{1,13}(,\d{3})*(\.\d\d)?$"
@@ -31,6 +32,14 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
   void initState(){
     super.initState();
     _getCategories();
+    _getTimeLimit();
+  }
+
+  _getTimeLimit() async {
+    var ret = await _firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
+
+    var doc = ret.docs[0];
+    beneficiaryTimeLimit = doc['beneficiaries'];
   }
 
   _getCategories() async {
@@ -44,9 +53,13 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     setState(() {});
   }
 
-  _submitForm(){
+  _submitForm() async{
     if (!_formKey.currentState!.validate()) {
       return;
+    }
+    else{
+      await _updateBeneficiary();
+      Navigator.pop(context,true);
     }
     _formKey.currentState!.save();
   }
@@ -79,8 +92,6 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
             TextButton(
               onPressed: () async {
                 _submitForm();
-                await _updateBeneficiary();
-                Navigator.pop(context,true);
               },
               child: const Text('Save',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
@@ -102,7 +113,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               _buildCampaignNameField(),
-              _buildBeneficiaryBiographField(),
+              _buildBeneficiaryBiographyField(),
               _buildGoalAmountField(),
               _buildEndDateField(),
               _buildCategoryField(),
@@ -142,7 +153,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
         ));
   }
 
-  Widget _buildBeneficiaryBiographField() {
+  Widget _buildBeneficiaryBiographyField() {
     _beneficiaryBiographyController = TextEditingController(text: widget.beneficiary.biography);
     return  Padding(
       padding: const EdgeInsets.all(8.0),
@@ -169,7 +180,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
   }
 
   Widget _buildGoalAmountField(){
-    _beneficiaryGoalAmountController = TextEditingController(text: widget.beneficiary.goalAmount.toString());
+    _beneficiaryGoalAmountController = TextEditingController(text: widget.beneficiary.goalAmount.toStringAsFixed(2));
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
@@ -223,6 +234,9 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
           validator: (value) {
             if (value!.isEmpty) {
               return "Please enter end date.";
+            }
+            else if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
+              return 'Beneficiaries cannot have a duration longer than 1 year.';
             }
             else {
               return null;

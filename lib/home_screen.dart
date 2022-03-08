@@ -24,101 +24,108 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
       ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-           Padding(
-             padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-             child: Material(
-               elevation: 5.0,
-               color: Colors.blue,
-               borderRadius: BorderRadius.circular(30.0),
-               child: MaterialButton(
-                 child: const Text(
-                   'Login',
-                   style: TextStyle(
-                     fontSize: 25.0,
-                     color: Colors.white,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                height: 200,
+                  child: Image.asset('assets/DONAID_LOGO.png')
+              ),
+             Padding(
+               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+               child: Material(
+                 elevation: 5.0,
+                 color: Colors.blue,
+                 borderRadius: BorderRadius.circular(30.0),
+                 child: MaterialButton(
+                   child: const Text(
+                     'Login',
+                     style: TextStyle(
+                       fontSize: 25.0,
+                       color: Colors.white,
+                     ),
                    ),
+                   onPressed: (){
+                     Navigator.pushNamed(context, LoginScreen.id);
+                   },
                  ),
-                 onPressed: (){
-                   Navigator.pushNamed(context, LoginScreen.id);
-                 },
                ),
              ),
-           ),
 
-            const SizedBox(
-              height: 10.0,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  child: const Text(
-                    'Register',
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      color: Colors.white,
+              const SizedBox(
+                height: 10.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
+                child: Material(
+                  elevation: 5.0,
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: MaterialButton(
+                    child: const Text(
+                      'Register',
+                      style: TextStyle(
+                        fontSize: 25.0,
+                        color: Colors.white,
+                      ),
                     ),
+                    onPressed: (){
+                      Navigator.pushNamed(context, RegistrationScreen.id);
+                    },
                   ),
-                  onPressed: (){
-                    Navigator.pushNamed(context, RegistrationScreen.id);
-                  },
                 ),
               ),
-            ),
-            Padding(
+              Padding(
+                  padding:
+                  EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
+                  child: Material(
+                      elevation: 5.0,
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(30.0),
+                      child: MaterialButton(
+                          child: const Text('Guest Login',
+                              style: TextStyle(fontSize: 25,color: Colors.white)),
+                          onPressed: () async {
+                            try {
+                              await FirebaseAuth
+                                  .instance
+                                  .signInAnonymously();
+                              Navigator.of(context).popUntil(
+                                  ModalRoute.withName(HomeScreen
+                                      .id)); //remove all screens on the stack and return to home screen
+                              Navigator.pushNamed(
+                                  context,
+                                  DonorDashboard
+                                      .id);
+                            } catch (signUpError) {
+                              print(signUpError);
+                            }
+                          }))),
+
+
+
+
+              Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 15.0),
+                  child: SignInButton(Buttons.Facebook,
+                      onPressed: () async => Auth.fbLogin(context),
+                      elevation: 5.0,
+                  )),
+              Padding(
                 padding:
-                EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
-                child: Material(
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                child: SignInButton(Buttons.Google,
+                    onPressed: () => Auth.googleLogin(context),
                     elevation: 5.0,
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(30.0),
-                    child: MaterialButton(
-                        child: const Text('Guest Login',
-                            style: TextStyle(fontSize: 25,color: Colors.white)),
-                        onPressed: () async {
-                          try {
-                            await FirebaseAuth
-                                .instance
-                                .signInAnonymously();
-                            Navigator.of(context).popUntil(
-                                ModalRoute.withName(HomeScreen
-                                    .id)); //remove all screens on the stack and return to home screen
-                            Navigator.pushNamed(
-                                context,
-                                DonorDashboard
-                                    .id);
-                          } catch (signUpError) {
-                            print(signUpError);
-                          }
-                        }))),
-
-
-
-
-            Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 15.0),
-                child: SignInButton(Buttons.Facebook,
-                    onPressed: () async => Auth.fbLogin(context),
-                    elevation: 5.0,
-                )),
-            Padding(
-              padding:
-              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-              child: SignInButton(Buttons.Google,
-                  onPressed: () => Auth.googleLogin(context),
-                  elevation: 5.0,
-              ),
-            )
-          ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

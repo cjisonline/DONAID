@@ -5,8 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-
-import 'OrganizationWidget/popup_dialog_success.dart';
+import 'organization_dashboard.dart';
 
 class AddCampaignForm extends StatefulWidget {
   static const id = 'campaign_form_screen';
@@ -361,11 +360,10 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                   });
                                   addCampaign(categoryController.text,descriptionController.text,
                                       int.parse(goalAmountController.text).toDouble(), titleController.text, endDateController.text);
-                                  Navigator.pop(context, true);
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => PopUpSuccessDialog(),
-                                  );
+                                  Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(content: Text('Campaign created!')));
                                 }
                               },
                             ),

@@ -5,8 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-
-import 'OrganizationWidget/popup_dialog_success.dart';
+import 'organization_dashboard.dart';
 
 class AddBeneficiaryForm extends StatefulWidget {
   static const id = 'beneficiary_form_screen';
@@ -367,12 +366,10 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                       int.parse(goalAmountController.text).toDouble(),
                                       nameController.text,
                                       endDateController.text);
-                                  Navigator.pop(context, true);
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        PopUpSuccessDialog(),
-                                  );
+                                  Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(content: Text('Beneficiary created!')));
                                 }
                               },
                             ),

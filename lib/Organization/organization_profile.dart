@@ -79,22 +79,22 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
   Widget _buildProfilePictureDisplay(){
     return Padding(
       padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
-      child: (organization?.profilePictureDownloadURL==null)
+      child: (organization?.profilePictureDownloadURL==null || organization!.profilePictureDownloadURL.toString().isEmpty)
           ? Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
         SizedBox(
-        width: 250,
-        height: 250,
-        child: Icon(Icons.person),
+        width: 150,
+        height: 150,
+        child: Icon(Icons.person,size: 150),
         ),])
-          : (organization?.profilePictureDownloadURL!=null)
+          : (organization!.profilePictureDownloadURL.toString().isNotEmpty)
           ? Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: 250,
-            height: 250,
+            width: 150,
+            height: 150,
             child: Image.network(
               organization!.profilePictureDownloadURL.toString(),
               fit: BoxFit.contain,

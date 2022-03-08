@@ -1,4 +1,4 @@
-import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
+import 'package:donaid/Donor/organization_full_details_screen.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,9 @@ class _OrganizationCardState extends State<OrganizationCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: (){
-        DonorAlertDialogs.showFullOrganizationDetails(context, widget.organization);
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return (OrganizationFullDetailsScreen(widget.organization));
+        }));
       },
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context) {

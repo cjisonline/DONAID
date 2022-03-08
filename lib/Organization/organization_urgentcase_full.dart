@@ -3,6 +3,7 @@ import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class OrganizationUrgentCaseFullScreen extends StatefulWidget {
   final UrgentCase urgentCase;
@@ -14,6 +15,7 @@ class OrganizationUrgentCaseFullScreen extends StatefulWidget {
 
 class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCaseFullScreen> {
   final _firestore = FirebaseFirestore.instance;
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState(){
@@ -130,32 +132,41 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
         child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(widget.urgentCase.title),
-              Text(widget.urgentCase.description),
+              SizedBox(
+                  height: 100,
+                  child: Image.asset('assets/DONAID_LOGO.png')
+              ),
+              Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
+              Text(widget.urgentCase.description, style: TextStyle(fontSize: 18),),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '\$${(widget.urgentCase.amountRaised.toStringAsFixed(2))}',
-                        style: const TextStyle(color: Colors.black, fontSize: 15),
+                        '\$'+f.format(widget.urgentCase.amountRaised),
+                        style: const TextStyle(color: Colors.black, fontSize: 18),
                       ),
                       Text(
-                        '\$${widget.urgentCase.goalAmount.toStringAsFixed(2)}',
-                        style: const TextStyle(color: Colors.black, fontSize: 15),
+                        '\$'+f.format(widget.urgentCase.goalAmount),
+                        style: const TextStyle(color: Colors.black, fontSize: 18),
                       ),
                     ]),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor:
-                  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                  value:
-                  (widget.urgentCase.amountRaised / widget.urgentCase.goalAmount),
-                  minHeight: 10,
+                child: Container(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: LinearProgressIndicator(
+                      backgroundColor: Colors.grey,
+                      valueColor:
+                      const AlwaysStoppedAnimation<Color>(Colors.green),
+                      value:
+                      (widget.urgentCase.amountRaised / widget.urgentCase.goalAmount),
+                      minHeight: 25,
+                    ),
+                  ),
                 ),
               ),
               Column(
@@ -172,6 +183,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                             child: const Text(
                               'Stop Charity',
                               style: TextStyle(
+                                fontSize: 25,
                                 color: Colors.white,
                               ),
                             ),
@@ -188,6 +200,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                             child: const Text(
                               'Resume Charity',
                               style: TextStyle(
+                                fontSize: 25,
                                 color: Colors.white,
                               ),
                             ),

@@ -15,6 +15,7 @@ class EditCampaign extends StatefulWidget {
 class _EditCampaignState extends State<EditCampaign> {
   final _firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  int campaignTimeLimit=0;
 
   static final goalRegExp = RegExp(
       r"^(?!0\.00)\d{1,13}(,\d{3})*(\.\d\d)?$"
@@ -31,6 +32,14 @@ class _EditCampaignState extends State<EditCampaign> {
   void initState(){
     super.initState();
     _getCategories();
+    _getTimeLimit();
+  }
+
+  _getTimeLimit() async {
+    var ret = await _firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
+
+    var doc = ret.docs[0];
+    campaignTimeLimit = doc['campaigns'];
   }
 
   _getCategories() async {
@@ -44,9 +53,13 @@ class _EditCampaignState extends State<EditCampaign> {
     setState(() {});
   }
 
-  _submitForm(){
+  _submitForm()async{
     if (!_formKey.currentState!.validate()) {
       return;
+    }
+    else{
+      await _updateCampaign();
+      Navigator.pop(context,true);
     }
     _formKey.currentState!.save();
   }
@@ -79,8 +92,7 @@ class _EditCampaignState extends State<EditCampaign> {
             TextButton(
               onPressed: () async {
                 _submitForm();
-                await _updateCampaign();
-                Navigator.pop(context,true);
+
               },
               child: const Text('Save',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
@@ -169,7 +181,7 @@ class _EditCampaignState extends State<EditCampaign> {
   }
 
   Widget _buildGoalAmountField(){
-    _campaignGoalAmountController = TextEditingController(text: widget.campaign.goalAmount.toString());
+    _campaignGoalAmountController = TextEditingController(text: widget.campaign.goalAmount.toStringAsFixed(2));
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
@@ -223,6 +235,9 @@ class _EditCampaignState extends State<EditCampaign> {
           validator: (value) {
             if (value!.isEmpty) {
               return "Please enter end date.";
+            }
+            if(DateTime.parse(value).difference(DateTime.now()).inDays > campaignTimeLimit){
+              return 'Campaigns cannot have a duration longer than 1 year.';
             }
             else {
               return null;
