@@ -62,6 +62,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             'lastName': lastName,
             'email': email,
             'phoneNumber': phoneNumber,
+            'enabled':true
           });
 
           final usersDocRef = await _firestore.collection('Users').add({});

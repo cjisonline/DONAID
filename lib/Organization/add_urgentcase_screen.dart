@@ -366,7 +366,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 25.0, horizontal: 5.0),
+                              vertical: 20.0, horizontal: 5.0),
                           child: Material(
                             elevation: 5.0,
                             color: Colors.blue,
