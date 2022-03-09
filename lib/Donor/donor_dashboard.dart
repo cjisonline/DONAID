@@ -11,12 +11,17 @@ import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:donaid/Models/PushNotification.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Donor/DonorWidgets/beneficiary_card.dart';
 import 'package:donaid/Services/chatServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlay_support/overlay_support.dart';
+
+import 'DonorWidgets/notification_badge.dart';
 
 class DonorDashboard extends StatefulWidget {
   static const id = 'donor_dashboard';
@@ -32,16 +37,21 @@ class _DonorDashboardState extends State<DonorDashboard> {
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
+  final _messaging = FirebaseMessaging.instance;
+  PushNotification? _notificationInfo;
 
   List<Beneficiary> beneficiaries = [];
   List<UrgentCase> urgentCases = [];
   List<Organization> organizations = [];
   List<CharityCategory> charityCategories = [];
+  late int _totalNotificationCounter;
 
 
   @override
   void initState() {
     super.initState();
+    _totalNotificationCounter =0;
+    registerNotification();
     _getCurrentUser();
     _getBeneficiaries();
     _getUrgentCases();
@@ -49,6 +59,71 @@ class _DonorDashboardState extends State<DonorDashboard> {
     _getCharityCategories();
     Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
     Get.find<ChatService>().listenFriend(loggedInUser!.uid, 0);
+  }
+
+  registerNotification() async {
+    NotificationSettings notificationSettings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true
+    );
+
+    if(notificationSettings.authorizationStatus == AuthorizationStatus.authorized)
+      {
+        print('User granted the permission.');
+
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+          print('NEW NOTIFICATION');
+          print('Message title: ${message.notification?.title}');
+
+          PushNotification notification = PushNotification(
+              message.notification!.title,
+              message.notification!.body,
+              message.data['title'],
+              message.data['body']
+          );
+          setState(() {
+            _totalNotificationCounter ++;
+            _notificationInfo = notification;
+          });
+          if(notification!=null){
+            showSimpleNotification(
+              Text(_notificationInfo!.title!),
+              leading: NotificationBadge(totalNotification: _totalNotificationCounter),
+              subtitle: Text(_notificationInfo!.body!)
+            );
+            // showOverlayNotification((context){
+            //   return Card(
+            //     margin: const EdgeInsets.symmetric(horizontal: 4),
+            //     child: SafeArea(
+            //       child: ListTile(
+            //         leading: SizedBox.fromSize(
+            //           size: const Size(40,40),
+            //           child: ClipOval(
+            //             child: Container(
+            //               color: Colors.black,
+            //             ),
+            //           ),
+            //         ),
+            //         title: Text(message.notification!.title!),
+            //         subtitle: Text(message.notification!.body!),
+            //         trailing: IconButton(
+            //           icon: Icon(Icons.close),
+            //           onPressed: (){
+            //             OverlaySupportEntry.of(context)?.dismiss();
+            //           },
+            //         ),
+            //       )
+            //     ),
+            //   );
+            // });
+          }
+        });
+      }
+    else{
+      print("Permission declined by user.");
+    }
   }
 
   _refreshPage() {
@@ -157,7 +232,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
         title: const Text('Dashboard'),
       ),
       drawer: const DonorDrawer(),
-      body: _body(),
+      body:_body() ,
       bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
