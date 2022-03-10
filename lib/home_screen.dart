@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
@@ -18,6 +20,35 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState(){
+    super.initState();
+    checkAuthState();
+  }
+
+  checkAuthState() async{
+    _auth.authStateChanges().listen((User? user)async{
+      if(user == null){
+        print('User signed out.');
+      }
+      else{
+        var userRef = await _firestore.collection('Users').where('uid', isEqualTo: user.uid).get();
+        var userDoc= userRef.docs.first;
+
+        var userType = userDoc.data()['userType'];
+
+        if(userType == 1){
+          Navigator.pushNamed(context, DonorDashboard.id);
+        }
+        else if(userType == 2){
+          Navigator.pushNamed(context, OrganizationDashboard.id);
+        }
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
