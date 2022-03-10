@@ -12,6 +12,7 @@ import 'package:donaid/Organization/organization_edit_profile.dart';
 import 'package:donaid/Organization/organization_profile.dart';
 import 'package:donaid/Registration/registration_screen.dart';
 import 'package:donaid/Services/chatServices.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -32,11 +33,20 @@ import 'Donor/donor_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
+  print('Handling background message: ${message.messageId}');
+
+
+}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = 'pk_test_51KTuiGEvfimLlZrsjvlq3mE1JEa8nGiejkGVgw9MvqJd9viDPIXCbUGbWp1QaXf50sQIQs3MNWlVjp99VAruB0qW00xrE9kMs7';
+
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   await GetStorage.init();
   await Auth.getCurrentUser();
   Get.put(ChatService());

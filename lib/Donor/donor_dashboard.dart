@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorWidgets/category_card.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
@@ -50,8 +52,27 @@ class _DonorDashboardState extends State<DonorDashboard> {
   @override
   void initState() {
     super.initState();
+    FirebaseMessaging.onBackgroundMessage((message){
+      print('Background message receieved.');
+
+      return Future<void>.value();
+    });
     _totalNotificationCounter =0;
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
+      PushNotification notification = PushNotification(
+          message.notification!.title,
+          message.notification!.body,
+          message.data['title'],
+          message.data['body']
+      );
+      setState(() {
+        _totalNotificationCounter ++;
+        _notificationInfo = notification;
+      });
+    });
     registerNotification();
+    checkForInitialMessage();
+
     _getCurrentUser();
     _getBeneficiaries();
     _getUrgentCases();
@@ -59,6 +80,22 @@ class _DonorDashboardState extends State<DonorDashboard> {
     _getCharityCategories();
     Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
     Get.find<ChatService>().listenFriend(loggedInUser!.uid, 0);
+  }
+
+  checkForInitialMessage() async{
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if(initialMessage != null){
+      PushNotification notification = PushNotification(
+          initialMessage.notification!.title,
+          initialMessage.notification!.body,
+          initialMessage.data['title'],
+          initialMessage.data['body']
+      );
+      setState(() {
+        _totalNotificationCounter ++;
+        _notificationInfo = notification;
+      });
+    }
   }
 
   registerNotification() async {
