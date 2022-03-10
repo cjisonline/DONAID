@@ -40,7 +40,7 @@ import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const db =getFirestore(app);
+  const db = getFirestore(app);
 
 // Logout
 function logoutAdmin(){
@@ -52,40 +52,151 @@ function logoutAdmin(){
     alert("Logged Out");
 }
 
-$(document).ready(function() {
-    
-} );
-
-async function getOrgData(){
+async function getRejectionData(){
     window.onload = async function(){
 
-        const querySnapshot = await getDocs(collection(db, "OrganizationUsers"));
-            querySnapshot.forEach((item) => {
-                if(item.data().approved == true) {
-                    document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
-                    "<tr><td class='emailTD'>" + item.data().email + 
-                    "</td><td>" + item.data().phoneNumber + 
-                    "</td><td>" + item.data().country + 
-                    "</td><td>" + item.data().organizationName + 
-                    "</td><td>" + '<a href=' + item.data().verificationDocumentURL + ' download><button id="docsButton" class="submitButton" type="submit">Download</button></a>' + "</td></tr>";
-                }
+    const querySnapshot = await getDocs(collection(db, "OrganizationUsers"));
+        querySnapshot.forEach((item) => {
+            if(item.data().approved == false && item.data().rejected == true) {
+                document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
+                "<tr><td class='emailTD'>" + item.data().email + 
+                "</td><td>" + item.data().phoneNumber + 
+                "</td><td>" + item.data().organizationName + 
+                "</td><td class='documentTD'>" + item.data().id +
+                "</td><td>" + item.data().denialReason +
+                "</td><td>" + '<a href=' + item.data().verificationDocumentURL + ' download><button id="docsButton" class="submitButton" type="submit">Download</button></a>' + 
+                "</td><td>" + '<button id="approveButton" class="approveButtonClass">Approve</button>' + "</td></tr>";
+            }
+        });
+
+        $('button.approveButtonClass').click(function() {
+            var $item = adminTableDef.row($(this).closest("tr")).data()[3];
+
+            $("#resultas").append($item); 
+            var documentID = $item;
+
+            approveTheOrganization(documentID);
             });
 
-        $('#adminTable').DataTable( {
-            autoWidth: false,
-            columnDefs: [
-                {
-                    targets: ['_all'],
-                    className: 'mdc-data-table__cell'
-                }
-            ],
-            "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
-            "info": false,
-        });
-    }
+            var adminTableDef = $('#adminTable').DataTable({
+                autoWidth: false,
+                columnDefs: [
+                    {
+                        targets: ['_all'],
+                        className: 'mdc-data-table__cell'
+                    },
+                    {
+                    "targets": [ 3 ],
+                    "visible": false,
+                    "searchable": true
+                    }
+                ],
+                "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
+                "info": false,
+            });
+        }
 }
-getOrgData();
 
+function approveTheOrganization(documentID) {
+      
+    swal.fire({
+        title: 'Approve this organization?',
+        icon: 'warning',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Approve',
+        denyButtonText: 'Deny',
+        confirmButtonColor: '#6804ec',
+        cancelButtonColor: '#d33',
+        denyButtonColor: '#D70040',
+        customClass: {
+            actions: 'my-actions',
+            confirmButton: 'order-1',
+            denyButton: 'order-1',
+            cancelButton: 'order-3 left-gap',
+        }
+
+    })
+    .then((result) => {
+        if (result.isConfirmed) { 
+            const approvals = doc(db, "OrganizationUsers", documentID);
+            updateDoc(approvals, {
+                approved: true,
+                rejected: false,
+                denialReason: ""
+        })
+    
+            .then(() => {
+                swal.fire('Approved!',
+                'Organization is approved.',
+                'success').then(function () {
+                    location.reload(); 
+                })
+                
+                .catch((error) => {
+                    console.error("Error approving organization: ", error);
+                })
+            })
+        }
+
+        else if (result.isDenied) {
+        runDenialDialogue(documentID);
+    }
+        
+
+        else {
+            swal.fire('Cancelled!',
+            'No changes were made.',
+            'error');
+        }
+            
+    });
+}
+
+async function runDenialDialogue(documentID){
+    const { value: deniedReason } = await Swal.fire({
+            input: 'textarea',
+            inputLabel: 'Reason for Denial',
+            inputPlaceholder: 'Type your rejection reason here...',
+            inputAttributes: {
+                'aria-label': 'Type your rejection reason here'
+            },
+            showCancelButton: true
+            })
+
+
+
+            if(deniedReason){
+                const approvals = doc(db, "OrganizationUsers", documentID);
+                const docSet = setDoc(approvals, {
+                    denialReason: deniedReason,
+                    rejected: true
+                
+                }, { merge: true })
+            
+
+                .then(() => {
+                    swal.fire('Denied!',
+                    'Organization is denied due to: ' + deniedReason + '',
+                    'success').then(function () {
+                        location.reload(); 
+                    })
+            
+                
+                .catch((error) => {
+                    console.error("Error denying organization: ", error);
+                
+                })
+            })
+        }
+        else {
+            swal.fire('Cancelled!',
+            'No changes were made.',
+            'error');
+        }
+}
+
+getRejectionData();
 </script>
 
 <title>DONAID Admin Console</title>
@@ -99,10 +210,10 @@ getOrgData();
                     <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
                         <span style="text-align:center; font-size: 24px;">DONAID</span>
                         <a href="donor_dashboard.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Donors</span> </a>
-                        <a href="org_dashboard.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="nav-active"><span>Organizations</span></a>
+                        <a href="org_dashboard.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Organizations</span></a>
                         <a href="beneficiaries.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Beneficiaries</span></a>
                         <a href="approvals.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Approvals</span></a>
-                        <a href="rejections.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Rejections</span></a>
+                        <a href="rejections.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="nav-active"><span>Rejections</span></a>
                         <a href="urgent_cases.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Urgent Cases</span></a>
                         <a href="categories.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Categories</span></a>
                         <a href="settings.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Settings</span></a>
@@ -110,14 +221,16 @@ getOrgData();
                 </div>
             </div>
       <div class="col ps-md-2 pt-2">
-            <h1 class="page-title-header" style="text-align:center; font-size: 24px;">Organizations</h1>
+            <h1 class="page-title-header" style="text-align:center; font-size: 24px;">Rejections</h1>
             <table id="adminTable">
             <thead>
                 <th>Email</th>
                 <th>Phone Number</th>
-                <th>Country</th>
                 <th>Organization Name</th>
+                <th>ID</th>
+                <th>Reason</th>
                 <th>Documents</th>
+                <th>Approve</th>
             </thead>
             <tbody>
             </tbody>
@@ -125,12 +238,6 @@ getOrgData();
     </div>
     </div>
     </div>
-
-        <!-- <form class="inputWrapper">
-            <button onclick="logoutAdmin()" class="submitButton" id="logout">Logout</button>
-        </form> -->
-
-        
 
         <script type="module">
             import {getAuth, signInWithEmailAndPassword} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
@@ -141,5 +248,6 @@ getOrgData();
                 });
             });
         </script>
+
 </body>
 </html>
