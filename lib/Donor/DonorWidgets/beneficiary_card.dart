@@ -5,6 +5,7 @@ import 'package:donaid/Models/Organization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../beneficiary_donate_screen.dart';
+import 'package:get/get.dart';
 
 class BeneficiaryCard extends StatefulWidget {
   final Beneficiary beneficiary;
@@ -131,7 +132,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                               color: Colors.white, size: 20),
                         Container(
                           margin: const EdgeInsets.only(left: 0.0, right: 10.0),
-                          child: const Text('Donate',
+                          child:  Text('donate'.tr,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,

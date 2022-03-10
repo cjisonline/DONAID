@@ -154,7 +154,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title:  Text('dashboard'.tr),
       ),
       drawer: const DonorDrawer(),
       body: _body(),
@@ -183,8 +183,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Categories',
+                       Text(
+                        'categories'.tr,
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
@@ -192,8 +192,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesScreen())).then((value) => _refreshPage());
                         },
-                        child: const Text(
-                          'See more >',
+                        child:  Text(
+                          'see_more'.tr,
                           style: TextStyle(fontSize: 14),
                           textAlign: TextAlign.start,
                         ),
@@ -220,8 +220,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Organizations',
+                     Text(
+                      'organization'.tr,
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.start,
                     ),
@@ -229,8 +229,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                       onPressed: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationsExpandedScreen())).then((value) => _refreshPage());
                       },
-                      child: const Text(
-                        'See more >',
+                      child:  Text(
+                        'see_more'.tr,
                         style: TextStyle(fontSize: 14),
                         textAlign: TextAlign.start,
                       ),
@@ -256,8 +256,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Beneficiaries',
+                       Text(
+                        'beneficiaries'.tr,
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
@@ -265,8 +265,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => BeneficiaryExpandedScreen())).then((value) => _refreshPage());
                         },
-                        child: const Text(
-                          'See more >',
+                        child:  Text(
+                          'see_more'.tr,
                           style: TextStyle(fontSize: 14),
                           textAlign: TextAlign.start,
                         ),
@@ -284,7 +284,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     return BeneficiaryCard(beneficiaries[index]);
                   },
                 ))
-            : const Center(child: Text('No active beneficiaries to show.', style: TextStyle(fontSize: 18),)),
+            :  Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),)),
 
             // urgent case list
             Align(
@@ -294,8 +294,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Urgent Cases',
+                       Text(
+                        'urgent_cases'.tr,
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
@@ -303,8 +303,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => UrgentCasesExpandedScreen())).then((value) => _refreshPage());
                         },
-                        child: const Text(
-                          'See more >',
+                        child:  Text(
+                          'see_more'.tr,
                           style: TextStyle(fontSize: 14),
                           textAlign: TextAlign.start,
                         ),
@@ -322,7 +322,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     return UrgentCaseCard(urgentCases[index]);
                   },
                 ))
-            : const Center(child: Text('No active urgent cases to show.', style: TextStyle(fontSize: 18),)),
+            :  Center(child: Text('no_active_urgent_sases_show'.tr, style: TextStyle(fontSize: 18),)),
           ],
         ),
       )),

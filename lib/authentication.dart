@@ -32,7 +32,7 @@ class Auth {
         AuthCredential authCredential = FacebookAuthProvider.credential(token);
         User? user = (await _auth.signInWithCredential(authCredential)).user;
         if (user == null) {
-          EasyLoading.showInfo("Something Wrong",
+          EasyLoading.showInfo("something_wrong".tr,
               duration: const Duration(seconds: 3));
         } else {
           currentUser.id = user.uid;
@@ -47,7 +47,7 @@ class Auth {
           Navigator.pushNamed(context, DonorDashboard.id);
         }
       } else if (facebookLoginResult.status == LoginStatus.cancelled) {
-        EasyLoading.showInfo("Login cancelled by user",
+        EasyLoading.showInfo("login_cancelled_by_user".tr,
             duration: const Duration(seconds: 3));
       } else if (facebookLoginResult.status == LoginStatus.failed) {
         EasyLoading.showInfo(facebookLoginResult.message ?? "",
@@ -75,7 +75,7 @@ class Auth {
             idToken: googleSignInAuthentication.idToken);
         User? user = (await _auth.signInWithCredential(authCredential)).user;
         if (user == null) {
-          EasyLoading.showInfo("Something Wrong",
+          EasyLoading.showInfo("something_wrong".tr,
               duration: const Duration(seconds: 3));
         } else {
           currentUser.name = googleSignInAccount.displayName ?? "";
@@ -86,7 +86,7 @@ class Auth {
           Navigator.pushNamed(context, DonorDashboard.id);
         }
       } else {
-        EasyLoading.showInfo("Something Wrong",
+        EasyLoading.showInfo("something_wrong".tr,
             duration: const Duration(seconds: 3));
       }
     } on FirebaseAuthException catch (error) {
@@ -109,7 +109,7 @@ class Auth {
         await LocalServices.write("user", currentUser.toJSON());
         Navigator.pushNamed(context, DonorDashboard.id);
       } else {
-        EasyLoading.showInfo("Something Wrong",
+        EasyLoading.showInfo("something_wrong".tr,
             duration: const Duration(seconds: 3));
       }
     } on FirebaseAuthException catch (error) {
@@ -128,7 +128,7 @@ class Auth {
         await LocalServices.write("user", currentUser.toJSON());
         Navigator.pushNamed(context, DonorDashboard.id);
       } else {
-        EasyLoading.showInfo("Something Wrong",
+        EasyLoading.showInfo("something_wrong".tr,
             duration: const Duration(seconds: 3));
       }
     } on FirebaseAuthException catch (error) {

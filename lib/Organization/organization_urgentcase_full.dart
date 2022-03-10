@@ -4,6 +4,8 @@ import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navig
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
+
 
 class OrganizationUrgentCaseFullScreen extends StatefulWidget {
   final UrgentCase urgentCase;
@@ -53,12 +55,13 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Are You Sure?'),
+            title:  Center(
+              child: Text('are_you_sure?'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
+            //doubt
             content: const Text(
                 'Stopping this charity will make it not visible to donors. Once you stop this charity '
                     'you can reactivate it from the Inactive Charities page. Would you like to continue '
@@ -71,7 +74,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                     Navigator.pop(context);
                     _refreshUrgentCase();
                   },
-                  child: const Text('Yes'),
+                  child:  Text('yes'.tr),
                 ),
               ),
               Center(
@@ -79,7 +82,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('No'),
+                  child:  Text('no'.tr),
                 ),
               ),
             ],
@@ -93,12 +96,13 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Are You Sure?'),
+            title:  Center(
+              child: Text('are_you_sure?'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
+            //doubt
             content: const Text(
                 'Resuming this charity will make it visible to donors again. Once you resume this charity '
                     'you can deactivate it again from the dashboard or the My Urgent Cases page. Would you like '
@@ -111,7 +115,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                     Navigator.pop(context);
                     _refreshUrgentCase();
                   },
-                  child: const Text('Yes'),
+                  child:  Text('yes'.tr),
                 ),
               ),
               Center(
@@ -119,7 +123,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('No'),
+                  child:  Text('no'.tr),
                 ),
               ),
             ],
@@ -180,8 +184,8 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(32.0),
                         child: MaterialButton(
-                            child: const Text(
-                              'Stop Charity',
+                            child:  Text(
+                              'stop_charity'.tr,
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
@@ -197,8 +201,8 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(32.0),
                         child: MaterialButton(
-                            child: const Text(
-                              'Resume Charity',
+                            child:  Text(
+                              'resume_charity'.tr,
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
@@ -212,8 +216,8 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                         child: Container(
-                          child: const Text(
-                            'Note: This charity has expired.',
+                          child:  Text(
+                            '_note:this_charity_has_expired'.tr,
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.black,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Donor/donor_dashboard.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
   static const id = 'login_screen';
@@ -93,21 +94,21 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Hold on a second!'),
+            title:  Center(
+              child: Text('hold_on_a_second!'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content: const Text(
-                'Cannot log in with that email and password. Please enter valid credentials.'),
+            content:  Text(
+                'cannot_log_in_with_that_email'.tr),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('OK'),
+                  child:  Text('oK'.tr),
                 ),
               ),
             ],
@@ -125,22 +126,22 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Hang on!'),
+            title:  Center(
+              child: Text('hang_on!'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content: const Text(
-                'Your organization account has not yet been approved by the admin. You must wait for '
-                    'approval before you can login to this account.'),
+            content:  Text(
+                'your_organizationaccount_has_not_yet_been_approved'.tr
+                  ),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('OK'),
+                  child:  Text('oK'.tr),
                 ),
               ),
             ],
@@ -157,22 +158,22 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Hang on!'),
+            title:  Center(
+              child: Text('hang_on!'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content: const Text(
-                'Your donor account has been disabled by the administrator. If you think this may have been a mistake,'
-                    ' please send an email to donaidmobileapp1@gmail.com'),
+            content:  Text(
+                'your_donor_account_has_been_disbaled_by_the_administrator'.tr
+                    ),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('OK'),
+                  child:  Text('oK'.tr),
                 ),
               ),
             ],
@@ -190,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Login'),
+        title:  Text('login'.tr),
       ),
       body: ModalProgressHUD(
         inAsyncCall: showLoadingSpinner,
@@ -209,9 +210,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return "Please enter your email.";
+                      return "please_enter_your_email.".tr;
                     } else if (!emailRegExp.hasMatch(value)) {
-                      return "Please enter a valid email address.";
+                      return "please_enter_a_valid_email_address.".tr;
                     } else {
                       return null;
                     }
@@ -234,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (value) {
                     if (passwordreset) return null;
                     if (value!.isEmpty || value.length < 6) {
-                      return "Password must be at least 6 characters.";
+                      return "password_must_be_at_least_6_characters.".tr;
                     } else {
                       return null;
                     }
@@ -255,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(32.0),
                   child: MaterialButton(
-                    child: Text('Login', style: TextStyle(color: Colors.white)),
+                    child: Text('login'.tr, style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       passwordreset = false;
                       if (_formKey.currentState!.validate()) {
@@ -287,23 +288,23 @@ class _LoginScreenState extends State<LoginScreen> {
                             barrierDismissible: false,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                  title: Center(child: Text('Reset Link Sent!')),
+                                  title: Center(child: Text('reset_link_sent!'.tr)),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(32.0)),
                                   content:
-                                  Text('Check Your Email to Reset Password'),
+                                  Text('check_your_email_to_reset_password'.tr),
                                   actions: [
                                     Center(
                                         child: TextButton(
                                             onPressed: () {
                                               Navigator.pop(context);
                                             },
-                                            child: const Text('OK')))
+                                            child:  Text('oK'.tr)))
                                   ]);
                             });
                       }
                     },
-                    child: Text('Forgot Password?',
+                    child: Text('forgot_password!'.tr,
                         style: TextStyle(color: Colors.black)),
                   )),
               Spacer(),

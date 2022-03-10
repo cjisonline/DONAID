@@ -150,7 +150,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title:  Text('dashboard'.tr),
         backgroundColor: Colors.blue,
         actions: <Widget>[
           IconButton(
@@ -187,8 +187,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Campaign',
+                       Text(
+                        '_campaign'.tr,
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
@@ -198,8 +198,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                             _refreshPage();
                           });
                         },
-                        child: const Text(
-                          'See more >',
+                        child:  Text(
+                          'see_more'.tr,
                           style: TextStyle(fontSize: 14),
                           textAlign: TextAlign.start,
                         ),
@@ -217,9 +217,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     return CampaignCard(campaigns[index]);
                   },
                 ))
-            : const Padding(
+            :  Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text('No active campaigns to show.', style: TextStyle(fontSize: 18),),
+              child: Text('no_active_campaigns_to_show'.tr, style: TextStyle(fontSize: 18),),
             ),
 
             // organization list
@@ -230,8 +230,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Urgent Cases',
+                       Text(
+                        '_urgent_cases'.tr,
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
@@ -241,8 +241,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                             _refreshPage();
                           });
                         },
-                        child: const Text(
-                          'See more >',
+                        child:  Text(
+                          'see_more'.tr,
                           style: TextStyle(fontSize: 14),
                           textAlign: TextAlign.start,
                         ),
@@ -263,7 +263,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
             )
             : Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('No active urgent cases to show.', style: TextStyle(fontSize: 18),),
+              child: Text('no_active_urgent_sases_show'.tr, style: TextStyle(fontSize: 18),),
             ),
 
             // urgent case list
@@ -274,8 +274,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Beneficiary',
+                       Text(
+                        '_beneficiary'.tr,
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
@@ -285,8 +285,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                             _refreshPage();
                           });
                         },
-                        child: const Text(
-                          'See more >',
+                        child:  Text(
+                          'see_more'.tr,
                           style: TextStyle(fontSize: 14),
                           textAlign: TextAlign.start,
                         ),
@@ -304,9 +304,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     return BeneficiaryCard(beneficiaries[index]);
                   },
                 ))
-            : const Padding(
+            :  Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text('No active beneficiaries to show.', style:  TextStyle(fontSize: 18),),
+              child: Text('no_active_beneficiaries_to_show'.tr, style:  TextStyle(fontSize: 18),),
             ),
           ],
         ),
