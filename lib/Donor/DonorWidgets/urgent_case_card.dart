@@ -3,7 +3,7 @@ import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../urgent_case_donate_screen.dart';
 
 class UrgentCaseCard extends StatefulWidget {
@@ -18,6 +18,7 @@ class UrgentCaseCard extends StatefulWidget {
 class _UrgentCaseCardState extends State<UrgentCaseCard> {
   final _firestore = FirebaseFirestore.instance;
   Organization? organization;
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
@@ -78,21 +79,26 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                   maxLines: 3,
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('\$${(widget.urgentCase.amountRaised.toStringAsFixed(2))}',
+              Text('\$'+f.format(widget.urgentCase.amountRaised),
                   textAlign: TextAlign.left,
                   style: const TextStyle(color: Colors.black, fontSize: 15)),
               Text(
-                '\$${widget.urgentCase.goalAmount.toStringAsFixed(2)}',
+                '\$'+f.format(widget.urgentCase.goalAmount),
                 textAlign: TextAlign.start,
                 style: const TextStyle(color: Colors.black, fontSize: 15),
               ),
             ]),
-            LinearProgressIndicator(
-              backgroundColor: Colors.grey,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).primaryColor),
-              value: (widget.urgentCase.amountRaised/widget.urgentCase.goalAmount),
-              minHeight: 10,
+            Container(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: LinearProgressIndicator(
+                  backgroundColor: Colors.grey,
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                      Colors.green),
+                  value: (widget.urgentCase.amountRaised/widget.urgentCase.goalAmount),
+                  minHeight: 10,
+                ),
+              ),
             ),
             Container(
                 margin: const EdgeInsets.only(top: 10.0),

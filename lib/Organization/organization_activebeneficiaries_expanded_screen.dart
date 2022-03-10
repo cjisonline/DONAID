@@ -4,7 +4,7 @@ import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navig
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import 'organization_beneficiary_full.dart';
 
 class OrganizationBeneficiariesExpandedScreen extends StatefulWidget {
@@ -16,11 +16,11 @@ class OrganizationBeneficiariesExpandedScreen extends StatefulWidget {
       _OrganizationBeneficiariesExpandedScreenState();
 }
 
-class _OrganizationBeneficiariesExpandedScreenState
-    extends State<OrganizationBeneficiariesExpandedScreen> {
+class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBeneficiariesExpandedScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries = [];
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
@@ -67,7 +67,8 @@ class _OrganizationBeneficiariesExpandedScreenState
       onRefresh: ()async{
         _refreshPage();
       },
-      child: ListView.builder(
+      child: beneficiaries.isNotEmpty
+        ? ListView.builder(
           itemCount: beneficiaries.length,
           shrinkWrap: true,
           itemBuilder: (context, int index) {
@@ -83,34 +84,39 @@ class _OrganizationBeneficiariesExpandedScreenState
                     title: Text(beneficiaries[index].name),
                     subtitle: Text(beneficiaries[index].biography),
                   ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
                       children: [
-                        Text(
-                            '\$${(beneficiaries[index].amountRaised.toStringAsFixed(2))}',
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 15)),
-                        Text(
-                          '\$${beneficiaries[index].goalAmount.toStringAsFixed(2)}',
-                          textAlign: TextAlign.start,
-                          style:
-                          const TextStyle(color: Colors.black, fontSize: 15),
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          Text('\$'+f.format(beneficiaries[index].amountRaised),
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(color: Colors.black, fontSize: 15)),
+                          Text(
+                            '\$'+f.format(beneficiaries[index].goalAmount),
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(color: Colors.black, fontSize: 15),
+                          ),
+                        ]),
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          child: LinearProgressIndicator(
+                            backgroundColor: Colors.grey,
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                                Colors.green),
+                            value: (beneficiaries[index].amountRaised/beneficiaries[index].goalAmount),
+                            minHeight: 10,
+                          ),
                         ),
-                      ]),
-                  LinearProgressIndicator(
-                    backgroundColor: Colors.grey,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).primaryColor),
-                    value: (beneficiaries[index].amountRaised /
-                        beneficiaries[index].goalAmount),
-                    minHeight: 10,
+                      ],
+                    ),
                   ),
                   const Divider()
                 ],
               ),
             );
-          }),
+          })
+      : const Center(child: Text('No active beneficiaries to show.', style: TextStyle(fontSize: 18),)),
     );
   }
 

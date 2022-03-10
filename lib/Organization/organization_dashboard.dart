@@ -159,7 +159,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 size: 30,
               ),
               onPressed: () {
-                Navigator.push (context, MaterialPageRoute(builder: (context) => OrgAddSelection()),).then((value){
+                Navigator.push (context, MaterialPageRoute(builder: (context) => const OrgAddSelection()),).then((value){
                   _refreshPage();
                 });
               }),
@@ -167,7 +167,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       ),
       drawer: const OrganizationDrawer(),
       body: _body(),
-      bottomNavigationBar: OrganizationBottomNavigation(),
+      bottomNavigationBar: const OrganizationBottomNavigation(),
     );
   }
 
@@ -194,7 +194,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                       ),
                       TextButton(
                         onPressed: (){
-                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationCampaignsExpandedScreen()),).then((value){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => const OrganizationCampaignsExpandedScreen()),).then((value){
                             _refreshPage();
                           });
                         },
@@ -207,7 +207,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     ]),
               ),
             ),
-            SizedBox(
+            campaigns.isNotEmpty
+            ? SizedBox(
                 height: 325.0,
                 child: ListView.builder(
                   itemCount: campaigns.length,
@@ -215,7 +216,11 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                   itemBuilder: (context, int index) {
                     return CampaignCard(campaigns[index]);
                   },
-                )),
+                ))
+            : const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text('No active campaigns to show.', style: TextStyle(fontSize: 18),),
+            ),
 
             // organization list
             Align(
@@ -232,7 +237,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                       ),
                       TextButton(
                         onPressed: (){
-                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationUrgentCasesExpandedScreen()),).then((value){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => const OrganizationUrgentCasesExpandedScreen()),).then((value){
                             _refreshPage();
                           });
                         },
@@ -245,7 +250,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     ]),
               ),
             ),
-            SizedBox(
+            urgentCases.isNotEmpty
+            ? SizedBox(
                 height: 325.0,
                 child: ListView.builder(
                   itemCount: urgentCases.length,
@@ -253,7 +259,12 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                   itemBuilder: (context, int index) {
                     return UrgentCaseCard(urgentCases[index]);
                   },
-                )),
+                )
+            )
+            : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('No active urgent cases to show.', style: TextStyle(fontSize: 18),),
+            ),
 
             // urgent case list
             Align(
@@ -270,7 +281,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                       ),
                       TextButton(
                         onPressed: (){
-                          Navigator.push (context, MaterialPageRoute(builder: (context) => OrganizationBeneficiariesExpandedScreen()),).then((value){
+                          Navigator.push (context, MaterialPageRoute(builder: (context) => const OrganizationBeneficiariesExpandedScreen()),).then((value){
                             _refreshPage();
                           });
                         },
@@ -283,7 +294,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     ]),
               ),
             ),
-            SizedBox(
+            beneficiaries.isNotEmpty
+            ? SizedBox(
                 height: 325.0,
                 child: ListView.builder(
                   itemCount: beneficiaries.length,
@@ -291,7 +303,11 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                   itemBuilder: (context, int index) {
                     return BeneficiaryCard(beneficiaries[index]);
                   },
-                )),
+                ))
+            : const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text('No active beneficiaries to show.', style:  TextStyle(fontSize: 18),),
+            ),
           ],
         ),
       ),

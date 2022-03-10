@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'OrganizationWidget/organization_drawer.dart';
 import 'organization_urgentcase_full.dart';
@@ -18,6 +18,7 @@ class _PendingApprovalsState extends State<PendingApprovals> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   List<UrgentCase> urgentCases = [];
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
@@ -63,7 +64,8 @@ class _PendingApprovalsState extends State<PendingApprovals> {
 
 
   _urgentCasesBody() {
-    return ListView.builder(
+    return urgentCases.isNotEmpty
+    ? ListView.builder(
         itemCount: urgentCases.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
@@ -79,28 +81,39 @@ class _PendingApprovalsState extends State<PendingApprovals> {
                   title: Text(urgentCases[index].title),
                   subtitle: Text(urgentCases[index].description),
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('\$${(urgentCases[index].amountRaised.toStringAsFixed(2))}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(color: Colors.black, fontSize: 15)),
-                  Text(
-                    '\$${urgentCases[index].goalAmount.toStringAsFixed(2)}',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text('\$'+f.format(urgentCases[index].amountRaised),
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$'+f.format(urgentCases[index].goalAmount),
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Colors.green),
+                          value: (urgentCases[index].amountRaised/urgentCases[index].goalAmount),
+                          minHeight: 10,
+                        ),
+                      ),
+                    ],
                   ),
-                ]),
-                LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
-                  value: (urgentCases[index].amountRaised/urgentCases[index].goalAmount),
-                  minHeight: 10,
                 ),
                 const Divider()
               ],
             ),
           );
-        });
+        })
+        : const Center(child: Text('No pending urgent cases to show.', style: TextStyle(fontSize: 18),));
   }
 
   @override

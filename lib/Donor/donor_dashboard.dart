@@ -274,7 +274,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     ]),
               ),
             ),
-            SizedBox(
+            beneficiaries.isNotEmpty
+            ? SizedBox(
                 height: 325.0,
                 child: ListView.builder(
                   itemCount: beneficiaries.length,
@@ -282,7 +283,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                   itemBuilder: (context, int index) {
                     return BeneficiaryCard(beneficiaries[index]);
                   },
-                )),
+                ))
+            : const Center(child: Text('No active beneficiaries to show.', style: TextStyle(fontSize: 18),)),
 
             // urgent case list
             Align(
@@ -310,7 +312,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     ]),
               ),
             ),
-            SizedBox(
+            urgentCases.isNotEmpty
+            ? SizedBox(
                 height: 325.0,
                 child: ListView.builder(
                   itemCount: urgentCases.length,
@@ -318,7 +321,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                   itemBuilder: (context, int index) {
                     return UrgentCaseCard(urgentCases[index]);
                   },
-                )),
+                ))
+            : const Center(child: Text('No active urgent cases to show.', style: TextStyle(fontSize: 18),)),
           ],
         ),
       )),

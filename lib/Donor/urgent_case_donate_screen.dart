@@ -8,6 +8,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class UrgentCaseDonateScreen extends StatefulWidget {
   UrgentCase urgentCase;
@@ -26,6 +27,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   Map<String, dynamic>? paymentIntentData;
   String donationAmount = "";
   bool showLoadingSpinner = false;
+  var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState(){
@@ -43,115 +45,128 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   _campaignDonateBody() {
     return ModalProgressHUD(
       inAsyncCall: showLoadingSpinner,
-      child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(widget.urgentCase.title),
-              Text(widget.urgentCase.description),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '\$${(widget.urgentCase.amountRaised.toStringAsFixed(2))}',
-                        style: const TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                      Text(
-                        '\$${widget.urgentCase.goalAmount.toStringAsFixed(2)}',
-                        style: const TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                    ]),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: LinearProgressIndicator(
-                  backgroundColor: Colors.grey,
-                  valueColor:
-                  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                  value:
-                  (widget.urgentCase.amountRaised / widget.urgentCase.goalAmount),
-                  minHeight: 10,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                SizedBox(
+                    height: 100,
+                    child: Image.asset('assets/DONAID_LOGO.png')
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 25.0),
-                child: (widget.urgentCase.active == true && (widget.urgentCase.endDate).compareTo(Timestamp.now())>0)
-                  ? Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
+                Text(widget.urgentCase.description, style: TextStyle(fontSize: 18),),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            onChanged: (value) {
-                              donationAmount = value.toString();
-                            },
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter a valid payment amount.';
-                              }
-                              else if(double.parse(value)<0.50){
-                                return 'Please provide a donation minimum of \$0.50';
-                              }
-                              else {
-                                return null;
-                              }
-                            },
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                                label: Center(
-                                  child: RichText(
-                                      text: TextSpan(
-                                        text: 'Donation Amount',
-                                        style: TextStyle(
-                                            color: Colors.grey[600], fontSize: 20.0),
-                                      )),
-                                ),
-                                border: const OutlineInputBorder(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(32.0)),
-                                )),
-                          ),
+                        Text(
+                          '\$'+f.format(widget.urgentCase.amountRaised),
+                          style: const TextStyle(color: Colors.black, fontSize: 18),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Material(
-                            elevation: 5.0,
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(32.0),
-                            child: MaterialButton(
-                              child: const Text(
-                                'Donate',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    showLoadingSpinner = true;
-                                  });
-                                  await makePayment();
-
-                                  setState(() {
-                                    showLoadingSpinner=false;
-                                  });
+                        Text(
+                          '\$'+f.format(widget.urgentCase.goalAmount),
+                          style: const TextStyle(color: Colors.black, fontSize: 18),
+                        ),
+                      ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      child: LinearProgressIndicator(
+                        backgroundColor: Colors.grey,
+                        valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.green),
+                        value:
+                        (widget.urgentCase.amountRaised / widget.urgentCase.goalAmount),
+                        minHeight: 25,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 25.0),
+                  child: (widget.urgentCase.active == true && (widget.urgentCase.endDate).compareTo(Timestamp.now())>0)
+                    ? Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              onChanged: (value) {
+                                donationAmount = value.toString();
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter a valid payment amount.';
+                                }
+                                else if(double.parse(value)<0.50){
+                                  return 'Please provide a donation minimum of \$0.50';
+                                }
+                                else {
+                                  return null;
                                 }
                               },
+                              keyboardType: const TextInputType.numberWithOptions(
+                                  decimal: true),
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                  label: Center(
+                                    child: RichText(
+                                        text: TextSpan(
+                                          text: 'Donation Amount',
+                                          style: TextStyle(
+                                              color: Colors.grey[600], fontSize: 20.0),
+                                        )),
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(32.0)),
+                                  )),
                             ),
                           ),
-                        ),
-                      ],
-                    ))
-                : Text('Urgent case is no longer available to donate to.'),
-              )
-            ]),
-          )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Material(
+                              elevation: 5.0,
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(32.0),
+                              child: MaterialButton(
+                                child: const Text(
+                                  'Donate',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    setState(() {
+                                      showLoadingSpinner = true;
+                                    });
+                                    await makePayment();
+
+                                    setState(() {
+                                      showLoadingSpinner=false;
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ))
+                  : Text('Urgent case is no longer available to donate to.'),
+                )
+              ]),
+            )),
+      ),
     );
   }
 

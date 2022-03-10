@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             content: const Text(
                 'Your donor account has been disabled by the administrator. If you think this may have been a mistake,'
-                    'please send an email to donaidmobileapp1@gmail.com'),
+                    ' please send an email to donaidmobileapp1@gmail.com'),
             actions: [
               Center(
                 child: TextButton(
@@ -287,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             barrierDismissible: false,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                  title: Center(child: Text('Alert')),
+                                  title: Center(child: Text('Reset Link Sent!')),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(32.0)),
                                   content:
