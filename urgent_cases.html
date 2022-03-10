@@ -21,13 +21,16 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.all.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
 <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css" />
-<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js"></script>
+<script type="module" defer  src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
+<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-messaging.js"></script>
 <script type="module">
+import { getMessaging } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-messaging.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
 import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
+
     const firebaseConfig = {
     apiKey: "AIzaSyAZIToR8oHIIgWmayz0PncWAaiwmJ5n_64",
     authDomain: "donaid-d3244.firebaseapp.com",
@@ -41,7 +44,8 @@ import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-
+  const messaging = getMessaging(app);
+  
 // Logout
 function logoutAdmin(){
     Firebase.auth().signOut()
@@ -95,7 +99,8 @@ var orgInfo = [];
             $("#resultas").append($item); 
             var documentID = $item;
 
-            approveTheUrgentCase(documentID);
+            //approveTheUrgentCase(documentID);
+            sendMessage(documentID);
         })
     });
 
@@ -119,6 +124,7 @@ var orgInfo = [];
     
     }
 }
+
 
 
 function approveTheUrgentCase(documentID) {
@@ -157,6 +163,34 @@ function approveTheUrgentCase(documentID) {
             
     });
 }
+
+async function sendMessage(documentID){
+console.log('sending message')
+    const querySnapshot = await getDocs(collection(db, "UrgentCases"), where("id","==",documentID));
+    querySnapshot.forEach((doc)=>{
+        var message = {
+            notification:{
+                title:'New Urgent Case!',
+                body: 'We need your help raising funds for '+doc.data().title
+            },
+            data: {
+                title: doc.data().id,
+                body: doc.data().organizationID
+            },
+            topic: 'UrgentCaseApprovals'
+        }
+
+        console.log(messaging);
+        getMessaging().send(message)
+        .then((response)=>{
+            console.log('Successfully send message:', repsonse);
+        })
+        .catch((error)=>{
+            console.log('Error sending message:',error);
+        })
+    });
+}
+
 
 getCaseData();
 
