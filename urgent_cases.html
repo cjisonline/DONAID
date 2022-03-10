@@ -24,9 +24,7 @@
 <script type="module" defer  src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
-<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-messaging.js"></script>
 <script type="module">
-import { getMessaging } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-messaging.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
 import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
@@ -59,22 +57,7 @@ function logoutAdmin(){
 async function getCaseData(){
     window.onload = async function(){
 
-/*         var orgInfo = [];
-    const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
-    querySnapshot2.forEach((item) => {
-        var orgPush = {
-            orgUID: item.data().uid,
-            orgName: item.data().organizationName
-        }
-
-        orgInfo.push(orgPush);
-    })
-    console.log(orgInfo);
-    var orgName2; */
-
-    
-
-var orgInfo = [];
+    var orgInfo = [];
     const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
         querySnapshot2.forEach((doc) => {
         orgInfo.push(doc.id, " => ", doc.data());
@@ -99,8 +82,7 @@ var orgInfo = [];
             $("#resultas").append($item); 
             var documentID = $item;
 
-            //approveTheUrgentCase(documentID);
-            sendMessage(documentID);
+            approveTheUrgentCase(documentID);
         })
     });
 
@@ -164,36 +146,7 @@ function approveTheUrgentCase(documentID) {
     });
 }
 
-async function sendMessage(documentID){
-console.log('sending message')
-    const querySnapshot = await getDocs(collection(db, "UrgentCases"), where("id","==",documentID));
-    querySnapshot.forEach((doc)=>{
-        var message = {
-            notification:{
-                title:'New Urgent Case!',
-                body: 'We need your help raising funds for '+doc.data().title
-            },
-            data: {
-                title: doc.data().id,
-                body: doc.data().organizationID
-            },
-            topic: 'UrgentCaseApprovals'
-        }
-
-        console.log(messaging);
-        getMessaging().send(message)
-        .then((response)=>{
-            console.log('Successfully send message:', repsonse);
-        })
-        .catch((error)=>{
-            console.log('Error sending message:',error);
-        })
-    });
-}
-
-
 getCaseData();
-
 </script>
 
 <title>DONAID Admin Console</title>
