@@ -52,6 +52,21 @@ class _DonorDashboardState extends State<DonorDashboard> {
   @override
   void initState() {
     super.initState();
+
+    handleNotifications();
+
+    _getCurrentUser();
+    _getBeneficiaries();
+    _getUrgentCases();
+    _getOrganizationUsers();
+    _getCharityCategories();
+    Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
+    Get.find<ChatService>().listenFriend(loggedInUser!.uid, 0);
+  }
+
+  handleNotifications()async{
+    await FirebaseMessaging.instance.subscribeToTopic('UrgentCaseApprovals').whenComplete(() => print('Subscribed to topic.'));
+
     FirebaseMessaging.onBackgroundMessage((message){
       print('Background message receieved.');
 
@@ -72,14 +87,6 @@ class _DonorDashboardState extends State<DonorDashboard> {
     });
     registerNotification();
     checkForInitialMessage();
-
-    _getCurrentUser();
-    _getBeneficiaries();
-    _getUrgentCases();
-    _getOrganizationUsers();
-    _getCharityCategories();
-    Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
-    Get.find<ChatService>().listenFriend(loggedInUser!.uid, 0);
   }
 
   checkForInitialMessage() async{
