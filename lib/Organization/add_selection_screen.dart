@@ -1,4 +1,3 @@
-import 'package:donaid/Organization/add_adoption.dart';
 import 'package:donaid/Organization/add_beneficiary_screen.dart';
 import 'package:donaid/Organization/add_urgentcase_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,22 +80,6 @@ class _addPage extends State<OrgAddSelection> {
                       onPressed: () async {
                         Navigator.pushNamed(context, AddBeneficiaryForm.id);
                       }))),
-          Container(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-              child: Material(
-                  elevation: 5.0,
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(32.0),
-                  child: MaterialButton(
-                      child: const Text(
-                        'Create Adoption',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      onPressed: () async {
-                        Navigator.pushNamed(context, AddAdoptionForm.id);
-                      })))
         ])
       ]),
 

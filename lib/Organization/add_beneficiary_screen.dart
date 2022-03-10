@@ -10,7 +10,7 @@ import 'OrganizationWidget/popup_dialog_success.dart';
 
 class AddBeneficiaryForm extends StatefulWidget {
   static const id = 'beneficiary_form_screen';
-  AddBeneficiaryForm({Key? key}) : super(key: key);
+  const AddBeneficiaryForm({Key? key}) : super(key: key);
 
   @override
   _AddBeneficiaryFormState createState() => _AddBeneficiaryFormState();
@@ -34,7 +34,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   late DocumentSnapshot documentSnapshot;
   var category = [];
   int beneficiaryTimeLimit=0;
-
+  bool? isAdopted = false;
 
   _getCampaign() async {
     var ret = await firestore
@@ -71,25 +71,97 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
       String name, String endDateController) async {
     try {
       final docRef = await firestore.collection("Beneficiaries").add({});
-
-      await firestore.collection("Beneficiaries").doc(docRef.id).set({
-        'active': true,
-        'amountRaised': 0,
-        'category': category,
-        'dateCreated': FieldValue.serverTimestamp(),
-        'biography': biography,
-        'endDate': Timestamp.fromDate(DateTime.parse(endDateController)),
-        'goalAmount': goalAmount,
-        'id': docRef.id,
-        'organizationID': loggedInUser?.uid,
-        'name': name
-      });
+      if(isAdopted == true){
+        await firestore.collection("Beneficiaries").doc(docRef.id).set({
+          'active': true,
+          'amountRaised': 0,
+          'category': category,
+          'dateCreated': FieldValue.serverTimestamp(),
+          'biography': biography,
+          'endDate': null,
+          'goalAmount': goalAmount,
+          'id': docRef.id,
+          'organizationID': loggedInUser?.uid,
+          'name': name,
+          'isAdopted': isAdopted
+        });
+      }
+      else{
+        await firestore.collection("Beneficiaries").doc(docRef.id).set({
+          'active': true,
+          'amountRaised': 0,
+          'category': category,
+          'dateCreated': FieldValue.serverTimestamp(),
+          'biography': biography,
+          'endDate': Timestamp.fromDate(DateTime.parse(endDateController)),
+          'goalAmount': goalAmount,
+          'id': docRef.id,
+          'organizationID': loggedInUser?.uid,
+          'name': name,
+          'isAdopted': isAdopted
+        });
+      }
     } catch (e) {
       print(e);
     }
   }
 
-
+  Widget showEndDateField(){
+    if(isAdopted == false){
+      return  Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextFormField(
+            controller: endDateController,
+            readOnly: true,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Please enter end date.";
+              }
+              if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
+                return 'Beneficiaries cannot have a duration longer than 1 year.';
+              }
+              else {
+                return null;
+              }
+            },
+            textAlign: TextAlign.center,
+            decoration: InputDecoration(
+                label: Center(
+                  child: RichText(
+                      text: TextSpan(
+                          text: 'Enter End Date',
+                          style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 20.0),
+                          children: const [
+                            TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ])),
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.all(Radius.circular(32.0)),
+                )
+            ),
+            onTap: () async {
+              var date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2100));
+              endDateController.text =
+                  date.toString().substring(0, 10);
+            },));
+    }
+    else{
+      return Container();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -251,56 +323,29 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 )),
                           ),
                         ),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: endDateController,
-                              readOnly: true,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Please enter end date.";
-                                }
-                                if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
-                                  return 'Beneficiaries cannot have a duration longer than 1 year.';
-                                }
-                                else {
-                                  return null;
-                                }
-                              },
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                  label: Center(
-                                    child: RichText(
-                                        text: TextSpan(
-                                            text: 'Enter End Date',
-                                            style: TextStyle(
-                                                color: Colors.grey[600],
-                                                fontSize: 20.0),
-                                            children: const [
-                                              TextSpan(
-                                                  text: ' *',
-                                                  style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 20.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ])),
-                                  ),
-                                  border: const OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(32.0)),
-                                  )
-                              ),
-                              onTap: () async {
-                                var date = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime(2100));
-                                endDateController.text =
-                                    date.toString().substring(0, 10);
-                              },)),
 
+                      Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child:
+                          Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const Text(
+                              'Set beneficiary up for adoption: ',
+                              style: TextStyle(fontSize: 17.0),
+                            ),
+                            Checkbox(
+                              value: isAdopted,
+                              onChanged: (value) {
+                                setState(() {
+                                  isAdopted = value;
+                                });
+                              },
+                            ),
+                          ],
+                        ))),
+                        showEndDateField(),
                         Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: DropdownButtonFormField <String>(
@@ -385,4 +430,6 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         )
     );
   }
+
+
 }
