@@ -70,36 +70,38 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
       String name, String endDateController) async {
     try {
       final docRef = await firestore.collection("Beneficiaries").add({});
-      if(isAdopted == true){
-        await firestore.collection("Beneficiaries").doc(docRef.id).set({
-          'active': true,
-          'amountRaised': 0,
-          'category': category,
-          'dateCreated': FieldValue.serverTimestamp(),
-          'biography': biography,
-          'endDate': null,
-          'goalAmount': goalAmount,
-          'id': docRef.id,
-          'organizationID': loggedInUser?.uid,
-          'name': name,
-          'isAdopted': isAdopted
-        });
-      }
-      else{
-        await firestore.collection("Beneficiaries").doc(docRef.id).set({
-          'active': true,
-          'amountRaised': 0,
-          'category': category,
-          'dateCreated': FieldValue.serverTimestamp(),
-          'biography': biography,
-          'endDate': Timestamp.fromDate(DateTime.parse(endDateController)),
-          'goalAmount': goalAmount,
-          'id': docRef.id,
-          'organizationID': loggedInUser?.uid,
-          'name': name,
-          'isAdopted': isAdopted
-        });
-      }
+
+      await firestore.collection("Beneficiaries").doc(docRef.id).set({
+        'active': true,
+        'amountRaised': 0,
+        'category': category,
+        'dateCreated': FieldValue.serverTimestamp(),
+        'biography': biography,
+        'endDate': Timestamp.fromDate(DateTime.parse(endDateController)),
+        'goalAmount': goalAmount,
+        'id': docRef.id,
+        'organizationID': loggedInUser?.uid,
+        'name': name
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> addAdoption(String category, String biography, double goalAmount,
+      String name, String endDateController) async {
+    try {
+      final docRef = await firestore.collection("Adoptions").add({});
+      await firestore.collection("Adoptions").doc(docRef.id).set({
+        'active': true,
+        'category': category,
+        'dateCreated': FieldValue.serverTimestamp(),
+        'biography': biography,
+        'goalAmount': goalAmount,
+        'id': docRef.id,
+        'organizationID': loggedInUser?.uid,
+        'name': name
+      });
     } catch (e) {
       print(e);
     }
@@ -406,11 +408,21 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   setState(() {
                                     showLoadingSpinner = true;
                                   });
-                                  addBeneficiary(categoryController.text,
-                                      biographyController.text,
-                                      int.parse(goalAmountController.text).toDouble(),
-                                      nameController.text,
-                                      endDateController.text);
+                                  if(isAdopted == true){
+                                    addAdoption(categoryController.text,
+                                        biographyController.text,
+                                        int.parse(goalAmountController.text).toDouble(),
+                                        nameController.text,
+                                        endDateController.text);
+                                  }
+                                  else{
+                                    addBeneficiary(categoryController.text,
+                                        biographyController.text,
+                                        int.parse(goalAmountController.text).toDouble(),
+                                        nameController.text,
+                                        endDateController.text);
+                                  }
+
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
 
                                   ScaffoldMessenger.of(context)
