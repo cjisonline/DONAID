@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorWidgets/category_card.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
@@ -24,6 +22,7 @@ import 'package:get/get.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 import 'DonorWidgets/notification_badge.dart';
+import 'notifications_page.dart';
 
 class DonorDashboard extends StatefulWidget {
   static const id = 'donor_dashboard';
@@ -84,6 +83,11 @@ class _DonorDashboardState extends State<DonorDashboard> {
         _totalNotificationCounter ++;
         _notificationInfo = notification;
       });
+
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return NotificationPage();
+      }));
+
     });
     registerNotification();
     checkForInitialMessage();
@@ -102,6 +106,9 @@ class _DonorDashboardState extends State<DonorDashboard> {
         _totalNotificationCounter ++;
         _notificationInfo = notification;
       });
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return NotificationPage();
+      }));
     }
   }
 
@@ -116,7 +123,6 @@ class _DonorDashboardState extends State<DonorDashboard> {
     if(notificationSettings.authorizationStatus == AuthorizationStatus.authorized)
       {
         print('User granted the permission.');
-
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
           print('NEW NOTIFICATION');
           print('Message title: ${message.notification?.title}');
@@ -131,37 +137,12 @@ class _DonorDashboardState extends State<DonorDashboard> {
             _totalNotificationCounter ++;
             _notificationInfo = notification;
           });
+
           if(notification!=null){
             showSimpleNotification(
               Text(_notificationInfo!.title!),
-              leading: NotificationBadge(totalNotification: _totalNotificationCounter),
               subtitle: Text(_notificationInfo!.body!)
             );
-            // showOverlayNotification((context){
-            //   return Card(
-            //     margin: const EdgeInsets.symmetric(horizontal: 4),
-            //     child: SafeArea(
-            //       child: ListTile(
-            //         leading: SizedBox.fromSize(
-            //           size: const Size(40,40),
-            //           child: ClipOval(
-            //             child: Container(
-            //               color: Colors.black,
-            //             ),
-            //           ),
-            //         ),
-            //         title: Text(message.notification!.title!),
-            //         subtitle: Text(message.notification!.body!),
-            //         trailing: IconButton(
-            //           icon: Icon(Icons.close),
-            //           onPressed: (){
-            //             OverlaySupportEntry.of(context)?.dismiss();
-            //           },
-            //         ),
-            //       )
-            //     ),
-            //   );
-            // });
           }
         });
       }
