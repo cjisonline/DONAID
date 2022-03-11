@@ -99,8 +99,8 @@ var orgInfo = [];
             $("#resultas").append($item); 
             var documentID = $item;
 
-            //approveTheUrgentCase(documentID);
-            sendMessage(documentID);
+            approveTheUrgentCase(documentID);
+
         })
     });
 
@@ -139,6 +139,7 @@ function approveTheUrgentCase(documentID) {
     })
     .then((result) => {
         if (result.isConfirmed) { 
+            sendMessage(documentID);
             const approvals = doc(db, "UrgentCases", documentID);
             updateDoc(approvals, {approved: true})
     
@@ -147,6 +148,7 @@ function approveTheUrgentCase(documentID) {
                 'Urgent case is approved.',
                 'success').then(function () {
                     location.reload(); 
+                    
                 })
                 
                 .catch((error) => {
@@ -164,31 +166,28 @@ function approveTheUrgentCase(documentID) {
     });
 }
 
-async function sendMessage(documentID){
-console.log('sending message')
-    const querySnapshot = await getDocs(collection(db, "UrgentCases"), where("id","==",documentID));
-    querySnapshot.forEach((doc)=>{
-        var message = {
-            notification:{
-                title:'New Urgent Case!',
-                body: 'We need your help raising funds for '+doc.data().title
-            },
-            data: {
-                title: doc.data().id,
-                body: doc.data().organizationID
-            },
-            topic: 'UrgentCaseApprovals'
-        }
+function sendMessage(documentID){
+    console.log('sending message')
+        
+    var url = "https://fcm.googleapis.com/fcm/send";
+    var params = {
+        "to":"/topics/UrgentCaseApprovals",
+        "notification":{
+            "title": "New Urgent Case!",
+            "body": "We need your help!",
+        },
+        "data":{
+            "title": "id",
+            "body":documentID,
+        },
+    };
 
-        console.log(messaging);
-        getMessaging().send(message)
-        .then((response)=>{
-            console.log('Successfully send message:', repsonse);
-        })
-        .catch((error)=>{
-            console.log('Error sending message:',error);
-        })
-    });
+    var reqHeaders = {
+        "Authorization": "key=AAAAN-nSpIQ:APA91bHFuKBdp90fSBP1YMwQlGh0cz7vNhDXG-wpoZtKebVTwWFW_fFgqMVJrIADYN_l2HP0zGpDdUjHBvo7mX6migzCF-d4jdxlgADzqSU6-nQAV1GqvfxkVq2aDgG7LW5w0GNaCe9j",
+        "Content-Type": "application/json",
+    };
+
+    fetch(url, {method: 'POST', body:JSON.stringify(params), headers: reqHeaders}).then(console.log);
 }
 
 
