@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/organization_tab_view.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
@@ -53,6 +54,15 @@ class _OrganizationsExpandedScreenState extends State<OrganizationsExpandedScree
           return Card(
             child: Column(
               children: [
+                Container(
+                  alignment: Alignment.topRight,
+                  child: FavoriteButton(
+                    isFavorite: false,
+                    valueChanged: (_isFavorite) {
+                      print('Is Favorite : $_isFavorite');
+                    },
+                  ),
+                ),
                 ListTile(
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {

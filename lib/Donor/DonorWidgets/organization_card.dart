@@ -1,6 +1,6 @@
-import 'package:donaid/Donor/organization_full_details_screen.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:flutter/material.dart';
+import 'package:favorite_button/favorite_button.dart';
 
 import '../organization_tab_view.dart';
 
@@ -13,77 +13,80 @@ class OrganizationCard extends StatefulWidget {
   State<OrganizationCard> createState() => _OrganizationCardState();
 }
 
+void favoriteFunction(bool isFav){
+  if(isFav == true){
+    //updateFav
+  //   this.afs.doc(`users/${uid}`)
+  //       .update({data})
+  //       .then(() => {
+  //     // update successful (document exists)
+  //   })
+  //     .catch((error) => {
+  // // console.log('Error updating user', error); // (document does not exists)
+  // this.afs.doc(`users/${result.uid}`)
+  //     .set({data});
+  // });
+  }else{
+    //deleteFav
+  }
+}
+
 class _OrganizationCardState extends State<OrganizationCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context){
-          return (OrganizationFullDetailsScreen(widget.organization));
-        }));
-      },
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return (OrganizationTabViewScreen(organization: widget.organization));
         })).then((value){
           setState(() {
-
+            
           });
         });
       },
       child: Padding(
-          padding: const EdgeInsets.fromLTRB(10.0,0,10.0,10.0),
+          padding: const EdgeInsets.all(10.0),
           child: Container(
-            width: 175.0,
+            width: 275.0,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 border: Border.all(color: Colors.grey.shade300, width: 2.0)),
             child: Column(children: [
-                (widget.organization.profilePictureDownloadURL != null && widget.organization.profilePictureDownloadURL.toString() != ""
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: Image.network(
-                        widget.organization.profilePictureDownloadURL!.toString(),
-                        fit: BoxFit.contain,
-                      ),),
-                  ],)
-              : const Icon(
-                  Icons.apartment,
-                  color: Colors.blue,
-                  size: 60,
-                )),
-              Container(
-                child: Column(
-                  children: [
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10.0,0,10.0,10.0),
-                        child: Text(widget.organization.organizationName,
-                            textAlign: TextAlign.center,
-                            softWrap: true,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                            )),
-                      ),
-                    ),
-                    Text(widget.organization.organizationDescription.toString(),
-                        textAlign: TextAlign.center,
-                        softWrap: true,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                        )),
-                  ],
+              const Icon(
+                Icons.apartment,
+                color: Colors.blue,
+                size: 40,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(widget.organization.organizationName,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(widget.organization.organizationDescription.toString(),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: FavoriteButton(
+                  isFavorite: false,
+                  valueChanged: (_isFavorite) {
+                    favoriteFunction(_isFavorite);
+                    print('Is Favorite : $_isFavorite');
+                  },
                 ),
               ),
 

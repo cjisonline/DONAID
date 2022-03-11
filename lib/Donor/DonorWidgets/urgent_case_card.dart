@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../urgent_case_donate_screen.dart';
@@ -140,7 +141,17 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                 decoration: const BoxDecoration(
                   color: Colors.pink,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                ))
+                )),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: FavoriteButton(
+                isFavorite: false,
+                valueChanged: (_isFavorite) {
+                  print('Is Favorite : $_isFavorite');
+                },
+              ),
+            ),
+
           ]),
         ));
   }

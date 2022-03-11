@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -133,6 +134,15 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
           return Card(
             child: Column(
               children: [
+                Container(
+                  alignment: Alignment.topRight,
+                  child: FavoriteButton(
+                    isFavorite: false,
+                    valueChanged: (_isFavorite) {
+                      print('Is Favorite : $_isFavorite');
+                    },
+                  ),
+                ),
                 ListTile(
                   onTap: () {
                     if(organizations[index].country =='United States'){

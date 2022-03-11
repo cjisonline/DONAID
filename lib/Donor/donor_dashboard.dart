@@ -77,7 +77,6 @@ class _DonorDashboardState extends State<DonorDashboard> {
         organizationDescription: element.data()['organizationDescription'],
         country: element.data()['country'],
         gatewayLink: element.data()['gatewayLink'],
-        profilePictureDownloadURL: element.data()['profilePictureDownloadURL']
       );
       organizations.add(organization);
     }
@@ -163,54 +162,50 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _body() {
-    return RefreshIndicator(
-      onRefresh: ()async{
-        _refreshPage();
-      },
-      child: Container(
-      decoration: BoxDecoration(
-      color: Colors.blueGrey.shade50,
-      borderRadius: const BorderRadius.all(Radius.circular(10)),
-      border: Border.all(color: Colors.grey.shade100)),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Categories',
-                        style: TextStyle(fontSize: 20),
+    return Container(
+    decoration: BoxDecoration(
+    color: Colors.blueGrey.shade50,
+    borderRadius: const BorderRadius.all(Radius.circular(10)),
+    border: Border.all(color: Colors.grey.shade100)),
+    child: SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Categories',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                    TextButton(
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesScreen())).then((value) => _refreshPage());
+                      },
+                      child: const Text(
+                        'See more >',
+                        style: TextStyle(fontSize: 14),
                         textAlign: TextAlign.start,
                       ),
-                      TextButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesScreen())).then((value) => _refreshPage());
-                        },
-                        child: const Text(
-                          'See more >',
-                          style: TextStyle(fontSize: 14),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                    ]),
-              ),
+                    ),
+                  ]),
             ),
-            SizedBox(
-                height: 75.0,
-                child: ListView.builder(
-                  itemCount: charityCategories.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, int index) {
-                    return CharityCategoryCard(
-                        charityCategories[index].name, charityCategories[index].iconDownloadURL);
-                  },
-                )),
+          ),
+          SizedBox(
+              height: 75.0,
+              child: ListView.builder(
+                itemCount: charityCategories.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, int index) {
+                  return CharityCategoryCard(
+                      charityCategories[index].name, charityCategories[index].iconDownloadURL);
+                },
+              )),
 
           // organization list
           Align(
@@ -239,7 +234,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
             ),
           ),
           SizedBox(
-              height: 200.0,
+              height: 270.0,
               child: ListView.builder(
                 itemCount: organizations.length,
                 scrollDirection: Axis.horizontal,
@@ -248,85 +243,80 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 },
               )),
 
-            //beneficiaries list
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Beneficiaries',
-                        style: TextStyle(fontSize: 20),
+          //beneficiaries list
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Beneficiaries',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                    TextButton(
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => BeneficiaryExpandedScreen())).then((value) => _refreshPage());
+                      },
+                      child: const Text(
+                        'See more >',
+                        style: TextStyle(fontSize: 14),
                         textAlign: TextAlign.start,
                       ),
-                      TextButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => BeneficiaryExpandedScreen())).then((value) => _refreshPage());
-                        },
-                        child: const Text(
-                          'See more >',
-                          style: TextStyle(fontSize: 14),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                    ]),
-              ),
+                    ),
+                  ]),
             ),
-            beneficiaries.isNotEmpty
-            ? SizedBox(
-                height: 325.0,
-                child: ListView.builder(
-                  itemCount: beneficiaries.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, int index) {
-                    return BeneficiaryCard(beneficiaries[index]);
-                  },
-                ))
-            : const Center(child: Text('No active beneficiaries to show.', style: TextStyle(fontSize: 18),)),
+          ),
+          SizedBox(
+              height: 400.0,
+              child: ListView.builder(
+                itemCount: beneficiaries.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, int index) {
+                  return BeneficiaryCard(beneficiaries[index]);
+                },
+              )),
 
-            // urgent case list
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Urgent Cases',
-                        style: TextStyle(fontSize: 20),
+          // urgent case list
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Urgent Cases',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                    TextButton(
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => UrgentCasesExpandedScreen())).then((value) => _refreshPage());
+                      },
+                      child: const Text(
+                        'See more >',
+                        style: TextStyle(fontSize: 14),
                         textAlign: TextAlign.start,
                       ),
-                      TextButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => UrgentCasesExpandedScreen())).then((value) => _refreshPage());
-                        },
-                        child: const Text(
-                          'See more >',
-                          style: TextStyle(fontSize: 14),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                    ]),
-              ),
+                    ),
+                  ]),
             ),
-            urgentCases.isNotEmpty
-            ? SizedBox(
-                height: 325.0,
-                child: ListView.builder(
-                  itemCount: urgentCases.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, int index) {
-                    return UrgentCaseCard(urgentCases[index]);
-                  },
-                ))
-            : const Center(child: Text('No active urgent cases to show.', style: TextStyle(fontSize: 18),)),
-          ],
-        ),
-      )),
-    );
+          ),
+          SizedBox(
+              height: 400.0,
+              child: ListView.builder(
+                itemCount: urgentCases.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, int index) {
+                  return UrgentCaseCard(urgentCases[index]);
+                },
+              )),
+        ],
+      ),
+    ));
   }
 }
 
