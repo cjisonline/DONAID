@@ -24,9 +24,7 @@
 <script type="module" defer  src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js"></script>
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
-<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-messaging.js"></script>
 <script type="module">
-import { getMessaging } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-messaging.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
 import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
@@ -44,7 +42,6 @@ import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  const messaging = getMessaging(app);
   
 // Logout
 function logoutAdmin(){
@@ -59,22 +56,7 @@ function logoutAdmin(){
 async function getCaseData(){
     window.onload = async function(){
 
-/*         var orgInfo = [];
-    const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
-    querySnapshot2.forEach((item) => {
-        var orgPush = {
-            orgUID: item.data().uid,
-            orgName: item.data().organizationName
-        }
-
-        orgInfo.push(orgPush);
-    })
-    console.log(orgInfo);
-    var orgName2; */
-
-    
-
-var orgInfo = [];
+    var orgInfo = [];
     const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
         querySnapshot2.forEach((doc) => {
         orgInfo.push(doc.id, " => ", doc.data());
@@ -100,7 +82,6 @@ var orgInfo = [];
             var documentID = $item;
 
             approveTheUrgentCase(documentID);
-
         })
     });
 
@@ -192,7 +173,6 @@ function sendMessage(documentID){
 
 
 getCaseData();
-
 </script>
 
 <title>DONAID Admin Console</title>
