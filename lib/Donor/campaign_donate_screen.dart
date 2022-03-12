@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/updateFavorite.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,10 +32,16 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   String donationAmount = "";
   bool showLoadingSpinner = false;
   var f = NumberFormat("###,##0.00", "en_US");
+  User? loggedInUser;
 
   @override
   void initState(){
     super.initState();
+    _getCurrentUser();
+  }
+
+  void _getCurrentUser() {
+    loggedInUser = _auth.currentUser;
   }
 
   _refreshPage() async {
@@ -60,7 +67,8 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
               child: FavoriteButton(
                 isFavorite: false,
                 valueChanged: (_isFavorite) {
-                  // favoriteFunction(_isFavorite);
+                  print(widget.campaign.id.toString());
+                  updateFavorites(loggedInUser!.uid.toString(),widget.campaign.id.toString());
                   print('Is Favorite : $_isFavorite');
                 },
               ),

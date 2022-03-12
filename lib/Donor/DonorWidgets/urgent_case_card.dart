@@ -3,8 +3,10 @@ import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:favorite_button/favorite_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../updateFavorite.dart';
 import '../urgent_case_donate_screen.dart';
 
 class UrgentCaseCard extends StatefulWidget {
@@ -20,11 +22,19 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
   final _firestore = FirebaseFirestore.instance;
   Organization? organization;
   var f = NumberFormat("###,##0.00", "en_US");
+  final _auth = FirebaseAuth.instance;
+  User? loggedInUser;
+
 
   @override
   void initState() {
     super.initState();
     _getUrgentCaseOrganization();
+    _getCurrentUser();
+  }
+
+  void _getCurrentUser() {
+    loggedInUser = _auth.currentUser;
   }
 
   _getUrgentCaseOrganization() async{
@@ -147,6 +157,8 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               child: FavoriteButton(
                 isFavorite: false,
                 valueChanged: (_isFavorite) {
+                  print(widget.urgentCase.id.toString());
+                  updateFavorites(loggedInUser!.uid.toString(),widget.urgentCase.id.toString());
                   print('Is Favorite : $_isFavorite');
                 },
               ),

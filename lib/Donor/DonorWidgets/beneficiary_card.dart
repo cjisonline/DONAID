@@ -3,9 +3,11 @@ import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:favorite_button/favorite_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../beneficiary_donate_screen.dart';
+import '../updateFavorite.dart';
 
 class BeneficiaryCard extends StatefulWidget {
   final Beneficiary beneficiary;
@@ -20,11 +22,18 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
   Organization? organization;
   final _firestore = FirebaseFirestore.instance;
   var f = NumberFormat("###,##0.00", "en_US");
+  final _auth = FirebaseAuth.instance;
+  User? loggedInUser;
 
   @override
   void initState() {
     super.initState();
     _getBeneficiaryOrganization();
+    _getCurrentUser();
+  }
+
+  void _getCurrentUser() {
+    loggedInUser = _auth.currentUser;
   }
 
 
@@ -152,6 +161,8 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
               child: FavoriteButton(
                 isFavorite: false,
                 valueChanged: (_isFavorite) {
+                  print(widget.beneficiary.id.toString());
+                  updateFavorites(loggedInUser!.uid.toString(),widget.beneficiary.id.toString());
                   print('Is Favorite : $_isFavorite');
                 },
               ),

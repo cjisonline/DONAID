@@ -193,7 +193,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
   }
 
   _getFavorite() async {
-    await _firestore.collection("Favorite").doc('HsOStdM6wWOdRL16MCH9zZ8lJDs1').get().then((value){
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
       setState(() {
         pointlist = List.from(value['favoriteList']);
       });

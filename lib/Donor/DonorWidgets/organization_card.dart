@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:donaid/Models/Organization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,6 @@ class OrganizationCard extends StatefulWidget {
 }
 
 class _OrganizationCardState extends State<OrganizationCard> {
-  final _firestore = FirebaseFirestore.instance;
   User? loggedInUser;
   final _auth = FirebaseAuth.instance;
 
@@ -79,16 +78,6 @@ class _OrganizationCardState extends State<OrganizationCard> {
                       color: Colors.black,
                       fontSize: 15,
                     )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: FavoriteButton(
-                  isFavorite: false,
-                  valueChanged: (_isFavorite) {
-                    updateFavorites(loggedInUser!.uid.toString(),"hfkdhjdhfkjsdfh");
-                    print('Is Favorite : $_isFavorite');
-                  },
-                ),
               ),
 
             ]),
