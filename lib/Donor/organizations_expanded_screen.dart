@@ -54,15 +54,6 @@ class _OrganizationsExpandedScreenState extends State<OrganizationsExpandedScree
           return Card(
             child: Column(
               children: [
-                Container(
-                  alignment: Alignment.topRight,
-                  child: FavoriteButton(
-                    isFavorite: false,
-                    valueChanged: (_isFavorite) {
-                      print('Is Favorite : $_isFavorite');
-                    },
-                  ),
-                ),
                 ListTile(
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {

@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:favorite_button/favorite_button.dart';
 
 import '../organization_tab_view.dart';
+import '../updateFavorite.dart';
 
 class OrganizationCard extends StatefulWidget {
   final Organization organization;
@@ -13,25 +16,23 @@ class OrganizationCard extends StatefulWidget {
   State<OrganizationCard> createState() => _OrganizationCardState();
 }
 
-void favoriteFunction(bool isFav){
-  if(isFav == true){
-    //updateFav
-  //   this.afs.doc(`users/${uid}`)
-  //       .update({data})
-  //       .then(() => {
-  //     // update successful (document exists)
-  //   })
-  //     .catch((error) => {
-  // // console.log('Error updating user', error); // (document does not exists)
-  // this.afs.doc(`users/${result.uid}`)
-  //     .set({data});
-  // });
-  }else{
-    //deleteFav
-  }
-}
-
 class _OrganizationCardState extends State<OrganizationCard> {
+  final _firestore = FirebaseFirestore.instance;
+  User? loggedInUser;
+  final _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentUser();
+  }
+
+  void _getCurrentUser() {
+    loggedInUser = _auth.currentUser;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -84,7 +85,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                 child: FavoriteButton(
                   isFavorite: false,
                   valueChanged: (_isFavorite) {
-                    favoriteFunction(_isFavorite);
+                    updateFavorites(loggedInUser!.uid.toString(),"hfkdhjdhfkjsdfh");
                     print('Is Favorite : $_isFavorite');
                   },
                 ),

@@ -134,15 +134,6 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
           return Card(
             child: Column(
               children: [
-                Container(
-                  alignment: Alignment.topRight,
-                  child: FavoriteButton(
-                    isFavorite: false,
-                    valueChanged: (_isFavorite) {
-                      print('Is Favorite : $_isFavorite');
-                    },
-                  ),
-                ),
                 ListTile(
                   onTap: () {
                     if(organizations[index].country =='United States'){

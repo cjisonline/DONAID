@@ -7,6 +7,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 import '../../home_screen.dart';
 import '../donation_history.dart';
+import '../donor_favorite_screen.dart';
 import '../donor_profile.dart';
 
 class DonorDrawer extends StatefulWidget {
@@ -50,6 +51,13 @@ class _DonorDrawerState extends State<DonorDrawer> {
               title: const Text("Profile"),
               onTap: () {
                 Navigator.pushNamed(context, DonorProfile.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.favorite),
+              title: const Text("My Favorites"),
+              onTap: () {
+                Navigator.pushNamed(context, DonorFavoritePage.id);
               },
             ),
             ListTile(

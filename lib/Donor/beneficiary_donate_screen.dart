@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Beneficiary.dart';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -52,6 +53,15 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                  alignment: Alignment.topRight,
+                  child: FavoriteButton(
+                    isFavorite: false,
+                    valueChanged: (_isFavorite) {
+                      print('Is Favorite : $_isFavorite');
+                    },
+                  ),
+                ),
                 SizedBox(
                   height: 100,
                   child: Image.asset('assets/DONAID_LOGO.png')

@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Campaign.dart';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
@@ -47,9 +50,21 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Center(
+
             child: Padding(
           padding: const EdgeInsets.all(8.0),
+
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: FavoriteButton(
+                isFavorite: false,
+                valueChanged: (_isFavorite) {
+                  // favoriteFunction(_isFavorite);
+                  print('Is Favorite : $_isFavorite');
+                },
+              ),
+            ),
             SizedBox(
                 height: 100,
                 child: Image.asset('assets/DONAID_LOGO.png')
