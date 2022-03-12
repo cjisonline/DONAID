@@ -53,10 +53,10 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
 
   @override
   initState() {
-    super.initState();
     _getCurrentUser();
     _getCampaign();
     _favUser = _allUsers;
+    super.initState();
   }
 
 
@@ -193,7 +193,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
   }
 
   _getFavorite() async {
-    await _firestore.collection("Favorite").doc('ziyEHi473ZsdY34oUuS8').get().then((value){
+    await _firestore.collection("Favorite").doc('HsOStdM6wWOdRL16MCH9zZ8lJDs1').get().then((value){
       setState(() {
         pointlist = List.from(value['favoriteList']);
       });
@@ -206,13 +206,16 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     print(pointlist.length);
       for(int i=0; i< pointlist.length; i++){
         print(results);
-        results= _allUsers
+        results.addAll(_allUsers
             .where((user) =>
         user["id"] == pointlist[i].toString())
-            .toList();
+            .toList());
       }
+    setState(() {
       _favUser = results;
-    print(results.length);
+      print(_favUser.length);
+    });
+
 
   }
 
