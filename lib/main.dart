@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
 import 'package:donaid/Donor/categories_screen.dart';
 import 'package:donaid/Donor/donor_search_screen.dart';
@@ -13,6 +14,7 @@ import 'package:donaid/Organization/organization_edit_profile.dart';
 import 'package:donaid/Organization/organization_profile.dart';
 import 'package:donaid/Registration/registration_screen.dart';
 import 'package:donaid/Services/chatServices.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -25,6 +27,7 @@ import 'Organization/search_page.dart';
 import 'Organization/organization_activebeneficiaries_expanded_screen.dart';
 import 'Organization/organization_activecampaigns_expanded_screen.dart';
 import 'Organization/organization_activeurgentcases_expanded_screen.dart';
+import 'Services/notifications.dart';
 import 'authentication.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
@@ -38,7 +41,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
   print('Handling background message: ${message.messageId}');
-
+  await Firebase.initializeApp();
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
+  if(_auth.currentUser!=null) {
+    addNotification(_auth.currentUser?.uid, message);
+  }
 
 }
 void main() async {
