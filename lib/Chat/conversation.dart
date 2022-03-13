@@ -10,6 +10,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../Donor/DonorWidgets/donor_drawer.dart';
+import '../Organization/OrganizationWidget/organization_drawer.dart';
+
 class ResetWidget extends StatelessWidget {
   String currentUid="",type="";
   ResetWidget(this.currentUid,this.type);
@@ -109,6 +112,7 @@ class _ConversationState extends State<Conversation> {
             ],
           ),
         ),
+        drawer: (this.widget.type == "OrganizationUsers") ? DonorDrawer() : OrganizationDrawer(),
         bottomNavigationBar: (this.widget.type == "OrganizationUsers") ? DonorBottomNavigationBar() : OrganizationBottomNavigation(),
       ),
     );
