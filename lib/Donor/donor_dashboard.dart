@@ -11,7 +11,6 @@ import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:donaid/Models/Organization.dart';
-import 'package:donaid/Models/PushNotification.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Donor/DonorWidgets/beneficiary_card.dart';
 import 'package:donaid/Services/chatServices.dart';
@@ -21,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-import 'DonorWidgets/notification_badge.dart';
+import '../Services/notifications.dart';
 import 'notifications_page.dart';
 
 class DonorDashboard extends StatefulWidget {
@@ -39,13 +38,11 @@ class _DonorDashboardState extends State<DonorDashboard> {
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   final _messaging = FirebaseMessaging.instance;
-  PushNotification? _notificationInfo;
 
   List<Beneficiary> beneficiaries = [];
   List<UrgentCase> urgentCases = [];
   List<Organization> organizations = [];
   List<CharityCategory> charityCategories = [];
-  late int _totalNotificationCounter;
 
 
   @override
@@ -64,26 +61,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   handleNotifications()async{
-    await FirebaseMessaging.instance.subscribeToTopic('UrgentCaseApprovals').whenComplete(() => print('Subscribed to topic.'));
-
-    FirebaseMessaging.onBackgroundMessage((message){
-      print('Background message receieved.');
-
-      return Future<void>.value();
-    });
-    _totalNotificationCounter =0;
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
-      PushNotification notification = PushNotification(
-          message.notification!.title,
-          message.notification!.body,
-          message.data['title'],
-          message.data['body']
-      );
-      setState(() {
-        _totalNotificationCounter ++;
-        _notificationInfo = notification;
-      });
-
       Navigator.push(context, MaterialPageRoute(builder: (context){
         return NotificationPage();
       }));
@@ -96,16 +74,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   checkForInitialMessage() async{
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if(initialMessage != null){
-      PushNotification notification = PushNotification(
-          initialMessage.notification!.title,
-          initialMessage.notification!.body,
-          initialMessage.data['title'],
-          initialMessage.data['body']
-      );
-      setState(() {
-        _totalNotificationCounter ++;
-        _notificationInfo = notification;
-      });
+      addNotification(_auth.currentUser?.uid, initialMessage);
       Navigator.push(context, MaterialPageRoute(builder: (context){
         return NotificationPage();
       }));
@@ -125,23 +94,26 @@ class _DonorDashboardState extends State<DonorDashboard> {
         print('User granted the permission.');
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
           print('NEW NOTIFICATION');
-          print('Message title: ${message.notification?.title}');
+          addNotification(_auth.currentUser?.uid, message);
 
-          PushNotification notification = PushNotification(
-              message.notification!.title,
-              message.notification!.body,
-              message.data['title'],
-              message.data['body']
-          );
-          setState(() {
-            _totalNotificationCounter ++;
-            _notificationInfo = notification;
-          });
+          // PushNotification notification = PushNotification(
+          //     message.notification!.title,
+          //     message.notification!.body,
+          //     message.data['title'],
+          //     message.data['body']
+          // );
+          // setState(() {
+          //   _totalNotificationCounter ++;
+          //   _notificationInfo = notification;
+          // });
 
-          if(notification!=null){
+          if(message.notification!=null){
             showSimpleNotification(
-              Text(_notificationInfo!.title!),
-              subtitle: Text(_notificationInfo!.body!)
+              Text(message.notification!.title!),
+              subtitle: Text(message.notification!.body!),
+              duration: Duration(seconds: 5),
+              slideDismissDirection: DismissDirection.up,
+
             );
           }
         });
