@@ -1,4 +1,5 @@
 import 'package:donaid/login_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -73,6 +74,8 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             'email':email,
             'userType':1
           });
+
+          await FirebaseMessaging.instance.subscribeToTopic('UrgentCaseApprovals').whenComplete(() => print('Subscribed to topic.'));
 
           Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
           Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
