@@ -66,7 +66,7 @@ class _NotificationPageState extends State<NotificationPage> {
       notifications.add(notification);
     }
     setState(() {
-
+      notifications = notifications.reversed.toList();
     });
 
 
@@ -84,18 +84,12 @@ class _NotificationPageState extends State<NotificationPage> {
                 onDismissed: (direction){
                   deleteNotification(_auth.currentUser?.uid, notifications[index]);
                   notifications.removeAt(index);
-                  setState(() {
-
-                  });
+                  setState(() {});
                 },
                 child: GestureDetector(
                   onTap: (){
                     if(notifications[index].dataTitle.toString() == 'UrgentCaseApprovals'){
                       _goToChosenUrgentCase(notifications[index].dataBody.toString());
-                      notifications.removeAt(index);
-                      setState(() {
-
-                      });
                     }
                   },
                   child: ListTile(
