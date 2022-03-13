@@ -5,8 +5,6 @@ import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart'
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
-
 import 'organization_beneficiary_full.dart';
 
 class OrganizationBeneficiariesExpandedScreen extends StatefulWidget {
@@ -118,7 +116,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
               ),
             );
           })
-      :  Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),)),
+      : const Center(child: Text('No active beneficiaries to show.', style: TextStyle(fontSize: 18),)),
     );
   }
 
@@ -126,7 +124,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('my_beneficiaries'.tr),
+        title: const Text('My Beneficiaries'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

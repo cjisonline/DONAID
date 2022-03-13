@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'organization_dashboard.dart';
-import 'package:get/get.dart';
 
 class AddBeneficiaryForm extends StatefulWidget {
   static const id = 'beneficiary_form_screen';
@@ -94,7 +93,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:  Text("donaid".tr),
+          title: const Text("DONAID"),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -115,20 +114,20 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         const SizedBox(
                           height: 15.0,
                         ),
-                         Center(
+                        const Center(
                           child: Text(
-                            'add_beneficiary'.tr,
+                            'Add Beneficiary',
                             style: TextStyle(fontSize: 32.0),
                           ),
                         ),
                         const SizedBox(
                           height: 15.0,
                         ),
-                         Padding(
+                        const Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 25.0),
                           child: Text(
-                            '* - required_fields'.tr,
+                            '* - required fields',
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
@@ -142,7 +141,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             ],
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "please_enter_a_nickname".tr;
+                                return "Please enter a nickname.";
                               } else {
                                 return null;
                               }
@@ -152,7 +151,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'nickname'.tr,
+                                          text: 'Nickname',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -181,7 +180,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             controller: biographyController,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "please_enter_a_biography".tr;
+                                return "Please enter a biography.";
                               } else {
                                 return null;
                               }
@@ -191,7 +190,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'biography'.tr,
+                                          text: 'Biography',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -218,9 +217,9 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             controller: goalAmountController,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "please_enter_a_goal_amount.".tr;
+                                return "Please enter a goal amount.";
                               } else if (!goalRegExp.hasMatch(value)) {
-                                return "please_enter_a_valid_goal_amount.".tr;
+                                return "Please enter a valid goal amount.";
                               }
                               else {
                                 return null;
@@ -231,7 +230,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: '\u0024 goal'.tr,
+                                          text: '\u0024 Goal',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -258,10 +257,10 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                               readOnly: true,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return "please_enter_end_date.".tr;
+                                  return "Please enter end date.";
                                 }
                                 if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
-                                  return 'beneficiaries_cannot_have_a_duration_longer_than_1_year.'.tr;
+                                  return 'Beneficiaries cannot have a duration longer than 1 year.';
                                 }
                                 else {
                                   return null;
@@ -272,7 +271,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   label: Center(
                                     child: RichText(
                                         text: TextSpan(
-                                            text: 'enter_end_date'.tr,
+                                            text: 'Enter End Date',
                                             style: TextStyle(
                                                 color: Colors.grey[600],
                                                 fontSize: 20.0),
@@ -308,7 +307,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   label: Center(
                                     child: RichText(
                                         text: TextSpan(
-                                            text: 'category'.tr,
+                                            text: 'Category',
                                             style: TextStyle(
                                                 color: Colors.grey[600],
                                                 fontSize: 20.0),
@@ -340,7 +339,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   }),
                               validator: (value) =>
                               value == null
-                                  ? 'please_fill_in_the_category'.tr : null,
+                                  ? 'Please fill in the category.' : null,
                             )
                         ),
                         Padding(
@@ -351,8 +350,8 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(32.0),
                             child: MaterialButton(
-                              child: Text(
-                                'submit'.tr,
+                              child: const Text(
+                                'Submit',
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
@@ -370,7 +369,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
 
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar( SnackBar(content: Text('beneficiary_created!'.tr)));
+                                      .showSnackBar(const SnackBar(content: Text('Beneficiary created!')));
                                 }
                               },
                             ),

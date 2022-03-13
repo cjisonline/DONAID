@@ -5,7 +5,6 @@ import 'package:donaid/Donor/donor_edit_profile.dart';
 import 'package:donaid/Models/Donor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'DonorWidgets/profile_list_row.dart';
 
@@ -61,13 +60,13 @@ class _DonorProfileState extends State<DonorProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('profile'.tr),
+        title: const Text('Profile'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => DonorEditProfile())).then((value) => _refreshPage());
               },
-              child:  Text('edit'.tr,
+              child: const Text('Edit',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
@@ -108,7 +107,7 @@ class _DonorProfileState extends State<DonorProfile> {
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-             Text('home'.tr,
+            const Text('Home',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -122,7 +121,7 @@ class _DonorProfileState extends State<DonorProfile> {
                 size: 35,
               ),
             ),
-             Text('search'.tr,
+            const Text('Search',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -133,7 +132,7 @@ class _DonorProfileState extends State<DonorProfile> {
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-             Text('notifications'.tr,
+            const Text('Notifications',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -143,7 +142,7 @@ class _DonorProfileState extends State<DonorProfile> {
               onPressed: () {},
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-             Text('message'.tr,
+            const Text('Messages',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),

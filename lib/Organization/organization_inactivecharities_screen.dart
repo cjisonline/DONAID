@@ -10,8 +10,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'organization_urgentcase_full.dart';
-import 'package:get/get.dart';
-
 
 class InactiveCharitiesScreen extends StatefulWidget {
   const InactiveCharitiesScreen({Key? key}) : super(key: key);
@@ -179,7 +177,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
             ),
           );
         })
-    :  Center(child: Text('no_inactive_beneficiaries_to_show.'.tr, style: TextStyle(fontSize: 18),));
+    : const Center(child: Text('No inactive beneficiaries to show.', style: TextStyle(fontSize: 18),));
   }
 
   _campaignsBody(){
@@ -232,7 +230,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
             ),
           );
         })
-        :  Center(child:  Text('no_inactive_campaigns_to_show.'.tr, style: TextStyle(fontSize: 18),));
+        : const Center(child:  Text('No inactive campaigns to show.', style: TextStyle(fontSize: 18),));
   }
 
   _urgentCasesBody(){
@@ -285,7 +283,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
             ),
           );
         })
-    :  Center(child: Text('no_inactive_urgent_cases_to_show.'.tr, style: TextStyle(fontSize: 18),));
+    : const Center(child: Text('No inactive urgent cases to show.', style: TextStyle(fontSize: 18),));
   }
   @override
   Widget build(BuildContext context) {
@@ -293,8 +291,8 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          bottom:  TabBar(tabs: [Tab(text: '_campaigns'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,)],),
-          title:  Text('inactive_charities'.tr),
+          bottom: const TabBar(tabs: [Tab(text: 'Campaigns',), Tab(text: 'Beneficiaries',), Tab(text: 'Urgent Cases',)],),
+          title: const Text('Inactive Charities'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {

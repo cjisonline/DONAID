@@ -8,8 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
-import 'package:get/get.dart';
-
 
 class CategoryCampaignsScreen extends StatefulWidget {
   final categoryName;
@@ -93,8 +91,8 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
-              child: Text('detour!'.tr),
+            title: const Center(
+              child: Text('Detour!'),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
@@ -107,7 +105,6 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                   throw 'Could not launch $link';
                 }
               },
-              //doubt
               text: 'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment.'
                       ' A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
               linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
@@ -119,7 +116,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child: const Text('OK'),
                 ),
               ),
             ],
@@ -182,15 +179,14 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
             ),
           );
         })
-    :  Center(child: Text('no_compaigns_in_this_category'.tr, style: TextStyle(fontSize: 18),));
+    : const Center(child: Text('No campaigns in this category.', style: TextStyle(fontSize: 18),));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //doubt
-        title: Text('campaigns - ${widget.categoryName}'),
+        title: Text('Campaigns - ${widget.categoryName}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

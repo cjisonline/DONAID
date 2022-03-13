@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 
 class DonorRegistrationScreen extends StatefulWidget {
   static const id = 'donor_registration_screen';
@@ -35,6 +34,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
   String phoneNumber = "";
 
   Future<bool> isEmailAvailable() async {
+    //This method checks to make sure the email is not already being used in Firebase
     final list = await _auth.fetchSignInMethodsForEmail(email);
 
     if (list.isEmpty) {
@@ -45,7 +45,9 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
   }
 
   void createNewDonorUser() async {
+    //This method creates the new user in Firebase
     if (await isEmailAvailable()) {
+      //If the email is available
       try {
         dynamic newUser = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
@@ -60,25 +62,26 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             'lastName': lastName,
             'email': email,
             'phoneNumber': phoneNumber,
-            'enabled': true
+            'enabled':true
           });
 
           final usersDocRef = await _firestore.collection('Users').add({});
 
           await _firestore.collection('Users').doc(usersDocRef.id).set({
             'id': usersDocRef.id,
-            'uid': newUser.user.uid,
-            'email': email,
-            'userType': 1
+            'uid':newUser.user.uid,
+            'email':email,
+            'userType':1
           });
 
-          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id));
-          Navigator.pushNamed(context, LoginScreen.id);
+          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
+          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
         }
       } catch (signUpError) {
         print(signUpError);
       }
     } else {
+      //If the email is already in use
       print('Email not available.');
       _emailInUseDialog();
     }
@@ -93,21 +96,21 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
-              child: Text('alert'.tr),
+            title: const Center(
+              child: Text('Alert'),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text(
-                'the_email_you_choose_is_already_in_use'.tr),
+            content: const Text(
+                'The email you chose is already in use. Please choose another email address.'),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child: const Text('OK'),
                 ),
               ),
             ],
@@ -119,7 +122,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:  Text('donor_registration'.tr),
+          title: const Text('Donor Registration'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -140,20 +143,20 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                   const SizedBox(
                     height: 15.0,
                   ),
-                   Center(
+                  const Center(
                     child: Text(
-                      'donaid'.tr,
+                      'DONAID',
                       style: TextStyle(fontSize: 32.0),
                     ),
                   ),
                   const SizedBox(
                     height: 15.0,
                   ),
-                   Padding(
+                  const Padding(
                     padding:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
+                    EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
                     child: Text(
-                      '* - required_fields'.tr,
+                      '* - required fields',
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
@@ -165,7 +168,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       },
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "please_enter_your_first_name.".tr;
+                          return "Please enter your first name.";
                         } else {
                           return null;
                         }
@@ -174,19 +177,19 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       decoration: InputDecoration(
                           label: Center(
                             child: RichText(
-                                text:  TextSpan(
-                                    text: 'first_name'.tr,
+                                text: const TextSpan(
+                                    text: 'First Name',
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 20.0),
                                     children: [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ])),
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
                           ),
                           border: const OutlineInputBorder(
                             borderRadius:
@@ -202,7 +205,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       },
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "please_enter_your_last_name.".tr;
+                          return "Please enter your last name.";
                         } else {
                           return null;
                         }
@@ -211,19 +214,19 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       decoration: InputDecoration(
                           label: Center(
                             child: RichText(
-                                text:  TextSpan(
-                                    text: 'last_name'.tr,
+                                text: const TextSpan(
+                                    text: 'Last Name',
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 20.0),
                                     children: [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ])),
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
                           ),
                           border: const OutlineInputBorder(
                             borderRadius:
@@ -239,9 +242,9 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       },
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "please_enter_your_email.".tr;
+                          return "Please enter your email.";
                         } else if (!emailRegExp.hasMatch(value)) {
-                          return "please_enter_a_valid_email_address.".tr;
+                          return "Please enter a valid email address.";
                         } else {
                           return null;
                         }
@@ -251,19 +254,19 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       decoration: InputDecoration(
                           label: Center(
                             child: RichText(
-                                text:  TextSpan(
-                                    text: 'email'.tr,
+                                text: const TextSpan(
+                                    text: 'Email',
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 20.0),
                                     children: [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ])),
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
                           ),
                           border: const OutlineInputBorder(
                             borderRadius:
@@ -279,9 +282,9 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       },
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "please_enter_your_phone_number.".tr;
+                          return "Please enter your phone number.";
                         } else if (!phoneNumberRegExp.hasMatch(value)) {
-                          return "please_enter_a_valid_phone_number.".tr;
+                          return "Please enter a valid phone number.";
                         } else {
                           return null;
                         }
@@ -291,19 +294,19 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       decoration: InputDecoration(
                           label: Center(
                             child: RichText(
-                                text:  TextSpan(
-                                    text: 'phone_number'.tr,
+                                text: const TextSpan(
+                                    text: 'Phone Number',
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 20.0),
                                     children: [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ])),
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
                           ),
                           border: const OutlineInputBorder(
                             borderRadius:
@@ -319,7 +322,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       },
                       validator: (value) {
                         if (value!.isEmpty || value.length < 6) {
-                          return "password_must_be_at_least_6_characters.".tr;
+                          return "Password must be at least 6 characters.";
                         } else {
                           return null;
                         }
@@ -329,19 +332,19 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       decoration: InputDecoration(
                           label: Center(
                             child: RichText(
-                                text:  TextSpan(
-                                    text: 'password'.tr,
+                                text: const TextSpan(
+                                    text: 'Password',
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 20.0),
                                     children: [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ])),
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
                           ),
                           border: const OutlineInputBorder(
                             borderRadius:
@@ -357,9 +360,9 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       },
                       validator: (value) {
                         if (value!.isEmpty || value.length < 6) {
-                          return "password_must_be_at_least_6_characters.".tr;
+                          return "Password must be at least 6 characters.";
                         } else if (value != password) {
-                          return "passwords_do_not_match".tr;
+                          return "Passwords do not match";
                         } else {
                           return null;
                         }
@@ -369,19 +372,19 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       decoration: InputDecoration(
                           label: Center(
                             child: RichText(
-                                text:  TextSpan(
-                                    text: 'confirm_password'.tr,
+                                text: const TextSpan(
+                                    text: 'Confirm Password',
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 20.0),
                                     children: [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ])),
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
                           ),
                           border: const OutlineInputBorder(
                             borderRadius:
@@ -395,17 +398,18 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       margin: EdgeInsets.symmetric(horizontal: 25.0),
                       child: Center(
                         child: RichText(
-                            text:  TextSpan(
-                                text: 'note '.tr,
+                            text: const TextSpan(
+                                text: 'Note: ',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 15.0),
                                 children: [
-                              TextSpan(
-                                  text:
-                                      'all_account_information_is_kept_private'.tr,
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 15.0)),
-                            ])),
+                                  TextSpan(
+                                      text: 'All account information is kept private unless you choose to share it at a later time.',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15.0
+                                      )),
+                                ])),
                       ),
                     ),
                   ),
@@ -417,8 +421,8 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       color: Colors.blue,
                       borderRadius: BorderRadius.circular(32.0),
                       child: MaterialButton(
-                        child:  Text(
-                          'register'.tr,
+                        child: const Text(
+                          'Register',
                           style: TextStyle(
                             color: Colors.white,
                           ),

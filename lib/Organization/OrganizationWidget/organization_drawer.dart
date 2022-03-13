@@ -7,8 +7,6 @@ import 'package:donaid/Organization/pending_approvals_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get.dart';
-
 
 import '../../home_screen.dart';
 import '../organization_profile.dart';
@@ -40,7 +38,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                     bottom: 8.0,
                     left: 4.0,
                     child: Text(
-                      "_organization".tr,
+                      "Organization",
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   )
@@ -52,19 +50,19 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
             ),
             ListTile(
               leading: Icon(Icons.settings),
-              title: Text("settings".tr),
+              title: Text("Settings"),
               onTap: () {},
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),
-              title:  Text("profile".tr),
+              title: const Text("Profile"),
               onTap: () {
                 Navigator.pushNamed(context, OrganizationProfile.id);
               },
             ),
             ListTile(
               leading: Icon(Icons.pending),
-              title: Text("pending_approvals".tr),
+              title: Text("Pending Approvals"),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context){
                   return PendingApprovals();
@@ -76,7 +74,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
             ),
             ListTile(
               leading: Icon(Icons.watch_later_outlined),
-              title: Text("expired_charities".tr),
+              title: Text("Expired Charities"),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context){
                   return ExpiredCharitiesScreen();
@@ -88,7 +86,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
             ),
             ListTile(
               leading: Icon(Icons.not_interested),
-              title: Text("inactive_charities".tr),
+              title: Text("Inactive Charities"),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context){
                   return InactiveCharitiesScreen();
@@ -99,7 +97,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
             ),
             ListTile(
               leading: Icon(Icons.logout),
-              title: Text("logout".tr),
+              title: Text("Logout"),
               onTap: () {
                 FirebaseAuth.instance.signOut();
                 MyGlobals.allMessages = <MessageModel>[].obs;

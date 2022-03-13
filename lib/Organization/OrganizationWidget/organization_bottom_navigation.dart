@@ -4,7 +4,6 @@ import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../organization_dashboard.dart';
 import '../search_page.dart';
@@ -39,7 +38,7 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-            Text('home'.tr,
+            Text('Home',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -55,7 +54,7 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
                 size: 35,
               ),
             ),
-            Text('search'.tr,
+            Text('Search',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -67,7 +66,7 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-            Text('notifications'.tr,
+            Text('Notifications',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -81,7 +80,7 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
               },
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-            Text('message'.tr,
+            Text('Messages',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),

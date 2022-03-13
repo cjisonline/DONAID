@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class EditBeneficiary extends StatefulWidget {
   Beneficiary beneficiary;
@@ -80,13 +79,13 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title:  Text('edit_beneficiary'.tr),
+          title: const Text('Edit Beneficiary'),
           leadingWidth: 80,
           leading: TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child:  Text('cancel'.tr,
+            child: const Text('Cancel',
                 style: TextStyle(fontSize: 15.0, color: Colors.white)),
           ),
           actions: [
@@ -94,7 +93,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               onPressed: () async {
                 _submitForm();
               },
-              child:  Text('save'.tr,
+              child: const Text('Save',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
@@ -135,8 +134,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
-                  text:  TextSpan(
-                    text: 'name'.tr,
+                  text: const TextSpan(
+                    text: 'Name',
                     style: TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
@@ -147,7 +146,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               )),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'please_enter_beneficiary_name.'.tr;
+              return 'Please enter beneficiary name.';
             }
             return null;
           },
@@ -166,8 +165,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
         decoration: InputDecoration(
             label: Center(
               child: RichText(
-                text:  TextSpan(
-                  text: 'biography'.tr,
+                text: const TextSpan(
+                  text: 'Biography',
                   style: TextStyle(
                       color: Colors.black, fontSize: 20.0),
                 ),
@@ -189,9 +188,9 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
         controller: _beneficiaryGoalAmountController,
         validator: (value) {
           if (value!.isEmpty) {
-            return "please_enter_a_goal_amount.".tr;
+            return "Please enter a goal amount.";
           }else if (!goalRegExp.hasMatch(value)){
-            return "please_enter_a_valid_goal_amount".tr;
+            return "Please enter a valid goal amount.";
           }
           else {
             return null;
@@ -202,7 +201,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
             label: Center(
               child: RichText(
                   text: TextSpan(
-                      text: 'goal_amount'.tr,
+                      text: 'Goal Amount',
                       style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 20.0),
@@ -234,10 +233,10 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
           readOnly: true,
           validator: (value) {
             if (value!.isEmpty) {
-              return "please_enter_end_date.".tr;
+              return "Please enter end date.";
             }
             else if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
-              return 'beneficiaries_cannot_have_a_duration_longer_than_1_year.'.tr;
+              return 'Beneficiaries cannot have a duration longer than 1 year.';
             }
             else {
               return null;
@@ -248,7 +247,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               label: Center(
                 child: RichText(
                     text: TextSpan(
-                        text: 'enter_end_date'.tr,
+                        text: 'Enter End Date',
                         style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 20.0),
@@ -287,7 +286,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               label: Center(
                 child: RichText(
                     text: TextSpan(
-                        text: 'category'.tr,
+                        text: 'Category',
                         style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 20.0),
@@ -316,7 +315,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
             _beneficiaryCategoryController?.text = val.toString();
           }),
           validator: (value) => value == null
-              ? 'please_fill_in_the_category'.tr : null,
+              ? 'Please fill in the category.' : null,
         )
     );
   }

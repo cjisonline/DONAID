@@ -7,14 +7,12 @@ import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navig
 import 'package:donaid/Widgets/conversation.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ResetWidget extends StatelessWidget {
-  String currentUid = "", type = "";
-  ResetWidget(this.currentUid, this.type);
+  String currentUid="",type="";
+  ResetWidget(this.currentUid,this.type);
   @override
   Widget build(BuildContext context) => Conversation(currentUid, type);
 }
@@ -28,13 +26,15 @@ class Conversation extends StatefulWidget {
 }
 
 class _ConversationState extends State<Conversation> {
-  _refresh() {
-    Navigator.push(
-        context,
-        PageRouteBuilder(
-            transitionDuration: Duration.zero,
-            pageBuilder: (_, __, ___) =>
-                ResetWidget(widget.currentUid, widget.type)));
+
+  _refresh(){
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration.zero,
+        pageBuilder: (_, __, ___) => ResetWidget(widget.currentUid, widget.type),
+      ),
+    );
   }
 
   @override
@@ -42,20 +42,26 @@ class _ConversationState extends State<Conversation> {
     return GetBuilder<ConController>(
       init: ConController(widget.type),
       builder: (homeCon) => Scaffold(
-        appBar: AppBar(title:  Text('message'.tr), actions: <Widget>[
-          widget.type == "OrganizationUsers"
-              ? IconButton(
-                  icon: const Icon(Icons.add, size: 30),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ConversationScreen(widget.currentUid, widget.type);
-                    }));
-                  })
-              : Container()
-        ]),
+        appBar: AppBar(
+          title: const Text('Messages'),
+          actions: <Widget>[
+            this.widget.type == "OrganizationUsers"
+                ? IconButton(
+                    icon: const Icon(
+                      Icons.add,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ConversationScreen(widget.currentUid, widget.type);
+                      }));
+                    })
+                : Container(),
+          ],
+        ),
         body: RefreshIndicator(
-          onRefresh: () async {
+          onRefresh: ()async{
             _refresh();
           },
           child: Column(
@@ -64,9 +70,10 @@ class _ConversationState extends State<Conversation> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0))),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0)),
+                  ),
                   child: Obx(
                     () => ListView(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -83,53 +90,12 @@ class _ConversationState extends State<Conversation> {
                                                 .capitalizeFirst ??
                                             "",
                                         MyGlobals.allMessages
-                                            .where(
-                                                (p0) => p0.receiverId == e.uid)
+                                            .where((p0) => p0.receiverId == e.uid)
                                             .toList()
                                             .last
                                             .body, () {
-                                      Get.to(Chat(e.uid, e.organizationName,
-                                          widget.currentUid));
-                                    }, () async {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              CupertinoAlertDialog(
-                                                  title: Text(
-                                                      "${e.organizationName}"),
-                                                  actions: [
-                                                    CupertinoDialogAction(
-                                                        onPressed: () {
-                                                          Get.back();
-                                                        },
-                                                        child: Text("No".tr)),
-                                                    CupertinoDialogAction(
-                                                        onPressed: () async {
-                                                          await FirebaseDatabase
-                                                              .instance
-                                                              .ref()
-                                                              .child('chat')
-                                                              .child(widget
-                                                                  .currentUid)
-                                                              .child(e.uid)
-                                                              .remove();
-                                                          homeCon.friendList
-                                                              .removeWhere(
-                                                                  (element) =>
-                                                                      element
-                                                                          .uid ==
-                                                                      e.uid);
-                                                          MyGlobals.allMessages
-                                                              .removeWhere((p0) =>
-                                                                  p0.receiverId ==
-                                                                  e.uid);
-                                                          Get.back();
-                                                          setState(() {});
-                                                        },
-                                                        child: Text("yes".tr))
-                                                  ],
-                                                  content: Text(
-                                                      "do_you_want_to_delete_conversation".tr)));
+                                      Get.to(Chat(
+                                          e.uid, e.organizationName, widget.currentUid));
                                     }, messageSeen: false),
                                     Divider(color: Colors.grey)
                                   ],
@@ -143,9 +109,7 @@ class _ConversationState extends State<Conversation> {
             ],
           ),
         ),
-        bottomNavigationBar: (this.widget.type == "OrganizationUsers")
-            ? DonorBottomNavigationBar()
-            : OrganizationBottomNavigation(),
+        bottomNavigationBar: (this.widget.type == "OrganizationUsers") ? DonorBottomNavigationBar() : OrganizationBottomNavigation(),
       ),
     );
   }
@@ -206,7 +170,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title:  Text("organization".tr)),
+        appBar: AppBar(title: Text("Organizations")),
         body: ListView.builder(
             itemCount: organizations.length,
             scrollDirection: Axis.vertical,
@@ -218,14 +182,19 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         organizations[index].organizationName,
                         widget.currentUid));
                   },
-                  child: Column(children: [
-                    ListTile(
+                  child: Column(
+                    children: [
+                      ListTile(
                         title: Text(organizations[index].organizationName),
                         subtitle: Text(organizations[index]
                             .organizationDescription
-                            .toString())),
-                    const Divider(color: Colors.grey)
-                  ]));
+                            .toString()),
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                      ),
+                    ],
+                  ));
             }));
   }
 }

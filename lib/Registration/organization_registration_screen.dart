@@ -8,7 +8,6 @@ import 'package:country_picker/country_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
-import 'package:get/get.dart';
 
 import '../home_screen.dart';
 import '../login_screen.dart';
@@ -121,21 +120,21 @@ class _OrganizationRegistrationScreenState
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
-              child: Text('alert'.tr),
+            title: const Center(
+              child: Text('Alert'),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text(
-                'the_email_you_choose_is_already_in_use'.tr),
+            content: const Text(
+                'The email you chose is already in use. Please choose another email address.'),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child: const Text('OK'),
                 ),
               ),
             ],
@@ -152,21 +151,21 @@ class _OrganizationRegistrationScreenState
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
-              child: Text('alert'.tr),
+            title: const Center(
+              child: Text('Alert'),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text(
-                'organizations_are_required_to_upload'.tr),
+            content: const Text(
+                'Organizations are required to upload images of documents to verify their organization.'),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child: const Text('OK'),
                 ),
               ),
             ],
@@ -183,21 +182,21 @@ class _OrganizationRegistrationScreenState
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
-              child: Text('alert'.tr),
+            title: const Center(
+              child: Text('Alert'),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text(
-                'organizations_are_Required_to_specify'.tr),
+            content: const Text(
+                'Organizations are required to specify the country that their organization is based in.'),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child: const Text('OK'),
                 ),
               ),
             ],
@@ -230,7 +229,7 @@ class _OrganizationRegistrationScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('organization_registration'.tr),
+        title: const Text('Organization Registration'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -251,20 +250,20 @@ class _OrganizationRegistrationScreenState
                 const SizedBox(
                   height: 15.0,
                 ),
-                 Center(
+                const Center(
                   child: Text(
-                    'donaid'.tr,
+                    'DONAID',
                     style: TextStyle(fontSize: 32.0),
                   ),
                 ),
                 const SizedBox(
                   height: 15.0,
                 ),
-                 Padding(
+                const Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
                   child: Text(
-                    '* - required_fields'.tr,
+                    '* - required fields',
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
@@ -277,7 +276,7 @@ class _OrganizationRegistrationScreenState
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "please_enter_your_organization_name.".tr;
+                        return "Please enter your organization name.";
                       } else {
                         return null;
                       }
@@ -287,7 +286,7 @@ class _OrganizationRegistrationScreenState
                         label: Center(
                           child: RichText(
                               text: TextSpan(
-                                  text: 'organization_name'.tr,
+                                  text: 'Organization Name',
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                   children: const [
@@ -319,7 +318,7 @@ class _OrganizationRegistrationScreenState
                         label: Center(
                           child: RichText(
                             text: TextSpan(
-                              text: 'organization_description'.tr,
+                              text: 'Organization Description',
                               style: TextStyle(
                                   color: Colors.grey[600], fontSize: 20.0),
                             ),
@@ -338,9 +337,9 @@ class _OrganizationRegistrationScreenState
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "please_enter_your_email.".tr;
+                        return "Please enter your email.";
                       } else if (!emailRegExp.hasMatch(value)) {
-                        return "please_enter_a_valid_email_address".tr;
+                        return "Please enter a valid email address.";
                       } else {
                         return null;
                       }
@@ -351,7 +350,7 @@ class _OrganizationRegistrationScreenState
                         label: Center(
                           child: RichText(
                               text: TextSpan(
-                                  text: 'email'.tr,
+                                  text: 'Email',
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                   children: const [
@@ -377,10 +376,10 @@ class _OrganizationRegistrationScreenState
                     },
                     validator: (value) {
                       if(value!.isEmpty){
-                        return "please_enter_a_phone_number.".tr;
+                        return "Please enter a phone number.";
                       }
                       if (value.isNotEmpty && !phoneNumberRegExp.hasMatch(value)) {
-                        return "please_enter_a_valid_phone_number.".tr;
+                        return "Please enter a valid phone number.";
                       } else {
                         return null;
                       }
@@ -391,7 +390,7 @@ class _OrganizationRegistrationScreenState
                         label: Center(
                           child: RichText(
                               text: TextSpan(
-                                  text: 'phone_number'.tr,
+                                  text: 'Phone Number',
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                   children: const [
@@ -418,7 +417,7 @@ class _OrganizationRegistrationScreenState
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "please_provide_street_address.".tr;
+                        return "Please provide street address.";
                       } else {
                         return null;
                       }
@@ -428,7 +427,7 @@ class _OrganizationRegistrationScreenState
                         label: Center(
                           child: RichText(
                               text: TextSpan(
-                                  text: 'street_address'.tr,
+                                  text: 'Street Address',
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                   children: const[
@@ -459,7 +458,7 @@ class _OrganizationRegistrationScreenState
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "please_provide_city.".tr;
+                              return "Please provide city.";
                             } else {
                               return null;
                             }
@@ -469,7 +468,7 @@ class _OrganizationRegistrationScreenState
                               label: Center(
                                 child: RichText(
                                     text: TextSpan(
-                                        text: 'city'.tr,
+                                        text: 'City',
                                         style: TextStyle(
                                             color: Colors.grey[600], fontSize: 20.0),
                                         children: const[
@@ -495,7 +494,7 @@ class _OrganizationRegistrationScreenState
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "please_provide_postal_code.".tr;
+                              return "Please provide postal code.";
                             } else {
                               return null;
                             }
@@ -505,7 +504,7 @@ class _OrganizationRegistrationScreenState
                               label: Center(
                                 child: RichText(
                                     text: TextSpan(
-                                        text: 'postal_code'.tr,
+                                        text: 'Postal Code',
                                         style: TextStyle(
                                             color: Colors.grey[600], fontSize: 20.0),
                                         children: const[
@@ -534,7 +533,7 @@ class _OrganizationRegistrationScreenState
                     },
                     validator: (value) {
                       if (value!.isEmpty || value.length < 6) {
-                        return "password_must_be_at_least_6_characters.".tr;
+                        return "Password must be at least 6 characters.";
                       } else {
                         return null;
                       }
@@ -545,7 +544,7 @@ class _OrganizationRegistrationScreenState
                         label: Center(
                           child: RichText(
                               text: TextSpan(
-                                  text: 'password'.tr,
+                                  text: 'Password',
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                   children: const[
@@ -571,9 +570,9 @@ class _OrganizationRegistrationScreenState
                     },
                     validator: (value) {
                       if (value!.isEmpty || value.length < 6) {
-                        return "password_must_be_at_least_6_characters.".tr;
+                        return "Password must be at least 6 characters.";
                       } else if (value != password) {
-                        return "passwords_do_not_match".tr;
+                        return "Passwords do not match";
                       } else {
                         return null;
                       }
@@ -584,7 +583,7 @@ class _OrganizationRegistrationScreenState
                         label: Center(
                           child: RichText(
                               text: TextSpan(
-                                  text: 'confirm_password'.tr,
+                                  text: 'Confirm Password',
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                   children: const [
@@ -610,7 +609,7 @@ class _OrganizationRegistrationScreenState
                     },
                     validator: (value) {
                       if (country != 'United States' && value == '') {
-                        return "countries_not_based_in_the_united_states".tr;
+                        return "Countries not based in the United States must provide their own\n gateway.";
                       } else {
                         return null;
                       }
@@ -620,7 +619,7 @@ class _OrganizationRegistrationScreenState
                         label: Center(
                           child: RichText(
                               text: TextSpan(
-                                  text: 'link_to_payment_gateway'.tr,
+                                  text: 'Link to Payment Gateway',
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                   )),
@@ -642,9 +641,9 @@ class _OrganizationRegistrationScreenState
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children:  [
+                      children: const [
                         Icon(Icons.flag),
-                        Text('select_country'.tr),
+                        Text('Select Country'),
                         Text(' *', style: TextStyle(color: Colors.red),)
                       ],
                     ),
@@ -658,9 +657,9 @@ class _OrganizationRegistrationScreenState
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children:  [
+                      children: const [
                         Icon(Icons.upload),
-                        Text('upload_document_to_verify'.tr),
+                        Text('Upload document to verify organization.'),
                         Text(' *', style: TextStyle(color: Colors.red),)
                       ],
                     ),
@@ -674,8 +673,8 @@ class _OrganizationRegistrationScreenState
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(32.0),
                     child: MaterialButton(
-                      child:  Text(
-                        'register'.tr,
+                      child: const Text(
+                        'Register',
                         style: TextStyle(
                           color: Colors.white,
                         ),

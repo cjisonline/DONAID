@@ -6,7 +6,6 @@ import 'package:donaid/Organization/organization_urgentcase_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
 
 class OrganizationUrgentCasesExpandedScreen extends StatefulWidget {
   static const id = 'organization_urgentcases_expanded_screen';
@@ -121,7 +120,7 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
               ),
             );
           })
-      :  Center(child: Text('no_active_campaigns_to_show'.tr, style: TextStyle(fontSize: 18),)),
+      : const Center(child: Text('No active urgent cases to show.', style: TextStyle(fontSize: 18),)),
     );
   }
 
@@ -129,7 +128,7 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('my_urgent_cases'.tr),
+        title: const Text('My Urgent Cases'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

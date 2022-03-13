@@ -5,7 +5,6 @@ import 'package:donaid/Models/UrgentCase.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../urgent_case_donate_screen.dart';
-import 'package:get/get.dart';
 
 class UrgentCaseCard extends StatefulWidget {
   final UrgentCase urgentCase;
@@ -127,7 +126,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                               color: Colors.white, size: 20),
                         Container(
                           margin: const EdgeInsets.only(left: 0.0, right: 10.0),
-                          child:  Text('donate'.tr,
+                          child: const Text('Donate',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,

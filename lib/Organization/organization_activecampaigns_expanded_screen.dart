@@ -6,7 +6,6 @@ import 'package:donaid/Organization/organization_campaign_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
 
 class OrganizationCampaignsExpandedScreen extends StatefulWidget {
   static const id = 'organization_campaigns_expanded_screen';
@@ -118,7 +117,7 @@ class _OrganizationCampaignsExpandedScreenState
               ),
             );
           })
-      :  Center(child: Text('no_active_campaigns_to_show'.tr, style: TextStyle(fontSize: 18),)),
+      : const Center(child: Text('No active campaigns to show.', style: TextStyle(fontSize: 18),)),
     );
   }
 
@@ -126,7 +125,7 @@ class _OrganizationCampaignsExpandedScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('my_campaigns'.tr),
+        title: const Text('My Campaigns'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

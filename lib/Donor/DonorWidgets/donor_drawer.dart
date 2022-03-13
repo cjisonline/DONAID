@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get.dart';
 
 import '../../home_screen.dart';
 import '../donation_history.dart';
@@ -26,12 +25,12 @@ class _DonorDrawerState extends State<DonorDrawer> {
           children: [
             DrawerHeader(
               child: Stack(
-                children: [
+                children: const [
                   Positioned(
                     bottom: 8.0,
                     left: 4.0,
                     child: Text(
-                      "donor".tr,
+                      "Donor",
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   )
@@ -43,81 +42,36 @@ class _DonorDrawerState extends State<DonorDrawer> {
             ),
             ListTile(
               leading: const Icon(Icons.settings),
-              title: Text("settings".tr),
+              title: const Text("Settings"),
               onTap: () {},
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),
-              title: Text("profile".tr),
+              title: const Text("Profile"),
               onTap: () {
                 Navigator.pushNamed(context, DonorProfile.id);
               },
             ),
             ListTile(
               leading: const Icon(Icons.article_outlined),
-              title: Text("about".tr),
+              title: const Text("About"),
               onTap: () {},
             ),
             ListTile(
               leading: const Icon(Icons.history),
-              title: Text("donation_history".tr),
+              title: const Text("Donation History"),
               onTap: () {
                 Navigator.pushNamed(context, DonationHistory.id);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.translate),
-              title: Text("language".tr),
-              onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return SimpleDialog(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          title: Center(child: Text("select_language".tr)),
-                          children: <Widget>[
-                            SimpleDialogOption(
-                                onPressed: () async {
-                                  await Get.updateLocale(
-                                      const Locale('en', 'US'));
-                                  Navigator.pop(context);
-                                },
-                                child: const Center(child: Text("English"))),
-                            SimpleDialogOption(
-                                onPressed: () async {
-                                  await Get.updateLocale(
-                                      const Locale('fr', 'FR'));
-                                  Navigator.pop(context);
-                                },
-                                child: const Center(child: Text("French"))),
-                            SimpleDialogOption(
-                                onPressed: () async {
-                                  await Get.updateLocale(
-                                      const Locale('ar', 'SA'));
-                                  Navigator.pop(context);
-                                },
-                                child: const Center(child: Text("Arabic"))),
-                            SimpleDialogOption(
-                                onPressed: () async {
-                                  await Get.updateLocale(
-                                      const Locale('es', 'ES'));
-                                  Navigator.pop(context);
-                                },
-                                child: const Center(child: Text("Spanish")))
-                          ]);
-                    });
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.help),
-              title: Text("help".tr),
+              title: const Text("Help"),
               onTap: () {},
             ),
             ListTile(
               leading: const Icon(Icons.logout),
-              title: Text("logout".tr),
+              title: const Text("Logout"),
               onTap: () {
                 FirebaseAuth.instance.signOut();
                 MyGlobals.allMessages = <MessageModel>[].obs;

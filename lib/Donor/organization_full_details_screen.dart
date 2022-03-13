@@ -5,8 +5,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../Models/Organization.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
-import 'package:get/get.dart';
-
 
 class OrganizationFullDetailsScreen extends StatefulWidget {
   final Organization organization;
@@ -102,7 +100,6 @@ class _OrganizationFullDetailsScreenState extends State<OrganizationFullDetailsS
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.person, size: 50, color: Colors.blue),
-                  //doubt
                   Text('${beneficiaryCount} Beneficiaries', style: TextStyle(fontSize: 18),)
                 ],
               ),
@@ -113,7 +110,6 @@ class _OrganizationFullDetailsScreenState extends State<OrganizationFullDetailsS
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.campaign, size: 50, color: Colors.blue),
-                  //doubt
                   Text('${campaignCount} Campaigns', style: TextStyle(fontSize: 18),)
                 ],
               ),

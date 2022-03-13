@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'organization_dashboard.dart';
-import 'package:get/get.dart';
-
 
 class AddCampaignForm extends StatefulWidget {
   static const id = 'campaign_form_screen';
@@ -97,7 +95,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:  Text("donaid".tr),
+          title: const Text("DONAID"),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -118,20 +116,20 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                         const SizedBox(
                           height: 15.0,
                         ),
-                         Center(
+                        const Center(
                           child: Text(
-                            'add_campaign'.tr,
+                            'Add Campaign',
                             style: TextStyle(fontSize: 32.0),
                           ),
                         ),
                         const SizedBox(
                           height: 15.0,
                         ),
-                         Padding(
+                        const Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 25.0),
                           child: Text(
-                            '* - required_fields'.tr,
+                            '* - required fields',
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
@@ -143,7 +141,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                             inputFormatters: [new LengthLimitingTextInputFormatter(50)],
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "please_enter_a_title.".tr;
+                                return "Please enter a title.";
                               } else {
                                 return null;
                               }
@@ -153,7 +151,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'title'.tr,
+                                          text: 'Title',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -182,7 +180,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                             controller: descriptionController,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "please_enter_a_description.".tr;
+                                return "Please enter a description.";
                               } else {
                                 return null;
                               }
@@ -192,7 +190,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'description'.tr,
+                                          text: 'Description',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -219,9 +217,9 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                             controller: goalAmountController,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "please_enter_a_goal_amount.".tr;
+                                return "Please enter a goal amount.";
                               }else if (!goalRegExp.hasMatch(value)){
-                                return "please_enter_a_valid_goal_amount".tr;
+                                return "Please enter a valid goal amount.";
                               }
                               else {
                                 return null;
@@ -232,7 +230,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: '\u0024 goal'.tr,
+                                          text: '\u0024 Goal',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -259,10 +257,10 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 readOnly: true,
                                 validator: (value) {
                                   if (value!.isEmpty) {
-                                    return "please_enter_end_date.".tr;
+                                    return "Please enter end date.";
                                   }
                                   if(DateTime.parse(value).difference(DateTime.now()).inDays > campaignTimeLimit){
-                                    return 'campaigns_cannot_have_a_duration_longer_than_1_year.'.tr;
+                                    return 'Campaigns cannot have a duration longer than 1 year.';
                                   }
                                   else {
                                     return null;
@@ -273,7 +271,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                   label: Center(
                                     child: RichText(
                                         text: TextSpan(
-                                            text: 'enter_end_date'.tr,
+                                            text: 'Enter End Date',
                                             style: TextStyle(
                                                 color: Colors.grey[600],
                                                 fontSize: 20.0),
@@ -308,7 +306,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                   label: Center(
                                     child: RichText(
                                         text: TextSpan(
-                                            text: 'category'.tr,
+                                            text: 'Category',
                                             style: TextStyle(
                                                 color: Colors.grey[600],
                                                 fontSize: 20.0),
@@ -337,7 +335,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                               categoryController.text = val.toString();
                             }),
                               validator: (value) => value == null
-                                 ? 'please_fill_in_the_category'.tr : null,
+                                 ? 'Please fill in the category.' : null,
                           )
                         ),
 
@@ -349,8 +347,8 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(32.0),
                             child: MaterialButton(
-                              child:  Text(
-                                'submit'.tr,
+                              child: const Text(
+                                'Submit',
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
@@ -365,7 +363,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
 
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar( SnackBar(content: Text('campaign_created!'.tr)));
+                                      .showSnackBar(const SnackBar(content: Text('Campaign created!')));
                                 }
                               },
                             ),

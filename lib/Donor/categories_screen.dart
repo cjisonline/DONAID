@@ -4,7 +4,6 @@ import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CategoriesScreen extends StatefulWidget {
   static const id = 'categories_screen';
@@ -42,7 +41,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('categories'.tr),
+        title: const Text('Categories'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

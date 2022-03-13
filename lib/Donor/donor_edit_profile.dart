@@ -3,7 +3,6 @@ import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Models/Donor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'donor_profile.dart';
 
@@ -70,13 +69,13 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title:  Text('edit_profile'.tr),
+          title: const Text('Edit Profile'),
           leadingWidth: 80,
           leading: TextButton(
             onPressed: () {
               Navigator.pushNamed(context, DonorProfile.id);
             },
-            child:  Text('cancel'.tr,
+            child: const Text('Cancel',
                 style: TextStyle(fontSize: 15.0, color: Colors.white)),
           ),
           actions: [
@@ -85,7 +84,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
                 _submitForm();
                 Navigator.pop(context);
               },
-              child:  Text('save'.tr,
+              child: const Text('Save',
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
@@ -105,8 +104,8 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
-                  text:  TextSpan(
-                    text: 'first_name'.tr,
+                  text: const TextSpan(
+                    text: 'First Name',
                     style: TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
@@ -117,7 +116,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               )),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'please_enter_first_name.'.tr;
+              return 'Please enter first name.';
             }
             return null;
           },
@@ -136,8 +135,8 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
-                  text:  TextSpan(
-                    text: 'last_name'.tr,
+                  text: const TextSpan(
+                    text: 'Last Name',
                     style: TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
@@ -148,7 +147,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               )),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'please_enter_last_name.'.tr;
+              return 'Please enter last name.';
             }
             return null;
           },
@@ -167,8 +166,8 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
-                  text:  TextSpan(
-                    text: 'phone_number'.tr,
+                  text: const TextSpan(
+                    text: 'Phone Number',
                     style: TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
@@ -179,9 +178,9 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               )),
           validator: (value) {
             if (value!.isEmpty) {
-              return "please_enter_your_phone_number.".tr;
+              return "Please enter your phone number.";
             } else if (!phoneNumberRegExp.hasMatch(value)) {
-              return "please_enter_a_valid_phone_number.".tr;
+              return "Please enter a valid phone number.";
             } else {
               return null;
             }
@@ -250,7 +249,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
                 size: 35,
               ),
             ),
-             Text('search'.tr,
+            const Text('Search',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -261,7 +260,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-             Text('notifications'.tr,
+            const Text('Notifications',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -271,7 +270,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               onPressed: () {},
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-             Text('message'.tr,
+            const Text('Messages',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),

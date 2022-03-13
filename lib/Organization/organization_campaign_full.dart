@@ -5,7 +5,6 @@ import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart'
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'edit_campaign.dart';
-import 'package:get/get.dart';
 
 class OrganizationCampaignFullScreen extends StatefulWidget {
   final Campaign campaign;
@@ -60,13 +59,12 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
-              child: Text('are_you_sure?'.tr),
+            title: const Center(
+              child: Text('Are You Sure?'),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            //doubt
             content: const Text(
                 'Stopping this charity will make it not visible to donors. Once you stop this charity '
                     'you can reactivate it from the Inactive Charities page. Would you like to continue '
@@ -79,7 +77,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                     Navigator.pop(context);
                     _refreshCampaign();
                   },
-                  child:  Text('yes'.tr),
+                  child: const Text('Yes'),
                 ),
               ),
               Center(
@@ -87,7 +85,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('no'.tr),
+                  child: const Text('No'),
                 ),
               ),
             ],
@@ -101,13 +99,12 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
-              child: Text('are_you_sure?'.tr),
+            title: const Center(
+              child: Text('Are You Sure?'),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            //doubt
             content: const Text(
                 'Resuming this charity will make it visible to donors again. Once you resume this charity '
                     'you can deactivate it again from the dashboard or the My Campaigns page. Would you like '
@@ -120,7 +117,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                     Navigator.pop(context);
                     _refreshCampaign();
                   },
-                  child:  Text('yes'.tr),
+                  child: const Text('Yes'),
                 ),
               ),
               Center(
@@ -128,7 +125,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('no'.tr),
+                  child: const Text('No'),
                 ),
               ),
             ],
@@ -188,8 +185,8 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(32.0),
                         child: MaterialButton(
-                            child:  Text(
-                              'edit'.tr,
+                            child: const Text(
+                              'Edit',
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
@@ -208,8 +205,8 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(32.0),
                         child: MaterialButton(
-                            child:  Text(
-                              'stop_charity'.tr,
+                            child: const Text(
+                              'Stop Charity',
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
@@ -225,8 +222,8 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(32.0),
                         child: MaterialButton(
-                            child:  Text(
-                              'resume_charity'.tr,
+                            child: const Text(
+                              'Resume Charity',
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
@@ -240,8 +237,8 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Container(
-                              child:  Text(
-                                'note:this_charity_has_expired'.tr,
+                              child: const Text(
+                                'Note: This charity has expired. To reactive this charity and make it visible to donors again, edit the end date for the charity.',
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.black,

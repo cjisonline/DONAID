@@ -10,7 +10,6 @@ import 'package:donaid/Organization/organization_urgentcase_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
 
 import 'organization_campaign_full.dart';
 
@@ -404,11 +403,11 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:  Text('donaid'.tr),
+          title: const Text('DONAID'),
           actions: <Widget>[
             TextButton(
               onPressed: _reset,
-              child: Text('reset'.tr, style: TextStyle(color: Colors.white),),
+              child: Text('RESET', style: TextStyle(color: Colors.white),),
             ),
           ],
         ),
@@ -440,7 +439,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                             label: Center(
                               child: RichText(
                                   text: TextSpan(
-                                    text: 'category'.tr,
+                                    text: 'Category',
                                     style: TextStyle(
                                         color: Colors.grey[600],
                                         fontSize: 12.0),
@@ -479,7 +478,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                             label: Center(
                               child: RichText(
                                   text: TextSpan(
-                                    text: 'charity_type'.tr,
+                                    text: 'Charity Type',
                                     style: TextStyle(
                                         color: Colors.grey[600],
                                         fontSize: 12.0),
@@ -522,7 +521,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                             label: Center(
                               child: RichText(
                                   text: TextSpan(
-                                    text: '% raised'.tr,
+                                    text: '% Raised',
                                     style: TextStyle(
                                         color: Colors.grey[600],
                                         fontSize: 12.0),
@@ -561,7 +560,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                             label: Center(
                               child: RichText(
                                   text: TextSpan(
-                                    text: 'end_date'.tr,
+                                    text: 'End Date',
                                     style: TextStyle(
                                         color: Colors.grey[600],
                                         fontSize: 12.0
@@ -629,8 +628,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         const Divider()
                       ])),
                 )
-                    :  Text(
-                  'no_results_found'.tr,
+                    : const Text(
+                  'No results found',
                   style: TextStyle(fontSize: 24),
                 ),
               ),

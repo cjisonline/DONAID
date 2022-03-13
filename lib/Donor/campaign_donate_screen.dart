@@ -3,14 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
 
 class CampaignDonateScreen extends StatefulWidget {
   final Campaign campaign;
@@ -105,10 +103,10 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'please_enter_a_valid_payment_amount'.tr;
+                              return 'Please enter a valid payment amount.';
                             }
                             else if(double.parse(value)<0.50){
-                              return 'please_provide_a_donation_minimum'.tr;
+                              return 'Please provide a donation minimum of \$0.50';
                             }
                             else {
                               return null;
@@ -121,7 +119,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                               label: Center(
                                 child: RichText(
                                     text: TextSpan(
-                                  text: 'donation_amount'.tr,
+                                  text: 'Donation Amount',
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                 )),
@@ -139,8 +137,8 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(32.0),
                           child: MaterialButton(
-                            child:  Text(
-                              'donate'.tr,
+                            child: const Text(
+                              'Donate',
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
@@ -164,7 +162,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                     ],
                   )
               )
-                  :  Text('compaign_is_no_longer_available_to_donate'.tr),
+                  : const Text('Campaign is no longer available to donate to.'),
             )
           ]),
         )),
@@ -239,17 +237,17 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
         // paymentIntentData = null;
       });
       ScaffoldMessenger.of(context)
-          .showSnackBar( SnackBar(content: Text('paid_successfully'.tr)));
+          .showSnackBar(const SnackBar(content: Text('Paid successfully!')));
 
       createDonationDocument();
       updateCampaign();
       await _refreshPage();
 
-    }catch (e) {
+    }on StripeException catch (e) {
       print('Stripe Exception: ${e.toString()}');
 
       ScaffoldMessenger.of(context)
-          .showSnackBar( SnackBar(content: Text('payment_cancelled!'.tr)));
+          .showSnackBar(const SnackBar(content: Text('Payment cancelled.')));
 
     }
   }
@@ -284,7 +282,6 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //doubt
         title: Text('Donate - ${widget.campaign.title}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

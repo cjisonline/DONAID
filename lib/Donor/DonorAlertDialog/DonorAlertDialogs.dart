@@ -2,7 +2,6 @@ import 'package:donaid/Models/Organization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:get/get.dart';
 
 class DonorAlertDialogs{
   static paymentLinkPopUp(context, Organization organization){
@@ -11,8 +10,8 @@ class DonorAlertDialogs{
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
-              child: Text('detour!'.tr),
+            title: const Center(
+              child: Text('Detour!'),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
@@ -25,8 +24,7 @@ class DonorAlertDialogs{
                   throw 'Could not launch $link';
                 }
               },
-             //doubt
-              text: "the_organization_that_created"
+              text: 'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment.'
                   ' A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
               linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
               textAlign: TextAlign.center,
@@ -37,7 +35,7 @@ class DonorAlertDialogs{
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('ok'.tr),
+                  child: const Text('OK'),
                 ),
               ),
             ],
@@ -64,7 +62,7 @@ class DonorAlertDialogs{
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('ok'.tr),
+                  child: const Text('OK'),
                 ),
               ),
             ],

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-Widget conversation(String name, String message, tab, tab2,
+Widget conversation(String name, String message, tab,
     {bool messageSeen = false}) {
   return InkWell(
       onTap: () => tab(),
-      onLongPress: () => tab2(),
       child: Padding(
           padding: EdgeInsets.symmetric(vertical: 12.0),
           child: Row(

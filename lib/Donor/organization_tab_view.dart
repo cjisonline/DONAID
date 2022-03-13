@@ -9,8 +9,6 @@ import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
-import 'package:get/get.dart';
-
 
 class OrganizationTabViewScreen extends StatefulWidget {
   final Organization organization;
@@ -147,7 +145,6 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
             ),
           );
         })
-        //doubt
     : const Center(child: Text('This organization doesn\'t have any \nactive campaigns at this time.', style: TextStyle(fontSize: 18),));
   }
 
@@ -206,7 +203,6 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
             ),
           );
         })
-        //doubt
     : const Center(child: Text('This organization doesn\'t have any \nactive beneficiaries at this time.', style: TextStyle(fontSize: 18),));
   }
 

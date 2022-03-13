@@ -5,7 +5,6 @@ import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart'
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'edit_beneficiary.dart';
-import 'package:get/get.dart';
 
 
 class OrganizationBeneficiaryFullScreen extends StatefulWidget {
@@ -61,13 +60,12 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
-              child: Text('are_you_sure?'.tr),
+            title: const Center(
+              child: Text('Are You Sure?'),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            //doubt
             content: const Text(
                 'Stopping this charity will make it not visible to donors. Once you stop this charity '
                     'you can reactivate it from the Inactive Charities page. Would you like to continue'
@@ -80,7 +78,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                     Navigator.pop(context);
                     _refreshBeneficiary();
                   },
-                  child:  Text('yes'.tr),
+                  child: const Text('Yes'),
                 ),
               ),
               Center(
@@ -88,7 +86,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('no'.tr),
+                  child: const Text('No'),
                 ),
               ),
             ],
