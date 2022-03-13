@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'add_campaigns_screen.dart';
+import 'package:get/get.dart';
+
 
 class OrgAddSelection extends StatefulWidget {
   static const id = 'add_selection_screen';
@@ -19,7 +21,7 @@ class _addPage extends State<OrgAddSelection> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('DONAID'),
+        title: Text('donaid'.tr),
         backgroundColor: Colors.blue,
       ),
       backgroundColor: Colors.white.withAlpha(55),
@@ -27,7 +29,7 @@ class _addPage extends State<OrgAddSelection> {
         ListView(children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(40, 20, 0, 0),
-            child: Text('Select an item you would like to create: ',
+            child: Text('select_an_item_you_would_like_to_create: '.tr,
                 style: TextStyle(fontSize: 20, color: Colors.white)),
           )
         ]),
@@ -39,8 +41,8 @@ class _addPage extends State<OrgAddSelection> {
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(32.0),
                   child: MaterialButton(
-                      child: const Text(
-                        'Create Campaign',
+                      child:  Text(
+                        'create_campaign'.tr,
                         style: TextStyle(
                           color: Colors.white,
                         ),
@@ -55,8 +57,8 @@ class _addPage extends State<OrgAddSelection> {
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(32.0),
                   child: MaterialButton(
-                      child: const Text(
-                        'Create Urgent Case',
+                      child:  Text(
+                        'create_urgent_case'.tr,
                         style: TextStyle(
                           color: Colors.white,
                         ),
@@ -71,8 +73,8 @@ class _addPage extends State<OrgAddSelection> {
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(32.0),
                   child: MaterialButton(
-                      child: const Text(
-                        'Create Beneficiary',
+                      child:  Text(
+                        'create_beneficiary'.tr,
                         style: TextStyle(
                           color: Colors.white,
                         ),

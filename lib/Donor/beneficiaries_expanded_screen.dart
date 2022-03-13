@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'beneficiary_donate_screen.dart';
+import 'package:get/get.dart';
 
 class BeneficiaryExpandedScreen extends StatefulWidget {
   static const id = 'beneficaries_expanded_screen';
@@ -91,8 +92,8 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Detour!'),
+            title:  Center(
+              child: Text('detour!'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
@@ -116,7 +117,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('OK'),
+                  child:  Text('oK'.tr),
                 ),
               ),
             ],
@@ -178,14 +179,14 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
             ),
           );
         })
-    : const Center(child: Text('No active beneficiaries to show.', style: TextStyle(fontSize: 18),));
+    :  Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Beneficiaries'),
+        title: Text('beneficiaries'.tr),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

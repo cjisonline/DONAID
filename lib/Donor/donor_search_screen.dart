@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 
 import 'DonorWidgets/donor_drawer.dart';
 import 'beneficiary_donate_screen.dart';
@@ -522,12 +523,12 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('DONAID'),
+          title:  Text('donaid'.tr),
           actions: <Widget>[
             TextButton(
                 onPressed: _reset,
                 child:
-                    Text('RESET', style: const TextStyle(color: Colors.white))),
+                    Text('reset'.tr, style: const TextStyle(color: Colors.white))),
           ],
         ),
         drawer: const DonorDrawer(),
@@ -555,7 +556,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                             label: Center(
                               child: RichText(
                                   text: TextSpan(
-                                text: 'Category',
+                                text: 'category'.tr,
                                 style: TextStyle(
                                     color: Colors.grey[600], fontSize: 12.0),
                               )),
@@ -587,7 +588,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                             label: Center(
                               child: RichText(
                                   text: TextSpan(
-                                text: 'Charity Type',
+                                text: 'charity_type'.tr,
                                 style: TextStyle(
                                     color: Colors.grey[600], fontSize: 12.0),
                               )),
@@ -623,7 +624,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                             label: Center(
                               child: RichText(
                                   text: TextSpan(
-                                text: '% Raised',
+                                text: '% raised'.tr,
                                 style: TextStyle(
                                     color: Colors.grey[600], fontSize: 12.0),
                               )),
@@ -653,7 +654,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                             label: Center(
                               child: RichText(
                                   text: TextSpan(
-                                text: 'End Date',
+                                text: 'end_date'.tr,
                                 style: TextStyle(
                                     color: Colors.grey[600], fontSize: 12.0),
                               )),
@@ -738,8 +739,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                           }
                         },
                       )
-                    : const Text(
-                        'No results found',
+                    :  Text(
+                        'no_results_found'.tr,
                         style: TextStyle(fontSize: 24),
                       ),
               ),
