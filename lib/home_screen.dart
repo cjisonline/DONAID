@@ -4,12 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:get/get.dart';
 import 'Donor/donor_dashboard.dart';
 import 'authentication.dart';
 import 'login_screen.dart';
 import 'Registration/registration_screen.dart';
-
-
 
 class HomeScreen extends StatefulWidget {
   static const id = 'home_screen';
@@ -52,113 +51,136 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: 200,
-                  child: Image.asset('assets/DONAID_LOGO.png')
-              ),
-             Padding(
-               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-               child: Material(
-                 elevation: 5.0,
-                 color: Colors.blue,
-                 borderRadius: BorderRadius.circular(30.0),
-                 child: MaterialButton(
-                   child: const Text(
-                     'Login',
-                     style: TextStyle(
-                       fontSize: 25.0,
-                       color: Colors.white,
-                     ),
-                   ),
-                   onPressed: (){
-                     Navigator.pushNamed(context, LoginScreen.id);
-                   },
-                 ),
-               ),
-             ),
-
-              const SizedBox(
-                height: 10.0,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
-                child: Material(
-                  elevation: 5.0,
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(30.0),
-                  child: MaterialButton(
-                    child: const Text(
-                      'Register',
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    onPressed: (){
-                      Navigator.pushNamed(context, RegistrationScreen.id);
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                  padding:
-                  EdgeInsets.symmetric(vertical: 16.0, horizontal: 5.0),
-                  child: Material(
-                      elevation: 5.0,
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(30.0),
-                      child: MaterialButton(
-                          child: const Text('Guest Login',
-                              style: TextStyle(fontSize: 25,color: Colors.white)),
-                          onPressed: () async {
-                            try {
-                              await FirebaseAuth
-                                  .instance
-                                  .signInAnonymously();
-                              Navigator.of(context).popUntil(
-                                  ModalRoute.withName(HomeScreen
-                                      .id)); //remove all screens on the stack and return to home screen
-                              Navigator.pushNamed(
-                                  context,
-                                  DonorDashboard
-                                      .id);
-                            } catch (signUpError) {
-                              print(signUpError);
-                            }
-                          }))),
-
-
-
-
-              Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 15.0),
-                  child: SignInButton(Buttons.Facebook,
-                      onPressed: () async => Auth.fbLogin(context),
-                      elevation: 5.0,
-                  )),
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                child: SignInButton(Buttons.Google,
-                    onPressed: () => Auth.googleLogin(context),
-                    elevation: 5.0,
-                ),
-              )
-            ],
-          ),
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
         ),
-      ),
-    );
+        body: Column(children: [
+          SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SafeArea(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                    const SizedBox(height: 15),
+                    SizedBox(
+                        height: 200,
+                        child: Image.asset('assets/DONAID_LOGO.png')),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 5.0),
+                        child: Material(
+                            elevation: 5.0,
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(30.0),
+                            child: MaterialButton(
+                                child: Text('login'.tr,
+                                    style: TextStyle(
+                                        fontSize: 25.0, color: Colors.white)),
+                                onPressed: () {
+                                  Navigator.pushNamed(context, LoginScreen.id);
+                                }))),
+                    const SizedBox(height: 10.0),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 5.0),
+                        child: Material(
+                            elevation: 5.0,
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(30.0),
+                            child: MaterialButton(
+                                child: Text('register'.tr,
+                                    style: const TextStyle(
+                                        fontSize: 25.0, color: Colors.white)),
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, RegistrationScreen.id);
+                                }))),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 5.0),
+                        child: Material(
+                            elevation: 5.0,
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(30.0),
+                            child: MaterialButton(
+                                child: Text('guest_login'.tr,
+                                    style: const TextStyle(
+                                        fontSize: 25, color: Colors.white)),
+                                onPressed: () async {
+                                  try {
+                                    await FirebaseAuth.instance
+                                        .signInAnonymously();
+                                    Navigator.of(context).popUntil(
+                                        ModalRoute.withName(HomeScreen.id));
+                                    Navigator.pushNamed(
+                                        context, DonorDashboard.id);
+                                  } catch (signUpError) {
+                                    // print(signUpError);
+                                  }
+                                }))),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
+                        child: SignInButton(Buttons.Facebook,
+                            onPressed: () async => Auth.fbLogin(context),
+                            elevation: 5.0)),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
+                        child: SignInButton(Buttons.Google,
+                            onPressed: () => Auth.googleLogin(context),
+                            elevation: 5.0))
+                  ]))),
+          const Spacer(),
+          Row(children: [
+            const SizedBox(width: 30),
+            InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return SimpleDialog(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                            title: Center(child: Text("select_language".tr)),
+                            children: <Widget>[
+                              SimpleDialogOption(
+                                  onPressed: () async {
+                                    await Get.updateLocale(
+                                        const Locale('en', 'US'));
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Center(child: Text("English"))),
+                              SimpleDialogOption(
+                                  onPressed: () async {
+                                    await Get.updateLocale(
+                                        const Locale('fr', 'FR'));
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Center(child: Text("French"))),
+                              SimpleDialogOption(
+                                  onPressed: () async {
+                                    await Get.updateLocale(
+                                        const Locale('ar', 'SA'));
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Center(child: Text("Arabic"))),
+                              SimpleDialogOption(
+                                  onPressed: () async {
+                                    await Get.updateLocale(
+                                        const Locale('es', 'ES'));
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Center(child: Text("Spanish")))
+                            ]);
+                      });
+                },
+                child: Text(Get.locale?.languageCode.toUpperCase() ?? "lan".tr,
+                    style: const TextStyle(fontSize: 22)))
+          ]),
+          const SizedBox(height: 40)
+        ]));
   }
 }

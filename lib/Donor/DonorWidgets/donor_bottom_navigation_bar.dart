@@ -2,6 +2,7 @@ import 'package:donaid/Chat/conversation.dart';
 import 'package:donaid/Donor/donor_search_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../donor_dashboard.dart';
 import '../notifications_page.dart';
@@ -30,7 +31,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-            const Text('Home',
+             Text('home'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -46,7 +47,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
                 size: 35,
               ),
             ),
-            const Text('Search',
+             Text('search'.tr,
                 textAlign: TextAlign.center,
                 style:  TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -63,7 +64,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-            const Text('Home',
+             Text('home'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -80,7 +81,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
                 size: 35,
               ),
             ),
-            const Text('Search',
+             Text('search'.tr,
                 textAlign: TextAlign.center,
                 style:  TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -95,7 +96,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-            const Text('Notifications',
+             Text('notifications'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -110,7 +111,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
               },
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-            const Text('Messages',
+             Text('message'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),

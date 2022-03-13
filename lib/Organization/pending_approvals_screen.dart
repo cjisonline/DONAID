@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'OrganizationWidget/organization_drawer.dart';
 import 'organization_urgentcase_full.dart';
+import 'package:get/get.dart';
+
 
 class PendingApprovals extends StatefulWidget {
   const PendingApprovals({Key? key}) : super(key: key);
@@ -113,14 +115,14 @@ class _PendingApprovalsState extends State<PendingApprovals> {
             ),
           );
         })
-        : const Center(child: Text('No pending urgent cases to show.', style: TextStyle(fontSize: 18),));
+        :  Center(child: Text('no_pending_urgent_cases_to_show.'.tr, style: TextStyle(fontSize: 18),));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pending Approvals'),
+        title:  Text('_pending_approvals'.tr),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

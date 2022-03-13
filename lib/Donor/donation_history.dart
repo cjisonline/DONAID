@@ -7,6 +7,7 @@ import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
@@ -169,7 +170,7 @@ class _DonationHistoryState extends State<DonationHistory> {
                         _goToChosenUrgentCase(donations[index].charityID.toString());
                       },
                       title: Text(donations[index].charityName),
-                      subtitle: Text('Urgent Case\n' +
+                      subtitle: Text('urgent_case\n'.tr +
                           organizations[index].organizationName),
                       trailing: Text(
                           "\u0024" + f.format(donations[index].donationAmount)),
@@ -180,7 +181,7 @@ class _DonationHistoryState extends State<DonationHistory> {
                             _goToChosenCampaign(donations[index].charityID.toString());
                           },
                           title: Text(donations[index].charityName),
-                          subtitle: Text('Campaign\n' +
+                          subtitle: Text('campaign\n'.tr +
                               organizations[index].organizationName),
                           trailing: Text("\u0024" +
                               f.format(donations[index].donationAmount)),
@@ -190,7 +191,7 @@ class _DonationHistoryState extends State<DonationHistory> {
                   _goToChosenBeneficiary(donations[index].charityID.toString());
                 },
                 title: Text(donations[index].charityName),
-                subtitle: Text('Beneficiary\n' +
+                subtitle: Text('beneficiary\n'.tr +
                     organizations[index].organizationName),
                 trailing: Text("\u0024" +
                     f.format(donations[index].donationAmount)),
@@ -202,8 +203,8 @@ class _DonationHistoryState extends State<DonationHistory> {
     : Center(child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('No donation history.', style: TextStyle(fontSize: 18),),
-        Text('Make a donation to see it here!', style: TextStyle(fontSize: 18),),
+        Text('no_donation_history'.tr, style: TextStyle(fontSize: 18),),
+        Text('make_a_donation_to_see_it_here!'.tr, style: TextStyle(fontSize: 18),),
       ],
     ));
   }
@@ -212,7 +213,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Donation History'),
+        title:  Text('donation_history'.tr),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

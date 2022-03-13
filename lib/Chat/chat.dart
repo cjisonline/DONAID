@@ -23,7 +23,6 @@ class Chat extends StatelessWidget {
           );
           return WillPopScope(
             onWillPop: () async {
-              // await homeCon.updateScreen();
               FocusScopeNode currentFocus = FocusScope.of(context);
               if (!currentFocus.hasPrimaryFocus) currentFocus.unfocus();
               return true;
@@ -31,21 +30,16 @@ class Chat extends StatelessWidget {
             child: Stack(
               children: [
                 Scaffold(
-                  // backgroundColor: Colors.black,
                   appBar: AppBar(
                     title: Text(
                       name.capitalizeFirst ?? "",
                       style: TextStyle(
-                          // color: Colors.white,
-                          fontSize: 18.5,
-                          fontWeight: FontWeight.w400),
+                          fontSize: 18.5, fontWeight: FontWeight.w400),
                     ),
                   ),
                   body: SafeArea(
                     child: Container(
-                      // padding: const EdgeInsets.only(left: 8, right: 8),
                       height: MediaQuery.of(context).size.height,
-                      // width: MediaQuery.of(context).size.width,
                       child: Column(
                         children: [
                           Expanded(
@@ -146,7 +140,7 @@ class Chat extends StatelessWidget {
                                                   border: InputBorder.none,
                                                   disabledBorder:
                                                       InputBorder.none,
-                                                  hintText: "Type a message",
+                                                  hintText: "type_a_message".tr,
                                                   hintStyle: TextStyle(
                                                       color:
                                                           Colors.grey.shade700),

@@ -10,6 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'organization_urgentcase_full.dart';
+import 'package:get/get.dart';
+
 
 class ExpiredCharitiesScreen extends StatefulWidget {
   const ExpiredCharitiesScreen({Key? key}) : super(key: key);
@@ -174,7 +176,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
             ),
           );
         })
-    : const Center(child: Text('No expired beneficiaries to show.', style: TextStyle(fontSize: 18),));
+    :  Center(child: Text('no_expired_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),));
   }
   
   _campaignsBody(){
@@ -227,7 +229,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
             ),
           );
         })
-    : const Center(child: Text('No expired campaigns to show.', style: TextStyle(fontSize: 18),));
+    :  Center(child: Text('no_expired_campaigns_to_show.'.tr, style: TextStyle(fontSize: 18),));
   }
   
   _urgentCasesBody(){
@@ -280,7 +282,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
             ),
           );
         })
-    : const Center(child: Text('No expired urgent cases to show.', style: TextStyle(fontSize: 18),));
+    :  Center(child: Text('no_expired_urgent_cases_to_show.'.tr, style: TextStyle(fontSize: 18),));
   }
   @override
   Widget build(BuildContext context) {
@@ -288,8 +290,8 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          bottom: const TabBar(tabs: [Tab(text: 'Campaigns',), Tab(text: 'Beneficiaries',), Tab(text: 'Urgent Cases',)],),
-          title: const Text('Expired Charities'),
+          bottom:  TabBar(tabs: [Tab(text: '_campaigns'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,)],),
+          title:  Text('expired_charities'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
