@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DonorRegistrationScreen extends StatefulWidget {
   static const id = 'donor_registration_screen';
@@ -18,6 +19,7 @@ class DonorRegistrationScreen extends StatefulWidget {
 class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -76,6 +78,8 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
           });
 
           await FirebaseMessaging.instance.subscribeToTopic('UrgentCaseApprovals').whenComplete(() => print('Subscribed to topic.'));
+          final SharedPreferences prefs = await _prefs;
+          await prefs.setBool('urgentCaseApprovalsNotifications', true);
 
           Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
           Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen

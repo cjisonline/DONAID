@@ -21,6 +21,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'Donor/donation_history.dart';
+import 'Donor/settings.dart';
 import 'Organization/add_campaigns_screen.dart';
 import 'Organization/add_selection_screen.dart';
 import 'Organization/search_page.dart';
@@ -102,6 +103,7 @@ class Donaid extends StatelessWidget {
           OrgSearchPage.id: (context) => const OrgSearchPage(),
           DonationHistory.id: (context) => const DonationHistory(),
           NotificationPage.id: (context) => const NotificationPage(),
+          DonorSettingsPage.id: (context) => const DonorSettingsPage(),
         },
       ),
     );
