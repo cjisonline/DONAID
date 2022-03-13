@@ -136,9 +136,9 @@ html {
   }
 
   tr:hover td {
-    background-color:#6804ec;
+    background-color:#dfc8fe;
     transition: background-color 0.5s;
-    color: #fff;
+    
   }
   tr:hover th {
     background-color:#b37bfd !important;
