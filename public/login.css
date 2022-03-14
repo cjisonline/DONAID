@@ -1,0 +1,194 @@
+html {
+    height: 100%;
+  }
+  
+  body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    background-color: #DAE3ED;
+  }
+  
+  .formContainer {
+    width: 50%;
+    height: 50%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    background-color: #DAE3ED;
+    border-radius: 20px;
+    box-shadow: 0px 0px 5px 2px #6804ec;
+  }
+  
+ .inputWrapper {
+    align-self: flex-start;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+  }
+  
+  .inputField::placeholder {
+    color: black;
+  }
+  
+  .inputField {
+    border: none;
+    background-color: #DAE3ED;
+    border-bottom: 1px solid #3a3a3a;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    outline: none;
+    padding: 0px 0px 5px 5px;
+  }
+  
+  .submitButton {
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    background-color: #6804ec;
+    cursor: pointer;
+    outline: none;
+    padding: 6px 1.6rem;
+  }
+
+  .submitButton:hover {
+      background-color: #54647A;
+      transition: background-color 0.5s;
+  }
+
+  .submitButton:active {
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+         box-shadow: inset 0px 0px 5px #c1c1c1;
+  }
+
+  .approveButtonClass,.createButtonClass,.editButtonClass {
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    background-color: #6804ec;
+    cursor: pointer;
+    outline: none;
+    padding: 6px 1.6rem;
+  }
+
+  .approveButtonClass:hover, .createButtonClass:hover, .editButtonClass:hover {
+      background-color: #54647A;
+      transition: background-color 0.5s;
+  }
+
+  .approveButtonClass:active, .createButtonClass:active, .editButtonClass:active {
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+         box-shadow: inset 0px 0px 5px #c1c1c1;
+  }
+
+  .shadow-z-1 {
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+  }
+
+  .table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 2rem;
+    background-color: #fff;
+  }
+  .table > thead > tr,
+  .table > tbody > tr,
+  .table > tfoot > tr {
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
+  .table > thead > tr > th,
+  .table > tbody > tr > th,
+  .table > tfoot > tr > th,
+  .table > thead > tr > td,
+  .table > tbody > tr > td,
+  .table > tfoot > tr > td {
+    text-align: left;
+    padding: 1.6rem;
+    border-top: 0;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
+  .table > thead > tr > th {
+    font-weight: 400;
+    color: #3D4B60;
+    vertical-align: bottom;
+    border-bottom: 1px solid #6804ec;
+  }
+
+  thead > tr > th {
+    background-color: #dfc8fe !important;
+    border: 1px solid #6804ec !important;
+    background-clip: padding-box !important;
+  }
+
+  tr:hover td {
+    background-color:#dfc8fe;
+    transition: background-color 0.5s;
+    
+  }
+  tr:hover th {
+    background-color:#b37bfd !important;
+    transition: background-color 0.5s !important;
+    color: #fff !important;
+  }
+
+  .mdc-data-table {
+    display: flex !important;
+    overflow-x: hidden !important;
+  }
+
+  #sidebar, #sidebar-nav {
+    background-color: #dfc8fe;
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+  }
+
+  #sidebar a {
+    background-color: #dfc8fe;
+  }
+
+  #sidebar a:hover {
+    background-color: #6804ec;
+    transition: background-color 0.5s;
+    color: white;
+  }
+
+  #nav-active {
+    background-color: #6804ec !important;
+    color: white;
+  }
+
+.my-actions { 
+  margin: 0 2em; 
+}
+
+.order-1 { 
+  order: 1; 
+}
+
+.order-2 { 
+  order: 2; 
+}
+
+.order-3 { 
+  order: 3; 
+}
+
+.right-gap {
+  margin-left: auto;
+}
