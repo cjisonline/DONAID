@@ -79,6 +79,7 @@ async function getApprovalData(){
 
             var adminTableDef = $('#adminTable').DataTable({
                 autoWidth: false,
+                scrollX: true,
                 columnDefs: [
                     {
                         targets: ['_all'],
@@ -92,6 +93,14 @@ async function getApprovalData(){
                 ],
                 "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
                 "info": false,
+
+                "fnDrawCallback": function(oSettings) {
+                    if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                    } else {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                    }
+                }
             });
         }
 }
@@ -173,7 +182,7 @@ async function runDenialDialogue(documentID){
                 .then(() => {
                     swal.fire('Denied!',
                     'Organization is denied due to: ' + deniedReason + '',
-                    'success').then(function () {
+                    'info').then(function () {
                         location.reload(); 
                     })
             
@@ -205,11 +214,26 @@ getApprovalData();
                     <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
                         <span style="text-align:center; font-size: 24px;">DONAID</span>
                         <a href="donor_dashboard.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Donors</span> </a>
-                        <a href="org_dashboard.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Organizations</span></a>
+                        <div class="dropdown" id="nav-active">
+                            <button class="btn dropdown-toggle" type="button" id="OrgPages" style="color: white" data-bs-toggle="dropdown" aria-expanded="false">
+                              Organizations
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="OrgPages">
+                              <li><a class="dropdown-item" href="org_dashboard.html" data-bs-parent="#sidebar">Organizations</a></li>
+                              <li><a class="dropdown-item" href="approvals.html" data-bs-parent="#sidebar" id="nav-active">Approvals</a></li>
+                              <li><a class="dropdown-item" href="rejections.html" data-bs-parent="#sidebar">Rejections</a></li>
+                            </ul>
+                          </div>
                         <a href="beneficiaries.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Beneficiaries</span></a>
-                        <a href="approvals.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="nav-active"><span>Approvals</span></a>
-                        <a href="rejections.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Rejections</span></a>
-                        <a href="urgent_cases.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Urgent Cases</span></a>
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="UCPages" data-bs-toggle="dropdown" aria-expanded="false">
+                              Urgent Cases
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="OrgPages">
+                              <li><a class="dropdown-item" href="urgent_cases.html" data-bs-parent="#sidebar">Urgent Cases</a></li>
+                              <li><a class="dropdown-item" href="urgentcase_rejections.html" data-bs-parent="#sidebar">Rejections</a></li>
+                            </ul>
+                          </div>
                         <a href="categories.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Categories</span></a>
                         <a href="settings.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Settings</span></a>
                     </div>
