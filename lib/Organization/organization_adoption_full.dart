@@ -5,6 +5,7 @@ import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navig
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'edit_adoption.dart';
 import 'edit_beneficiary.dart';
 
 
@@ -198,9 +199,9 @@ class _OrganizationAdoptionFullScreenState extends State<OrganizationAdoptionFul
                               ),
                             ),
                             onPressed: () async {
-                              // Navigator.push(context, MaterialPageRoute(builder: (context){
-                              //   return EditBeneficiary(beneficiary: widget.adoption);
-                              // })).then((value) => _refreshAdoption());
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return EditAdoption(adoption: widget.adoption);
+                              })).then((value) => _refreshAdoption());
                             })),),
                   Container(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
