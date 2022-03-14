@@ -98,6 +98,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         'dateCreated': FieldValue.serverTimestamp(),
         'biography': biography,
         'goalAmount': goalAmount,
+        'amountRaised': 0,
         'id': docRef.id,
         'organizationID': loggedInUser?.uid,
         'name': name
