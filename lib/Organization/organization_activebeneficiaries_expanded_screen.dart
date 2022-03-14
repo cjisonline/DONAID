@@ -36,6 +36,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
     beneficiaries.clear();
     adoptions.clear();
     _getBeneficiaries();
+    _getAdoptions();
     setState(() {
 
     });
@@ -89,7 +90,6 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
         );
         adoptions.add(adoption);
       }
-      print(adoptions);
     }
     catch(e){
       print(e);
@@ -173,9 +173,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (OrganizationAdoptionFullScreen(adoptions[index]));
-
                       })).then((value) => _refreshPage());
-
                     },
                     title: Text(adoptions[index].name),
                     subtitle: Text(adoptions[index].biography),
