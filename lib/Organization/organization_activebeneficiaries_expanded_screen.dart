@@ -6,6 +6,7 @@ import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart'
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'organization_adoption_full.dart';
 import 'organization_beneficiary_full.dart';
 
 class OrganizationBeneficiariesExpandedScreen extends StatefulWidget {
@@ -170,10 +171,10 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
                 children: [
                   ListTile(
                     onTap: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      //   return (OrganizationBeneficiaryFullScreen(adoptions[index]));
-                      //
-                      // })).then((value) => _refreshPage());
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return (OrganizationAdoptionFullScreen(adoptions[index]));
+
+                      })).then((value) => _refreshPage());
 
                     },
                     title: Text(adoptions[index].name),
