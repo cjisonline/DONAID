@@ -63,10 +63,11 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
 
   _getFavorite() async {
     await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
-      setState(() {
-        pointlist = List.from(value['favoriteList']);
-      });
-    });
+      pointlist = List.from(value['favoriteList']);
+    }).then((value) => setState(() {
+    }));
+
+
   }
 
 
@@ -180,11 +181,12 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                   pointlist.contains(widget.beneficiary.id.toString())? Icons.favorite: Icons.favorite_border,
                   color: pointlist.contains(widget.beneficiary.id.toString())? Colors.red:null,
                   size: 40,
-                ), onPressed: () {
-                setState(() {
-                  _getFavorite();
-                });
-                updateFavorites(loggedInUser!.uid.toString(),widget.beneficiary.id.toString());
+                ), onPressed: () async {
+                await updateFavorites(loggedInUser!.uid.toString(),widget.beneficiary.id.toString());
+                await _getFavorite();
+
+
+
               },
               ),)
           ]),
