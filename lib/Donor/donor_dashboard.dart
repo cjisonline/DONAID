@@ -37,6 +37,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   List<UrgentCase> urgentCases = [];
   List<Organization> organizations = [];
   List<CharityCategory> charityCategories = [];
+  var pointlist = [];
 
 
   @override
@@ -61,12 +62,22 @@ class _DonorDashboardState extends State<DonorDashboard> {
     _getUrgentCases();
     _getOrganizationUsers();
     _getCharityCategories();
+    _getFavorite();
     setState(() {});
 }
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
+
+  _getFavorite() async {
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+      setState(() {
+        pointlist = List.from(value['favoriteList']);
+      });
+    });
+  }
+
 
   _getOrganizationUsers() async {
     var ret = await _firestore.collection('OrganizationUsers').where('approved', isEqualTo: true).get();

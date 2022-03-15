@@ -31,11 +31,13 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   bool showLoadingSpinner = false;
   var f = NumberFormat("###,##0.00", "en_US");
   User? loggedInUser;
+  var pointlist = [];
 
   @override
   void initState(){
     super.initState();
     _getCurrentUser();
+    _getFavorite();
 
   }
 
@@ -50,6 +52,14 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
     widget.urgentCase.amountRaised = doc['amountRaised'];
   }
 
+  _getFavorite() async {
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+      setState(() {
+        pointlist = List.from(value['favoriteList']);
+      });
+    });
+  }
+
   _campaignDonateBody() {
     return ModalProgressHUD(
       inAsyncCall: showLoadingSpinner,
@@ -59,17 +69,19 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Container(
+                Align(
                   alignment: Alignment.topRight,
-                  child: FavoriteButton(
-                    isFavorite: false,
-                    valueChanged: (_isFavorite) {
-                      print(widget.urgentCase.id.toString());
-                      updateFavorites(loggedInUser!.uid.toString(),widget.urgentCase.id.toString());
-                      print('Is Favorite : $_isFavorite');
-                    },
-                  ),
-                ),
+                  child:IconButton(
+                    icon: Icon(
+                      pointlist.contains(widget.urgentCase.id.toString())? Icons.favorite: Icons.favorite_border,
+                      color: pointlist.contains(widget.urgentCase.id.toString())? Colors.red:null,
+                      size: 40,
+                    ), onPressed: () async {
+                    await updateFavorites(loggedInUser!.uid.toString(),widget.urgentCase.id.toString());
+                    await _getFavorite();
+
+                  },
+                  ),),
                 SizedBox(
                     height: 100,
                     child: Image.asset('assets/DONAID_LOGO.png')

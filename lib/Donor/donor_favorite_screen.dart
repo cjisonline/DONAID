@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
+import 'DonorWidgets/donor_drawer.dart';
 import 'beneficiaries_expanded_screen.dart';
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
@@ -49,7 +50,9 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
   List<UrgentCase> urgentCases = [];
   List<String> urgentCasesID = [];
   var f = NumberFormat("###,###.00#", "en_US");
-  List<Map<String, dynamic>> _favUser = [];
+  List<Map<String, dynamic>> _favUserUrgentCase = [];
+  List<Map<String, dynamic>> _favUserBeneficiary = [];
+  List<Map<String, dynamic>> _favUserCampaign = [];
   final List<Map<String, dynamic>> _allUsers = [];
   var pointlist = [];
 
@@ -61,7 +64,6 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
   initState() {
     _getCurrentUser();
     _getCampaign();
-    _favUser = _allUsers;
     super.initState();
   }
 
@@ -218,20 +220,226 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
   }
 
   _findFavorite() async {
-    List<Map<String, dynamic>> results = [];
+    List<Map<String, dynamic>> resultsUrgentCase = [];
+    List<Map<String, dynamic>> resultsBeneficiary = [];
+    List<Map<String, dynamic>> resultsCampaign = [];
     print(pointlist.length);
       for(int i=0; i< pointlist.length; i++){
-        print(results);
-        results.addAll(_allUsers
+        print(resultsUrgentCase);
+        resultsUrgentCase.addAll(_allUsers
             .where((user) =>
-        user["id"] == pointlist[i].toString())
+            user["id"] == pointlist[i].toString() &&  user["charityType"] == "Urgent Case")
+            .toList());
+        resultsCampaign.addAll(_allUsers
+            .where((user) =>
+        user["id"] == pointlist[i].toString() &&  user["charityType"] == "Campaigns")
+            .toList());
+        resultsBeneficiary.addAll(_allUsers
+            .where((user) =>
+        user["id"] == pointlist[i].toString() &&  user["charityType"] == "Beneficiary")
             .toList());
       }
     setState(() {
-      _favUser = results;
-      print(_favUser.length);
+      if(resultsUrgentCase.isNotEmpty){
+        _favUserUrgentCase = resultsUrgentCase;
+        print(_favUserUrgentCase.length);
+      }
+      if(resultsCampaign.isNotEmpty){
+        _favUserCampaign = resultsCampaign;
+        print(_favUserCampaign.length);
+      }
+      if(resultsBeneficiary.isNotEmpty){
+        _favUserBeneficiary = resultsBeneficiary;
+        print(_favUserBeneficiary.length);
+      }
     });
 
+
+  }
+
+  _campaignsBody(){
+    return Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: _favUserCampaign.isNotEmpty
+                          ? ListView.builder(
+                        itemCount: _favUserCampaign.length,
+                        itemBuilder: (context, index) =>
+                            Card(
+                            key: ValueKey(_favUserCampaign[index]["name"]),
+                            child: Column(children: [
+                              ListTile(
+                                title: Text(
+                                  _favUserCampaign[index]["name"].toString(),
+                                ),
+                                subtitle: Text(_favUserCampaign[index]["description"].toString(),),
+                                trailing: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: FavoriteButton(
+                                    isFavorite: true,
+                                    valueChanged: (_isFavorite) {
+                                      updateFavorites(loggedInUser!.uid.toString(),_favUserCampaign[index]["id"].toString());
+                                      _reset();
+                                      print('Is Favorite : $_isFavorite');
+                                    },
+                                  ),
+                                ),
+
+                                onTap: () {
+                                  if (campaignsID
+                                      .contains(_favUserCampaign[index]['id'])) {
+                                    _goToChosenCampaign(
+                                        _favUserCampaign[index]['id']);
+                                  } else if (beneficiariesID
+                                      .contains(_favUserCampaign[index]['id'])) {
+                                    _goToChosenBeneficiary(
+                                        _favUserCampaign[index]['id']);
+                                  } else if (urgentCasesID
+                                      .contains(_favUserCampaign[index]['id'])) {
+                                    _goToChosenUrgentCase(
+                                        _favUserCampaign[index]['id']);
+                                  }
+                                  setState(() {
+                                    //Add the extended view page here
+                                  });
+                                },
+                              ),
+                              const Divider()
+                            ])),
+                      )
+                          : const Text(
+                        'No favorites found',
+                        style: TextStyle(fontSize: 24),
+                      ),
+                    ),
+                  ],
+                )
+    );
+  }
+
+  _beneficiariesBody(){
+    return Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Expanded(
+              child: _favUserBeneficiary.isNotEmpty
+                  ? ListView.builder(
+                itemCount: _favUserBeneficiary.length,
+                itemBuilder: (context, index) => Card(
+                    key: ValueKey(_favUserBeneficiary[index]["name"]),
+                    child: Column(children: [
+                      ListTile(
+                        title: Text(
+                          _favUserBeneficiary[index]["name"].toString(),
+                        ),
+                        subtitle: Text(_favUserBeneficiary[index]["description"].toString(),),
+                        trailing: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: FavoriteButton(
+                            isFavorite: true,
+                            valueChanged: (_isFavorite) {
+                              updateFavorites(loggedInUser!.uid.toString(),_favUserBeneficiary[index]["id"].toString());
+                              _reset();
+                              print('Is Favorite : $_isFavorite');
+                            },
+                          ),
+                        ),
+
+                        onTap: () {
+                          if (campaignsID
+                              .contains(_favUserBeneficiary[index]['id'])) {
+                            _goToChosenCampaign(
+                                _favUserBeneficiary[index]['id']);
+                          } else if (beneficiariesID
+                              .contains(_favUserBeneficiary[index]['id'])) {
+                            _goToChosenBeneficiary(
+                                _favUserBeneficiary[index]['id']);
+                          } else if (urgentCasesID
+                              .contains(_favUserBeneficiary[index]['id'])) {
+                            _goToChosenUrgentCase(
+                                _favUserBeneficiary[index]['id']);
+                          }
+                          setState(() {
+                            //Add the extended view page here
+                          });
+                        },
+                      ),
+                      const Divider()
+                    ])),
+              )
+                  : const Text(
+                'No favorites found',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+          ],
+        )
+    );
+
+  }
+
+  _urgentCasesBody(){
+    return Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Expanded(
+              child: _favUserUrgentCase.isNotEmpty
+                  ? ListView.builder(
+                itemCount: _favUserUrgentCase.length,
+                itemBuilder: (context, index) => Card(
+                    key: ValueKey(_favUserUrgentCase[index]["name"]),
+                    child: Column(children: [
+                      ListTile(
+                        title: Text(
+                          _favUserUrgentCase[index]["name"].toString(),
+                        ),
+                        subtitle: Text(_favUserUrgentCase[index]["description"].toString(),),
+                        trailing: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: FavoriteButton(
+                            isFavorite: true,
+                            valueChanged: (_isFavorite) {
+                              updateFavorites(loggedInUser!.uid.toString(),_favUserUrgentCase[index]["id"].toString());
+                              _reset();
+                              print('Is Favorite : $_isFavorite');
+                            },
+                          ),
+                        ),
+
+                        onTap: () {
+                          if (campaignsID
+                              .contains(_favUserUrgentCase[index]['id'])) {
+                            _goToChosenCampaign(
+                                _favUserUrgentCase[index]['id']);
+                          } else if (beneficiariesID
+                              .contains(_favUserUrgentCase[index]['id'])) {
+                            _goToChosenBeneficiary(
+                                _favUserUrgentCase[index]['id']);
+                          } else if (urgentCasesID
+                              .contains(_favUserUrgentCase[index]['id'])) {
+                            _goToChosenUrgentCase(
+                                _favUserUrgentCase[index]['id']);
+                          }
+                          setState(() {
+                            //Add the extended view page here
+                          });
+                        },
+                      ),
+                      const Divider()
+                    ])),
+              )
+                  : const Text(
+                'No favorites found',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+          ],
+        )
+    );
 
   }
 
@@ -308,73 +516,102 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
 
 
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //       appBar: AppBar(
+  //         title: const Text('DONAID'),
+  //       ),
+  //
+  //       body: Padding(
+  //         padding: const EdgeInsets.all(10),
+  //         child: Column(
+  //           children: [
+  //             Expanded(
+  //               child: _favUser.isNotEmpty
+  //                   ? ListView.builder(
+  //                 itemCount: _favUser.length,
+  //                 itemBuilder: (context, index) => Card(
+  //                     key: ValueKey(_favUser[index]["name"]),
+  //                     child: Column(children: [
+  //                       ListTile(
+  //                         title: Text(
+  //                           _favUser[index]["name"].toString(),
+  //                         ),
+  //                         subtitle: Text(_favUser[index]["description"].toString(),),
+  //                         trailing: Padding(
+  //                           padding: const EdgeInsets.all(10.0),
+  //                           child: FavoriteButton(
+  //                             isFavorite: true,
+  //                             valueChanged: (_isFavorite) {
+  //                               updateFavorites(loggedInUser!.uid.toString(),_favUser[index]["id"].toString());
+  //                               _reset();
+  //                               print('Is Favorite : $_isFavorite');
+  //                             },
+  //                           ),
+  //                         ),
+  //
+  //                         onTap: () {
+  //                           if (campaignsID
+  //                               .contains(_favUser[index]['id'])) {
+  //                             _goToChosenCampaign(
+  //                                 _favUser[index]['id']);
+  //                           } else if (beneficiariesID
+  //                               .contains(_favUser[index]['id'])) {
+  //                             _goToChosenBeneficiary(
+  //                                 _favUser[index]['id']);
+  //                           } else if (urgentCasesID
+  //                               .contains(_favUser[index]['id'])) {
+  //                             _goToChosenUrgentCase(
+  //                                 _favUser[index]['id']);
+  //                           }
+  //                           setState(() {
+  //                             //Add the extended view page here
+  //                           });
+  //                         },
+  //                       ),
+  //                       const Divider()
+  //                     ])),
+  //               )
+  //                   : const Text(
+  //                 'No favorites found',
+  //                 style: TextStyle(fontSize: 24),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       bottomNavigationBar: DonorBottomNavigationBar());
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
         appBar: AppBar(
-          title: const Text('DONAID'),
-        ),
-
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Expanded(
-                child: _favUser.isNotEmpty
-                    ? ListView.builder(
-                  itemCount: _favUser.length,
-                  itemBuilder: (context, index) => Card(
-                      key: ValueKey(_favUser[index]["name"]),
-                      child: Column(children: [
-                        ListTile(
-                          title: Text(
-                            _favUser[index]["name"].toString(),
-                          ),
-                          subtitle: Text(_favUser[index]["description"].toString(),),
-                          trailing: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: FavoriteButton(
-                              isFavorite: true,
-                              valueChanged: (_isFavorite) {
-                                updateFavorites(loggedInUser!.uid.toString(),_favUser[index]["id"].toString());
-                                _reset();
-                                print('Is Favorite : $_isFavorite');
-                              },
-                            ),
-                          ),
-
-                          onTap: () {
-                            if (campaignsID
-                                .contains(_favUser[index]['id'])) {
-                              _goToChosenCampaign(
-                                  _favUser[index]['id']);
-                            } else if (beneficiariesID
-                                .contains(_favUser[index]['id'])) {
-                              _goToChosenBeneficiary(
-                                  _favUser[index]['id']);
-                            } else if (urgentCasesID
-                                .contains(_favUser[index]['id'])) {
-                              _goToChosenUrgentCase(
-                                  _favUser[index]['id']);
-                            }
-                            setState(() {
-                              //Add the extended view page here
-                            });
-                          },
-                        ),
-                        const Divider()
-                      ])),
-                )
-                    : const Text(
-                  'No favorites found',
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
-            ],
+          bottom: const TabBar(tabs: [Tab(text: 'Campaigns',), Tab(text: 'Beneficiaries',), Tab(text: 'Urgent Cases',)],),
+          title: const Text('Favorite Page'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
-        bottomNavigationBar: DonorBottomNavigationBar());
+        drawer: const DonorDrawer(),
+        body: TabBarView(
+          children: [
+            _campaignsBody(),
+            _beneficiariesBody(),
+            _urgentCasesBody()
+          ],
+        ),
+        bottomNavigationBar: DonorBottomNavigationBar(),
+      ),
+    );
   }
+
 }
 
 

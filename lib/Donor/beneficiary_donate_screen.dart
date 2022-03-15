@@ -32,11 +32,13 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
   bool showLoadingSpinner = false;
   var f = NumberFormat("###,##0.00", "en_US");
   User? loggedInUser;
+  var pointlist = [];
 
   @override
   void initState(){
     super.initState();
     _getCurrentUser();
+    _getFavorite();
   }
 
   void _getCurrentUser() {
@@ -50,6 +52,14 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
     widget.beneficiary.amountRaised = doc['amountRaised'];
   }
 
+  _getFavorite() async {
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+      setState(() {
+        pointlist = List.from(value['favoriteList']);
+      });
+    });
+  }
+
 
   _beneficiaryDonateBody() {
     return ModalProgressHUD(
@@ -60,17 +70,19 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Container(
+                Align(
                   alignment: Alignment.topRight,
-                  child: FavoriteButton(
-                    isFavorite: false,
-                    valueChanged: (_isFavorite) {
-                      print(widget.beneficiary.id.toString());
-                      updateFavorites(loggedInUser!.uid.toString(),widget.beneficiary.id.toString());
-                      print('Is Favorite : $_isFavorite');
-                    },
-                  ),
-                ),
+                  child:IconButton(
+                    icon: Icon(
+                      pointlist.contains(widget.beneficiary.id.toString())? Icons.favorite: Icons.favorite_border,
+                      color: pointlist.contains(widget.beneficiary.id.toString())? Colors.red:null,
+                      size: 40,
+                    ), onPressed: () async {
+                    await updateFavorites(loggedInUser!.uid.toString(),widget.beneficiary.id.toString());
+                    await _getFavorite();
+
+                  },
+                  ),),
                 SizedBox(
                   height: 100,
                   child: Image.asset('assets/DONAID_LOGO.png')

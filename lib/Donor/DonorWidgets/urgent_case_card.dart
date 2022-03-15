@@ -169,15 +169,9 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                   pointlist.contains(widget.urgentCase.id.toString())? Icons.favorite: Icons.favorite_border,
                   color: pointlist.contains(widget.urgentCase.id.toString())? Colors.red:null,
                   size: 40,
-                ), onPressed: () {
-                setState(() {
-                  _getFavorite();
-                  // Icon(
-                  //   pointlist.contains(widget.beneficiary.id.toString())? Icons.favorite: Icons.favorite_border,
-                  //   color: pointlist.contains(widget.beneficiary.id.toString())? Colors.red:null,
-                  //   size: 40,);
-                  updateFavorites(loggedInUser!.uid.toString(),widget.urgentCase.id.toString());
-                });
+                ), onPressed: () async {
+                await updateFavorites(loggedInUser!.uid.toString(),widget.urgentCase.id.toString());
+                await _getFavorite();
               },
               ),)
 

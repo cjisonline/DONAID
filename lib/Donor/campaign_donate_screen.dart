@@ -33,11 +33,13 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   bool showLoadingSpinner = false;
   var f = NumberFormat("###,##0.00", "en_US");
   User? loggedInUser;
+  var pointlist = [];
 
   @override
   void initState(){
     super.initState();
     _getCurrentUser();
+    _getFavorite();
   }
 
   void _getCurrentUser() {
@@ -49,6 +51,14 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
 
     var doc = ret.docs[0];
     widget.campaign.amountRaised = doc['amountRaised'];
+  }
+
+  _getFavorite() async {
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+      setState(() {
+        pointlist = List.from(value['favoriteList']);
+      });
+    });
   }
 
   _campaignDonateBody() {
@@ -64,15 +74,17 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Align(
               alignment: Alignment.topRight,
-              child: FavoriteButton(
-                isFavorite: false,
-                valueChanged: (_isFavorite) {
-                  print(widget.campaign.id.toString());
-                  updateFavorites(loggedInUser!.uid.toString(),widget.campaign.id.toString());
-                  print('Is Favorite : $_isFavorite');
-                },
-              ),
-            ),
+              child:IconButton(
+                icon: Icon(
+                  pointlist.contains(widget.campaign.id.toString())? Icons.favorite: Icons.favorite_border,
+                  color: pointlist.contains(widget.campaign.id.toString())? Colors.red:null,
+                  size: 40,
+                ), onPressed: () async {
+                await updateFavorites(loggedInUser!.uid.toString(),widget.campaign.id.toString());
+                await _getFavorite();
+
+              },
+              ),),
             SizedBox(
                 height: 100,
                 child: Image.asset('assets/DONAID_LOGO.png')
