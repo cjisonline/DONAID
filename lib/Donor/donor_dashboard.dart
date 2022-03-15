@@ -63,7 +63,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   handleNotifications()async{
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
       Navigator.push(context, MaterialPageRoute(builder: (context){
-        return NotificationPage();
+        return DonorNotificationPage();
       }));
 
     });
@@ -76,7 +76,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
     if(initialMessage != null){
       addNotification(_auth.currentUser?.uid, initialMessage);
       Navigator.push(context, MaterialPageRoute(builder: (context){
-        return NotificationPage();
+        return DonorNotificationPage();
       }));
     }
   }

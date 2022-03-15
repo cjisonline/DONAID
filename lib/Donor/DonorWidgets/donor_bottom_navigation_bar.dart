@@ -90,7 +90,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
               enableFeedback: false,
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return NotificationPage();
+                  return DonorNotificationPage();
                 }));
               },
               icon: const Icon(Icons.notifications,

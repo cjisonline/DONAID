@@ -78,7 +78,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             'userType':1
           });
 
-          await FirebaseMessaging.instance.subscribeToTopic('UrgentCaseApprovals').whenComplete(() => print('Subscribed to topic.'));
+          await FirebaseMessaging.instance.subscribeToTopic('UrgentCaseApprovals');
           final SharedPreferences prefs = await _prefs;
           await prefs.setBool('urgentCaseApprovalsNotifications', true);
 

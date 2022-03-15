@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -7,18 +9,17 @@ import 'package:flutter/material.dart';
 import '../Models/PushNotification.dart';
 import '../Models/UrgentCase.dart';
 import '../Services/notifications.dart';
-import 'DonorWidgets/donor_bottom_navigation_bar.dart';
-import 'DonorWidgets/donor_drawer.dart';
 
-class DonorNotificationPage extends StatefulWidget {
-  static const id = 'donor_notification_page';
-  const DonorNotificationPage({Key? key}) : super(key: key);
+
+class OrganizationNotificationPage extends StatefulWidget {
+  static const id = 'org_notification_page';
+  const OrganizationNotificationPage({Key? key}) : super(key: key);
 
   @override
-  _DonorNotificationPageState createState() => _DonorNotificationPageState();
+  _OrganizationNotificationPageState createState() => _OrganizationNotificationPageState();
 }
 
-class _DonorNotificationPageState extends State<DonorNotificationPage> {
+class _OrganizationNotificationPageState extends State<OrganizationNotificationPage> {
   final _messaging = FirebaseMessaging.instance;
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
@@ -112,8 +113,8 @@ class _DonorNotificationPageState extends State<DonorNotificationPage> {
         title: const Text('Notifications'),
       ),
       body: _body(),
-      drawer: const DonorDrawer(),
-      bottomNavigationBar: DonorBottomNavigationBar(),
+      drawer: const OrganizationDrawer(),
+      bottomNavigationBar: const OrganizationBottomNavigation(),
     );
   }
 }

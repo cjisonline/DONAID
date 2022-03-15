@@ -69,53 +69,55 @@ class Donaid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      builder: EasyLoading.init(),
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity),
-      initialRoute: HomeScreen.id,
-      routes: {
-        HomeScreen.id: (context) => const HomeScreen(),
-        LoginScreen.id: (context) => const LoginScreen(),
-        RegistrationScreen.id: (context) => const RegistrationScreen(),
-        DonorRegistrationScreen.id: (context) =>
-            const DonorRegistrationScreen(),
-        OrganizationRegistrationScreen.id: (context) =>
-            const OrganizationRegistrationScreen(),
-        DonorDashboard.id: (context) => const DonorDashboard(),
-        OrganizationDashboard.id: (context) => const OrganizationDashboard(),
-        CategoriesScreen.id: (context) => const CategoriesScreen(),
-        BeneficiaryExpandedScreen.id: (context) =>
-            const BeneficiaryExpandedScreen(),
-        UrgentCasesExpandedScreen.id: (context) =>
-            const UrgentCasesExpandedScreen(),
-        OrganizationsExpandedScreen.id: (context) =>
-            const OrganizationsExpandedScreen(),
-        OrgAddSelection.id: (context) => const OrgAddSelection(),
-        AddCampaignForm.id: (context) => AddCampaignForm(),
-        AddBeneficiaryForm.id: (context) => AddBeneficiaryForm(),
-        AddUrgentCaseForm.id: (context) => AddUrgentCaseForm(),
-        DonorProfile.id: (context) => const DonorProfile(),
-        DonorEditProfile.id: (context) => const DonorEditProfile(),
-        OrganizationProfile.id: (context) => const OrganizationProfile(),
-        OrganizationEditProfile.id: (context) =>
-            const OrganizationEditProfile(),
-        DonorSearchScreen.id: (context) => const DonorSearchScreen(),
-        OrganizationBeneficiariesExpandedScreen.id: (context) =>
-            const OrganizationBeneficiariesExpandedScreen(),
-        OrganizationUrgentCasesExpandedScreen.id: (context) =>
-            const OrganizationUrgentCasesExpandedScreen(),
-        OrganizationCampaignsExpandedScreen.id: (context) =>
-            const OrganizationCampaignsExpandedScreen(),
-        OrgSearchPage.id: (context) => const OrgSearchPage(),
-        DonationHistory.id: (context) => const DonationHistory(),
-        NotificationPage.id: (context) => const NotificationPage(),
-        DonorSettingsPage.id: (context) => const DonorSettingsPage(),
-      },
-      translations: Messages(),
-      locale: const Locale('en', 'US'),
-      fallbackLocale: const Locale('en', 'US')
+    return OverlaySupport.global(
+      child: GetMaterialApp(
+        builder: EasyLoading.init(),
+        theme: ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity),
+        initialRoute: HomeScreen.id,
+        routes: {
+          HomeScreen.id: (context) => const HomeScreen(),
+          LoginScreen.id: (context) => const LoginScreen(),
+          RegistrationScreen.id: (context) => const RegistrationScreen(),
+          DonorRegistrationScreen.id: (context) =>
+              const DonorRegistrationScreen(),
+          OrganizationRegistrationScreen.id: (context) =>
+              const OrganizationRegistrationScreen(),
+          DonorDashboard.id: (context) => const DonorDashboard(),
+          OrganizationDashboard.id: (context) => const OrganizationDashboard(),
+          CategoriesScreen.id: (context) => const CategoriesScreen(),
+          BeneficiaryExpandedScreen.id: (context) =>
+              const BeneficiaryExpandedScreen(),
+          UrgentCasesExpandedScreen.id: (context) =>
+              const UrgentCasesExpandedScreen(),
+          OrganizationsExpandedScreen.id: (context) =>
+              const OrganizationsExpandedScreen(),
+          OrgAddSelection.id: (context) => const OrgAddSelection(),
+          AddCampaignForm.id: (context) => AddCampaignForm(),
+          AddBeneficiaryForm.id: (context) => AddBeneficiaryForm(),
+          AddUrgentCaseForm.id: (context) => AddUrgentCaseForm(),
+          DonorProfile.id: (context) => const DonorProfile(),
+          DonorEditProfile.id: (context) => const DonorEditProfile(),
+          OrganizationProfile.id: (context) => const OrganizationProfile(),
+          OrganizationEditProfile.id: (context) =>
+              const OrganizationEditProfile(),
+          DonorSearchScreen.id: (context) => const DonorSearchScreen(),
+          OrganizationBeneficiariesExpandedScreen.id: (context) =>
+              const OrganizationBeneficiariesExpandedScreen(),
+          OrganizationUrgentCasesExpandedScreen.id: (context) =>
+              const OrganizationUrgentCasesExpandedScreen(),
+          OrganizationCampaignsExpandedScreen.id: (context) =>
+              const OrganizationCampaignsExpandedScreen(),
+          OrgSearchPage.id: (context) => const OrgSearchPage(),
+          DonationHistory.id: (context) => const DonationHistory(),
+          DonorNotificationPage.id: (context) => const DonorNotificationPage(),
+          DonorSettingsPage.id: (context) => const DonorSettingsPage(),
+        },
+        translations: Messages(),
+        locale: const Locale('en', 'US'),
+        fallbackLocale: const Locale('en', 'US')
+      ),
     );
   }
 }
