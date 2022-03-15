@@ -24,6 +24,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
   var f = NumberFormat("###,##0.00", "en_US");
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
+  var pointlist = [];
 
 
   @override
@@ -31,6 +32,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
     super.initState();
     _getUrgentCaseOrganization();
     _getCurrentUser();
+    _getFavorite();
   }
 
   void _getCurrentUser() {
@@ -51,6 +53,14 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
         gatewayLink: element.data()['gatewayLink'],
       );
     }
+  }
+
+  _getFavorite() async {
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+      setState(() {
+        pointlist = List.from(value['favoriteList']);
+      });
+    });
   }
 
   @override
@@ -152,17 +162,24 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                   color: Colors.pink,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 )),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: FavoriteButton(
-                isFavorite: false,
-                valueChanged: (_isFavorite) {
-                  print(widget.urgentCase.id.toString());
+            Align(
+              alignment: Alignment.center,
+              child:IconButton(
+                icon: Icon(
+                  pointlist.contains(widget.urgentCase.id.toString())? Icons.favorite: Icons.favorite_border,
+                  color: pointlist.contains(widget.urgentCase.id.toString())? Colors.red:null,
+                  size: 40,
+                ), onPressed: () {
+                setState(() {
+                  _getFavorite();
+                  // Icon(
+                  //   pointlist.contains(widget.beneficiary.id.toString())? Icons.favorite: Icons.favorite_border,
+                  //   color: pointlist.contains(widget.beneficiary.id.toString())? Colors.red:null,
+                  //   size: 40,);
                   updateFavorites(loggedInUser!.uid.toString(),widget.urgentCase.id.toString());
-                  print('Is Favorite : $_isFavorite');
-                },
-              ),
-            ),
+                });
+              },
+              ),)
 
           ]),
         ));

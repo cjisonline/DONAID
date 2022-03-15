@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Beneficiary.dart';
@@ -19,17 +21,22 @@ class BeneficiaryCard extends StatefulWidget {
 }
 
 class _BeneficiaryCardState extends State<BeneficiaryCard> {
+  late bool _alreadySaved;
   Organization? organization;
   final _firestore = FirebaseFirestore.instance;
   var f = NumberFormat("###,##0.00", "en_US");
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
+  var pointlist = [];
+  bool favorite = false;
 
   @override
   void initState() {
     super.initState();
     _getBeneficiaryOrganization();
     _getCurrentUser();
+    _getFavorite();
+
   }
 
   void _getCurrentUser() {
@@ -53,6 +60,16 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
         );
       }
   }
+
+  _getFavorite() async {
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+      setState(() {
+        pointlist = List.from(value['favoriteList']);
+      });
+    });
+  }
+
+
 
 
   @override
@@ -156,18 +173,20 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                   color: Colors.pink,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 )),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: FavoriteButton(
-                isFavorite: false,
-                valueChanged: (_isFavorite) {
-                  print(widget.beneficiary.id.toString());
-                  updateFavorites(loggedInUser!.uid.toString(),widget.beneficiary.id.toString());
-                  print('Is Favorite : $_isFavorite');
-                },
-              ),
-            ),
-
+            Align(
+              alignment: Alignment.center,
+              child:IconButton(
+                icon: Icon(
+                  pointlist.contains(widget.beneficiary.id.toString())? Icons.favorite: Icons.favorite_border,
+                  color: pointlist.contains(widget.beneficiary.id.toString())? Colors.red:null,
+                  size: 40,
+                ), onPressed: () {
+                setState(() {
+                  _getFavorite();
+                });
+                updateFavorites(loggedInUser!.uid.toString(),widget.beneficiary.id.toString());
+              },
+              ),)
           ]),
         ));
   }

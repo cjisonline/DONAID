@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/updateFavorite.dart';
+import 'package:donaid/Donor/urgent_case_donate_screen.dart';
 import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
@@ -17,10 +19,14 @@ import 'package:intl/intl.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'beneficiaries_expanded_screen.dart';
+import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
 
+class ResetWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => DonorFavoritePage();
+}
 
-//Start here
 class DonorFavoritePage extends StatefulWidget {
   static const id = 'donor_favorite_screen';
   const DonorFavoritePage({Key? key}) : super(key: key);
@@ -57,6 +63,16 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     _getCampaign();
     _favUser = _allUsers;
     super.initState();
+  }
+
+  void _reset() {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration.zero,
+        pageBuilder: (_, __, ___) => ResetWidget(),
+      ),
+    );
   }
 
 
@@ -240,7 +256,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
         organizationID: doc.data()['organizationID'],
         active: doc.data()['active']);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return CampaignDonateScreen(campaign);
+      return (CampaignDonateScreen(campaign));
     }));
   }
 
@@ -262,7 +278,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
         organizationID: doc.data()['organizationID'],
         active: doc.data()['active']);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return (BeneficiaryExpandedScreen());
+      return (BeneficiaryDonateScreen(beneficiary));
     }));
   }
 
@@ -272,11 +288,22 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
         .where('id', isEqualTo: id)
         .get();
     var doc = ret.docs[0];
+    UrgentCase urgentCase = UrgentCase(
+        title: doc.data()['title'],
+        description: doc.data()['description'],
+        goalAmount: doc.data()['goalAmount'].toDouble(),
+        amountRaised: doc.data()['amountRaised'].toDouble(),
+        category: doc.data()['category'],
+        endDate: doc.data()['endDate'],
+        dateCreated: doc.data()['dateCreated'],
+        id: doc.data()['id'],
+        organizationID: doc.data()['organizationID'],
+        active: doc.data()['active'],
+        approved: doc.data()['approved']);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return (UrgentCasesExpandedScreen ());
+      return (UrgentCaseDonateScreen(urgentCase));
     }));
   }
-
 
 
 
@@ -292,7 +319,6 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-
               Expanded(
                 child: _favUser.isNotEmpty
                     ? ListView.builder(
@@ -310,7 +336,8 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                             child: FavoriteButton(
                               isFavorite: true,
                               valueChanged: (_isFavorite) {
-                                // favoriteFunction(_isFavorite);
+                                updateFavorites(loggedInUser!.uid.toString(),_favUser[index]["id"].toString());
+                                _reset();
                                 print('Is Favorite : $_isFavorite');
                               },
                             ),
