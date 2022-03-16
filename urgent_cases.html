@@ -124,12 +124,10 @@ async function getCaseData(){
     }
 }
 
-
-
-function approveTheUrgentCase(documentID, urgentCaseTitle,orgName,orgID) {
+function approveTheUrgentCase(documentID, urgentCaseTitle, orgName, orgID) {
       
     swal.fire({
-        title: 'Approve this urgent case?',
+        title: 'Approve the urgent case: ' + urgentCaseTitle + '?',
         icon: 'warning',
         showDenyButton: true,
         showCancelButton: true,
@@ -147,14 +145,14 @@ function approveTheUrgentCase(documentID, urgentCaseTitle,orgName,orgID) {
 })
     .then((result) => {
         if (result.isConfirmed) { 
-            sendDonorNotification(documentID,urgentCaseTitle,orgName);
-            sendOrganizationNotificaiton(documentID, urgentCaseTitle,orgID)
+            sendDonorNotification(documentID, urgentCaseTitle, orgName);
+            sendOrganizationNotification(documentID, urgentCaseTitle, orgID)
             const approvals = doc(db, "UrgentCases", documentID);
             updateDoc(approvals, {approved: true})
     
             .then(() => {
                 swal.fire('Approved!',
-                'Urgent case is approved.',
+                'Urgent Case: ' + urgentCaseTitle + ' approved.',
                 'success').then(function () {
                     location.reload(); 
                     
@@ -167,7 +165,8 @@ function approveTheUrgentCase(documentID, urgentCaseTitle,orgName,orgID) {
         }
 
         else if (result.isDenied) {
-            runDenialDialogue(documentID);
+            runDenialDialogue(documentID, urgentCaseTitle);
+            sendRejectionNotification(documentID, urgentCaseTitle, orgID);
         }
 
         else {
@@ -179,7 +178,7 @@ function approveTheUrgentCase(documentID, urgentCaseTitle,orgName,orgID) {
     })
 }
 
-async function runDenialDialogue(documentID){
+async function runDenialDialogue(documentID, urgentCaseTitle){
     const { value: deniedReason } = await Swal.fire({
             input: 'textarea',
             inputLabel: 'Reason for Denial',
@@ -187,7 +186,12 @@ async function runDenialDialogue(documentID){
             inputAttributes: {
                 'aria-label': 'Type your rejection reason here'
             },
-            showCancelButton: true
+            showCancelButton: true,
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'You need to give a denial reason!'
+                }
+            }
             })
 
             if(deniedReason){
@@ -201,7 +205,7 @@ async function runDenialDialogue(documentID){
 
                 .then(() => {
                     swal.fire('Denied!',
-                    'Urgent Case is denied due to: ' + deniedReason + '',
+                    'Urgent case "' + urgentCaseTitle + '" is denied due to: ' + deniedReason + '',
                     'info').then(function () {
                         location.reload(); 
                     })
@@ -244,7 +248,7 @@ function sendDonorNotification(documentID, urgentCaseTitle, orgName){
     fetch(url, {method: 'POST', body:JSON.stringify(params), headers: reqHeaders}).then(console.log);
 }
 
-function sendOrganizationNotificaiton(documentID, urgentCaseTitle, orgID){
+function sendOrganizationNotification(documentID, urgentCaseTitle, orgID){
     console.log('sending organization message')
         
     var url = "https://fcm.googleapis.com/fcm/send";
@@ -252,6 +256,30 @@ function sendOrganizationNotificaiton(documentID, urgentCaseTitle, orgID){
         "to":`/topics/${orgID}`,
         "notification":{
             "title": "Urgent Case Approved!",
+            "body": urgentCaseTitle,
+        },
+        "data":{
+            "title": "UrgentCaseApprovals",
+            "body":documentID,
+        },
+    };
+
+    var reqHeaders = {
+        "Authorization": "key=AAAAN-nSpIQ:APA91bHFuKBdp90fSBP1YMwQlGh0cz7vNhDXG-wpoZtKebVTwWFW_fFgqMVJrIADYN_l2HP0zGpDdUjHBvo7mX6migzCF-d4jdxlgADzqSU6-nQAV1GqvfxkVq2aDgG7LW5w0GNaCe9j",
+        "Content-Type": "application/json",
+    };
+
+    fetch(url, {method: 'POST', body:JSON.stringify(params), headers: reqHeaders}).then(console.log);
+}
+
+function sendRejectionNotification(documentID, urgentCaseTitle, orgID){
+    console.log('sending organization message')
+        
+    var url = "https://fcm.googleapis.com/fcm/send";
+    var params = {
+        "to":`/topics/${orgID}`,
+        "notification":{
+            "title": "Urgent Case Denied.",
             "body": urgentCaseTitle,
         },
         "data":{
