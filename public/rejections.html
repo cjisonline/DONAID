@@ -71,15 +71,17 @@ async function getRejectionData(){
 
         $('button.approveButtonClass').click(function() {
             var $item = adminTableDef.row($(this).closest("tr")).data()[3];
-
+            var $orgName = adminTableDef.row($(this).closest("tr")).data()[2];
             $("#resultas").append($item); 
             var documentID = $item;
+            var orgName = $orgName;
 
-            approveTheOrganization(documentID);
+            approveTheOrganization(documentID, orgName);
             });
 
             var adminTableDef = $('#adminTable').DataTable({
                 autoWidth: false,
+                scrollX: true,
                 columnDefs: [
                     {
                         targets: ['_all'],
@@ -93,108 +95,118 @@ async function getRejectionData(){
                 ],
                 "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
                 "info": false,
+                "fnDrawCallback": function(oSettings) {
+                    if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                    } else {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                    }
+                }
             });
         }
 }
 
-function approveTheOrganization(documentID) {
+function approveTheOrganization(documentID, orgName) {
       
-    swal.fire({
-        title: 'Approve this organization?',
-        icon: 'warning',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Approve',
-        denyButtonText: 'Deny',
-        confirmButtonColor: '#6804ec',
-        cancelButtonColor: '#d33',
-        denyButtonColor: '#D70040',
-        customClass: {
-            actions: 'my-actions',
-            confirmButton: 'order-1',
-            denyButton: 'order-1',
-            cancelButton: 'order-3 left-gap',
-        }
-
-    })
-    .then((result) => {
-        if (result.isConfirmed) { 
-            const approvals = doc(db, "OrganizationUsers", documentID);
-            updateDoc(approvals, {
+      swal.fire({
+          title: 'Approve the organization: ' + orgName + '?',
+          icon: 'warning',
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'Approve',
+          denyButtonText: 'Deny',
+          confirmButtonColor: '#6804ec',
+          cancelButtonColor: '#d33',
+          denyButtonColor: '#D70040',
+          customClass: {
+              actions: 'my-actions',
+              confirmButton: 'order-1',
+              denyButton: 'order-1',
+              cancelButton: 'order-3 left-gap',
+          }
+  
+      })
+      .then((result) => {
+          if (result.isConfirmed) { 
+              const approvals = doc(db, "OrganizationUsers", documentID);
+              updateDoc(approvals, {
                 approved: true,
                 rejected: false,
                 denialReason: ""
-        })
-    
-            .then(() => {
-                swal.fire('Approved!',
-                'Organization is approved.',
-                'success').then(function () {
-                    location.reload(); 
-                })
-                
-                .catch((error) => {
-                    console.error("Error approving organization: ", error);
-                })
             })
-        }
-
-        else if (result.isDenied) {
-        runDenialDialogue(documentID);
-    }
-        
-
-        else {
-            swal.fire('Cancelled!',
-            'No changes were made.',
-            'error');
-        }
-            
-    });
-}
-
-async function runDenialDialogue(documentID){
-    const { value: deniedReason } = await Swal.fire({
-            input: 'textarea',
-            inputLabel: 'Reason for Denial',
-            inputPlaceholder: 'Type your rejection reason here...',
-            inputAttributes: {
-                'aria-label': 'Type your rejection reason here'
-            },
-            showCancelButton: true
-            })
-
-
-
-            if(deniedReason){
-                const approvals = doc(db, "OrganizationUsers", documentID);
-                const docSet = setDoc(approvals, {
-                    denialReason: deniedReason,
-                    rejected: true
-                
-                }, { merge: true })
-            
-
-                .then(() => {
-                    swal.fire('Denied!',
-                    'Organization is denied due to: ' + deniedReason + '',
-                    'success').then(function () {
-                        location.reload(); 
-                    })
-            
-                
-                .catch((error) => {
-                    console.error("Error denying organization: ", error);
-                
-                })
-            })
-        }
-        else {
-            swal.fire('Cancelled!',
-            'No changes were made.',
-            'error');
-        }
-}
+      
+              .then(() => {
+                  swal.fire('Approved!',
+                  'Organization "' + orgName + '" is approved.',
+                  'success').then(function () {
+                      location.reload(); 
+                  })
+                  
+                  .catch((error) => {
+                      console.error("Error approving organization: ", error);
+                  })
+              })
+          }
+  
+          else if (result.isDenied) {
+          runDenialDialogue(documentID, orgName);
+      }
+          
+  
+          else {
+              swal.fire('Cancelled!',
+              'No changes were made.',
+              'error');
+          }
+              
+      });
+  }
+  
+  async function runDenialDialogue(documentID, orgName){
+      const { value: deniedReason } = await Swal.fire({
+              input: 'textarea',
+              inputLabel: 'Reason for Denial',
+              inputPlaceholder: 'Type your rejection reason here...',
+              inputAttributes: {
+                  'aria-label': 'Type your rejection reason here'
+              },
+              showCancelButton: true,
+              inputValidator: (value) => {
+                  if (!value) {
+                      return 'You need to give a denial reason!'
+                  }
+              }
+              })
+  
+              if(deniedReason){
+                  const approvals = doc(db, "OrganizationUsers", documentID);
+                  const docSet = setDoc(approvals, {
+                      denialReason: deniedReason,
+                      rejected: true
+                  
+                  }, { merge: true })
+              
+  
+                  .then(() => {
+                      swal.fire('Denied!',
+                      'Organization "' + orgName + '" is denied due to: ' + deniedReason + '',
+                      'info').then(function () {
+                          location.reload(); 
+                      })
+              
+                  
+                  .catch((error) => {
+                      console.error("Error denying organization: ", error);
+                  
+                  })
+              })
+          }
+          else {
+              swal.fire('Cancelled!',
+              'No changes were made.',
+              'error');
+          }
+  }
 
 getRejectionData();
 </script>
@@ -210,18 +222,33 @@ getRejectionData();
                     <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
                         <span style="text-align:center; font-size: 24px;">DONAID</span>
                         <a href="donor_dashboard.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Donors</span> </a>
-                        <a href="org_dashboard.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Organizations</span></a>
+                        <div class="dropdown" id="nav-active">
+                            <button class="btn dropdown-toggle" type="button" id="OrgPages" style="color: white" data-bs-toggle="dropdown" aria-expanded="false">
+                              Organizations
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="OrgPages">
+                              <li><a class="dropdown-item" href="org_dashboard.html" data-bs-parent="#sidebar">Organizations</a></li>
+                              <li><a class="dropdown-item" href="approvals.html" data-bs-parent="#sidebar">Approvals</a></li>
+                              <li><a class="dropdown-item" href="rejections.html" data-bs-parent="#sidebar" id="nav-active">Rejections</a></li>
+                            </ul>
+                          </div>
                         <a href="beneficiaries.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Beneficiaries</span></a>
-                        <a href="approvals.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Approvals</span></a>
-                        <a href="rejections.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="nav-active"><span>Rejections</span></a>
-                        <a href="urgent_cases.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Urgent Cases</span></a>
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="UCPages" data-bs-toggle="dropdown" aria-expanded="false">
+                              Urgent Cases
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="OrgPages">
+                              <li><a class="dropdown-item" href="urgent_cases.html" data-bs-parent="#sidebar">Urgent Cases</a></li>
+                              <li><a class="dropdown-item" href="urgentcase_rejections.html" data-bs-parent="#sidebar">Rejections</a></li>
+                            </ul>
+                          </div>
                         <a href="categories.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Categories</span></a>
                         <a href="settings.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Settings</span></a>
                     </div>
                 </div>
             </div>
       <div class="col ps-md-2 pt-2">
-            <h1 class="page-title-header" style="text-align:center; font-size: 24px;">Rejections</h1>
+            <h1 class="page-title-header" style="text-align:center; font-size: 24px;">Organization Rejections</h1>
             <table id="adminTable">
             <thead>
                 <th>Email</th>
