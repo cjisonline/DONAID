@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
 import 'package:donaid/Donor/categories_screen.dart';
 import 'package:donaid/Donor/donor_search_screen.dart';
@@ -9,6 +8,7 @@ import 'package:donaid/Organization/add_beneficiary_screen.dart';
 import 'package:donaid/Organization/add_urgentcase_screen.dart';
 import 'package:donaid/Donor/donor_edit_profile.dart';
 import 'package:donaid/Donor/donor_profile.dart';
+import 'package:donaid/Organization/notifications_page.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:donaid/Organization/organization_edit_profile.dart';
 import 'package:donaid/Organization/organization_profile.dart';
@@ -39,13 +39,11 @@ import 'Registration/donor_registration_screen.dart';
 import 'Registration/organization_registration_screen.dart';
 import 'Donor/donor_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
   print('Handling background message: ${message.messageId}');
   await Firebase.initializeApp();
-  final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   if(_auth.currentUser!=null) {
     addNotification(_auth.currentUser?.uid, message);
@@ -112,6 +110,7 @@ class Donaid extends StatelessWidget {
           OrgSearchPage.id: (context) => const OrgSearchPage(),
           DonationHistory.id: (context) => const DonationHistory(),
           DonorNotificationPage.id: (context) => const DonorNotificationPage(),
+          OrganizationNotificationPage.id: (context) => const OrganizationNotificationPage(),
           DonorSettingsPage.id: (context) => const DonorSettingsPage(),
           OrganizationSettingsPage.id: (context) => const OrganizationSettingsPage(),
         },

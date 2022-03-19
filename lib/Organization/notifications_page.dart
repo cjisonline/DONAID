@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Donor/urgent_case_donate_screen.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Organization/organization_urgentcase_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import '../Models/PushNotification.dart';
@@ -20,7 +19,6 @@ class OrganizationNotificationPage extends StatefulWidget {
 }
 
 class _OrganizationNotificationPageState extends State<OrganizationNotificationPage> {
-  final _messaging = FirebaseMessaging.instance;
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   List<PushNotification> notifications=[];
@@ -49,7 +47,7 @@ class _OrganizationNotificationPageState extends State<OrganizationNotificationP
     );
 
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return (UrgentCaseDonateScreen(urgentCase));
+      return (OrganizationUrgentCaseFullScreen(urgentCase));
     }));
   }
 
