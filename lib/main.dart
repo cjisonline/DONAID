@@ -30,6 +30,7 @@ import 'Organization/search_page.dart';
 import 'Organization/organization_activebeneficiaries_expanded_screen.dart';
 import 'Organization/organization_activecampaigns_expanded_screen.dart';
 import 'Organization/organization_activeurgentcases_expanded_screen.dart';
+import 'Organization/settings.dart';
 import 'Services/notifications.dart';
 import 'authentication.dart';
 import 'home_screen.dart';
@@ -40,7 +41,6 @@ import 'Donor/donor_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
   print('Handling background message: ${message.messageId}');
@@ -113,6 +113,7 @@ class Donaid extends StatelessWidget {
           DonationHistory.id: (context) => const DonationHistory(),
           DonorNotificationPage.id: (context) => const DonorNotificationPage(),
           DonorSettingsPage.id: (context) => const DonorSettingsPage(),
+          OrganizationSettingsPage.id: (context) => const OrganizationSettingsPage(),
         },
         translations: Messages(),
         locale: const Locale('en', 'US'),

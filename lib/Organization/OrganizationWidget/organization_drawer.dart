@@ -1,4 +1,5 @@
 import 'package:donaid/Models/message.dart';
+import 'package:donaid/Organization/settings.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:donaid/Organization/organization_expiredcharities_screen.dart';
@@ -53,7 +54,9 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("settings".tr),
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, OrganizationSettingsPage.id);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),

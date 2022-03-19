@@ -1,10 +1,12 @@
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrganizationSettingsPage extends StatefulWidget {
+  static const id = 'organization_settings_page';
   const OrganizationSettingsPage({Key? key}) : super(key: key);
 
   @override
@@ -13,6 +15,7 @@ class OrganizationSettingsPage extends StatefulWidget {
 
 class _OrganizationSettingsPageState extends State<OrganizationSettingsPage> {
   final _prefs = SharedPreferences.getInstance();
+  final _auth = FirebaseAuth.instance;
   bool urgentCaseApprovalsNotifications=false;
   @override
   void initState(){
@@ -90,10 +93,11 @@ class _OrganizationSettingsPageState extends State<OrganizationSettingsPage> {
     prefs.setBool('urgentCaseApprovalsNotifications', urgentCaseApprovalsNotifications);
 
     if(urgentCaseApprovalsNotifications){
-      FirebaseMessaging.instance.subscribeToTopic('UrgentCaseApprovals');
+      FirebaseMessaging.instance.subscribeToTopic(_auth.currentUser!.uid.toString()+'Approvals');
+      print('Subscribed:' + _auth.currentUser!.uid.toString()+'Approvals');
     }
     else{
-      FirebaseMessaging.instance.unsubscribeFromTopic('UrgentCaseApprovals');
+      FirebaseMessaging.instance.unsubscribeFromTopic(_auth.currentUser!.uid.toString()+'Approvals');
     }
   }
 

@@ -100,7 +100,7 @@ class _OrganizationRegistrationScreenState
               .doc(usersDocRef.id)
               .set({'id': usersDocRef.id,'uid': newUser.user.uid, 'email': email, 'userType': 2});
 
-          await FirebaseMessaging.instance.subscribeToTopic(newUser.user.uid.toString());
+          await FirebaseMessaging.instance.subscribeToTopic(newUser.user.uid.toString()+'Approvals');
           final SharedPreferences prefs = await _prefs;
           await prefs.setBool('urgentCaseApprovalsNotifications', true);
 
