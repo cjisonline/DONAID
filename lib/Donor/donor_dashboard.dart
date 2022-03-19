@@ -173,161 +173,166 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _body() {
-    return Container(
-    decoration: BoxDecoration(
-    color: Colors.blueGrey.shade50,
-    borderRadius: const BorderRadius.all(Radius.circular(10)),
-    border: Border.all(color: Colors.grey.shade100)),
-    child: SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Categories',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesScreen())).then((value) => _refreshPage());
-                      },
-                      child: const Text(
-                        'See more >',
-                        style: TextStyle(fontSize: 14),
+    return RefreshIndicator(
+      onRefresh: () async{
+        _refreshPage();
+      },
+      child: Container(
+      decoration: BoxDecoration(
+      color: Colors.blueGrey.shade50,
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
+      border: Border.all(color: Colors.grey.shade100)),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Categories',
+                        style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
-                    ),
-                  ]),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesScreen())).then((value) => _refreshPage());
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(
-              height: 75.0,
-              child: ListView.builder(
-                itemCount: charityCategories.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return CharityCategoryCard(
-                      charityCategories[index].name, charityCategories[index].iconDownloadURL);
-                },
-              )),
+            SizedBox(
+                height: 75.0,
+                child: ListView.builder(
+                  itemCount: charityCategories.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return CharityCategoryCard(
+                        charityCategories[index].name, charityCategories[index].iconDownloadURL);
+                  },
+                )),
 
-          // organization list
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Organizations',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationsExpandedScreen())).then((value) => _refreshPage());
-                      },
-                      child: const Text(
-                        'See more >',
-                        style: TextStyle(fontSize: 14),
+            // organization list
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Organizations',
+                        style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
-                    ),
-                  ]),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationsExpandedScreen())).then((value) => _refreshPage());
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(
-              height: 270.0,
-              child: ListView.builder(
-                itemCount: organizations.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return OrganizationCard(organizations[index]);
-                },
-              )),
+            SizedBox(
+                height: 270.0,
+                child: ListView.builder(
+                  itemCount: organizations.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return OrganizationCard(organizations[index]);
+                  },
+                )),
 
-          //beneficiaries list
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Beneficiaries',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => BeneficiaryExpandedScreen())).then((value) => _refreshPage());
-                      },
-                      child: const Text(
-                        'See more >',
-                        style: TextStyle(fontSize: 14),
+            //beneficiaries list
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Beneficiaries',
+                        style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
-                    ),
-                  ]),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => BeneficiaryExpandedScreen())).then((value) => _refreshPage());
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(
-              height: 400.0,
-              child: ListView.builder(
-                itemCount: beneficiaries.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return BeneficiaryCard(beneficiaries[index]);
-                },
-              )),
+            SizedBox(
+                height: 400.0,
+                child: ListView.builder(
+                  itemCount: beneficiaries.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return BeneficiaryCard(beneficiaries[index]);
+                  },
+                )),
 
-          // urgent case list
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Urgent Cases',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => UrgentCasesExpandedScreen())).then((value) => _refreshPage());
-                      },
-                      child: const Text(
-                        'See more >',
-                        style: TextStyle(fontSize: 14),
+            // urgent case list
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Urgent Cases',
+                        style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
-                    ),
-                  ]),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => UrgentCasesExpandedScreen())).then((value) => _refreshPage());
+                        },
+                        child: const Text(
+                          'See more >',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(
-              height: 400.0,
-              child: ListView.builder(
-                itemCount: urgentCases.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return UrgentCaseCard(urgentCases[index]);
-                },
-              )),
-        ],
-      ),
-    ));
+            SizedBox(
+                height: 400.0,
+                child: ListView.builder(
+                  itemCount: urgentCases.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, int index) {
+                    return UrgentCaseCard(urgentCases[index]);
+                  },
+                )),
+          ],
+        ),
+      )),
+    );
   }
 }
 
