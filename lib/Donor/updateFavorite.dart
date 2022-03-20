@@ -9,11 +9,11 @@ Future<bool> updateFavorites(String? uid, String updateItemID) {
     if (postSnapshot.exists) {
       if (!postSnapshot['favoriteList'].contains(updateItemID)) {
         await tx.update(favoritesReference, <String, dynamic>{
-          'favoriteList': FieldValue.arrayUnion([updateItemID])
+          'favoriteList': FieldValue.arrayUnion([updateItemID]),
         });
       } else {
         await tx.update(favoritesReference, <String, dynamic>{
-          'favoriteList': FieldValue.arrayRemove([updateItemID])
+          'favoriteList': FieldValue.arrayRemove([updateItemID]),
         });
       }
     } else {

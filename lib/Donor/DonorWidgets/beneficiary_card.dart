@@ -1,10 +1,7 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Organization.dart';
-import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,14 +11,13 @@ import '../updateFavorite.dart';
 class BeneficiaryCard extends StatefulWidget {
   final Beneficiary beneficiary;
 
-  const BeneficiaryCard( this.beneficiary, {Key? key}) : super(key: key);
+  const BeneficiaryCard(this.beneficiary, {Key? key}) : super(key: key);
 
   @override
   State<BeneficiaryCard> createState() => _BeneficiaryCardState();
 }
 
 class _BeneficiaryCardState extends State<BeneficiaryCard> {
-  late bool _alreadySaved;
   Organization? organization;
   final _firestore = FirebaseFirestore.instance;
   var f = NumberFormat("###,##0.00", "en_US");
@@ -36,41 +32,40 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
     _getBeneficiaryOrganization();
     _getCurrentUser();
     _getFavorite();
-
   }
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
 
+  _getBeneficiaryOrganization() async {
+    var ret = await _firestore
+        .collection('OrganizationUsers')
+        .where('uid', isEqualTo: widget.beneficiary.organizationID)
+        .get();
 
-  _getBeneficiaryOrganization() async{
-
-      var ret = await _firestore.collection('OrganizationUsers')
-          .where('uid', isEqualTo: widget.beneficiary.organizationID)
-          .get();
-
-      for(var element in ret.docs){
-        organization = Organization(
-          organizationName: element.data()['organizationName'],
-          uid: element.data()['uid'],
-          organizationDescription: element.data()['organizationDescription'],
-          country: element.data()['country'],
-          gatewayLink: element.data()['gatewayLink'],
-        );
-      }
+    for (var element in ret.docs) {
+      organization = Organization(
+        organizationName: element.data()['organizationName'],
+        uid: element.data()['uid'],
+        organizationDescription: element.data()['organizationDescription'],
+        country: element.data()['country'],
+        gatewayLink: element.data()['gatewayLink'],
+      );
+    }
   }
 
   _getFavorite() async {
-    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+    await _firestore
+        .collection("Favorite")
+        .doc(loggedInUser!.uid)
+        .get()
+        .then((value) {
       setState(() {
         pointlist = List.from(value['favoriteList']);
       });
     });
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +78,12 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
               color: Colors.white,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               border: Border.all(color: Colors.grey.shade300, width: 2.0)),
-
           child: Column(children: [
-            Icon(Icons.person, color: Colors.blue, size: 40,),
+            Icon(
+              Icons.person,
+              color: Colors.blue,
+              size: 40,
+            ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Text(widget.beneficiary.name,
@@ -108,11 +106,11 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                   maxLines: 3,
                 )),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('\$'+f.format(widget.beneficiary.amountRaised),
+              Text('\$' + f.format(widget.beneficiary.amountRaised),
                   textAlign: TextAlign.left,
                   style: const TextStyle(color: Colors.black, fontSize: 15)),
               Text(
-              '\$'+f.format(widget.beneficiary.goalAmount),
+                '\$' + f.format(widget.beneficiary.goalAmount),
                 textAlign: TextAlign.start,
                 style: const TextStyle(color: Colors.black, fontSize: 15),
               ),
@@ -122,9 +120,9 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 child: LinearProgressIndicator(
                   backgroundColor: Colors.grey,
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                      Colors.green),
-                  value: (widget.beneficiary.amountRaised/widget.beneficiary.goalAmount),
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                  value: (widget.beneficiary.amountRaised /
+                      widget.beneficiary.goalAmount),
                   minHeight: 10,
                 ),
               ),
@@ -136,36 +134,36 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
-                      onTap: (){
-                        if(organization?.country =='United States'){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) {
-                            return (BeneficiaryDonateScreen(widget.beneficiary));
-                          })).then((value){
-                            setState(() {
-
-                            });
+                      onTap: () {
+                        if (organization?.country == 'United States') {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return (BeneficiaryDonateScreen(
+                                widget.beneficiary));
+                          })).then((value) {
+                            setState(() {});
                           });
+                        } else {
+                          DonorAlertDialogs.paymentLinkPopUp(
+                              context, organization!);
                         }
-                        else{
-                          DonorAlertDialogs.paymentLinkPopUp(context, organization!);
-                        }
-
                       },
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                         const Icon(Icons.favorite,
-                              color: Colors.white, size: 20),
-                        Container(
-                          margin: const EdgeInsets.only(left: 0.0, right: 10.0),
-                          child: const Text('Donate',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              )),
-                        )
-                      ]),
+                            const Icon(Icons.favorite,
+                                color: Colors.white, size: 20),
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(left: 0.0, right: 10.0),
+                              child: const Text('Donate',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  )),
+                            )
+                          ]),
                     ),
                   ),
                 ),
@@ -175,16 +173,23 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                 )),
             Align(
               alignment: Alignment.center,
-              child:IconButton(
+              child: IconButton(
                 icon: Icon(
-                  pointlist.contains(widget.beneficiary.id.toString())? Icons.favorite: Icons.favorite_border,
-                  color: pointlist.contains(widget.beneficiary.id.toString())? Colors.red:null,
+                  pointlist.contains(widget.beneficiary.id.toString())
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: pointlist.contains(widget.beneficiary.id.toString())
+                      ? Colors.red
+                      : null,
                   size: 40,
-                ), onPressed: () async {
-                await updateFavorites(loggedInUser!.uid.toString(),widget.beneficiary.id.toString());
-                await _getFavorite();
+                ),
+                onPressed: () async {
+                  await updateFavorites(loggedInUser!.uid.toString(),
+                      widget.beneficiary.id.toString());
+                  await _getFavorite();
                 },
-              ),)
+              ),
+            )
           ]),
         ));
   }

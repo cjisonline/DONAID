@@ -2,10 +2,7 @@
 import 'package:donaid/Models/Organization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:favorite_button/favorite_button.dart';
-
 import '../organization_tab_view.dart';
-import '../updateFavorite.dart';
 
 class OrganizationCard extends StatefulWidget {
   final Organization organization;

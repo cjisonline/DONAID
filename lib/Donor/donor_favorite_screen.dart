@@ -1,17 +1,11 @@
-import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/updateFavorite.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
-import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
-import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
-import 'package:donaid/Organization/organization_beneficiary_full.dart';
-import 'package:donaid/Organization/organization_campaign_full.dart';
-import 'package:donaid/Organization/organization_urgentcase_full.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +13,6 @@ import 'package:intl/intl.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
-import 'beneficiaries_expanded_screen.dart';
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
 
@@ -302,7 +295,6 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                                         _favUserCampaign[index]['id']);
                                   }
                                   setState(() {
-                                    //Add the extended view page here
                                   });
                                 },
                               ),
