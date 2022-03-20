@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
 
 class OrganizationEditProfile extends StatefulWidget {
   static const id = 'organization_edit_profile';
@@ -116,13 +117,13 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: const Text('Edit Profile'),
+          title:  Text('edit_profile'.tr),
           leadingWidth: 80,
           leading: TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, OrganizationProfile.id);
               },
-              child: const Text('Cancel',
+              child:  Text('cancel'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           actions: [
@@ -132,7 +133,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
                 _updateOrganizationInformation();
                 Navigator.pop(context);
               },
-              child: const Text('Save',
+              child:  Text('save'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
@@ -153,9 +154,9 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         (organization.profilePictureDownloadURL.toString().isEmpty)
         ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children:  [
             Icon(Icons.upload),
-            Text('Upload profile picture or logo.'),
+            Text('upload_profile_picture_or_logo.'.tr),
           ],
         )
         : (organization.profilePictureDownloadURL.toString().isNotEmpty)
@@ -184,8 +185,8 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
       decoration: InputDecoration(
           label: Center(
             child: RichText(
-              text: const TextSpan(
-                text: 'Name',
+              text:  TextSpan(
+                text: 'name'.tr,
                 style: TextStyle(
                     color: Colors.black, fontSize: 20.0),
               ),
@@ -196,6 +197,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           )),
       validator: (value) {
         if (value == null || value.isEmpty) {
+          //doubt
           return 'Please enter organization\'s name.';
         }
         return null;
@@ -215,8 +217,8 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
       decoration: InputDecoration(
           label: Center(
             child: RichText(
-              text: const TextSpan(
-                text: 'Phone Number',
+              text:  TextSpan(
+                text: 'phone_number'.tr,
                 style: TextStyle(
                     color: Colors.black, fontSize: 20.0),
               ),
@@ -227,9 +229,9 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           )),
       validator: (value) {
         if (value!.isEmpty) {
-          return "Please enter your phone number.";
+          return "please_enter_your_phone_number.".tr;
         } else if (!phoneNumberRegExp.hasMatch(value)) {
-          return "Please enter a valid phone number.";
+          return "please_enter_a_valid_phone_number.".tr;
         } else {
           return null;
         }
@@ -256,8 +258,8 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         decoration: InputDecoration(
             label: Center(
               child: RichText(
-                text: const TextSpan(
-                  text: 'Organization Description',
+                text:  TextSpan(
+                  text: 'organization_description'.tr,
                   style: TextStyle(
                       color: Colors.black, fontSize: 20.0),
                 ),
@@ -280,8 +282,8 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
             decoration: InputDecoration(
                 label: Center(
                   child: RichText(
-                    text: const TextSpan(
-                      text: 'Gateway Link',
+                    text:  TextSpan(
+                      text: 'gateway_link'.tr,
                       style: TextStyle(
                           color: Colors.black, fontSize: 20.0),
                     ),
@@ -292,7 +294,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
                 )),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter gateway link.';
+                return 'please_enter_gateway_link.'.tr;
               }
               return null;
             },

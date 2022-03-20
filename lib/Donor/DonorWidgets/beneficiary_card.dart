@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../beneficiary_donate_screen.dart';
 import '../updateFavorite.dart';
+import 'package:get/get.dart';
 
 class BeneficiaryCard extends StatefulWidget {
   final Beneficiary beneficiary;
@@ -151,6 +152,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+
                             const Icon(Icons.favorite,
                                 color: Colors.white, size: 20),
                             Container(
@@ -164,6 +166,19 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                                   )),
                             )
                           ]),
+
+                         const Icon(Icons.favorite,
+                              color: Colors.white, size: 20),
+                        Container(
+                          margin: const EdgeInsets.only(left: 0.0, right: 10.0),
+                          child:  Text('donate'.tr,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              )),
+                        )
+                      ]),
                     ),
                   ),
                 ),

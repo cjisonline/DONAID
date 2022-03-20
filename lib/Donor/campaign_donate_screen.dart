@@ -8,11 +8,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 
 class CampaignDonateScreen extends StatefulWidget {
   final Campaign campaign;
@@ -138,10 +142,10 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter a valid payment amount.';
+                              return 'please_enter_a_valid_payment_amount'.tr;
                             }
                             else if(double.parse(value)<0.50){
-                              return 'Please provide a donation minimum of \$0.50';
+                              return 'please_provide_a_donation_minimum'.tr;
                             }
                             else {
                               return null;
@@ -154,7 +158,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                               label: Center(
                                 child: RichText(
                                     text: TextSpan(
-                                  text: 'Donation Amount',
+                                  text: 'donation_amount'.tr,
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                 )),
@@ -172,8 +176,8 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(32.0),
                           child: MaterialButton(
-                            child: const Text(
-                              'Donate',
+                            child:  Text(
+                              'donate'.tr,
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
@@ -197,7 +201,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                     ],
                   )
               )
-                  : const Text('Campaign is no longer available to donate to.'),
+                  :  Text('compaign_is_no_longer_available_to_donate'.tr),
             )
           ]),
         )),
@@ -272,17 +276,17 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
         // paymentIntentData = null;
       });
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Paid successfully!')));
+          .showSnackBar( SnackBar(content: Text('paid_successfully'.tr)));
 
       createDonationDocument();
       updateCampaign();
       await _refreshPage();
 
-    }on StripeException catch (e) {
+    }catch (e) {
       print('Stripe Exception: ${e.toString()}');
 
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Payment cancelled.')));
+          .showSnackBar( SnackBar(content: Text('payment_cancelled!'.tr)));
 
     }
   }
@@ -317,6 +321,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        //doubt
         title: Text('Donate - ${widget.campaign.title}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

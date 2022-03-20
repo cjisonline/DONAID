@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
+import 'package:get/get.dart';
 
 class UrgentCasesExpandedScreen extends StatefulWidget {
   static const id = 'urgent_cases_expanded_screen';
@@ -93,8 +94,8 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Detour!'),
+            title:  Center(
+              child: Text('detour!'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
@@ -107,6 +108,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                   throw 'Could not launch $link';
                 }
               },
+              //doubt
               text: 'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment.'
                   ' A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
               linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
@@ -118,7 +120,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('OK'),
+                  child:  Text('oK'.tr),
                 ),
               ),
             ],
@@ -180,14 +182,14 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
             ),
           );
         })
-    : const Center(child: Text('No active urgent cases to show.', style: TextStyle(fontSize: 18),));
+    :  Center(child: Text('no_active_urgent_sases_show'.tr, style: TextStyle(fontSize: 18),));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Urgent Cases'),
+        title: Text('urgent_cases'.tr),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

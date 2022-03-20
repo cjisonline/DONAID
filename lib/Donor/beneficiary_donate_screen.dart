@@ -5,12 +5,14 @@ import 'package:donaid/Models/Beneficiary.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 
 
 class BeneficiaryDonateScreen extends StatefulWidget {
@@ -137,10 +139,10 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Please enter a valid payment amount.';
+                                  return 'please_enter_a_valid_payment_amount'.tr;
                                 }
                                 else if(double.parse(value)<0.50){
-                                  return 'Please provide a donation minimum of \$0.50';
+                                  return 'please_provide_a_donation_minimum'.tr;
                                 }
                                 else {
                                   return null;
@@ -153,7 +155,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                                   label: Center(
                                     child: RichText(
                                         text: TextSpan(
-                                          text: 'Donation Amount',
+                                          text: 'donation_amount'.tr,
                                           style: TextStyle(
                                               color: Colors.grey[600], fontSize: 20.0),
                                         )),
@@ -171,8 +173,8 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                               color: Colors.blue,
                               borderRadius: BorderRadius.circular(32.0),
                               child: MaterialButton(
-                                child: const Text(
-                                  'Donate',
+                                child:  Text(
+                                  'donate'.tr,
                                   style: TextStyle(
                                     fontSize: 25,
                                     color: Colors.white,
@@ -195,7 +197,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                           ),
                         ],
                       ))
-                      : const Text('Beneficiary is no longer available to donate to.'),
+                      :  Text('beneficiary_is_no_longer_available'.tr),
                 )
               ]),
             )),
@@ -271,17 +273,17 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
         // paymentIntentData = null;
       });
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Paid successfully!')));
+          .showSnackBar( SnackBar(content: Text('paid_successfully'.tr)));
 
       createDonationDocument();
       updateBeneficiary();
       await _refreshPage();
 
-    }on StripeException catch (e) {
+    } catch (e) {
       print('Stripe Exception: ${e.toString()}');
 
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Payment cancelled.')));
+          .showSnackBar( SnackBar(content: Text('payment_cancelled!'.tr)));
 
     }
   }
@@ -316,7 +318,8 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Donate - ${widget.beneficiary.name}'),
+        //doubt
+        title: Text('donate - ${widget.beneficiary.name}'.tr),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

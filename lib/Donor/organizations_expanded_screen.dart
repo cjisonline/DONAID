@@ -3,6 +3,7 @@ import 'package:donaid/Donor/organization_tab_view.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
@@ -74,7 +75,7 @@ class _OrganizationsExpandedScreenState extends State<OrganizationsExpandedScree
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Organizations'),
+        title: Text('organization'.tr),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
