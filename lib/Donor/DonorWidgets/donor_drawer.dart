@@ -1,3 +1,4 @@
+import 'package:donaid/Donor/my_adoptions.dart';
 import 'package:donaid/Models/message.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,6 +63,13 @@ class _DonorDrawerState extends State<DonorDrawer> {
               title: const Text("Donation History"),
               onTap: () {
                 Navigator.pushNamed(context, DonationHistory.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.history),
+              title: const Text("My Adoptions"),
+              onTap: () {
+                Navigator.pushNamed(context, MyAdoptions.id);
               },
             ),
             ListTile(
