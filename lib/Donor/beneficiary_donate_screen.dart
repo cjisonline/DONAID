@@ -288,7 +288,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
     return Scaffold(
       appBar: AppBar(
         //doubt
-        title: Text('donate - ${widget.beneficiary.name}'.tr),
+        title: Text('donate'.tr +' - ${widget.beneficiary.name}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

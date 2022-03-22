@@ -285,7 +285,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
     return Scaffold(
       appBar: AppBar(
         //doubt
-        title: Text('Donate - ${widget.campaign.title}'),
+        title: Text('donate'.tr + ' - ${widget.campaign.title}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

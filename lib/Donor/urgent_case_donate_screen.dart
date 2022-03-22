@@ -286,7 +286,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
     return Scaffold(
       appBar: AppBar(
         //doubt
-        title: Text('Donate - ${widget.urgentCase.title}'),
+        title: Text('donate'.tr + ' - ${widget.urgentCase.title}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
