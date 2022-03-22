@@ -271,12 +271,18 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               )
           ),
           onTap: () async {
-            var date =  await showDatePicker(
-                context: context,
-                initialDate:DateTime.now(),
-                firstDate:DateTime.now(),
-                lastDate: DateTime(2100));
-            _beneficiaryEndDateController?.text = date.toString().substring(0,10);
+            if(widget.beneficiary.amountRaised < widget.beneficiary.goalAmount) {
+              var date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2100));
+              _beneficiaryEndDateController?.text =
+                  date.toString().substring(0, 10);
+            }
+            else{
+              return;
+            }
           },));
   }
 

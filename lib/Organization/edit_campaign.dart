@@ -272,12 +272,17 @@ class _EditCampaignState extends State<EditCampaign> {
               )
           ),
           onTap: () async {
-            var date =  await showDatePicker(
-                context: context,
-                initialDate:DateTime.now(),
-                firstDate:DateTime.now(),
-                lastDate: DateTime(2100));
-            _campaignEndDateController?.text = date.toString().substring(0,10);
+            if(widget.campaign.amountRaised < widget.campaign.goalAmount){
+              var date =  await showDatePicker(
+                  context: context,
+                  initialDate:DateTime.now(),
+                  firstDate:DateTime.now(),
+                  lastDate: DateTime(2100));
+              _campaignEndDateController?.text = date.toString().substring(0,10);
+            }
+            else{
+              return;
+            }
           },));
   }
 
