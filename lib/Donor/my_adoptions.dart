@@ -93,7 +93,7 @@ class _MyAdoptionsState extends State<MyAdoptions> {
                 children: [
                   ListTile(
                     onTap: () {
-
+                      // go to donate screen for adoptions
                       // Navigator.push(context, MaterialPageRoute(builder: (context) {
                       //   return (OrganizationAdoptionFullScreen(adoptions[index]));
                       // })).then((value) => _refreshPage());

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
+import '../Models/Adoption.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'beneficiary_donate_screen.dart';
@@ -25,20 +26,25 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
   List<Beneficiary> beneficiaries = [];
   List<Organization> organizations=[];
   var f = NumberFormat("###,##0.00", "en_US");
+  List<Adoption> adoptions = [];
+
 
   @override
   void initState() {
     super.initState();
     _getBeneficiaries();
+    _getAdoptions();
   }
   
   _refreshPage(){
     beneficiaries.clear();
+    adoptions.clear();
     _getBeneficiaries();
     setState(() {
       
     });
   }
+
 
   _getBeneficiaries() async {
     var ret = await _firestore.collection('Beneficiaries')
@@ -66,6 +72,22 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
     _getBeneficiaryOrganizations();
   }
 
+  _getAdoptions() async {
+    // call database method here
+    Adoption adoption = Adoption(
+      name: "Bill",
+      biography: "Need funds to help pay for college fees.",
+      goalAmount: 50000,
+      amountRaised: 10000,
+      category: "Education",
+      dateCreated: Timestamp.now(),
+      id: "asdf",
+      organizationID: "asdf",
+      active: true,
+    );
+    adoptions.add(adoption);
+
+  }
   _getBeneficiaryOrganizations() async{
     for(var beneficiary in beneficiaries){
       var ret = await _firestore.collection('OrganizationUsers')
@@ -180,22 +202,102 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
         })
     : const Center(child: Text('No active beneficiaries to show.', style: TextStyle(fontSize: 18),));
   }
-
+  _adoptionsBody() {
+    return RefreshIndicator(
+      onRefresh: ()async{
+        _refreshPage();
+      },
+      child: adoptions.isNotEmpty
+          ? ListView.builder(
+          itemCount: adoptions.length,
+          shrinkWrap: true,
+          itemBuilder: (context, int index) {
+            return Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () {
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      //   return (OrganizationAdoptionFullScreen(adoptions[index]));
+                      // })).then((value) => _refreshPage());
+                    },
+                    title: Text(adoptions[index].name),
+                    subtitle: Text(adoptions[index].biography),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          Text('\$'+f.format(adoptions[index].amountRaised),
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(color: Colors.black, fontSize: 15)),
+                          Text(
+                            '\$'+f.format(adoptions[index].goalAmount),
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(color: Colors.black, fontSize: 15),
+                          ),
+                        ]),
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          child: LinearProgressIndicator(
+                            backgroundColor: Colors.grey,
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                                Colors.green),
+                            value: (adoptions[index].amountRaised/adoptions[index].goalAmount),
+                            minHeight: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider()
+                ],
+              ),
+            );
+          })
+          : const Center(child: Text('No active adoptions to show.', style: TextStyle(fontSize: 18),)),
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Beneficiaries'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          bottom: const TabBar(tabs: [Tab(text: 'Beneficiaries',), Tab(text: 'Adoptions',)],),
+          title: const Text('Beneficiaries'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
+        drawer: const DonorDrawer(),
+        body: TabBarView(
+          children: [
+            _beneficiariesBody(),
+            _adoptionsBody()
+          ],
+        ),
+        bottomNavigationBar:   DonorBottomNavigationBar(),
       ),
-      drawer: const DonorDrawer(),
-      body: _beneficiariesBody(),
-      bottomNavigationBar: DonorBottomNavigationBar(),
     );
+  // }
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: Text('Beneficiaries'),
+  //       leading: IconButton(
+  //         icon: const Icon(Icons.arrow_back),
+  //         onPressed: () {
+  //           Navigator.pop(context);
+  //         },
+  //       ),
+  //     ),
+  //     drawer: const DonorDrawer(),
+  //     body: _beneficiariesBody(),
+  //     bottomNavigationBar: DonorBottomNavigationBar(),
+  //   );
   }
 }
