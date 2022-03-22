@@ -14,7 +14,7 @@ class Messages extends Translations {
           "_organization": "Organization",
           "detour!": "Detour!",
           "the_organization_that_created":
-              'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment.',
+              'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment. A link to the payment gateway is below',
           "ok": "OK",
           "donate": "Donate",
           "home": "Home",
@@ -267,7 +267,7 @@ class Messages extends Translations {
           "make_a_donation_to_see_it_here!": "Faites un don pour le voir ici!",
           "dashboard": "Tableau de bord",
           "see_more": "Voir plus >",
-          "urgent_cases": "Cas urgents",
+          "urgent_cases": "Cas Urgents",
           "no_active_urgent_sases_show": "Aucun cas urgent actif à afficher.",
           "edit_profile": "Editer le Profile",
           "cancel": "Annuler",
@@ -682,7 +682,7 @@ class Messages extends Translations {
           "logout": "Cerrar sesión",
           "no_active_beneficiaries_to_show":
               "No hay beneficiarios activos para mostrar.",
-          "beneficiaries": "beneficiarios",
+          "beneficiaries": "Beneficiarios",
           "please_enter_a_valid_payment_amount":
               "Ingrese un monto de pago válido.",
           "please_provide_a_donation_minimum":
@@ -705,7 +705,7 @@ class Messages extends Translations {
               "¡Haz una donación para verlo aquí!",
           "dashboard": "Tablero",
           "see_more": "Ver más",
-          "urgent_cases": "Casos urgentes",
+          "urgent_cases": "Casos Urgentes",
           "no_active_urgent_sases_show":
               "No hay casos urgentes activos para mostrar.",
           "edit_profile": "Editar perfil",

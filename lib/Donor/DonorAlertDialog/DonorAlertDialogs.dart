@@ -26,8 +26,7 @@ class DonorAlertDialogs{
                 }
               },
              //doubt
-              text: "the_organization_that_created"
-                  ' A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
+              text: "the_organization_that_created".tr +'\n\n ${organization.gatewayLink}',
               linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
               textAlign: TextAlign.center,
             ),
