@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'edit_campaign.dart';
@@ -48,6 +49,10 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
 
   }
 
+  _deleteCampaign() async{
+    await _firestore.collection('Campaigns').doc(widget.campaign.id).delete();
+  }
+
   _resumeCampaign() async {
     await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
       'active': true
@@ -78,6 +83,44 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                     _stopCampaign();
                     Navigator.pop(context);
                     _refreshCampaign();
+                  },
+                  child:  Text('yes'.tr),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child:  Text('no'.tr),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _deleteCharityConfirm() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title:  Center(
+              child: Text('are_you_sure?'.tr),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            //doubt
+            content: const Text(
+                'Deleting this charity will completely remove it from the application. Would you like to continue?'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    _deleteCampaign();
+                    Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
                   },
                   child:  Text('yes'.tr),
                 ),
@@ -137,125 +180,147 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
   }
 
   _campaignFullBody() {
-    return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SizedBox(
-                height: 100,
-                child: Image.asset('assets/DONAID_LOGO.png')
-            ),
-            Text(widget.campaign.title, style: TextStyle(fontSize: 25)),
-            Text(widget.campaign.description, style: TextStyle(fontSize: 18)),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '\$'+f.format(widget.campaign.amountRaised),
-                      style: const TextStyle(color: Colors.black, fontSize: 18),
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SizedBox(
+                  height: 100,
+                  child: Image.asset('assets/DONAID_LOGO.png')
+              ),
+              Text(widget.campaign.title, style: TextStyle(fontSize: 25)),
+              Text(widget.campaign.description, style: TextStyle(fontSize: 18)),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '\$'+f.format(widget.campaign.amountRaised),
+                        style: const TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                      Text(
+                        '\$'+f.format(widget.campaign.goalAmount),
+                        style: const TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                    ]),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: LinearProgressIndicator(
+                      backgroundColor: Colors.grey,
+                      valueColor:
+                      const AlwaysStoppedAnimation<Color>(Colors.green),
+                      value:
+                      (widget.campaign.amountRaised / widget.campaign.goalAmount),
+                      minHeight: 25,
                     ),
-                    Text(
-                      '\$'+f.format(widget.campaign.goalAmount),
-                      style: const TextStyle(color: Colors.black, fontSize: 18),
-                    ),
-                  ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  child: LinearProgressIndicator(
-                    backgroundColor: Colors.grey,
-                    valueColor:
-                    const AlwaysStoppedAnimation<Color>(Colors.green),
-                    value:
-                    (widget.campaign.amountRaised / widget.campaign.goalAmount),
-                    minHeight: 25,
                   ),
                 ),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                    padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
-                    child: Material(
-                        elevation: 5.0,
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(32.0),
-                        child: MaterialButton(
-                            child:  Text(
-                              'edit'.tr,
-                              style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.white,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
+                      child: Material(
+                          elevation: 5.0,
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child:  Text(
+                                'edit'.tr,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return EditCampaign(campaign: widget.campaign);
+                                })).then((value) => _refreshCampaign());
+                              })),),
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child: (widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
+                      ? Material(
+                          elevation: 5.0,
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child:  Text(
+                                'stop_charity'.tr,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                _stopCharityConfirm();
+
+                              }))
+                  : (!widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
+                          ? Material(
+                          elevation: 5.0,
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child:  Text(
+                                'resume_charity'.tr,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                _resumeCharityConfirm();
+                              }))
+                    : (widget.campaign.endDate.compareTo(Timestamp.now()) < 0)
+                          ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Container(
+                                child:  Text(
+                                  'note:this_charity_has_expired'.tr,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ),
                             ),
-                            onPressed: () async {
-                              Navigator.push(context, MaterialPageRoute(builder: (context){
-                                return EditCampaign(campaign: widget.campaign);
-                              })).then((value) => _refreshCampaign());
-                            })),),
-                Container(
+                          )
+                          : Container()
+                  ),
+                  Container(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                    child: (widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
-                    ? Material(
+                    child: widget.campaign.amountRaised == 0 ?
+                    Material(
                         elevation: 5.0,
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(32.0),
                         child: MaterialButton(
                             child:  Text(
-                              'stop_charity'.tr,
+                              'Delete'.tr,
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
                               ),
                             ),
                             onPressed: () async {
-                              _stopCharityConfirm();
-
+                              _deleteCharityConfirm();
                             }))
-                : (!widget.campaign.active && widget.campaign.endDate.compareTo(Timestamp.now()) > 0)
-                        ? Material(
-                        elevation: 5.0,
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(32.0),
-                        child: MaterialButton(
-                            child:  Text(
-                              'resume_charity'.tr,
-                              style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.white,
-                              ),
-                            ),
-                            onPressed: () async {
-                              _resumeCharityConfirm();
-                            }))
-                  : (widget.campaign.endDate.compareTo(Timestamp.now()) < 0)
-                        ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Container(
-                              child:  Text(
-                                'note:this_charity_has_expired'.tr,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                        : Container()
-                ),
-              ],
-            ),
-          ])
-        ));
+                  : Container()),
+                ],
+              ),
+            ])
+          )),
+    );
   }
 
   @override
