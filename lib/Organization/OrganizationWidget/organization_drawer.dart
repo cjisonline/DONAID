@@ -98,6 +98,51 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.translate),
+              title: Text("language".tr),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return SimpleDialog(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(15))),
+                          title: Center(child: Text("select_language".tr)),
+                          children: <Widget>[
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('en', 'US'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("English"))),
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('fr', 'FR'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("French"))),
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('ar', 'SA'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("Arabic"))),
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('es', 'ES'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("Spanish")))
+                          ]);
+                    });
+              },
+            ),
+            ListTile(
               leading: Icon(Icons.logout),
               title: Text("logout".tr),
               onTap: () {

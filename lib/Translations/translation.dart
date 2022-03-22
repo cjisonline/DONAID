@@ -116,7 +116,7 @@ class Messages extends Translations {
           "add_urgent_case": "Add Urgent Case",
           "urgent_cases_cannot_have_a_duration_longer":
               "Urgent cases cannot have a duration longer than 6 months.",
-          "urgetn_cases_must_recieves_approval":
+          "urgent_cases_must_receive_approval":
               "Urgent cases must receive approval from an administrator before they are displayed to donors.",
           "note": "Note:",
           "urgent_case_submitted!": "Urgent case submitted!",
@@ -335,7 +335,7 @@ class Messages extends Translations {
           "add_urgent_case": "Ajouter un Cas Urgent",
           "urgent_cases_cannot_have_a_duration_longer":
               "Les cas urgents ne peuvent avoir une durée supérieure à 6 mois.",
-          "urgetn_cases_must_recieves_approval":
+          "urgent_cases_must_receive_approval":
               "Les cas urgents doivent être approuvés par un administrateur avant d'être affichés aux donneurs.",
           "note": "Note:",
           "urgent_case_submitted!": "Cas urgent soumis!",
@@ -553,7 +553,7 @@ class Messages extends Translations {
           "add_urgent_case": " إضافة حالة عاجلة",
           "urgent_cases_cannot_have_a_duration_longer":
               " لا يمكن أن تزيد مدة الحالات المستعجلة عن 6 أشهر",
-          "urgetn_cases_must_recieves_approval":
+          "urgent_cases_must_receive_approval":
               " يجب أن تحصل الحالات العاجلة على موافقة من المسؤول قبل عرضها على المتبرعين",
           "note": " ملحوظة:",
           "urgent_case_submitted!": " تم إرسال الحالة العاجلة!",
@@ -773,7 +773,7 @@ class Messages extends Translations {
           "add_urgent_case": "Agregar Caso Urgente",
           "urgent_cases_cannot_have_a_duration_longer":
               "Los casos urgentes no pueden tener una duración superior a 6 meses.",
-          "urgetn_cases_must_recieves_approval":
+          "urgent_cases_must_receive_approval":
               "Los casos urgentes deben recibir la aprobación de un administrador antes de mostrarse a los donantes.",
           "note": "Nota:",
           "urgent_case_submitted!": "¡Caso urgente enviado!",
