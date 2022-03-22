@@ -1,4 +1,5 @@
 import 'package:donaid/Models/message.dart';
+import 'package:donaid/contactUs.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -110,6 +111,14 @@ class _DonorDrawerState extends State<DonorDrawer> {
                     });
               },
             ),
+            if (FirebaseAuth.instance.currentUser?.email != null)
+              ListTile(
+                leading: const Icon(Icons.assignment_ind_outlined),
+                title: Text("contact_admin".tr),
+                onTap: () {
+                  Get.to(ContactUs("DonorUsers"));
+                },
+              ),
             ListTile(
               leading: const Icon(Icons.help),
               title: Text("help".tr),

@@ -4,6 +4,7 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "contact_admin": "Contact Admin",
           "type_a_message": "Type a message",
           "message": "Messages",
           "no": "No",
@@ -219,6 +220,7 @@ class Messages extends Translations {
           "forgot_password!": "Forgot Password?",
         },
         'fr_FR': {
+          "contact_admin": "Contacter l'administrateur",
           "type_a_message": "Tapez/écrivez un message",
           "message": "Message",
           "no": "Non",
@@ -446,6 +448,7 @@ class Messages extends Translations {
           "forgot_password!": "Mot de passe oublié?",
         },
         'ar_SA': {
+          "contact_admin": "اتصل بالمسؤول",
           "type_a_message": " اكتب رسالة",
           "message": " رسائل",
           "no": " لا",
@@ -657,6 +660,7 @@ class Messages extends Translations {
           "forgot_password!": " هل نسيت كلمة السر؟",
         },
         'es_ES': {
+          "contact_admin": "Administrador de contacto",
           "type_a_message": "Escriba un mensaje",
           "message": "Mensajes",
           "no": "No",
