@@ -69,9 +69,9 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(4.0),
         child: Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(4.0),
           width: 275.0,
           decoration: BoxDecoration(
               color: Colors.white,

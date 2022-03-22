@@ -71,9 +71,9 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(4.0),
         child: Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(4.0),
           width: 275.0,
           decoration: BoxDecoration(
               color: Colors.white,
@@ -139,9 +139,8 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                         if (organization?.country == 'United States') {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return (BeneficiaryDonateScreen(
-                                widget.beneficiary));
-                          })).then((value) {
+                                return (BeneficiaryDonateScreen(widget.beneficiary));
+                              })).then((value) {
                             setState(() {});
                           });
                         } else {
@@ -149,26 +148,9 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                               context, organization!);
                         }
                       },
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-
-                            const Icon(Icons.favorite,
-                                color: Colors.white, size: 20),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(left: 0.0, right: 10.0),
-                              child: const Text('Donate',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                  )),
-                            )
-                          ]),
-
-                         const Icon(Icons.favorite,
-                              color: Colors.white, size: 20),
+                      child: Row(children: [
+                        const Icon(Icons.favorite,
+                            color: Colors.white, size: 20),
                         Container(
                           margin: const EdgeInsets.only(left: 0.0, right: 10.0),
                           child:  Text('donate'.tr,
