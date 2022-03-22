@@ -116,7 +116,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child:  Text('ok'.tr),
                 ),
               ),
             ],

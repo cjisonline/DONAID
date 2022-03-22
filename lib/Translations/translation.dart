@@ -145,7 +145,7 @@ class Messages extends Translations {
           "no_expired_campaigns_to_show.": "No expired campaigns to show.",
           "no_expired_urgent_cases_to_show.":
               "No expired urgent cases to show.",
-          "_campaigns": "Campaigns",
+          "campaigns": "Campaigns",
           "no_inactive_beneficiaries_to_show.":
               "No inactive beneficiaries to show.",
           "no_inactive_campaigns_to_show.": "No inactive campaigns to show.",

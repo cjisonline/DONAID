@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/category_campaigns_screen.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,6 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
 
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
-
   Map<String, dynamic>? paymentIntentData;
   String donationAmount = "";
   bool showLoadingSpinner = false;
@@ -41,6 +41,46 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
 
     var doc = ret.docs[0];
     widget.campaign.amountRaised = doc['amountRaised'];
+  }
+
+  Future<void> _confirmDonationAmount() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Are You Sure?'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'We see that you\'ve entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount'
+                    ' is correct to proceed.'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () async{
+                    Navigator.pop(context);
+                    await makePayment();
+
+
+                  },
+                  child: const Text('Yes'),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No'),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   _campaignDonateBody() {
@@ -115,7 +155,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                             }
                           },
                           keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
+                              decimal: true, signed: false),
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                               label: Center(
@@ -151,7 +191,13 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                                 setState(() {
                                   showLoadingSpinner = true;
                                 });
-                                await makePayment();
+                                if(double.parse(donationAmount) > 999){
+                                  _confirmDonationAmount();
+                                }
+                                else{
+                                  await makePayment();
+                                }
+
 
                                 setState(() {
                                   showLoadingSpinner=false;
@@ -195,6 +241,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
         'amountRaised': widget.campaign.amountRaised+double.parse(donationAmount),
         'active':false
       });
+      Navigator.pop(context);
     }
     else{
       await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
@@ -238,6 +285,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
       setState(() {
         // paymentIntentData = null;
       });
+
       ScaffoldMessenger.of(context)
           .showSnackBar( SnackBar(content: Text('paid_successfully'.tr)));
 
@@ -278,6 +326,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   calculateAmount(String amount) {
     final price = (double.parse(amount)*100).toInt();
     return price.toString();
+    print(price);
   }
 
   @override

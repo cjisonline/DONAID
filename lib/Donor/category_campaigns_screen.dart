@@ -118,7 +118,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child:  Text('ok'.tr),
                 ),
               ),
             ],
@@ -189,7 +189,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
     return Scaffold(
       appBar: AppBar(
         //doubt
-        title: Text('campaigns - ${widget.categoryName}'),
+        title: Text('campaigns'.tr+' - ${widget.categoryName}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

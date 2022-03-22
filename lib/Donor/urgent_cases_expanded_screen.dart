@@ -118,7 +118,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child:  Text('ok'.tr),
                 ),
               ),
             ],
