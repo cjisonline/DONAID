@@ -70,8 +70,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(4.0),
+    return Expanded(
         child: Container(
           padding: const EdgeInsets.all(4.0),
           width: 275.0,
