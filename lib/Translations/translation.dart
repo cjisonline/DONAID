@@ -211,7 +211,7 @@ class Messages extends Translations {
           "hang_on!": "Hang on!",
           "your_organizationaccount_has_not_yet_been_approved":
               "Your organization account has not yet been approved by the admin. You must wait for approval before you can login to this account.",
-          "your_donor_account_has_been_disbaled_by_the_administrator":
+          "your_donor_account_has_been_disabled_by_the_administrator":
               "Your donor account has been disabled by the administrator. If you think this may have been a mistake,please send an email to donaidmobileapp1@gmail.com",
           "reset_link_sent!": "Reset Link Sent!",
           "check_your_email_to_reset_password":
@@ -438,7 +438,7 @@ class Messages extends Translations {
           "hang_on!": "Attendez!",
           "your_organizationaccount_has_not_yet_been_approved":
               "Le compte de votre organisation n'a pas encore été approuvé par l'administrateur. Vous devez attendre la validation avant de pouvoir vous connecter à ce compte.",
-          "your_donor_account_has_been_disbaled_by_the_administrator":
+          "your_donor_account_has_been_disabled_by_the_administrator":
               "Votre compte de donneur a été désactivé par l'administrateur. Si vous pensez qu'il s'agit d'une erreur, veuillez envoyer un courriel à donaidmobileapp1@gmail.com.",
           "reset_link_sent!": "Lien de réinitialisation envoyé!",
           "check_your_email_to_reset_password":
@@ -649,7 +649,7 @@ class Messages extends Translations {
           "hang_on!": " انتظر!",
           "your_organizationaccount_has_not_yet_been_approved":
               " لم يوافق المسؤول على حساب مؤسستك. يجب أن تنتظر الموافقة قبل أن تتمكن من تسجيل الدخول إلى هذا الحساب.",
-          "your_donor_account_has_been_disbaled_by_the_administrator":
+          "your_donor_account_has_been_disabled_by_the_administrator":
               " تم تعطيل حساب المتبرع الخاص بك من قبل المسؤول. إذا كنت تعتقد أن هذا قد يكون خطأً ، فيرجى إرسال بريد إلكتروني إلى donaidmobileapp1@gmail.com ",
           "reset_link_sent!": " تم إرسال رابط إعادة التعيين!",
           "check_your_email_to_reset_password":
@@ -880,7 +880,7 @@ class Messages extends Translations {
           "hang_on!": "¡Aférrate!",
           "your_organizationaccount_has_not_yet_been_approved":
               "El administrador aún no ha aprobado la cuenta de su organización. Debe esperar la aprobación antes de poder iniciar sesión en esta cuenta.",
-          "your_donor_account_has_been_disbaled_by_the_administrator":
+          "your_donor_account_has_been_disabled_by_the_administrator":
               "Su cuenta de donante ha sido deshabilitada por el administrador. Si cree que esto puede haber sido un error, envíe un correo electrónico a donaidmobileapp1@gmail.com",
           "reset_link_sent!": "Restablecer enlace enviado!",
           "check_your_email_to_reset_password":

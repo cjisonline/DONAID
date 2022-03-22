@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
               borderRadius: BorderRadius.circular(32.0),
             ),
             content:  Text(
-                'your_donor_account_has_been_disbaled_by_the_administrator'.tr
+                'your_donor_account_has_been_disabled_by_the_administrator'.tr
                     ),
             actions: [
               Center(

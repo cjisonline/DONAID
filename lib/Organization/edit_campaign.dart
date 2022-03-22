@@ -132,6 +132,7 @@ class _EditCampaignState extends State<EditCampaign> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
+          readOnly: widget.campaign.amountRaised > 0,
           controller: _campaignTitleController,
           decoration: InputDecoration(
               label: Center(
@@ -160,6 +161,7 @@ class _EditCampaignState extends State<EditCampaign> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        readOnly: widget.campaign.amountRaised > 0,
         controller: _campaignDescriptionController,
         minLines: 2,
         maxLines: 5,
@@ -186,6 +188,7 @@ class _EditCampaignState extends State<EditCampaign> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        readOnly: widget.campaign.amountRaised > 0,
         keyboardType: TextInputType.number,
         controller: _campaignGoalAmountController,
         validator: (value) {
