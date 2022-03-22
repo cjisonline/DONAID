@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,6 +45,10 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
 
     var doc = ret.docs[0];
     widget.urgentCase.amountRaised = doc['amountRaised'];
+    widget.urgentCase.active = doc['active'];
+
+    setState(() {
+    });
   }
 
   Future<void> _confirmDonationAmount() async {
@@ -241,7 +246,6 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
         'amountRaised': widget.urgentCase.amountRaised+double.parse(donationAmount),
         'active':false
       });
-      Navigator.popUntil(context, ModalRoute.withName(UrgentCasesExpandedScreen.id));
     }
     else{
       await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).update({

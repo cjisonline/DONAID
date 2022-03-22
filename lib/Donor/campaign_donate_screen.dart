@@ -13,6 +13,8 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
+import 'donor_dashboard.dart';
+
 class CampaignDonateScreen extends StatefulWidget {
   final Campaign campaign;
   const CampaignDonateScreen(this.campaign, {Key? key}) : super(key: key);
@@ -41,6 +43,11 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
 
     var doc = ret.docs[0];
     widget.campaign.amountRaised = doc['amountRaised'];
+    widget.campaign.active = doc['active'];
+
+    setState(() {
+
+    });
   }
 
   Future<void> _confirmDonationAmount() async {
@@ -241,7 +248,6 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
         'amountRaised': widget.campaign.amountRaised+double.parse(donationAmount),
         'active':false
       });
-      Navigator.pop(context);
     }
     else{
       await _firestore.collection('Campaigns').doc(widget.campaign.id).update({

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
+import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,10 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
 
     var doc = ret.docs[0];
     widget.beneficiary.amountRaised = doc['amountRaised'];
+    widget.beneficiary.active = doc['active'];
+
+    setState(() {
+    });
   }
 
   Future<void> _confirmDonationAmount() async {
@@ -243,7 +248,6 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
         'amountRaised': widget.beneficiary.amountRaised+double.parse(donationAmount),
         'active':false
       });
-      Navigator.popUntil(context, ModalRoute.withName(BeneficiaryExpandedScreen.id));
     }
     else{
       await _firestore.collection('Beneficiaries').doc(widget.beneficiary.id).update({
