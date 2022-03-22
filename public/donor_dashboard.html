@@ -104,7 +104,7 @@ async function getDonorData(){
             });
 
             var adminTableDef = $('#adminTable').DataTable({
-                autoWidth: false,
+                responsive: true,
                 scrollX: true,
                 columnDefs: [
                     {
@@ -127,6 +127,10 @@ async function getDonorData(){
                     $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
                 }
             }
+            });
+
+            $(window).on('resize', function () {
+                $('#adminTable').dataTable().fnDraw();
             });
     }
 }
@@ -243,6 +247,7 @@ getDonorData();
                             </ul>
                           </div>
                         <a href="categories.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Categories</span></a>
+                        <a href="messages.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Messages</span></a>
                         <a href="settings.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Settings</span></a>
                     </div>
                 </div>
@@ -256,7 +261,7 @@ getDonorData();
                     <th>Last Name</th>
                     <th>First Name</th>
                     <th>Donor ID</th>
-                    <th>Enabled</th>
+                    <th>Status</th>
                 </thead>
                 <tbody>
                 </tbody>

@@ -96,7 +96,7 @@ async function getRejectionData(){
         });
 
             var adminTableDef = $('#adminTable').DataTable({
-                autoWidth: false,
+                responsive: true,
                 scrollX: true,
                 columnDefs: [
                     {
@@ -118,6 +118,9 @@ async function getRejectionData(){
                         $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
                     }
                 }
+            });
+            $(window).on('resize', function () {
+                $('#adminTable').dataTable().fnDraw();
             });
         }
 }
@@ -332,6 +335,7 @@ getRejectionData();
                             </ul>
                           </div>
                         <a href="categories.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Categories</span></a>
+                        <a href="messages.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Messages</span></a>
                         <a href="settings.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Settings</span></a>
                     </div>
                 </div>
