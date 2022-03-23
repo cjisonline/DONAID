@@ -124,7 +124,8 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                         }
                         else{
                           Map<String, dynamic> charity = {
-                            'charityType':'Beneficiaries',
+                            'charityType':'Beneficiary',
+                            'charityID':widget.beneficiary.id,
                             'charityTitle':widget.beneficiary.name
                           };
                           DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid, charity);

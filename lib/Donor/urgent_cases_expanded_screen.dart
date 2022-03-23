@@ -108,7 +108,8 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                     }
                     else{
                       Map<String, dynamic> charity = {
-                        'charityType':'UrgentCases',
+                        'charityID':urgentCases[index].id,
+                        'charityType':'Urgent Case',
                         'charityTitle':urgentCases[index].title
                       };
                       DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid,charity);

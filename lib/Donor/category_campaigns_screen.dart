@@ -108,7 +108,8 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                     }
                     else{
                       Map<String, dynamic> charity = {
-                        'charityType':'Campaigns',
+                        'charityID':campaigns[index].id,
+                        'charityType':'Campaign',
                         'charityTitle':campaigns[index].title
                       };
                       DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid, charity);

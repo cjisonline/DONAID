@@ -112,7 +112,8 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                     }
                     else{
                       Map<String, dynamic> charity = {
-                        'charityType':'Campaigns',
+                        'charityID':campaigns[index].id,
+                        'charityType':'Campaign',
                         'charityTitle':campaigns[index].title
                       };
                       DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid, charity);
@@ -175,7 +176,8 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                     }
                     else{
                       Map<String, dynamic> charity = {
-                        'charityType':'Beneficiaries',
+                        'charityID':beneficiaries[index].id,
+                        'charityType':'Beneficiary',
                         'charityTitle':beneficiaries[index].name
                       };
                       DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid, charity);

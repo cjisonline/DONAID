@@ -107,7 +107,8 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                     }
                     else{
                       Map<String, dynamic> charity = {
-                        'charityType':'Beneficiaries',
+                        'charityID':beneficiaries[index].id,
+                        'charityType':'Beneficiary',
                         'charityTitle':beneficiaries[index].name
                       };
                       DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid, charity);
