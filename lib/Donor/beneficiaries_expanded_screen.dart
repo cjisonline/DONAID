@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../Models/Adoption.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
+import 'adoption_details_screen.dart';
 import 'beneficiary_donate_screen.dart';
 
 class BeneficiaryExpandedScreen extends StatefulWidget {
@@ -40,6 +41,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
     beneficiaries.clear();
     adoptions.clear();
     _getBeneficiaries();
+    _getAdoptions();
     setState(() {
       
     });
@@ -71,22 +73,33 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
     setState(() {});
     _getBeneficiaryOrganizations();
   }
-
   _getAdoptions() async {
-    // call database method here
-    Adoption adoption = Adoption(
-      name: "Bill",
-      biography: "Need funds to help pay for college fees.",
-      goalAmount: 50000,
-      amountRaised: 10000,
-      category: "Education",
-      dateCreated: Timestamp.now(),
-      id: "asdf",
-      organizationID: "asdf",
-      active: true,
-    );
-    adoptions.add(adoption);
+    try{
+      var ret = await _firestore
+          .collection('Adoptions')
+          .where('active', isEqualTo: true)
+          .get();
 
+      for (var element in ret.docs) {
+        Adoption adoption = Adoption(
+          name: element.data()['name'],
+          biography: element.data()['biography'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
+          category: element.data()['category'],
+          dateCreated: element.data()['dateCreated'],
+          id: element.data()['id'],
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+        );
+        adoptions.add(adoption);
+      }
+    }
+    catch(e){
+      print(e);
+    }
+
+    setState(() {});
   }
   _getBeneficiaryOrganizations() async{
     for(var beneficiary in beneficiaries){
@@ -217,9 +230,9 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                 children: [
                   ListTile(
                     onTap: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      //   return (OrganizationAdoptionFullScreen(adoptions[index]));
-                      // })).then((value) => _refreshPage());
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return (AdoptionDetailsScreen(adoptions[index]));
+                      })).then((value) => _refreshPage());
                     },
                     title: Text(adoptions[index].name),
                     subtitle: Text(adoptions[index].biography),
@@ -284,20 +297,5 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
         bottomNavigationBar:   DonorBottomNavigationBar(),
       ),
     );
-  // }
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('Beneficiaries'),
-  //       leading: IconButton(
-  //         icon: const Icon(Icons.arrow_back),
-  //         onPressed: () {
-  //           Navigator.pop(context);
-  //         },
-  //       ),
-  //     ),
-  //     drawer: const DonorDrawer(),
-  //     body: _beneficiariesBody(),
-  //     bottomNavigationBar: DonorBottomNavigationBar(),
-  //   );
   }
 }
