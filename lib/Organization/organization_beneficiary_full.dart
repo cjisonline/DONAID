@@ -73,10 +73,8 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
               borderRadius: BorderRadius.circular(32.0),
             ),
             //doubt
-            content: const Text(
-                'Stopping this charity will make it not visible to donors. Once you stop this charity '
-                    'you can reactivate it from the Inactive Charities page. Would you like to continue'
-                    'with stopping this charity?'),
+            content: Text(
+                'Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -114,8 +112,8 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
               borderRadius: BorderRadius.circular(32.0),
             ),
             //doubt
-            content: const Text(
-                'Deleting this charity will completely remove it from the application. Would you like to continue?'),
+            content: Text(
+                'Deleting this charity will completely remove it from the application. Would you like to continue?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -145,16 +143,14 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Are You Sure?'),
+            title: Center(
+              child: Text('are_you_sure'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content: const Text(
-                'Resuming this charity will make it visible to donors again. Once you resume this charity '
-                    'you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like '
-                    'to continue?'),
+            content: Text(
+                'Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -164,7 +160,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                     _refreshBeneficiary();
 
                   },
-                  child: const Text('Yes'),
+                  child: Text('yes'.tr),
                 ),
               ),
               Center(
@@ -172,7 +168,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('No'),
+                  child: Text('no'.tr),
                 ),
               ),
             ],
@@ -235,8 +231,8 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(32.0),
                           child: MaterialButton(
-                              child: const Text(
-                                'Edit',
+                              child: Text(
+                                'edit'.tr,
                                 style: TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,
@@ -255,8 +251,8 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                             color: Colors.orange,
                             borderRadius: BorderRadius.circular(32.0),
                             child: MaterialButton(
-                                child: const Text(
-                                  'Stop Charity',
+                                child: Text(
+                                  'stop_charity'.tr,
                                   style: TextStyle(
                                     fontSize: 25,
                                     color: Colors.white,
@@ -272,8 +268,8 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                             color: Colors.green,
                             borderRadius: BorderRadius.circular(32.0),
                             child: MaterialButton(
-                                child: const Text(
-                                  'Resume Charity',
+                                child: Text(
+                                  'resume_charity'.tr,
                                   style: TextStyle(
                                     fontSize: 25,
                                     color: Colors.white,
@@ -287,8 +283,8 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Container(
-                              child: const Text(
-                                'Note: This charity has expired. To reactive this charity and make it visible to donors again, edit the end date for the charity.',
+                              child: Text(
+                                'note:this_charity_has_expired'.tr,
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.black,
@@ -306,9 +302,9 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(32.0),
                           child: MaterialButton(
-                              child: const Text(
-                                'Delete',
-                                style: TextStyle(
+                              child: Text(
+                                'Delete'.tr,
+                                style: const TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,
                                 ),

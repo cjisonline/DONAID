@@ -72,10 +72,8 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
               borderRadius: BorderRadius.circular(32.0),
             ),
             //doubt
-            content: const Text(
-                'Stopping this charity will make it not visible to donors. Once you stop this charity '
-                    'you can reactivate it from the Inactive Charities page. Would you like to continue '
-                    'with stopping this charity?'),
+            content: Text(
+                'Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -113,8 +111,8 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
               borderRadius: BorderRadius.circular(32.0),
             ),
             //doubt
-            content: const Text(
-                'Deleting this charity will completely remove it from the application. Would you like to continue?'),
+            content: Text(
+                'Deleting this charity will completely remove it from the application. Would you like to continue?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -151,10 +149,8 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
               borderRadius: BorderRadius.circular(32.0),
             ),
             //doubt
-            content: const Text(
-                'Resuming this charity will make it visible to donors again. Once you resume this charity '
-                    'you can deactivate it again from the dashboard or the My Campaigns page. Would you like '
-                    'to continue?'),
+            content: Text(
+                'Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?'.tr),
             actions: [
               Center(
                 child: TextButton(

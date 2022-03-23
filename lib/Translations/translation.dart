@@ -4,6 +4,12 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
+      "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?",
+          "Deleting this charity will completely remove it from the application. Would you like to continue?":"Deleting this charity will completely remove it from the application. Would you like to continue?",
+          "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
+"Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?",
+          "Delete":"Delete",
           "The email you chose is already in use.":"The email you chose is already in use.",
           "Are You Sure?":"Are You Sure?",
           "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.",
@@ -224,6 +230,13 @@ class Messages extends Translations {
           "forgot_password!": "Forgot Password?",
         },
         'fr_FR': {
+          "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
+      "La reprise de cet organisme de bienfaisance le rendra à nouveau visible pour les donateurs. Une fois que vous avez repris cet organisme de bienfaisance, vous pouvez le désactiver à nouveau à partir du tableau de bord ou de la page Mes bénéficiaires. Voulez-vous continuer?",
+          "Deleting this charity will completely remove it from the application. Would you like to continue?":
+      "La suppression de cet organisme de bienfaisance le supprimera complètement de l’application. Voulez-vous continuer?",
+          "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
+      "L’arrêt de cet organisme de bienfaisance le rendra invisible pour les donateurs. Une fois que vous avez arrêté cet organisme de bienfaisance, vous pouvez le réactiver à partir de la page Organismes de bienfaisance inactifs. Aimeriez-vous continuer à mettre fin à cet organisme de bienfaisance?",
+          "Delete":"Supprimer",
           "The email you chose is already in use.":"L’e-mail que vous avez choisi est déjà utilisé",
           "Are You Sure?":"",
           "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"Nous voyons que vous avez inscrit un montant de don supérieur à 999 \$. Nous apprécions votre générosité, mais veuillez confirmer que ce montant est correct pour continuer.",
@@ -456,6 +469,13 @@ class Messages extends Translations {
           "forgot_password!": "Mot de passe oublié?",
         },
         'ar_SA': {
+          "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
+      "إن استئناف هذه المؤسسة الخيرية سيجعلها مرئية للمتبرعين مرة أخرى. بمجرد استئناف هذه المؤسسة الخيرية ، يمكنك إلغاء تنشيطها مرة أخرى من لوحة التحكم أو صفحة المستفيدين مني. هل ترغب في المتابعة؟",
+          "Deleting this charity will completely remove it from the application. Would you like to continue?":
+      "سيؤدي حذف هذه المؤسسة الخيرية إلى إزالتها تماما من التطبيق. هل ترغب في المتابعة؟",
+          "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
+      "إن وقف هذه المؤسسة الخيرية سيجعلها غير مرئية للمانحين. بمجرد إيقاف هذه المؤسسة الخيرية ، يمكنك إعادة تنشيطها من صفحة الجمعيات الخيرية غير النشطة. هل ترغب في الاستمرار في إيقاف هذه المؤسسة الخيرية؟",
+          "Delete":"حذف",
           "The email you chose is already in use.":"البريد الإلكتروني الذي اخترته قيد الاستخدام بالفعل",
           "Are You Sure?":"هل أنت متأكد؟",
           "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"نرى أنك أدخلت مبلغ تبرع أكبر من 999 دولارا. نحن نقدر كرمك ، ولكن يرجى التأكد من أن هذا المبلغ صحيح للمتابعة.",
@@ -672,6 +692,13 @@ class Messages extends Translations {
           "forgot_password!": " هل نسيت كلمة السر؟",
         },
         'es_ES': {
+          "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
+      "Reanudar esta organización benéfica la hará visible nuevamente para los donantes. Una vez que reanude esta organización benéfica, puede desactivarla nuevamente desde el panel de control o la página Mis beneficiarios. ¿Te gustaría continuar?",
+          "Deleting this charity will completely remove it from the application. Would you like to continue?":
+      "Eliminar esta organización benéfica la eliminará por completo de la aplicación. ¿Te gustaría continuar?",
+          "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
+          "Detener esta organización benéfica hará que no sea visible para los donantes. Una vez que detenga esta organización benéfica, puede reactivarla desde la página Organizaciones benéficas inactivas. ¿Te gustaría seguir parando esta caridad?",
+          "Delete":"Borrar",
           "The email you chose is already in use.":"El correo electrónico que elegiste ya está en uso",
           "Are You Sure?":"¿Estás seguro?",
           "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"Vemos que ha ingresado un monto de donación superior a \$999. Agradecemos su generosidad, pero por favor confirme que esta cantidad es correcta para proceder.",
