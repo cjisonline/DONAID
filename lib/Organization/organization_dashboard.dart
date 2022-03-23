@@ -142,7 +142,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       campaigns.add(campaign);
     }
 
-    campaigns.sort((b,a) => (a.endDate).compareTo((b.endDate)));
+    campaigns.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 
@@ -172,7 +172,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       );
       urgentCases.add(urgentCase);
     }
-    urgentCases.sort((b,a) => (a.endDate).compareTo((b.endDate)));
+    urgentCases.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 
@@ -201,7 +201,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       beneficiaries.add(beneficiary);
     }
 
-    beneficiaries.sort((b,a) => (a.endDate).compareTo((b.endDate)));
+    beneficiaries.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
 
     setState(() {});
   }
