@@ -14,7 +14,6 @@ import 'package:get/get.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
-import 'organization_tab_view.dart';
 
 class ResetWidget extends StatelessWidget {
   @override
@@ -426,12 +425,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                         label: Center(
-                          child: RichText(
-                              text: TextSpan(
-                                text: 'category'.tr,
-                                style: TextStyle(
-                                    color: Colors.grey[600], fontSize: 12.0),
-                              )),
+                          child: Text('category'.tr)
                         ),
                         border: const OutlineInputBorder(
                           borderRadius:
@@ -457,12 +451,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                   controller: countryController,
                   decoration: InputDecoration(
                       label: Center(
-                        child: RichText(
-                            text: TextSpan(
-                              text: 'Country',
-                              style: TextStyle(
-                                  color: Colors.grey[600], fontSize: 12.0),
-                            )),),
+                        child: Text('Country'.tr),),
                       border: const OutlineInputBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(12.0)),
@@ -491,12 +480,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                         label: Center(
-                          child: RichText(
-                              text: TextSpan(
-                                text: 'Sort By',
-                                style: TextStyle(
-                                    color: Colors.grey[600], fontSize: 12.0),
-                              )),
+                          child: Text('Sort By'.tr)
                         ),
                         border: const OutlineInputBorder(
                           borderRadius:
@@ -579,12 +563,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                         label: Center(
-                          child: RichText(
-                              text: TextSpan(
-                                text: 'category'.tr,
-                                style: TextStyle(
-                                    color: Colors.grey[600], fontSize: 12.0),
-                              )),
+                          child: Text('category'.tr)
                         ),
                         border: const OutlineInputBorder(
                           borderRadius:
@@ -610,12 +589,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                   controller: countryController,
                   decoration: InputDecoration(
                       label: Center(
-                        child: RichText(
-                            text: TextSpan(
-                              text: 'Country',
-                              style: TextStyle(
-                                  color: Colors.grey[600], fontSize: 12.0),
-                            )),),
+                        child: Text('Country'.tr)),
                       border: const OutlineInputBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(12.0)),
@@ -644,12 +618,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                         label: Center(
-                          child: RichText(
-                              text: TextSpan(
-                                text: 'Sort By',
-                                style: TextStyle(
-                                    color: Colors.grey[600], fontSize: 12.0),
-                              )),
+                          child: Text('Sort By'.tr)
                         ),
                         border: const OutlineInputBorder(
                           borderRadius:
@@ -732,12 +701,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                         label: Center(
-                          child: RichText(
-                              text: TextSpan(
-                                text: 'category'.tr,
-                                style: TextStyle(
-                                    color: Colors.grey[600], fontSize: 12.0),
-                              )),
+                          child: Text('category'.tr)
                         ),
                         border: const OutlineInputBorder(
                           borderRadius:
@@ -763,12 +727,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                   controller: countryController,
                   decoration: InputDecoration(
                       label: Center(
-                        child: RichText(
-                            text: TextSpan(
-                              text: 'Country',
-                              style: TextStyle(
-                                  color: Colors.grey[600], fontSize: 12.0),
-                            )),),
+                        child: Text('Country'.tr),),
                       border: const OutlineInputBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(12.0)),
@@ -797,12 +756,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                         label: Center(
-                          child: RichText(
-                              text: TextSpan(
-                                text: 'Sort By',
-                                style: TextStyle(
-                                    color: Colors.grey[600], fontSize: 12.0),
-                              )),
+                          child: Text('Sort By'.tr)
                         ),
                         border: const OutlineInputBorder(
                           borderRadius:
