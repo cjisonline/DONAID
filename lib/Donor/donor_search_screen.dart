@@ -191,7 +191,6 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
 
 
   void _searchResults(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
     if (enteredKeyword.isEmpty) {
       campaigns = allCampaigns;
       beneficiaries = allBeneficiaries;

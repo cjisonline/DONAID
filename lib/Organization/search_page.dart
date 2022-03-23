@@ -32,25 +32,29 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
+
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries = [];
-  List<String> beneficiariesID = [];
+  List<Beneficiary> allBeneficiaries = [];
+
   List<Campaign> campaigns = [];
-  List<String> campaignsID = [];
+  List<Campaign> allCampaigns = [];
+
   List<UrgentCase> urgentCases = [];
-  List<String> urgentCasesID = [];
-  List<Map<String, dynamic>> _foundUsers = [];
-  final List<Map<String, dynamic>> _allUsers = [];
+  List<UrgentCase> allUrgentCases = [];
+
+  List<String> sortingChoices = [
+    'Percent Raised - Ascending',
+    'Percent Raised - Descending',
+    'End Date - Soonest',
+    'End Date - Latest'
+  ];
   var f = NumberFormat("###,###.00#", "en_US");
   var searchFieldController = TextEditingController();
   var categoryFilterController = TextEditingController();
-  var moneyRaisedFilterController = TextEditingController();
-  var charityTypeFilterController = TextEditingController();
-  var endDateFilterController = TextEditingController();
+  var sortingController = TextEditingController();
+
   var campaignCategory = [];
-  var campaignType = ["Urgent Case", "Campaign", "Beneficiary"];
-  List<String> moneyPercentChoice=['0-25%','25-50%','50-75%', '75-99%'];
-  List<String> endDateRangeChoices=['This Week', 'This Month','3 months', '6 months'];
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
@@ -61,7 +65,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
     _getCurrentUser();
     _getCampaign();
     _getCategories();
-    _foundUsers = _allUsers;
+    _getUrgentCases();
+    _getBeneficiaries();
     super.initState();
   }
 
@@ -94,11 +99,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           organizationID: element.data()['organizationID'],
           active: element.data()['active']);
       campaigns.add(campaign);
-      print(campaign.title);
-
-      campaignsID.add(element.data()['id']);
+      allCampaigns.add(campaign);
     }
-    _getUrgentCases();
     setState(() {});
   }
 
@@ -123,11 +125,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           active: element.data()['active'],
           approved: element.data()['approved']);
       urgentCases.add(urgentCase);
-      print(urgentCase.title);
+      allUrgentCases.add(urgentCase);
 
-      urgentCasesID.add(element.data()['id']);
     }
-    _getBeneficiaries();
 
     setState(() {});
   }
@@ -151,167 +151,84 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           organizationID: element.data()['organizationID'],
           active: element.data()['active']); // need to add category
       beneficiaries.add(beneficiary);
-      print(beneficiary.name);
-
-      beneficiariesID.add(element.data()['id']);
+      allBeneficiaries.add(beneficiary);
     }
-    _getAllData();
     setState(() {});
   }
 
-  _getAllData() {
-    for (var i = 0; i < urgentCases.length; i++) {
-      _allUsers.add({
-        "charityType": "Urgent Case",
-        "id": urgentCases[i].id,
-        "name": urgentCases[i].title,
-        "category": urgentCases[i].category,
-        "goal": urgentCases[i].goalAmount,
-        "amountRaised": urgentCases[i].amountRaised,
-        "endDate": urgentCases[i].endDate,
-        "amountRaisedPrecent": ((urgentCases[i].amountRaised/urgentCases[i].goalAmount)*100).toStringAsFixed(0),
-        "endDateFromNow" :(DateTime.parse((urgentCases[i].endDate.toDate().toString().substring(
-            0, urgentCases[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString()
-      });
-    }
-    for (var i = 0; i < campaigns.length; i++) {
-      _allUsers.add({
-        "charityType": "Campaign",
-        "id": campaigns[i].id,
-        "name": campaigns[i].title,
-        "category": campaigns[i].category,
-        "amountRaised": campaigns[i].amountRaised,
-        "goal":campaigns[i].goalAmount,
-        "endDate": campaigns[i].endDate,
-        "amountRaisedPrecent": ((campaigns[i].amountRaised/campaigns[i].goalAmount)*100).toStringAsFixed(0),
-        "endDateFromNow" :(DateTime.parse((campaigns[i].endDate.toDate().toString().substring(
-            0, campaigns[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString()
-
-      });
-    }
-    for (var i = 0; i < beneficiaries.length; i++) {
-      _allUsers.add({
-        "charityType": "Beneficiary",
-        "id": beneficiaries[i].id,
-        "name": beneficiaries[i].name,
-        "category": beneficiaries[i].category,
-        "amountRaised": beneficiaries[i].amountRaised,
-        "goal": beneficiaries[i].goalAmount,
-        "endDate": beneficiaries[i].endDate,
-        "amountRaisedPrecent": ((beneficiaries[i].amountRaised/beneficiaries[i].goalAmount)*100).toStringAsFixed(0),
-        "endDateFromNow" :(DateTime.parse((beneficiaries[i].endDate.toDate().toString().substring(
-            0, beneficiaries[i].endDate.toDate().toString().indexOf(' ')))).difference(DateTime.now()).inDays).toString()
-
-      });
-    }
-  }
-
   void _searchResults(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-    results = _allUsers
-        .where((user) =>
-        user["name"].toLowerCase().contains(enteredKeyword.toLowerCase()))
-        .toList();
+    if (enteredKeyword.isEmpty) {
+      campaigns = allCampaigns;
+      beneficiaries = allBeneficiaries;
+      urgentCases = allUrgentCases;
+    } else {
+      campaigns = campaigns
+          .where((item) =>
+          item.title.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+
+      beneficiaries = beneficiaries
+          .where((item) =>
+          item.name.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+
+      urgentCases = urgentCases
+          .where((item) =>
+          item.title.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
     setState(() {
-      _foundUsers = results;
     });
   }
 
-
-  void _charityTypeResult() {
-    if(charityTypeFilterController.text.isNotEmpty){
-      List<Map<String, dynamic>> results = [];
-      results = _foundUsers
-          .where(
-              (user) => user["charityType"].contains(charityTypeFilterController.text))
-          .toList();
-      setState(() {
-        _foundUsers = results;
-      });
-    }
-   }
-
-
   void _categoryResult() {
-    if (categoryFilterController.text.isNotEmpty) {
-      List<Map<String, dynamic>> results = [];
-      results = _foundUsers
-          .where((user) =>
-          user["category"].contains(categoryFilterController.text))
+    if(categoryFilterController.text.isNotEmpty){
+      campaigns = campaigns
+          .where((item) => item.category.contains(categoryFilterController.text))
           .toList();
+
+      beneficiaries = beneficiaries
+          .where((item) => item.category.contains(categoryFilterController.text))
+          .toList();
+
+      urgentCases = urgentCases
+          .where((item) => item.category.contains(categoryFilterController.text))
+          .toList();
+
+
       setState(() {
-        _foundUsers = results;
       });
     }
   }
 
+  void _sortResults(){
+    if(sortingController.text.isNotEmpty){
 
-  void _goalAmountResults() {
-    if (moneyRaisedFilterController.text.isNotEmpty) {
-      List<Map<String, dynamic>> results = [];
-      if (moneyRaisedFilterController.text == '0-25%') {
-        results =
-            _foundUsers.where((user) => (user['amountRaised'] / user['goal']) >=
-                0 && (user['amountRaised'] / user['goal']) <= 0.25).toList();
+      if(sortingController.text == 'Percent Raised - Ascending'){
+        campaigns.sort((a, b) => (a.amountRaised/a.goalAmount).compareTo((b.amountRaised/b.goalAmount)));
+        beneficiaries.sort((a, b) => (a.amountRaised/a.goalAmount).compareTo((b.amountRaised/b.goalAmount)));
+        urgentCases.sort((a, b) => (a.amountRaised/a.goalAmount).compareTo((b.amountRaised/b.goalAmount)));
       }
-      if (moneyRaisedFilterController.text == '25-50%') {
-        results =
-            _foundUsers.where((user) => (user['amountRaised'] / user['goal']) >=
-                .25 && (user['amountRaised'] / user['goal']) <= 0.50).toList();
+      else if(sortingController.text == 'Percent Raised - Descending'){
+        campaigns.sort((b, a) => (a.amountRaised/a.goalAmount).compareTo((b.amountRaised/b.goalAmount)));
+        beneficiaries.sort((b, a) => (a.amountRaised/a.goalAmount).compareTo((b.amountRaised/b.goalAmount)));
+        urgentCases.sort((b, a) => (a.amountRaised/a.goalAmount).compareTo((b.amountRaised/b.goalAmount)));
       }
-      if (moneyRaisedFilterController.text == '50-75%') {
-        results =
-            _foundUsers.where((user) => (user['amountRaised'] / user['goal']) >=
-                .50 && (user['amountRaised'] / user['goal']) <= 0.75).toList();
+      else if(sortingController.text ==  'End Date - Soonest'){
+        campaigns.sort((a, b) => a.endDate.compareTo(b.endDate));
+        beneficiaries.sort((a, b) => a.endDate.compareTo(b.endDate));
+        urgentCases.sort((a, b) => a.endDate.compareTo(b.endDate));
       }
-      if (moneyRaisedFilterController.text == '75-99%') {
-        results =
-            _foundUsers.where((user) => (user['amountRaised'] / user['goal']) >=
-                .75 && (user['amountRaised'] / user['goal']) <= 0.99).toList();
+      else if(sortingController.text == 'End Date - Latest'){
+        campaigns.sort((b, a) => a.endDate.compareTo(b.endDate));
+        beneficiaries.sort((b, a) => a.endDate.compareTo(b.endDate));
+        urgentCases.sort((b, a) => a.endDate.compareTo(b.endDate));
       }
+
       setState(() {
-        _foundUsers = results;
       });
     }
   }
-
-  void _endDateResults() {
-    if (endDateFilterController.text.isNotEmpty) {
-      List<Map<String, dynamic>> results = [];
-      if (endDateFilterController.text == 'This Week') {
-        results = _foundUsers.where((user) =>
-        ((user['endDate']
-            .toDate()
-            .difference(Timestamp.now().toDate())
-            .inDays <= 7))).toList();
-      }
-      else if (endDateFilterController.text == 'This Month') {
-        results = _foundUsers.where((user) =>
-        ((user['endDate']
-            .toDate()
-            .difference(Timestamp.now().toDate())
-            .inDays <= 30))).toList();
-      }
-      else if (endDateFilterController.text == '3 months') {
-        results = _foundUsers.where((user) =>
-        ((user['endDate']
-            .toDate()
-            .difference(Timestamp.now().toDate())
-            .inDays <= 90))).toList();
-      }
-      else if (endDateFilterController.text == '6 months') {
-        results = _foundUsers.where((user) =>
-        ((user['endDate']
-            .toDate()
-            .difference(Timestamp.now().toDate())
-            .inDays <= 180))).toList();
-      }
-      setState(() {
-        _foundUsers = results;
-      });
-    }
-  }
-
 
   _goToChosenCampaign(String id) async {
     var ret = await _firestore
@@ -391,252 +308,365 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   }
 
   _filterResults(){
-    _foundUsers = _allUsers;
-    _charityTypeResult();
+    campaigns = allCampaigns;
+    beneficiaries = allBeneficiaries;
+    urgentCases = allUrgentCases;
     _categoryResult();
-    _goalAmountResults();
-    _endDateResults();
   }
 
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title:  Text('donaid'.tr),
-          actions: <Widget>[
-            TextButton(
-              onPressed: _reset,
-              child: Text('reset'.tr, style: TextStyle(color: Colors.white),),
-            ),
-          ],
-        ),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+          appBar: AppBar(
+            title:  Text('donaid'.tr),
+            bottom: TabBar(tabs: [Tab(text: 'campaigns'.tr), Tab(text: 'beneficiaries'.tr), Tab(text: 'urgent_cases'.tr)],),
+            actions: <Widget>[
+              TextButton(
+                onPressed: _reset,
+                child: Text('reset'.tr, style: TextStyle(color: Colors.white),),
+              ),
+            ],
+          ),
 
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
+          body: TabBarView(
             children: [
+              _buildCampaignsBody(),
+              _buildBeneficiariesBody(),
+              _buildUrgentCasesBody()
+            ],
+          ),
+          bottomNavigationBar: OrganizationBottomNavigation()),
+    );
+  }
 
-              TextField(
-                onChanged: (val){
-                  _searchResults(val.toString());
-                },
-                controller: searchFieldController,
-                decoration: const InputDecoration(
-                    labelText: 'Search',
-                    ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: <Widget>[
-                  Container(
-                      width: 180.0,
-                      height: 55,
-                      child: DropdownButtonFormField <String>(
-                        decoration: InputDecoration(
-                            label: Center(
-                              child: RichText(
-                                  text: TextSpan(
-                                    text: 'category'.tr,
-                                    style: TextStyle(
-                                        color: Colors.grey[600],
-                                        fontSize: 12.0),
-                                  )),
-                            ),
-                            border: const OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(12.0)),
-                            )),
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        items: campaignCategory == null? []: campaignCategory.map((items) {
-                          return DropdownMenuItem<String>(
-                            child: Text(
-                              items,
-                              style: const TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            value: items,
-                          );
-                        }).toList(),
-                        onChanged: (val) => setState(() {
-                          categoryFilterController.text = val.toString();
-                          _filterResults();
-                        }),
-                      )
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Container(
-                      width: 180.0,
-                      height: 55,
-                      child:DropdownButtonFormField <String>(
-                        decoration: InputDecoration(
-                            label: Center(
-                              child: RichText(
-                                  text: TextSpan(
-                                    text: 'charity_type'.tr,
-                                    style: TextStyle(
-                                        color: Colors.grey[600],
-                                        fontSize: 12.0),
-                                  )),
-                            ),
-                            border: const OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(12.0)),
-                            )),
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        items: campaignType == null? []: campaignType.map((items) {
-                          return DropdownMenuItem<String>(
-                            child: new Text(
-                              items,
-                              style: new TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            value: items,
-                          );
-                        }).toList(),
-                        onChanged: (val) => setState(() {
-                          charityTypeFilterController.text = val.toString();
-                          _filterResults();
-                        }),
-                      )
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: <Widget>[
-                  Container(
-                      width: 180.0,
-                      height: 55,
-                      child: DropdownButtonFormField <String>(
-                        decoration: InputDecoration(
-                            label: Center(
-                              child: RichText(
-                                  text: TextSpan(
-                                    text: '% raised'.tr,
-                                    style: TextStyle(
-                                        color: Colors.grey[600],
-                                        fontSize: 12.0),
-                                  )),
-                            ),
-                            border: const OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(12.0)),
-                            )),
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        items: moneyPercentChoice.map((items) {
-                          return DropdownMenuItem<String>(
-                            child: new Text(
-                              items,
-                              style: new TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            value: items,
-                          );
-                        }).toList(),
-                        onChanged: (val) => setState(() {
-                          moneyRaisedFilterController.text = val.toString();
-                          _filterResults();
-                        }),
-                      )
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Container(
-                      width: 180.0,
-                      height: 55,
-                      child:DropdownButtonFormField <String>(
-                        decoration: InputDecoration(
-                            label: Center(
-                              child: RichText(
-                                  text: TextSpan(
-                                    text: 'end_date'.tr,
-                                    style: TextStyle(
-                                        color: Colors.grey[600],
-                                        fontSize: 12.0
-                                    ),
-                                  )),
-                            ),
-                            border: const OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(12.0)),
-                            )),
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        items: endDateRangeChoices.map((items) {
-                          return DropdownMenuItem<String>(
-                            child: new Text(
-                              items,
-                              style: new TextStyle(
-                                fontSize: 12.0,
-                              ),
-                            ),
-                            value: items,
-                          );
-                        }).toList(),
-                        onChanged: (val) => setState(() {
-                          endDateFilterController.text = val.toString();
-                          _filterResults();
-                        }),
-                      )
-                  ),
-                ],
-              ),
+  _buildCampaignsBody() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
 
+          TextField(
+            onChanged: (val){
+              _searchResults(val.toString());
+            },
+            controller: searchFieldController,
+            decoration: const InputDecoration(
+              labelText: 'Search',
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: <Widget>[
               Expanded(
-                child: _foundUsers.isNotEmpty
-                    ? ListView.builder(
-                  itemCount: _foundUsers.length,
-                  itemBuilder: (context, index) => Card(
-                      key: ValueKey(_foundUsers[index]["name"]),
-                      child: Column(children: [
-                        ListTile(
-                          title: Text(
-                            _foundUsers[index]["name"].toString(),
-                          ),
-                          subtitle: Text('\$'+f.format(_foundUsers[index]['goal'])),
-                          trailing: Text(
-                              DateFormat('yyyy-MM-dd').format((_foundUsers[index]["endDate"].toDate()))),
-                          onTap: () {
-                            if (campaignsID
-                                .contains(_foundUsers[index]['id'])) {
-                              _goToChosenCampaign(
-                                  _foundUsers[index]['id']);
-                            } else if (beneficiariesID
-                                .contains(_foundUsers[index]['id'])) {
-                              _goToChosenBeneficiary(
-                                  _foundUsers[index]['id']);
-                            } else if (urgentCasesID
-                                .contains(_foundUsers[index]['id'])) {
-                              _goToChosenUrgentCase(
-                                  _foundUsers[index]['id']);
-                            }
-                            setState(() {
-                              //Add the extended view page here
-                            });
-                          },
-                        ),
-                        const Divider()
-                      ])),
-                )
-                    :  Text(
-                  'no_results_found'.tr,
-                  style: TextStyle(fontSize: 24),
+                child: DropdownButtonFormField <String>(
+                  decoration: InputDecoration(
+                      label: Center(
+                          child: Text('category'.tr)
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(12.0)),
+                      )),
+                  icon:  Visibility(visible: false, child: Icon(Icons.keyboard_arrow_down)),
+                  items: campaignCategory == null? []: campaignCategory.map((items) {
+                    return DropdownMenuItem<String>(
+                      child: Text(
+                        items,
+                      ),
+                      value: items,
+                    );
+                  }).toList(),
+                  onChanged: (val) => setState(() {
+                    categoryFilterController.text = val.toString();
+                    _filterResults();
+                  }),
                 ),
               ),
             ],
           ),
-        ),
-        bottomNavigationBar: OrganizationBottomNavigation());
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                        label: Center(
+                            child: Text('Sort By'.tr)
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(12.0)),
+                        )),
+                    icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    items: sortingChoices.map((items) {
+                      return DropdownMenuItem<String>(
+                        child: Text(items),
+                        value: items,
+                      );
+                    }).toList(),
+                    onChanged: (val) => setState(() {
+                      sortingController.text = val.toString();
+                      _sortResults();
+                    }),
+                  )),
+            ],
+          ),
+
+          Expanded(
+            child: campaigns.isNotEmpty
+                ? ListView.builder(
+              itemCount: campaigns.length,
+              itemBuilder: (context, index) => Card(
+                  key: ValueKey(campaigns[index].title),
+                  child: Column(children: [
+                    ListTile(
+                      title: Text(
+                        campaigns[index].title,
+                      ),
+                      subtitle: Text('\$'+f.format(campaigns[index].goalAmount)),
+                      trailing: Text(
+                          DateFormat('yyyy-MM-dd').format((campaigns[index].endDate.toDate()))),
+                      onTap: () {
+                        _goToChosenCampaign(
+                            campaigns[index].id);
+                      },
+                    ),
+                    const Divider()
+                  ])),
+            )
+                :  Text(
+              'no_results_found'.tr,
+              style: TextStyle(fontSize: 24),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildBeneficiariesBody() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+
+          TextField(
+            onChanged: (val){
+              _searchResults(val.toString());
+            },
+            controller: searchFieldController,
+            decoration: const InputDecoration(
+              labelText: 'Search',
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: DropdownButtonFormField <String>(
+                  decoration: InputDecoration(
+                      label: Center(
+                          child: Text('category'.tr)
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(12.0)),
+                      )),
+                  icon:  Visibility(visible: false, child: Icon(Icons.keyboard_arrow_down)),
+                  items: campaignCategory == null? []: campaignCategory.map((items) {
+                    return DropdownMenuItem<String>(
+                      child: Text(
+                        items,
+                      ),
+                      value: items,
+                    );
+                  }).toList(),
+                  onChanged: (val) => setState(() {
+                    categoryFilterController.text = val.toString();
+                    _filterResults();
+                  }),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                        label: Center(
+                            child: Text('Sort By'.tr)
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(12.0)),
+                        )),
+                    icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    items: sortingChoices.map((items) {
+                      return DropdownMenuItem<String>(
+                        child: Text(items),
+                        value: items,
+                      );
+                    }).toList(),
+                    onChanged: (val) => setState(() {
+                      sortingController.text = val.toString();
+                      _sortResults();
+                    }),
+                  )),
+            ],
+          ),
+
+          Expanded(
+            child: beneficiaries.isNotEmpty
+                ? ListView.builder(
+              itemCount: beneficiaries.length,
+              itemBuilder: (context, index) => Card(
+                  key: ValueKey(beneficiaries[index].name ),
+                  child: Column(children: [
+                    ListTile(
+                      title: Text(
+                        beneficiaries[index].name ,
+                      ),
+                      subtitle: Text('\$'+f.format(beneficiaries[index].goalAmount)),
+                      trailing: Text(
+                          DateFormat('yyyy-MM-dd').format((beneficiaries[index].endDate.toDate()))),
+                      onTap: () {
+                        _goToChosenBeneficiary(
+                            beneficiaries[index].id);
+                      },
+                    ),
+                    const Divider()
+                  ])),
+            )
+                :  Text(
+              'no_results_found'.tr,
+              style: TextStyle(fontSize: 24),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildUrgentCasesBody() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+
+          TextField(
+            onChanged: (val){
+              _searchResults(val.toString());
+            },
+            controller: searchFieldController,
+            decoration: const InputDecoration(
+              labelText: 'Search',
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: DropdownButtonFormField <String>(
+                  decoration: InputDecoration(
+                      label: Center(
+                          child: Text('category'.tr)
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(12.0)),
+                      )),
+                  icon:  Visibility(visible: false, child: Icon(Icons.keyboard_arrow_down)),
+                  items: campaignCategory == null? []: campaignCategory.map((items) {
+                    return DropdownMenuItem<String>(
+                      child: Text(
+                        items,
+                      ),
+                      value: items,
+                    );
+                  }).toList(),
+                  onChanged: (val) => setState(() {
+                    categoryFilterController.text = val.toString();
+                    _filterResults();
+                  }),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                        label: Center(
+                            child: Text('Sort By'.tr)
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(12.0)),
+                        )),
+                    icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    items: sortingChoices.map((items) {
+                      return DropdownMenuItem<String>(
+                        child: Text(items),
+                        value: items,
+                      );
+                    }).toList(),
+                    onChanged: (val) => setState(() {
+                      sortingController.text = val.toString();
+                      _sortResults();
+                    }),
+                  )),
+            ],
+          ),
+
+          Expanded(
+            child: urgentCases.isNotEmpty
+                ? ListView.builder(
+              itemCount: urgentCases.length,
+              itemBuilder: (context, index) => Card(
+                  key: ValueKey(urgentCases[index].title),
+                  child: Column(children: [
+                    ListTile(
+                      title: Text(
+                        urgentCases[index].title,
+                      ),
+                      subtitle: Text('\$'+f.format(urgentCases[index].goalAmount)),
+                      trailing: Text(
+                          DateFormat('yyyy-MM-dd').format((urgentCases[index].endDate.toDate()))),
+                      onTap: () {
+                        _goToChosenCampaign(
+                            urgentCases[index].id);
+                      },
+                    ),
+                    const Divider()
+                  ])),
+            )
+                :  Text(
+              'no_results_found'.tr,
+              style: TextStyle(fontSize: 24),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
