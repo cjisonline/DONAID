@@ -1,4 +1,5 @@
 import 'package:donaid/Models/message.dart';
+import 'package:donaid/Organization/gateway_visits.dart';
 import 'package:donaid/Organization/settings.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,6 +64,13 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               title:  Text("profile".tr),
               onTap: () {
                 Navigator.pushNamed(context, OrganizationProfile.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.link),
+              title:  Text("Gateway Visits".tr),
+              onTap: () {
+                Navigator.pushNamed(context, GatewayVisits.id);
               },
             ),
             ListTile(
