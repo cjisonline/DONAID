@@ -91,21 +91,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
     if(notificationSettings.authorizationStatus == AuthorizationStatus.authorized)
       {
-        print('User granted the permission.');
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-          print('NEW NOTIFICATION');
           addNotification(_auth.currentUser?.uid, message);
-
-          // PushNotification notification = PushNotification(
-          //     message.notification!.title,
-          //     message.notification!.body,
-          //     message.data['title'],
-          //     message.data['body']
-          // );
-          // setState(() {
-          //   _totalNotificationCounter ++;
-          //   _notificationInfo = notification;
-          // });
 
           if(message.notification!=null){
             showSimpleNotification(
