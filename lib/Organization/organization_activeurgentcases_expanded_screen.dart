@@ -63,6 +63,8 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
       );
       urgentCases.add(urgentCase);
     }
+
+    urgentCases.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 

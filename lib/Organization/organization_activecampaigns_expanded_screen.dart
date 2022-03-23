@@ -61,6 +61,8 @@ class _OrganizationCampaignsExpandedScreenState
       );
       campaigns.add(campaign);
     }
+
+    campaigns.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 
