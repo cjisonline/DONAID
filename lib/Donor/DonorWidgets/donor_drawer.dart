@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import '../../home_screen.dart';
 import '../donation_history.dart';
 import '../donor_profile.dart';
+import '../settings.dart';
 
 class DonorDrawer extends StatefulWidget {
   const DonorDrawer({Key? key}) : super(key: key);
@@ -44,7 +45,9 @@ class _DonorDrawerState extends State<DonorDrawer> {
             ListTile(
               leading: const Icon(Icons.settings),
               title: Text("settings".tr),
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, DonorSettingsPage.id);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),

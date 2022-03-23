@@ -15,8 +15,13 @@ import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Donor/DonorWidgets/beneficiary_card.dart';
 import 'package:donaid/Services/chatServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlay_support/overlay_support.dart';
+
+import '../Services/notifications.dart';
+import 'notifications_page.dart';
 
 class DonorDashboard extends StatefulWidget {
   static const id = 'donor_dashboard';
@@ -32,6 +37,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
+  final _messaging = FirebaseMessaging.instance;
 
   List<Beneficiary> beneficiaries = [];
   List<UrgentCase> urgentCases = [];
@@ -42,6 +48,9 @@ class _DonorDashboardState extends State<DonorDashboard> {
   @override
   void initState() {
     super.initState();
+
+    handleNotifications();
+
     _getCurrentUser();
     _getBeneficiaries();
     _getUrgentCases();
@@ -49,6 +58,69 @@ class _DonorDashboardState extends State<DonorDashboard> {
     _getCharityCategories();
     Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
     Get.find<ChatService>().listenFriend(loggedInUser!.uid, 0);
+  }
+
+  handleNotifications()async{
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return DonorNotificationPage();
+      }));
+
+    });
+    registerNotification();
+    checkForInitialMessage();
+  }
+
+  checkForInitialMessage() async{
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if(initialMessage != null){
+      addNotification(_auth.currentUser?.uid, initialMessage);
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return DonorNotificationPage();
+      }));
+    }
+  }
+
+  registerNotification() async {
+    NotificationSettings notificationSettings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true
+    );
+
+    if(notificationSettings.authorizationStatus == AuthorizationStatus.authorized)
+      {
+        print('User granted the permission.');
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+          print('NEW NOTIFICATION');
+          addNotification(_auth.currentUser?.uid, message);
+
+          // PushNotification notification = PushNotification(
+          //     message.notification!.title,
+          //     message.notification!.body,
+          //     message.data['title'],
+          //     message.data['body']
+          // );
+          // setState(() {
+          //   _totalNotificationCounter ++;
+          //   _notificationInfo = notification;
+          // });
+
+          if(message.notification!=null){
+            showSimpleNotification(
+              Text(message.notification!.title!),
+              subtitle: Text(message.notification!.body!),
+              duration: Duration(seconds: 5),
+              slideDismissDirection: DismissDirection.up,
+
+            );
+          }
+        });
+      }
+    else{
+      print("Permission declined by user.");
+    }
   }
 
   _refreshPage() {
@@ -157,7 +229,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
         title:  Text('dashboard'.tr),
       ),
       drawer: const DonorDrawer(),
-      body: _body(),
+      body:_body() ,
       bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
