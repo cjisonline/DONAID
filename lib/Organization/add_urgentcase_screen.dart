@@ -357,7 +357,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                           color: Colors.black, fontSize: 15.0),
                                       children: [
                                         TextSpan(
-                                            text: 'urgetn_cases_must_recieves_approval'.tr,
+                                            text: 'urgent_cases_must_receive_approval'.tr,
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15.0

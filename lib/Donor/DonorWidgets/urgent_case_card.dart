@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../urgent_case_donate_screen.dart';
@@ -17,6 +18,7 @@ class UrgentCaseCard extends StatefulWidget {
 }
 
 class _UrgentCaseCardState extends State<UrgentCaseCard> {
+  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   Organization? organization;
   var f = NumberFormat("###,##0.00", "en_US");
@@ -119,7 +121,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                           });
                         }
                         else{
-                          DonorAlertDialogs.paymentLinkPopUp(context, organization!);
+                          DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid);
                         }
                       },
                       child: Row(children: [

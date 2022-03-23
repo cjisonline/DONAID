@@ -3,6 +3,7 @@ import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
@@ -21,6 +22,7 @@ class OrganizationTabViewScreen extends StatefulWidget {
 }
 
 class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
+  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries=[];
   List<Campaign> campaigns=[];
@@ -109,7 +111,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization);
+                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid);
                     }
                   },
                   title: Text(campaigns[index].title),
@@ -168,7 +170,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization);
+                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid);
                     }
                   },
                   title: Text(beneficiaries[index].name),

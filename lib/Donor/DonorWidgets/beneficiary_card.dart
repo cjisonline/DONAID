@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../beneficiary_donate_screen.dart';
@@ -18,6 +19,7 @@ class BeneficiaryCard extends StatefulWidget {
 
 class _BeneficiaryCardState extends State<BeneficiaryCard> {
   Organization? organization;
+  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   var f = NumberFormat("###,##0.00", "en_US");
 
@@ -121,7 +123,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                           });
                         }
                         else{
-                          DonorAlertDialogs.paymentLinkPopUp(context, organization!);
+                          DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid);
                         }
 
                       },

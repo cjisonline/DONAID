@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Donor/beneficiary_donate_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,6 +24,7 @@ class BeneficiaryExpandedScreen extends StatefulWidget {
 }
 
 class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
+  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries = [];
   List<Organization> organizations=[];
@@ -86,43 +89,6 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
     }
   }
 
-  _paymentLinkPopUp(Organization organization){
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title:  Center(
-              child: Text('detour!'.tr),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0),
-            ),
-            content: Linkify(
-              onOpen: (link) async {
-                if (await canLaunch(link.url)) {
-                  await launch(link.url);
-                } else {
-                  throw 'Could not launch $link';
-                }
-              },
-              text: 'the_organization_that_created'.tr +'\n\n ${organization.gatewayLink}',
-              linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:  Text('ok'.tr),
-                ),
-              ),
-            ],
-          );
-        });
-  }
   _beneficiariesBody() {
     return beneficiaries.isNotEmpty
     ? ListView.builder(
@@ -140,7 +106,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      _paymentLinkPopUp(organizations[index]);
+                      DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid);
                     }
                   },
                   title: Text(beneficiaries[index].name),
