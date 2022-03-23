@@ -111,7 +111,11 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid);
+                      Map<String, dynamic> charity = {
+                        'charityType':'Campaigns',
+                        'charityTitle':campaigns[index].title
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid, charity);
                     }
                   },
                   title: Text(campaigns[index].title),
@@ -170,7 +174,11 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid);
+                      Map<String, dynamic> charity = {
+                        'charityType':'Beneficiaries',
+                        'charityTitle':beneficiaries[index].name
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid, charity);
                     }
                   },
                   title: Text(beneficiaries[index].name),

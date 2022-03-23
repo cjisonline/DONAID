@@ -107,7 +107,11 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid);
+                      Map<String, dynamic> charity = {
+                        'charityType':'UrgentCases',
+                        'charityTitle':urgentCases[index].title
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid,charity);
                     }
                   },
                   title: Text(urgentCases[index].title),

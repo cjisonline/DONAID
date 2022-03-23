@@ -106,7 +106,11 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid);
+                      Map<String, dynamic> charity = {
+                        'charityType':'Beneficiaries',
+                        'charityTitle':beneficiaries[index].name
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid, charity);
                     }
                   },
                   title: Text(beneficiaries[index].name),

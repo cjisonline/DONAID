@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 
 class DonorAlertDialogs{
-  static createGatewayVisit(Organization organization, String uidDonor) async{
+  static createGatewayVisit(Organization organization, String uidDonor, Map<String, dynamic> charity) async{
     final _firestore = FirebaseFirestore.instance;
 
     try{
@@ -16,7 +16,9 @@ class DonorAlertDialogs{
         'organizationID':organization.uid,
         'donorID':uidDonor,
         'visitedAt': FieldValue.serverTimestamp(),
-        'id':docRef.id
+        'id':docRef.id,
+        'charityType': charity['charityType'],
+        'charityTitle': charity['charityTitle']
       });
     }
     catch(e){
@@ -26,7 +28,7 @@ class DonorAlertDialogs{
 
   }
 
-  static paymentLinkPopUp(context, Organization organization, String uidDonor){
+  static paymentLinkPopUp(context, Organization organization, String uidDonor, Map<String, dynamic> charity){
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -43,7 +45,7 @@ class DonorAlertDialogs{
                 print('IN ON OPEN');
                 if (await canLaunch(link.url)) {
                   await launch(link.url);
-                  await createGatewayVisit(organization, uidDonor);
+                  await createGatewayVisit(organization, uidDonor, charity);
                 } else {
                   throw 'Could not launch $link';
                 }

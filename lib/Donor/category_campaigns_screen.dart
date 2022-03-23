@@ -107,7 +107,11 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid);
+                      Map<String, dynamic> charity = {
+                        'charityType':'Campaigns',
+                        'charityTitle':campaigns[index].title
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid, charity);
                     }
                   },
                   title: Text(campaigns[index].title),

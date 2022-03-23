@@ -123,7 +123,11 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                           });
                         }
                         else{
-                          DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid);
+                          Map<String, dynamic> charity = {
+                            'charityType':'Beneficiaries',
+                            'charityTitle':widget.beneficiary.name
+                          };
+                          DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid, charity);
                         }
 
                       },

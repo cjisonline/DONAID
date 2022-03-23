@@ -121,7 +121,11 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                           });
                         }
                         else{
-                          DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid);
+                          Map<String, dynamic> charity = {
+                            'charityType':'UrgentCases',
+                            'charityTitle':widget.urgentCase.title
+                          };
+                          DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid, charity);
                         }
                       },
                       child: Row(children: [
