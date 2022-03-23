@@ -56,15 +56,14 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Are You Sure?'),
+            title: Center(
+              child: Text('Are You Sure?'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content: const Text(
-                'We see that you\'ve entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount'
-                    ' is correct to proceed.'),
+            content: Text(
+                "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.".tr),
             actions: [
               Center(
                 child: TextButton(

@@ -4,6 +4,11 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "The email you chose is already in use.":"The email you chose is already in use.",
+          "Are You Sure?":"Are You Sure?",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.",
+          "Sort By":"Sort By",
+          "Country":"Country",
           "type_a_message": "Type a message",
           "message": "Messages",
           "no": "No",
@@ -219,6 +224,11 @@ class Messages extends Translations {
           "forgot_password!": "Forgot Password?",
         },
         'fr_FR': {
+          "The email you chose is already in use.":"L’e-mail que vous avez choisi est déjà utilisé",
+          "Are You Sure?":"",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"Nous voyons que vous avez inscrit un montant de don supérieur à 999 \$. Nous apprécions votre générosité, mais veuillez confirmer que ce montant est correct pour continuer.",
+          "Sort By": "Trier par",
+          "Country":"Pays",
           "type_a_message": "Tapez/écrivez un message",
           "message": "Message",
           "no": "Non",
@@ -446,6 +456,11 @@ class Messages extends Translations {
           "forgot_password!": "Mot de passe oublié?",
         },
         'ar_SA': {
+          "The email you chose is already in use.":"البريد الإلكتروني الذي اخترته قيد الاستخدام بالفعل",
+          "Are You Sure?":"هل أنت متأكد؟",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"نرى أنك أدخلت مبلغ تبرع أكبر من 999 دولارا. نحن نقدر كرمك ، ولكن يرجى التأكد من أن هذا المبلغ صحيح للمتابعة.",
+          "Sort By": "ترتيب حسب",
+          "Country":"بلد",
           "type_a_message": " اكتب رسالة",
           "message": " رسائل",
           "no": " لا",
@@ -657,6 +672,11 @@ class Messages extends Translations {
           "forgot_password!": " هل نسيت كلمة السر؟",
         },
         'es_ES': {
+          "The email you chose is already in use.":"El correo electrónico que elegiste ya está en uso",
+          "Are You Sure?":"¿Estás seguro?",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"Vemos que ha ingresado un monto de donación superior a \$999. Agradecemos su generosidad, pero por favor confirme que esta cantidad es correcta para proceder.",
+          "Sort By": "Ordenar por",
+          "Country": "País",
           "type_a_message": "Escriba un mensaje",
           "message": "Mensajes",
           "no": "No",
