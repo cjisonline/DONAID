@@ -48,11 +48,11 @@ class _DonorProfileState extends State<DonorProfile> {
     var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
     donor = Donor(
-          doc['email'],
-        doc['firstName'],
-        doc['lastName'],
-           doc['phoneNumber'],
-      doc['id']
+        email: doc['email'],
+        firstName: doc['firstName'],
+        lastName: doc['lastName'],
+        phoneNumber: doc['phoneNumber'],
+        id: doc['id']
       );
     setState(() {});
   }
