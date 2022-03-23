@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+<string name="app_name">DONAID</string>
+<string name="facebook_app_id">927307591318939</string>
+<string name="fb_login_protocol_scheme">fb927307591318939</string>
+<string name="facebook_client_token">208cae1b282a017646e9da18dc3006e6</string>
+<string name="default_notification_channel_id">com.app.donaid.urgent</string>
+</resources>
