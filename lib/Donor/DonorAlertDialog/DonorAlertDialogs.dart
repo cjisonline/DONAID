@@ -18,7 +18,8 @@ class DonorAlertDialogs{
         'visitedAt': FieldValue.serverTimestamp(),
         'id':docRef.id,
         'charityType': charity['charityType'],
-        'charityTitle': charity['charityTitle']
+        'charityTitle': charity['charityTitle'],
+        'charityID': charity['charityID']
       });
     }
     catch(e){
