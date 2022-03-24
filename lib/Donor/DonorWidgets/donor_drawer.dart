@@ -66,11 +66,6 @@ class _DonorDrawerState extends State<DonorDrawer> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.article_outlined),
-              title: Text("about".tr),
-              onTap: () {},
-            ),
-            ListTile(
               leading: const Icon(Icons.history),
               title: Text("donation_history".tr),
               onTap: () {
@@ -130,11 +125,6 @@ class _DonorDrawerState extends State<DonorDrawer> {
                   Get.to(ContactUs("DonorUsers"));
                 },
               ),
-            ListTile(
-              leading: const Icon(Icons.help),
-              title: Text("help".tr),
-              onTap: () {},
-            ),
             ListTile(
               leading: const Icon(Icons.logout),
               title: Text("logout".tr),

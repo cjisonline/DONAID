@@ -4,6 +4,7 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "Contact Us":"Contact Us",
           "contact_admin": "Contact Admin",
           "My Favorites":"My Favorites",
           "Favorite Page":"Favorite Page",
@@ -223,6 +224,7 @@ class Messages extends Translations {
           "forgot_password!": "Forgot Password?",
         },
         'fr_FR': {
+          "Contact Us":"Contactez-nous",
           "My Favorites":"Mes favoris",
           "Favorite Page":"Favorite Page",
           "No favorites found":"Aucun favori trouvé",
@@ -454,6 +456,7 @@ class Messages extends Translations {
           "forgot_password!": "Mot de passe oublié?",
         },
         'ar_SA': {
+          "Contact Us":"اتصل بنا",
           "My Favorites":"مفضلاتي",
           "Favorite Page":"الصفحة المفضلة",
           "No favorites found":"لم يتم العثور على المفضلة",
@@ -669,6 +672,7 @@ class Messages extends Translations {
           "forgot_password!": " هل نسيت كلمة السر؟",
         },
         'es_ES': {
+          "Contact Us":"Contáctenos",
           "My Favorites":"Mis favoritos",
           "Favorite Page":"Página favorita",
           "No favorites found":"No se han encontrado favoritos",
