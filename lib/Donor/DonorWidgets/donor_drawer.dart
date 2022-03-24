@@ -56,7 +56,7 @@ class _DonorDrawerState extends State<DonorDrawer> {
             ),
             ListTile(
               leading: const Icon(Icons.favorite),
-              title: const Text("My Favorites"),
+              title: Text("My Favorites".tr),
               onTap: () {
                 Navigator.pushNamed(context, DonorFavoritePage.id);
               },
