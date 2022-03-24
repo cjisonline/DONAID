@@ -5,6 +5,9 @@ class Messages extends Translations {
   Map<String, Map<String, String>> get keys => {
         'en_US': {
           "contact_admin": "Contact Admin",
+          "My Favorites":"My Favorites",
+          "Favorite Page":"Favorite Page",
+          "No favorites found":"No favorites found",
           "type_a_message": "Type a message",
           "message": "Messages",
           "no": "No",
@@ -220,6 +223,9 @@ class Messages extends Translations {
           "forgot_password!": "Forgot Password?",
         },
         'fr_FR': {
+          "My Favorites":"Mes favoris",
+          "Favorite Page":"Favorite Page",
+          "No favorites found":"Aucun favori trouvé",
           "contact_admin": "Contacter l'administrateur",
           "type_a_message": "Tapez/écrivez un message",
           "message": "Message",
@@ -448,6 +454,9 @@ class Messages extends Translations {
           "forgot_password!": "Mot de passe oublié?",
         },
         'ar_SA': {
+          "My Favorites":"مفضلاتي",
+          "Favorite Page":"الصفحة المفضلة",
+          "No favorites found":"لم يتم العثور على المفضلة",
           "contact_admin": "اتصل بالمسؤول",
           "type_a_message": " اكتب رسالة",
           "message": " رسائل",
@@ -660,6 +669,9 @@ class Messages extends Translations {
           "forgot_password!": " هل نسيت كلمة السر؟",
         },
         'es_ES': {
+          "My Favorites":"Mis favoritos",
+          "Favorite Page":"Página favorita",
+          "No favorites found":"No se han encontrado favoritos",
           "contact_admin": "Administrador de contacto",
           "type_a_message": "Escriba un mensaje",
           "message": "Mensajes",

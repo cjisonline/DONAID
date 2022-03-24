@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../donor_dashboard.dart';
+import '../notifications_page.dart';
 
 class DonorBottomNavigationBar extends StatelessWidget {
   final _auth = FirebaseAuth.instance;
@@ -87,7 +88,11 @@ class DonorBottomNavigationBar extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
               enableFeedback: false,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return DonorNotificationPage();
+                }));
+              },
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),

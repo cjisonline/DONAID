@@ -15,8 +15,13 @@ import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Donor/DonorWidgets/beneficiary_card.dart';
 import 'package:donaid/Services/chatServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlay_support/overlay_support.dart';
+
+import '../Services/notifications.dart';
+import 'notifications_page.dart';
 
 class DonorDashboard extends StatefulWidget {
   static const id = 'donor_dashboard';
@@ -32,16 +37,21 @@ class _DonorDashboardState extends State<DonorDashboard> {
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
+  final _messaging = FirebaseMessaging.instance;
 
   List<Beneficiary> beneficiaries = [];
   List<UrgentCase> urgentCases = [];
   List<Organization> organizations = [];
   List<CharityCategory> charityCategories = [];
+  var pointlist = [];
 
 
   @override
   void initState() {
     super.initState();
+
+    handleNotifications();
+
     _getCurrentUser();
     _getBeneficiaries();
     _getUrgentCases();
@@ -49,6 +59,69 @@ class _DonorDashboardState extends State<DonorDashboard> {
     _getCharityCategories();
     Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
     Get.find<ChatService>().listenFriend(loggedInUser!.uid, 0);
+  }
+
+  handleNotifications()async{
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return DonorNotificationPage();
+      }));
+
+    });
+    registerNotification();
+    checkForInitialMessage();
+  }
+
+  checkForInitialMessage() async{
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if(initialMessage != null){
+      addNotification(_auth.currentUser?.uid, initialMessage);
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return DonorNotificationPage();
+      }));
+    }
+  }
+
+  registerNotification() async {
+    NotificationSettings notificationSettings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true
+    );
+
+    if(notificationSettings.authorizationStatus == AuthorizationStatus.authorized)
+      {
+        print('User granted the permission.');
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+          print('NEW NOTIFICATION');
+          addNotification(_auth.currentUser?.uid, message);
+
+          // PushNotification notification = PushNotification(
+          //     message.notification!.title,
+          //     message.notification!.body,
+          //     message.data['title'],
+          //     message.data['body']
+          // );
+          // setState(() {
+          //   _totalNotificationCounter ++;
+          //   _notificationInfo = notification;
+          // });
+
+          if(message.notification!=null){
+            showSimpleNotification(
+              Text(message.notification!.title!),
+              subtitle: Text(message.notification!.body!),
+              duration: Duration(seconds: 5),
+              slideDismissDirection: DismissDirection.up,
+
+            );
+          }
+        });
+      }
+    else{
+      print("Permission declined by user.");
+    }
   }
 
   _refreshPage() {
@@ -61,12 +134,22 @@ class _DonorDashboardState extends State<DonorDashboard> {
     _getUrgentCases();
     _getOrganizationUsers();
     _getCharityCategories();
+    _getFavorite();
     setState(() {});
 }
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
+
+  _getFavorite() async {
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+      setState(() {
+        pointlist = List.from(value['favoriteList']);
+      });
+    });
+  }
+
 
   _getOrganizationUsers() async {
     var ret = await _firestore.collection('OrganizationUsers').where('approved', isEqualTo: true).get();
@@ -77,7 +160,6 @@ class _DonorDashboardState extends State<DonorDashboard> {
         organizationDescription: element.data()['organizationDescription'],
         country: element.data()['country'],
         gatewayLink: element.data()['gatewayLink'],
-        profilePictureDownloadURL: element.data()['profilePictureDownloadURL']
       );
       organizations.add(organization);
     }
@@ -157,7 +239,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
         title:  Text('dashboard'.tr),
       ),
       drawer: const DonorDrawer(),
-      body: _body(),
+      body:_body() ,
       bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
@@ -168,164 +250,164 @@ class _DonorDashboardState extends State<DonorDashboard> {
         _refreshPage();
       },
       child: Container(
-      decoration: BoxDecoration(
-      color: Colors.blueGrey.shade50,
-      borderRadius: const BorderRadius.all(Radius.circular(10)),
-      border: Border.all(color: Colors.grey.shade100)),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                       Text(
-                        'categories'.tr,
-                        style: TextStyle(fontSize: 20),
-                        textAlign: TextAlign.start,
-                      ),
-                      TextButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesScreen())).then((value) => _refreshPage());
-                        },
-                        child:  Text(
-                          'see_more'.tr,
-                          style: TextStyle(fontSize: 14),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                    ]),
-              ),
-            ),
-            SizedBox(
-                height: 75.0,
-                child: ListView.builder(
-                  itemCount: charityCategories.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, int index) {
-                    return CharityCategoryCard(
-                        charityCategories[index].name, charityCategories[index].iconDownloadURL);
-                  },
-                )),
-
-          // organization list
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                     Text(
-                      'organization'.tr,
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.start,
-                    ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationsExpandedScreen())).then((value) => _refreshPage());
+          decoration: BoxDecoration(
+              color: Colors.blueGrey.shade50,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              border: Border.all(color: Colors.grey.shade100)),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'categories'.tr,
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.start,
+                          ),
+                          TextButton(
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesScreen())).then((value) => _refreshPage());
+                            },
+                            child:  Text(
+                              'see_more'.tr,
+                              style: TextStyle(fontSize: 14),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
+                SizedBox(
+                    height: 75.0,
+                    child: ListView.builder(
+                      itemCount: charityCategories.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, int index) {
+                        return CharityCategoryCard(
+                            charityCategories[index].name, charityCategories[index].iconDownloadURL);
                       },
-                      child:  Text(
-                        'see_more'.tr,
-                        style: TextStyle(fontSize: 14),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ]),
-            ),
-          ),
-          SizedBox(
-              height: 200.0,
-              child: ListView.builder(
-                itemCount: organizations.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, int index) {
-                  return OrganizationCard(organizations[index]);
-                },
-              )),
+                    )),
 
-            //beneficiaries list
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                       Text(
-                        'beneficiaries'.tr,
-                        style: TextStyle(fontSize: 20),
-                        textAlign: TextAlign.start,
-                      ),
-                      TextButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => BeneficiaryExpandedScreen())).then((value) => _refreshPage());
-                        },
-                        child:  Text(
-                          'see_more'.tr,
-                          style: TextStyle(fontSize: 14),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                    ]),
-              ),
-            ),
-            beneficiaries.isNotEmpty
-            ? SizedBox(
-                height: 325.0,
-                child: ListView.builder(
-                  itemCount: beneficiaries.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, int index) {
-                    return BeneficiaryCard(beneficiaries[index]);
-                  },
-                ))
-            :  Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),)),
+                // organization list
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'organization'.tr,
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.start,
+                          ),
+                          TextButton(
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationsExpandedScreen())).then((value) => _refreshPage());
+                            },
+                            child:  Text(
+                              'see_more'.tr,
+                              style: TextStyle(fontSize: 14),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
+                SizedBox(
+                    height: 200.0,
+                    child: ListView.builder(
+                      itemCount: organizations.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, int index) {
+                        return OrganizationCard(organizations[index]);
+                      },
+                    )),
 
-            // urgent case list
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                       Text(
-                        'urgent_cases'.tr,
-                        style: TextStyle(fontSize: 20),
-                        textAlign: TextAlign.start,
-                      ),
-                      TextButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => UrgentCasesExpandedScreen())).then((value) => _refreshPage());
-                        },
-                        child:  Text(
-                          'see_more'.tr,
-                          style: TextStyle(fontSize: 14),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                    ]),
-              ),
+                //beneficiaries list
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'beneficiaries'.tr,
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.start,
+                          ),
+                          TextButton(
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => BeneficiaryExpandedScreen())).then((value) => _refreshPage());
+                            },
+                            child:  Text(
+                              'see_more'.tr,
+                              style: TextStyle(fontSize: 14),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
+                beneficiaries.isNotEmpty
+                    ? SizedBox(
+                    height: 325.0,
+                    child: ListView.builder(
+                      itemCount: beneficiaries.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, int index) {
+                        return BeneficiaryCard(beneficiaries[index]);
+                      },
+                    ))
+                    :  Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),)),
+
+                // urgent case list
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'urgent_cases'.tr,
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.start,
+                          ),
+                          TextButton(
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => UrgentCasesExpandedScreen())).then((value) => _refreshPage());
+                            },
+                            child:  Text(
+                              'see_more'.tr,
+                              style: TextStyle(fontSize: 14),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
+                urgentCases.isNotEmpty
+                    ? SizedBox(
+                    height: 325.0,
+                    child: ListView.builder(
+                      itemCount: urgentCases.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, int index) {
+                        return UrgentCaseCard(urgentCases[index]);
+                      },
+                    ))
+                    :  Center(child: Text('no_active_urgent_sases_show'.tr, style: TextStyle(fontSize: 18),)),
+              ],
             ),
-            urgentCases.isNotEmpty
-            ? SizedBox(
-                height: 325.0,
-                child: ListView.builder(
-                  itemCount: urgentCases.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, int index) {
-                    return UrgentCaseCard(urgentCases[index]);
-                  },
-                ))
-            :  Center(child: Text('no_active_urgent_sases_show'.tr, style: TextStyle(fontSize: 18),)),
-          ],
-        ),
-      )),
+          )),
     );
   }
 }
