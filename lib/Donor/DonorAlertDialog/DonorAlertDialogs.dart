@@ -20,7 +20,7 @@ class DonorAlertDialogs{
         'charityType': charity['charityType'],
         'charityTitle': charity['charityTitle'],
         'charityID': charity['charityID'],
-        'read':true
+        'read':false
       });
     }
     catch(e){
