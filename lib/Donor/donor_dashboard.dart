@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorWidgets/admin_carousal_card_content.dart';
 import 'package:donaid/Donor/DonorWidgets/category_card.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
@@ -8,6 +9,7 @@ import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
 import 'package:donaid/Donor/categories_screen.dart';
 import 'package:donaid/Donor/organizations_expanded_screen.dart';
 import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
+import 'package:donaid/Models/AdminCarouselImage.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:donaid/Models/Organization.dart';
@@ -19,7 +21,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:overlay_support/overlay_support.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import '../Services/notifications.dart';
 import 'notifications_page.dart';
 
@@ -39,6 +41,11 @@ class _DonorDashboardState extends State<DonorDashboard> {
   final _firestore = FirebaseFirestore.instance;
   final _messaging = FirebaseMessaging.instance;
 
+  int _currentIndex=0;
+  List<AdminCarouselImage> adminCarouselImages=[];
+  List cardList=[];
+
+
   List<Beneficiary> beneficiaries = [];
   List<UrgentCase> urgentCases = [];
   List<Organization> organizations = [];
@@ -56,6 +63,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
     _getUrgentCases();
     _getOrganizationUsers();
     _getCharityCategories();
+    _getCarouselImagesAndCardList();
     Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
     Get.find<ChatService>().listenFriend(loggedInUser!.uid, 0);
   }
@@ -208,6 +216,20 @@ class _DonorDashboardState extends State<DonorDashboard> {
     setState(() {});
   }
 
+  _getCarouselImagesAndCardList() async{
+    var ret = await _firestore.collection('AdminCarouselImages').get();
+
+    for(var doc in ret.docs){
+      AdminCarouselImage carouselImage = AdminCarouselImage(id: doc.data()['id'], pictureDownloadURL: doc.data()['pictureDownloadURL']);
+
+      adminCarouselImages.add(carouselImage);
+    }
+
+    for(var image in adminCarouselImages){
+      cardList.add(AdminCarouselCardContent(image));
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -235,6 +257,36 @@ class _DonorDashboardState extends State<DonorDashboard> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            CarouselSlider(
+              options: CarouselOptions(
+                height: 200.0,
+                autoPlay: true,
+                autoPlayInterval: Duration(seconds: 3),
+                autoPlayAnimationDuration: Duration(milliseconds: 800),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                pauseAutoPlayOnTouch: true,
+                aspectRatio: 2.0,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+              ),
+              items: cardList.map((card){
+                return Builder(
+                    builder:(BuildContext context){
+                      return Container(
+                        height: MediaQuery.of(context).size.height*0.30,
+                        width: MediaQuery.of(context).size.width,
+                        child: Card(
+                          color: Colors.blueAccent,
+                          child: card,
+                        ),
+                      );
+                    }
+                );
+              }).toList(),
+            ),
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
