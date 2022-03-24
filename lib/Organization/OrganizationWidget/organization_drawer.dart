@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/message.dart';
 import 'package:donaid/Organization/gateway_visits.dart';
 import 'package:donaid/Organization/settings.dart';
@@ -23,14 +24,161 @@ class OrganizationDrawer extends StatefulWidget {
 }
 
 class _OrganizationDrawerState extends State<OrganizationDrawer> {
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+  String country="";
 
   @override
   void initState(){
     super.initState();
+    _getCountry();
+  }
+
+  _getCountry() async{
+    var ret = await _firestore.collection('OrganizationUsers').where('uid', isEqualTo: _auth.currentUser!.uid).get();
+    var doc = ret.docs.first;
+    country = doc.data()['country'];
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    return country == "United States" ? _buildUSDrawer() : _buildForeignDrawer();
+  }
+
+  _buildUSDrawer(){
+    return Container(
+      child: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: Stack(
+                children: [
+                  Positioned(
+                    bottom: 8.0,
+                    left: 4.0,
+                    child: Text(
+                      "_organization".tr,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  )
+                ],
+              ),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text("settings".tr),
+              onTap: () {
+                Navigator.pushNamed(context, OrganizationSettingsPage.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.account_circle),
+              title:  Text("profile".tr),
+              onTap: () {
+                Navigator.pushNamed(context, OrganizationProfile.id);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.pending),
+              title: Text("pending_approvals".tr),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return PendingApprovals();
+                })).then((value){
+                  setState(() {
+                  });
+                });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.watch_later_outlined),
+              title: Text("expired_charities".tr),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return ExpiredCharitiesScreen();
+                })).then((value){
+                  setState(() {
+                  });
+                });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.not_interested),
+              title: Text("inactive_charities".tr),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return InactiveCharitiesScreen();
+                })).then((value){
+                  setState(() {});
+                });
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.translate),
+              title: Text("language".tr),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return SimpleDialog(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(15))),
+                          title: Center(child: Text("select_language".tr)),
+                          children: <Widget>[
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('en', 'US'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("English"))),
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('fr', 'FR'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("French"))),
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('ar', 'SA'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("Arabic"))),
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('es', 'ES'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("Spanish")))
+                          ]);
+                    });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text("logout".tr),
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+                MyGlobals.allMessages = <MessageModel>[].obs;
+                Navigator.of(context)
+                    .popUntil(ModalRoute.withName(HomeScreen.id));
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _buildForeignDrawer(){
     return Container(
       child: Drawer(
         child: ListView(
