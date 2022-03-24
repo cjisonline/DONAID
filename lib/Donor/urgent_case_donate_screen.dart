@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/updateFavorite.dart';
 import 'package:donaid/Models/UrgentCase.dart';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -31,11 +33,19 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   String donationAmount = "";
   bool showLoadingSpinner = false;
   var f = NumberFormat("###,##0.00", "en_US");
+  User? loggedInUser;
+  var pointlist = [];
 
   @override
   void initState(){
     super.initState();
+    _getCurrentUser();
+    _getFavorite();
 
+  }
+
+  void _getCurrentUser() {
+    loggedInUser = _auth.currentUser;
   }
 
   _refreshPage() async {
@@ -43,6 +53,14 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
 
     var doc = ret.docs[0];
     widget.urgentCase.amountRaised = doc['amountRaised'];
+  }
+
+  _getFavorite() async {
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+      setState(() {
+        pointlist = List.from(value['favoriteList']);
+      });
+    });
   }
 
   _campaignDonateBody() {
@@ -54,6 +72,19 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child:IconButton(
+                    icon: Icon(
+                      pointlist.contains(widget.urgentCase.id.toString())? Icons.favorite: Icons.favorite_border,
+                      color: pointlist.contains(widget.urgentCase.id.toString())? Colors.red:null,
+                      size: 40,
+                    ), onPressed: () async {
+                    await updateFavorites(loggedInUser!.uid.toString(),widget.urgentCase.id.toString());
+                    await _getFavorite();
+
+                  },
+                  ),),
                 SizedBox(
                     height: 100,
                     child: Image.asset('assets/DONAID_LOGO.png')

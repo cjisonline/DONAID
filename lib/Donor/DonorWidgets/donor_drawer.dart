@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../home_screen.dart';
 import '../donation_history.dart';
+import '../donor_favorite_screen.dart';
 import '../donor_profile.dart';
 import '../settings.dart';
 
@@ -54,6 +55,13 @@ class _DonorDrawerState extends State<DonorDrawer> {
               title: Text("profile".tr),
               onTap: () {
                 Navigator.pushNamed(context, DonorProfile.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.favorite),
+              title: Text("My Favorites".tr),
+              onTap: () {
+                Navigator.pushNamed(context, DonorFavoritePage.id);
               },
             ),
             ListTile(
