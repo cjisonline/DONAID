@@ -1,0 +1,47 @@
+#adminSettings {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #dfc8fe;
+    border-radius: 0.4rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+          box-shadow: inset 0px 0px 5px #c1c1c1;
+}
+
+#adminSettings > p {
+    text-align: center;
+}
+
+#adminSettings > hr {
+    border: 0.1rem solid #6804ec;
+    border-radius: 10px;
+}
+
+.settingsButtonClass {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: auto;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    background-color: #6804ec;
+    cursor: pointer;
+    outline: none;
+    padding: 6px 1.6rem;
+  }
+  
+  .settingsButtonClass:hover {
+      background-color: #54647A;
+      transition: background-color 0.5s;
+  }
+  
+  .settingsButtonClass:active {
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+          box-shadow: inset 0px 0px 5px #c1c1c1;
+  }

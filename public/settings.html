@@ -5,6 +5,7 @@
 
 <!-- CSS Loads -->
 <link rel="stylesheet" href="login.css">
+<link rel="stylesheet" href="settings_page.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
@@ -58,13 +59,12 @@ async function getSettings(){
 
     const querySnapshot = await getDoc(doc(db, "AdminRestrictions", "CharityDurationLimits"));
         
-                document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
-                "<tr><td>" + querySnapshot.data().beneficiaries + ' days' +
-                "</td><td>" + querySnapshot.data().campaigns + ' days' +
-                "</td><td>" + querySnapshot.data().urgentCases + ' days' +
-                "</td><td>" + '<button id="approveButton" class="editButtonClass">Edit</button>' + "</td></tr>";
+                document.getElementById('adminSettings').innerHTML += 
+                "<p><b>Beneficiary Length Limit:</b><br>" + querySnapshot.data().beneficiaries + ' days </p>' +
+                "<hr><p><b>Campaign Length Limit:</b><br>" + querySnapshot.data().campaigns + ' days </p>' +
+                "<hr><p><b>Urgent Case Length Limit:</b><br>" + querySnapshot.data().urgentCases + ' days </p>';
             
-        $('button.editButtonClass').click(function() {
+        $('button.settingsButtonClass').click(function() {
             editSettings();
         });
     }
@@ -78,24 +78,35 @@ async function editSettings() {
         title: 'Organization Limits',
         html:
             'Enter Beneficiary Limit:' +
-            '<input id="catName-input" class="swal2-input" value='+querySnapshot.data().beneficiaries+'>' + 'days.' +
+            '<input id="catName-input" class="swal2-input" value=' + querySnapshot.data().beneficiaries+'>' + 'days.' +
             '<br><br>Enter Campaign Limit:' +
-            '<input id="catName-input2" class="swal2-input" value='+querySnapshot.data().campaigns+'>' + 'days.' +
+            '<input id="catName-input2" class="swal2-input" value=' + querySnapshot.data().campaigns+'>' + 'days.' +
             '<br><br>Enter Urgent Case Limit:' +
-            '<input id="catName-input3" class="swal2-input" value='+querySnapshot.data().urgentCases+'>' + 'days.',
+            '<input id="catName-input3" class="swal2-input" value=' + querySnapshot.data().urgentCases+'>' + 'days.',
         focusConfirm: false,
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#6804ec',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Apply',
         preConfirm: () => {
-        return [
-            document.getElementById('catName-input').value,
-            document.getElementById('catName-input2').value,
-            document.getElementById('catName-input3').value,
-        ]
-        }
-    })
+
+        return new Promise((resolve) => {
+            if (document.getElementById('catName-input').value == '' || document.getElementById('catName-input2').value == '' || document.getElementById('catName-input3').value == '') {
+                swal.showValidationMessage("Enter a limit for all charity types");
+                swal.enableButtons();
+            } 
+
+            else {
+                swal.resetValidationMessage();
+                resolve([
+                    document.getElementById('catName-input').value,
+                    document.getElementById('catName-input2').value,
+                    document.getElementById('catName-input3').value,
+                ])
+            }
+        })
+    }
+})
     .then((result) => {
         if (result.isConfirmed) { 
 
@@ -170,16 +181,8 @@ getSettings();
                 </div>
       <div class="col ps-md-2 pt-2">
             <h1 class="page-title-header" style="text-align:center; font-size: 24px;">Settings</h1>
-            <table class="table" id="adminTable">
-            <thead>
-                <th>Beneficiary Limit</th>
-                <th>Campaign Limit</th>
-                <th>Urgent Case Limit</th>
-                <th></th>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+    <div id="adminSettings"></div>
+    <button class="settingsButtonClass">Edit Limits</button>
     </div>
     </div>
     </div>
