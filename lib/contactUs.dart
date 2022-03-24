@@ -1,10 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
+import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
+import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Models/Donor.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'Organization/organization_dashboard.dart';
 
 class ContactUs extends StatefulWidget {
   String type;
@@ -14,14 +21,22 @@ class ContactUs extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<ContactUs> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool cSub = false, cEmail = false, cMess = false;
+  final _formKey = GlobalKey<FormState>();
   final _firestore = FirebaseFirestore.instance;
+  bool cSub = false, cEmail = false, cMess = false;
   Donor donor = Donor.c1();
-  TextEditingController sub = TextEditingController(),
-      email = TextEditingController(),
-      message = TextEditingController();
-  String type = "Question";
+  TextEditingController subject = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController message = TextEditingController();
+  TextEditingController messageType = TextEditingController();
+
+  List<String> categoryOptions = [
+    "Question",
+    "Suggestion",
+    "Help",
+    "Other"
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -38,162 +53,327 @@ class _HomeScreenState extends State<ContactUs> {
     setState(() {});
   }
 
+  _sendMessage() async{
+    var docRef = await _firestore.collection('AdminMessages').add({});
+
+    await _firestore.collection('AdminMessages').doc(docRef.id).set(
+      {
+        "email": email.text,
+        "subject": subject.text,
+        "category": messageType.text,
+        "userType": widget.type,
+        "message": message.text,
+        "ContactTime": DateTime.now(),
+        "userId": FirebaseAuth.instance.currentUser!.uid,
+        "read":false,
+        "id":docRef.id
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
         appBar: AppBar(title: Text("Contact Us".tr)),
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              child:
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const SizedBox(height: 10),
-                Text("Subject",
-                    textAlign: TextAlign.left,
-                    style:
-                        GoogleFonts.openSans(fontSize: 12, color: Colors.grey)),
-                const SizedBox(height: 10),
-                Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey.shade400)),
-                    child: TextField(
-                        controller: sub,
-                        decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.only(
-                                left: 15, bottom: 11, top: 5, right: 15)))),
-                if (cSub) const SizedBox(height: 5),
-                if (cSub)
-                  Text("Enter Subject to process",
-                      textAlign: TextAlign.left,
-                      style:
-                          GoogleFonts.openSans(fontSize: 10, color: Colors.red)),
-                const SizedBox(height: 10),
-                const SizedBox(height: 10),
-                Text("Select Categories",
-                    textAlign: TextAlign.left,
-                    style:
-                        GoogleFonts.openSans(fontSize: 12, color: Colors.grey)),
-                DropdownButton(
-                  value: type,
-                  items: const [
-                    DropdownMenuItem(
-                      child: Text("Question"),
-                      value: "Question",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Suggestion"),
-                      value: "Suggestion",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Help"),
-                      value: "Help",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Other"),
-                      value: "Other",
-                    ),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      type = value.toString();
-                    });
-                  },
-                ),
-                if (cEmail) const SizedBox(height: 5),
-                if (cEmail)
-                  Text("Enter Email to process",
-                      textAlign: TextAlign.left,
-                      style:
-                          GoogleFonts.openSans(fontSize: 10, color: Colors.red)),
-                const SizedBox(height: 10),
-                const SizedBox(height: 10),
-                Text("message".tr,
-                    textAlign: TextAlign.left,
-                    style:
-                        GoogleFonts.openSans(fontSize: 12, color: Colors.grey)),
-                const SizedBox(height: 10),
-                Container(
-                    height: 90,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey.shade400)),
-                    child: TextField(
-                        controller: message,maxLines :3,
-                        decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.only(
-                                left: 15, bottom: 11, top: 11, right: 15)))),
-                if (cMess) const SizedBox(height: 5),
-                if (cMess)
-                  Text(
-                    "Enter Message to process",
-                    textAlign: TextAlign.left,
-                    style: GoogleFonts.openSans(fontSize: 10, color: Colors.red),
-                  ),
-                InkWell(
-                    onTap: () async {
-                      if (email.text == "")
-                        cEmail = true;
-                      else
-                        cEmail = false;
-                      if (sub.text == "")
-                        cSub = true;
-                      else
-                        cSub = false;
-                      if (message.text == "")
-                        cMess = true;
-                      else
-                        cMess = false;
-                      setState(() {});
-                      if (email.text == "" ||
-                          sub.text == "" ||
-                          message.text == "") return;
-                      FirebaseFirestore.instance.collection('AdminMessages').add({
-                        "email": email.text,
-                        "subject": sub.text,
-                        "category": type,
-                        "userType": widget.type,
-                        "message": message.text,
-                        "ContactTime": DateTime.now(),
-                        "userId": FirebaseAuth.instance.currentUser?.uid ?? ""
-                      });
-                      await EasyLoading.showInfo(
-                          "We receive you request, we contact you back on your email",
-                          duration: const Duration(seconds: 5));
-                      Get.back();
-                    },
-                    child: Padding(
-                        padding: const EdgeInsets.only(top: 40),
-                        child: Container(
-                            height: 40,
-                            width: 90,
-                            decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                    colors: [Colors.blue, Colors.blue]),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.grey.shade400)),
-                            child: Center(
-                                child: Text("Send",
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.openSans(
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1.2,
-                                        color: Colors.white,
-                                        fontSize: 13))))))
-              ])),
-        ));
+        body: widget.type == "DonorUsers" ? _buildDonorBody() : _buildOrganizationBody(),
+      drawer: widget.type == "DonorUsers" ? DonorDrawer() : OrganizationDrawer(),
+      bottomNavigationBar: widget.type =='DonorUsers' ? DonorBottomNavigationBar() : OrganizationBottomNavigation(),
+    );
   }
+
+  _buildDonorBody(){
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                      label: Center(
+                        child: Text('category'.tr, style: TextStyle(color: Colors.black, fontSize: 20),)),
+                      border: const OutlineInputBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(12.0)),
+                      )),
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  items:categoryOptions.map((items) {
+                    return DropdownMenuItem<String>(
+                      child: Text(items),
+                      value: items,
+                    );
+                  }).toList(),
+                  onChanged: (val) => setState(() {
+                    messageType.text = val.toString();
+                  }),
+                  validator: (value){
+                    if(messageType.text.isEmpty){
+                      return 'Please select a category.';
+                    }
+                    else{
+                      return null;
+                    }
+                  },
+                )
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  onChanged: (value){
+                    subject.text = value;
+                  },
+                  validator: (value){
+                    if(value!.isEmpty){
+                      return 'Please enter valid subject.';
+                    }
+                    else {
+                      return null;
+                    }
+                  },
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      label: Center(
+                        child: RichText(
+                            text:  TextSpan(
+                                text: 'Subject',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20.0),
+                                children: [
+                                  TextSpan(
+                                      text: ' *',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ])),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(32.0)),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  minLines: 2,
+                  maxLength: 240,
+                  maxLines: 5,
+                  onChanged: (value){
+                    message.text = value;
+                  },
+                  validator: (value){
+                    if(value!.isEmpty){
+                      return 'Please enter valid message.';
+                    }
+                    else {
+                      return null;
+                    }
+                  },
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      label: Center(
+                        child: RichText(
+                            text:  TextSpan(
+                                text: 'Message',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20.0),
+                                children: [
+                                  TextSpan(
+                                      text: ' *',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ])),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(32.0)),
+                      )),
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: Material(
+                      elevation: 5.0,
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(30.0),
+                      child: MaterialButton(
+                          child: Text('Send',
+                              style: const TextStyle(
+                                  fontSize: 25, color: Colors.white)),
+                          onPressed: () async {
+                            if(_formKey.currentState!.validate()){
+                              await _sendMessage();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar( SnackBar(content: Text('Message sent!'.tr)));
+                            Navigator.popUntil(context, ModalRoute.withName(DonorDashboard.id));
+                            }
+                          }
+                      )
+                  )
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _buildOrganizationBody(){
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                        label: Center(
+                            child: Text('category'.tr, style: TextStyle(color: Colors.black, fontSize: 20),)),
+                        border: const OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(12.0)),
+                        )),
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items:categoryOptions.map((items) {
+                      return DropdownMenuItem<String>(
+                        child: Text(items),
+                        value: items,
+                      );
+                    }).toList(),
+                    onChanged: (val) => setState(() {
+                      messageType.text = val.toString();
+                    }),
+                    validator: (value){
+                      if(messageType.text.isEmpty){
+                        return 'Please select a category.';
+                      }
+                      else{
+                        return null;
+                      }
+                    },
+                  )
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  onChanged: (value){
+                    subject.text = value;
+                  },
+                  validator: (value){
+                    if(value!.isEmpty){
+                      return 'Please enter valid subject.';
+                    }
+                    else {
+                      return null;
+                    }
+                  },
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      label: Center(
+                        child: RichText(
+                            text:  TextSpan(
+                                text: 'Subject',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20.0),
+                                children: [
+                                  TextSpan(
+                                      text: ' *',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ])),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(32.0)),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  minLines: 2,
+                  maxLength: 240,
+                  maxLines: 5,
+                  onChanged: (value){
+                    message.text = value;
+                  },
+                  validator: (value){
+                    if(value!.isEmpty){
+                      return 'Please enter valid message.';
+                    }
+                    else {
+                      return null;
+                    }
+                  },
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      label: Center(
+                        child: RichText(
+                            text:  TextSpan(
+                                text: 'Message',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20.0),
+                                children: [
+                                  TextSpan(
+                                      text: ' *',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ])),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(32.0)),
+                      )),
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: Material(
+                      elevation: 5.0,
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(30.0),
+                      child: MaterialButton(
+                          child: Text('Send',
+                              style: const TextStyle(
+                                  fontSize: 25, color: Colors.white)),
+                          onPressed: () async {
+                            if(_formKey.currentState!.validate()){
+                              await _sendMessage();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar( SnackBar(content: Text('Message sent!'.tr)));
+                              Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
+                            }
+                          }
+                      )
+                  )
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 }
