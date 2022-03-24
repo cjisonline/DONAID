@@ -6,6 +6,7 @@ import 'package:donaid/Organization/OrganizationWidget/campaign_card.dart';
 import 'package:donaid/Organization/OrganizationWidget/urgent_case_card.dart';
 import 'package:donaid/Services/chatServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,7 +49,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     _getBeneficiaries();
     Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
     Get.find<ChatService>().listenFriend(loggedInUser!.uid, 1);
+
   }
+
 
   _refreshPage() async{
     beneficiaries.clear();
