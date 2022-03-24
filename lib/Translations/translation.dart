@@ -4,6 +4,12 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "No new visits":"No new visits",
+          "Did this visit result in a donation?":"Did this visit result in a donation?",
+          "Gateway Visits":"Gateway Visits",
+          "Please enter the amount that was donated.":"Please enter the amount that was donated.",
+          "Confirm Donation":"Confirm Donation",
+          "Please confirm that this visit to your gateway did not result in a donation.":"Please confirm that this visit to your gateway did not result in a donation.",
           "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
       "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?",
           "Deleting this charity will completely remove it from the application. Would you like to continue?":"Deleting this charity will completely remove it from the application. Would you like to continue?",
@@ -230,6 +236,12 @@ class Messages extends Translations {
           "forgot_password!": "Forgot Password?",
         },
         'fr_FR': {
+          "No new visits":"Pas de nouvelles visites",
+          "Did this visit result in a donation?":"Cette visite a-t-elle donné lieu à un don?",
+          "Gateway Visits":"Visites de passerelle",
+          "Please enter the amount that was donated.":"Veuillez entrer le montant qui a été donné.",
+          "Confirm Donation":"Confirmer le don",
+          "Please confirm that this visit to your gateway did not result in a donation.":"Veuillez confirmer que cette visite à votre portail n’a pas donné lieu à un don.",
           "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
       "La reprise de cet organisme de bienfaisance le rendra à nouveau visible pour les donateurs. Une fois que vous avez repris cet organisme de bienfaisance, vous pouvez le désactiver à nouveau à partir du tableau de bord ou de la page Mes bénéficiaires. Voulez-vous continuer?",
           "Deleting this charity will completely remove it from the application. Would you like to continue?":
@@ -469,6 +481,12 @@ class Messages extends Translations {
           "forgot_password!": "Mot de passe oublié?",
         },
         'ar_SA': {
+          "No new visits":"لا توجد زيارات جديدة",
+          "Did this visit result in a donation?":"هل أسفرت هذه الزيارة عن تبرع؟",
+          "Gateway Visits":"زيارات البوابة",
+          "Please enter the amount that was donated.":"يرجى إدخال المبلغ الذي تم التبرع به.",
+          "Confirm Donation":"تأكيد التبرع",
+          "Please confirm that this visit to your gateway did not result in a donation.": "يرجى التأكد من أن هذه الزيارة إلى بوابتك لم تسفر عن تبرع",
           "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
       "إن استئناف هذه المؤسسة الخيرية سيجعلها مرئية للمتبرعين مرة أخرى. بمجرد استئناف هذه المؤسسة الخيرية ، يمكنك إلغاء تنشيطها مرة أخرى من لوحة التحكم أو صفحة المستفيدين مني. هل ترغب في المتابعة؟",
           "Deleting this charity will completely remove it from the application. Would you like to continue?":
@@ -692,6 +710,12 @@ class Messages extends Translations {
           "forgot_password!": " هل نسيت كلمة السر؟",
         },
         'es_ES': {
+          "No new visits":"No hay nuevas visitas",
+          "Did this visit result in a donation?":"¿Esta visita resultó en una donación?",
+          "Gateway Visits":"Visitas a la puerta de enlace",
+          "Please enter the amount that was donated.":"Por favor, introduzca la cantidad que fue donada.",
+          "Confirm Donation":"Confirmar donación",
+          "Please confirm that this visit to your gateway did not result in a donation.":"Por favor, confirme que esta visita a su puerta de enlace no resultó en una donación",
           "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
       "Reanudar esta organización benéfica la hará visible nuevamente para los donantes. Una vez que reanude esta organización benéfica, puede desactivarla nuevamente desde el panel de control o la página Mis beneficiarios. ¿Te gustaría continuar?",
           "Deleting this charity will completely remove it from the application. Would you like to continue?":

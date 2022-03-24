@@ -259,7 +259,7 @@ class _GatewayVisitsState extends State<GatewayVisits> {
               borderRadius: BorderRadius.circular(32.0),
             ),
             content: Text(
-                'Please confirm that this visit to your gateway did not result in a donation'),
+                'Please confirm that this visit to your gateway did not result in a donation.'.tr),
             actions: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -291,13 +291,13 @@ class _GatewayVisitsState extends State<GatewayVisits> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Center(
-              child: Text('Confirm Donation'),
+              child: Text('Confirm Donation'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
             content: Column(mainAxisSize: MainAxisSize.min, children: [
-              Text('Please enter the amount that was donated'),
+              Text('Please enter the amount that was donated.'.tr),
               SizedBox(
                 height: 12,
               ),
@@ -385,7 +385,7 @@ class _GatewayVisitsState extends State<GatewayVisits> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Did this visit result in a donation?',
+                    'Did this visit result in a donation?'.tr,
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
@@ -439,7 +439,7 @@ class _GatewayVisitsState extends State<GatewayVisits> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'No new visits',
+                  'No new visits'.tr,
                   style: TextStyle(fontSize: 18),
                 ),
               ],
