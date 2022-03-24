@@ -19,7 +19,8 @@ class DonorAlertDialogs{
         'id':docRef.id,
         'charityType': charity['charityType'],
         'charityTitle': charity['charityTitle'],
-        'charityID': charity['charityID']
+        'charityID': charity['charityID'],
+        'read':true
       });
     }
     catch(e){

@@ -63,6 +63,7 @@ class _DonationHistoryState extends State<DonationHistory> {
 
       donations.add(donation);
     }
+    donations.sort((b,a) => a.donatedAt.compareTo(b.donatedAt));
     _getDonationOrganizations();
   }
 
@@ -170,7 +171,7 @@ class _DonationHistoryState extends State<DonationHistory> {
                         _goToChosenUrgentCase(donations[index].charityID.toString());
                       },
                       title: Text(donations[index].charityName),
-                      subtitle: Text('urgent_case\n'.tr +
+                      subtitle: Text('urgent_case'.tr +'\n'+
                           organizations[index].organizationName),
                       trailing: Text(
                           "\u0024" + f.format(donations[index].donationAmount)),
@@ -181,7 +182,7 @@ class _DonationHistoryState extends State<DonationHistory> {
                             _goToChosenCampaign(donations[index].charityID.toString());
                           },
                           title: Text(donations[index].charityName),
-                          subtitle: Text('campaign\n'.tr +
+                          subtitle: Text('campaign'.tr + '\n'+
                               organizations[index].organizationName),
                           trailing: Text("\u0024" +
                               f.format(donations[index].donationAmount)),
@@ -191,7 +192,7 @@ class _DonationHistoryState extends State<DonationHistory> {
                   _goToChosenBeneficiary(donations[index].charityID.toString());
                 },
                 title: Text(donations[index].charityName),
-                subtitle: Text('beneficiary\n'.tr +
+                subtitle: Text('beneficiary'.tr + '\n'+
                     organizations[index].organizationName),
                 trailing: Text("\u0024" +
                     f.format(donations[index].donationAmount)),
