@@ -5,6 +5,7 @@ import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
+import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:donaid/Organization/organization_beneficiary_full.dart';
 import 'package:donaid/Organization/organization_urgentcase_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -322,7 +323,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
       length: 3,
       child: Scaffold(
           appBar: AppBar(
-            title:  Text('donaid'.tr),
+            title:  Text('search'.tr),
             bottom: TabBar(tabs: [Tab(text: 'campaigns'.tr), Tab(text: 'beneficiaries'.tr), Tab(text: 'urgent_cases'.tr)],),
             actions: <Widget>[
               TextButton(
@@ -339,6 +340,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               _buildUrgentCasesBody()
             ],
           ),
+          drawer: OrganizationDrawer(),
           bottomNavigationBar: OrganizationBottomNavigation()),
     );
   }
@@ -653,7 +655,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                       trailing: Text(
                           DateFormat('yyyy-MM-dd').format((urgentCases[index].endDate.toDate()))),
                       onTap: () {
-                        _goToChosenCampaign(
+                        _goToChosenUrgentCase(
                             urgentCases[index].id);
                       },
                     ),

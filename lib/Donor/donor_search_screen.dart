@@ -380,7 +380,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
       length: 3,
       child: Scaffold(
           appBar: AppBar(
-            title:  Text('donaid'.tr),
+            title:  Text('search'.tr),
             bottom: TabBar(tabs: [Tab(text: 'campaigns'.tr), Tab(text: 'beneficiaries'.tr), Tab(text: 'urgent_cases'.tr)],),
             actions: <Widget>[
               TextButton(
