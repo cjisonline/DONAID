@@ -4,27 +4,58 @@
     margin-right: auto;
     background-color: #dfc8fe;
     border-radius: 0.4rem;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    margin-top: 2rem;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
     -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
           box-shadow: inset 0px 0px 5px #c1c1c1;
 }
 
-#adminSettings > p {
+#carouselSettings {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #dfc8fe;
+    border-radius: 0.4rem;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+          box-shadow: inset 0px 0px 5px #c1c1c1;
+}
+
+#adminSettings > p, #carouselSettings > p {
     text-align: center;
 }
 
-#adminSettings > hr {
+#adminSettings > hr, #carouselSettings > hr {
     border: 0.1rem solid #6804ec;
     border-radius: 10px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.headerShader > h4 {
+    color: white;
+    padding: 0.2rem;
+    font-size: 1.2rem;
+}
+
+.headerShader {
+    background-color: #6804ec;
+    padding: 0.1rem;
+    margin-top: 0.4rem;
+    border-radius: 5px;
+    text-align: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .settingsButtonClass {
-    width: 80%;
-    margin-left: 10%;
-    margin-right: auto;
+    width: 20%;
     border: none;
     border-radius: 5px;
     color: white;
@@ -32,7 +63,7 @@
     background-color: #6804ec;
     cursor: pointer;
     outline: none;
-    padding: 6px 1.6rem;
+    margin-top: 0.2rem;
   }
   
   .settingsButtonClass:hover {
@@ -44,4 +75,39 @@
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
     -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
           box-shadow: inset 0px 0px 5px #c1c1c1;
+  }
+
+.carouselButtonClass {
+    margin-left: auto;
+    margin-right: auto;
+    width: 20%;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    background-color: #6804ec;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .carouselButtonClass:hover {
+      background-color: #54647A;
+      transition: background-color 0.5s;
+  }
+  
+  .carouselButtonClass:active {
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+          box-shadow: inset 0px 0px 5px #c1c1c1;
+  }
+
+  .swal2-image {
+      padding: 2rem;
+      border-radius: 2.5rem;
+  }
+
+  #adminTable_wrapper {
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
   }
