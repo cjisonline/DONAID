@@ -91,9 +91,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   }
 
   Future<void> _adoptBeneficiary() async {
-    print('in adopt bene');
     try {
-      // update addoption and add entry to donorMap
+      // update adoption and add entry to donorMap
       _firestore.collection('Adoptions').doc(widget.adoption.id).update({
         "donorMap.$donorID": monthlyAmount
       });
@@ -109,7 +108,6 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
         "donorMap": donorMap.remove({donorID: monthlyAmount})
       });
     } catch (e) {
-      print('error in cancel adopt');
       print(e);
     }
   }

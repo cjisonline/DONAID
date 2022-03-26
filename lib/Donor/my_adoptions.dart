@@ -70,8 +70,7 @@ class _MyAdoptionsState extends State<MyAdoptions> {
           .where('active',isEqualTo: true)
           .get();
       for (var element in ret.docs) {
-        if(element.data()['donorMap'].containsKey(donorID)){
-          print('in if');
+        if( element.data()['donorMap'] != null && element.data()['donorMap'].containsKey(donorID)){
           Adoptee adoptee = Adoptee(
             name: element.data()['name'],
             biography: element.data()['biography'],
@@ -83,7 +82,6 @@ class _MyAdoptionsState extends State<MyAdoptions> {
           adoptions.add(adoptee);
         }
       }
-      print(adoptions);
       setState(() {});
     }
     catch(e){
