@@ -31,10 +31,10 @@ class _HomeScreenState extends State<ContactUs> {
   TextEditingController messageType = TextEditingController();
 
   List<String> categoryOptions = [
-    "Question",
-    "Suggestion",
-    "Help",
-    "Other"
+    "Question".tr,
+    "Suggestion".tr,
+    "Help".tr,
+    "Other".tr
   ];
 
   @override
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<ContactUs> {
                   }),
                   validator: (value){
                     if(messageType.text.isEmpty){
-                      return 'Please select a category.';
+                      return 'Please select a category'.tr;
                     }
                     else{
                       return null;
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<ContactUs> {
                   },
                   validator: (value){
                     if(value!.isEmpty){
-                      return 'Please enter valid subject.';
+                      return 'Please enter a valid subject'.tr;
                     }
                     else {
                       return null;
@@ -141,10 +141,10 @@ class _HomeScreenState extends State<ContactUs> {
                       label: Center(
                         child: RichText(
                             text:  TextSpan(
-                                text: 'Subject',
-                                style: TextStyle(
+                                text: 'Subject'.tr,
+                                style: const TextStyle(
                                     color: Colors.black, fontSize: 20.0),
-                                children: [
+                                children: const [
                                   TextSpan(
                                       text: ' *',
                                       style: TextStyle(
@@ -171,7 +171,7 @@ class _HomeScreenState extends State<ContactUs> {
                   },
                   validator: (value){
                     if(value!.isEmpty){
-                      return 'Please enter valid message.';
+                      return 'Please enter a valid message'.tr;
                     }
                     else {
                       return null;
@@ -182,10 +182,10 @@ class _HomeScreenState extends State<ContactUs> {
                       label: Center(
                         child: RichText(
                             text:  TextSpan(
-                                text: 'Message',
-                                style: TextStyle(
+                                text: 'Message'.tr,
+                                style: const TextStyle(
                                     color: Colors.black, fontSize: 20.0),
-                                children: [
+                                children: const [
                                   TextSpan(
                                       text: ' *',
                                       style: TextStyle(
@@ -208,7 +208,7 @@ class _HomeScreenState extends State<ContactUs> {
                       color: Colors.blue,
                       borderRadius: BorderRadius.circular(30.0),
                       child: MaterialButton(
-                          child: Text('Send',
+                          child: Text('Send'.tr,
                               style: const TextStyle(
                                   fontSize: 25, color: Colors.white)),
                           onPressed: () async {
@@ -261,7 +261,7 @@ class _HomeScreenState extends State<ContactUs> {
                     }),
                     validator: (value){
                       if(messageType.text.isEmpty){
-                        return 'Please select a category.';
+                        return 'Please select a category'.tr;
                       }
                       else{
                         return null;
@@ -277,7 +277,7 @@ class _HomeScreenState extends State<ContactUs> {
                   },
                   validator: (value){
                     if(value!.isEmpty){
-                      return 'Please enter valid subject.';
+                      return 'Please enter a valid subject'.tr;
                     }
                     else {
                       return null;
@@ -288,10 +288,10 @@ class _HomeScreenState extends State<ContactUs> {
                       label: Center(
                         child: RichText(
                             text:  TextSpan(
-                                text: 'Subject',
-                                style: TextStyle(
+                                text: 'Subject'.tr,
+                                style: const TextStyle(
                                     color: Colors.black, fontSize: 20.0),
-                                children: [
+                                children: const [
                                   TextSpan(
                                       text: ' *',
                                       style: TextStyle(
@@ -318,7 +318,7 @@ class _HomeScreenState extends State<ContactUs> {
                   },
                   validator: (value){
                     if(value!.isEmpty){
-                      return 'Please enter valid message.';
+                      return 'Please enter a valid message'.tr;
                     }
                     else {
                       return null;
@@ -329,10 +329,10 @@ class _HomeScreenState extends State<ContactUs> {
                       label: Center(
                         child: RichText(
                             text:  TextSpan(
-                                text: 'Message',
+                                text: 'Message'.tr,
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 20.0),
-                                children: [
+                                children: const [
                                   TextSpan(
                                       text: ' *',
                                       style: TextStyle(
@@ -355,7 +355,7 @@ class _HomeScreenState extends State<ContactUs> {
                       color: Colors.blue,
                       borderRadius: BorderRadius.circular(30.0),
                       child: MaterialButton(
-                          child: Text('Send',
+                          child: Text('Send'.tr,
                               style: const TextStyle(
                                   fontSize: 25, color: Colors.white)),
                           onPressed: () async {
