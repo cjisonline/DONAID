@@ -101,7 +101,8 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         'amountRaised': 0,
         'id': docRef.id,
         'organizationID': loggedInUser?.uid,
-        'name': name
+        'name': name,
+        'donorMap' : {}
       });
     } catch (e) {
       print(e);

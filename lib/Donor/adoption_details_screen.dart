@@ -24,13 +24,14 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   String donorID = "";
   String donorAdopteeID = "";
   final _formKey = GlobalKey<FormState>();
+  var donorMap;
 
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
     _refreshAdoption();
-    _getDonorID().whenComplete(() => _getDonorAdoptionInformation());
+    _getDonorID().whenComplete(() => _getAdoption());
   }
 
   _refreshAdoption() async {
@@ -61,51 +62,54 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     donorID = doc['id'];
   }
 
-  _getDonorAdoptionInformation() async {
-    var ret = await _firestore
-        .collection('DonorAdoptee')
-        .where('donorID', isEqualTo: donorID)
-        .where('adopteeID', isEqualTo: widget.adoption.id)
-        .get();
+  _getAdoption() async {
+    try{
 
-    if (ret.docs.isEmpty) {
-      isAdopted = false;
-    } else {
-      var doc = ret.docs[0];
-      isAdopted = true;
-      monthlyAmount = doc['monthlyAmount'].toDouble();
-      donorAdopteeID = doc['id'];
+      var ret = await _firestore
+          .collection('Adoptions')
+          .where('active',isEqualTo: true)
+          .where('id', isEqualTo: widget.adoption.id)
+          .get();
+        if (ret.docs.isEmpty) {
+          isAdopted = false;
+        } else {
+          var doc = ret.docs[0];
+          if(doc['donorMap'] != null && doc['donorMap'].containsKey(donorID)) {
+            isAdopted = true;
+            monthlyAmount = doc['donorMap'][donorID].toDouble();
+            donorMap = doc['donorMap'];
+          }
+          else{
+            isAdopted = false;
+          }
+        }
+      setState(() {});
     }
-    setState(() {});
+    catch(e){
+      print(e);
+    }
   }
 
   Future<void> _adoptBeneficiary() async {
-    // add entry to donorAdpotee table
+    print('in adopt bene');
     try {
-      final docRef = await _firestore.collection("DonorAdoptee").add({});
-      // // goalAmount, amount raised for progress bar
-      //     // name and bio of adoptee
-      await _firestore.collection("DonorAdoptee").doc(docRef.id).set({
-        'donorID': donorID,
-        'adopteeID': widget.adoption.id,
-        'monthlyAmount': monthlyAmount,
-        'id': docRef.id,
-        'goalAmount': widget.adoption.goalAmount,
-        'amountRaised': widget.adoption.amountRaised,
-        'name': widget.adoption.name,
-        'biography': widget.adoption.biography
+      // update addoption and add entry to donorMap
+      _firestore.collection('Adoptions').doc(widget.adoption.id).update({
+        "donorMap.$donorID": monthlyAmount
       });
-      donorAdopteeID = docRef.id;
     } catch (e) {
       print(e);
     }
   }
 
   _cancelBeneficiaryAdoption() async {
-    // delete entry to donorAdpotee table
+    // delete entry from donorMap
     try {
-      await _firestore.collection('DonorAdoptee').doc(donorAdopteeID).delete();
+      _firestore.collection('Adoptions').doc(widget.adoption.id).update({
+        "donorMap": donorMap.remove({donorID: monthlyAmount})
+      });
     } catch (e) {
+      print('error in cancel adopt');
       print(e);
     }
   }
@@ -198,7 +202,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                         onPressed: () async {
                                           _cancelBeneficiaryAdoption()
                                               .whenComplete(() {
-                                            _getDonorAdoptionInformation();
+                                            _getAdoption();
                                           });
                                         }))
                               ],
@@ -278,7 +282,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                               _submitForm();
                                               _adoptBeneficiary()
                                                   .whenComplete(() {
-                                                _getDonorAdoptionInformation();
+                                                _getAdoption();
                                               });
                                             }))
                                   ],
