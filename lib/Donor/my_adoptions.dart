@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../Models/Adoptee.dart';
-import '../Models/Adoption.dart';
 import 'package:intl/intl.dart';
 
 class MyAdoptions extends StatefulWidget {
@@ -24,15 +23,13 @@ class _MyAdoptionsState extends State<MyAdoptions> {
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   Donor donor = Donor.c1();
-  List<Adoptee> adoptions = [];
   var f = NumberFormat("###,##0.00", "en_US");
 
   bool isAdopted = false;
   double monthlyAmount = 0;
   String donorID = "";
   String donorAdopteeID = "";
-  List<String> adopteeIDs = [];
-  List<Adoptee> adoptions2 = [];
+  List<Adoptee> adoptions = [];
 
 
   @override
@@ -40,17 +37,13 @@ class _MyAdoptionsState extends State<MyAdoptions> {
     super.initState();
     _getCurrentUser();
     _getDonorID().whenComplete( () =>
-        // _getAdoptions()
-    // _retrieveEntryFromArrayOfMaps()
-    // _retrieveAdoptionsOfCurrentDonor()
-    _retrievePrefix()
+    _getAdoptions()
     );
   }
 
   _refreshPage() {
     adoptions.clear();
     _getCurrentUser();
-
     _getAdoptions();
     setState(() {
 
@@ -69,86 +62,16 @@ class _MyAdoptionsState extends State<MyAdoptions> {
     donorID = doc['id'];
   }
 
-  _retrieveAdoptionsOfCurrentDonor() async{
-    var ret = await _firestore
-        .collection('Adoptions')
-        .where ((user) {
-          // print(user['donorList'].toString());
-          // return user['name'] == 'Jerry';
-          return true;
-          })
-        .get();         // .where('donorList',arrayContains: donorID)
-  }
-
-  _retrieveEntryFromArrayOfMaps() async{
-    print('in retrieve');
-    print(donorID);
-    try{
-      // map key : donorID
-      // map value : monthlyAmount
-
-      var ret = await _firestore
-          .collection('Adoptions')
-          .where('donorList',arrayContains: { 'donorID': donorID , 'monthlyAmount':123})
-          .get();
-      for (var element in ret.docs) {
-        print(element.data()['name']);
-        print('in loop');
-      }
-    }
-    catch(e){
-      print(e);
-    }
-  }
 
   _getAdoptions() async {
-    var ret = await _firestore
-        .collection('DonorAdoptee')
-        .where('donorID', isEqualTo: donorID)
-        .get();
-
-    for (var element in ret.docs) {
-      Adoptee adoptee = Adoptee(
-        name: element.data()['name'],
-        biography: element.data()['biography'],
-        goalAmount: element.data()['goalAmount'].toDouble(),
-        amountRaised: element.data()['amountRaised'].toDouble(),
-        id: element.data()['adopteeID'],
-        monthlyAmount: 100,
-      );
-      adoptions.add(adoptee);
-      print(adopteeIDs);
-      setState(() {});
-    }
-
-
-      // select where donor id == current id from DonorAdoptee table
-      // this will get adonorID, adopteeID, and montly amount
-      // create adopteeID list
-
-      // then go to Adoptions table
-      // grab entry if adoption id is in adopteeID list - only up to 10 entries possible for firebase where in clause
-
-  }
-  _retrievePrefix() async {
     try{
       var ret = await _firestore
           .collection('Adoptions')
           .where('active',isEqualTo: true)
           .get();
       for (var element in ret.docs) {
-        // print(element.data()['donorMap']);
-        // if(element.data()['donorMap'].toString().contains(donorID)){
-        //   print('found donor');
-        // }
-        // var map = Map<String, dynamic>.from(element.data()['donorMap']);
-        //
-        // if(map.containsKey(donorID)){
-        //   print('found donor map way');
-        //   print(map[donorID]);
-        // }
         if(element.data()['donorMap'].containsKey(donorID)){
-          print('found donor map way3');
+          print('in if');
           Adoptee adoptee = Adoptee(
             name: element.data()['name'],
             biography: element.data()['biography'],
@@ -157,12 +80,11 @@ class _MyAdoptionsState extends State<MyAdoptions> {
             id: element.data()['id'],
             monthlyAmount: element.data()['donorMap'][donorID].toDouble()
           );
-          adoptions2.add(adoptee);
+          adoptions.add(adoptee);
         }
-        print('in loop');
       }
-      print(adoptions2[0].monthlyAmount);
-
+      print(adoptions);
+      setState(() {});
     }
     catch(e){
       print(e);
