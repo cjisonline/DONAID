@@ -25,16 +25,12 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   String donorAdopteeID = "";
   final _formKey = GlobalKey<FormState>();
 
-
   @override
   void initState() {
     super.initState();
     _getCurrentUser();
     _refreshAdoption();
-    _getDonorID().whenComplete( () =>
-        _getDonorAdoptionInformation()
-
-    );
+    _getDonorID().whenComplete(() => _getDonorAdoptionInformation());
   }
 
   _refreshAdoption() async {
@@ -79,7 +75,6 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
       isAdopted = true;
       monthlyAmount = doc['monthlyAmount'].toDouble();
       donorAdopteeID = doc['id'];
-
     }
     setState(() {});
   }
@@ -88,11 +83,17 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     // add entry to donorAdpotee table
     try {
       final docRef = await _firestore.collection("DonorAdoptee").add({});
+      // // goalAmount, amount raised for progress bar
+      //     // name and bio of adoptee
       await _firestore.collection("DonorAdoptee").doc(docRef.id).set({
         'donorID': donorID,
         'adopteeID': widget.adoption.id,
         'monthlyAmount': monthlyAmount,
         'id': docRef.id,
+        'goalAmount': widget.adoption.goalAmount,
+        'amountRaised': widget.adoption.amountRaised,
+        'name': widget.adoption.name,
+        'biography': widget.adoption.biography
       });
       donorAdopteeID = docRef.id;
     } catch (e) {
@@ -167,98 +168,121 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                 ),
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                       child: (isAdopted)
-                          ? Material(
-                              elevation: 5.0,
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(32.0),
-                              child: MaterialButton(
-                                  child: const Text(
-                                    'Cancel Adoption',
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.white,
-                                    ),
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    'Monthly Amount: \$' +
+                                        f.format(monthlyAmount),
+                                    style: TextStyle(fontSize: 18),
                                   ),
-                                  onPressed: () async {
-                                    _cancelBeneficiaryAdoption()
-                                        .whenComplete(() {
-                                      _getDonorAdoptionInformation();
-                                    });
-                                  }))
-                          : (!isAdopted)
-                              ?
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Form(
-                              key: _formKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      onSaved: (value) {
-                                        monthlyAmount = double.parse(value!);
-                                      },
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Please enter a valid payment amount.';
-                                        }
-                                        else if(double.parse(value)<0.50){
-                                          return 'Please provide a monthly donation amount minimum of \$0.50';
-                                        }
-                                        else {
-                                          return null;
-                                        }
-                                      },
-                                      keyboardType: const TextInputType.numberWithOptions(
-                                          decimal: true),
-                                      textAlign: TextAlign.center,
-                                      decoration: InputDecoration(
-                                          label: Center(
-                                            child: RichText(
-                                                text: TextSpan(
-                                                  text: 'Monthly Donation Amount',
-                                                  style: TextStyle(
-                                                      color: Colors.grey[600], fontSize: 20.0),
-                                                )),
+                                ),
+                                Material(
+                                    elevation: 5.0,
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(32.0),
+                                    child: MaterialButton(
+                                        child: const Text(
+                                          'Cancel Adoption',
+                                          style: TextStyle(
+                                            fontSize: 25,
+                                            color: Colors.white,
                                           ),
-                                          border: const OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius.all(Radius.circular(32.0)),
-                                          )),
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          Material(
-                              elevation: 5.0,
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(32.0),
-                              child: MaterialButton(
-                                  child: const Text(
-                                    'Adopt',
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    _submitForm();
-                                    _adoptBeneficiary()
-                                        .whenComplete(() {
-                                      _getDonorAdoptionInformation();
-                                    });
-                                  }))
-                        ],
-                      )
-
+                                        ),
+                                        onPressed: () async {
+                                          _cancelBeneficiaryAdoption()
+                                              .whenComplete(() {
+                                            _getDonorAdoptionInformation();
+                                          });
+                                        }))
+                              ],
+                            )
+                          : (!isAdopted)
+                              ? Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Form(
+                                        key: _formKey,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: TextFormField(
+                                                onSaved: (value) {
+                                                  monthlyAmount =
+                                                      double.parse(value!);
+                                                },
+                                                validator: (value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'Please enter a valid payment amount.';
+                                                  } else if (double.parse(
+                                                          value) <
+                                                      0.50) {
+                                                    return 'Please provide a monthly donation amount minimum of \$0.50';
+                                                  } else {
+                                                    return null;
+                                                  }
+                                                },
+                                                keyboardType:
+                                                    const TextInputType
+                                                            .numberWithOptions(
+                                                        decimal: true),
+                                                textAlign: TextAlign.center,
+                                                decoration: InputDecoration(
+                                                    label: Center(
+                                                      child: RichText(
+                                                          text: TextSpan(
+                                                        text:
+                                                            'Monthly Donation Amount',
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontSize: 20.0),
+                                                      )),
+                                                    ),
+                                                    border:
+                                                        const OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  32.0)),
+                                                    )),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
+                                    Material(
+                                        elevation: 5.0,
+                                        color: Colors.green,
+                                        borderRadius:
+                                            BorderRadius.circular(32.0),
+                                        child: MaterialButton(
+                                            child: const Text(
+                                              'Adopt',
+                                              style: TextStyle(
+                                                fontSize: 25,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            onPressed: () async {
+                                              _submitForm();
+                                              _adoptBeneficiary()
+                                                  .whenComplete(() {
+                                                _getDonorAdoptionInformation();
+                                              });
+                                            }))
+                                  ],
+                                )
                               : Container()),
                 ],
               ),
