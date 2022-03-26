@@ -32,12 +32,10 @@ class _DonorProfileState extends State<DonorProfile> {
     _getDonorInformation();
   }
 
-  _refreshPage(){
+  _refreshPage() {
     _getCurrentUser();
     _getDonorInformation();
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   void _getCurrentUser() {
@@ -45,32 +43,30 @@ class _DonorProfileState extends State<DonorProfile> {
   }
 
   _getDonorInformation() async {
-    var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
+    var ret = await _firestore
+        .collection('DonorUsers')
+        .where('uid', isEqualTo: loggedInUser?.uid)
+        .get();
     final doc = ret.docs[0];
-    donor = Donor(
-          doc['email'],
-        doc['firstName'],
-        doc['lastName'],
-           doc['phoneNumber'],
-      doc['id']
-      );
+    donor = Donor(doc['email'], doc['firstName'], doc['lastName'],
+        doc['phoneNumber'], doc['id']);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title:  Text('profile'.tr),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DonorEditProfile())).then((value) => _refreshPage());
-              },
-              child:  Text('edit'.tr,
-                  style: TextStyle(fontSize: 15.0, color: Colors.white)),
-            ),
-          ]),
+      appBar: AppBar(title: Text('profile'.tr), actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DonorEditProfile()))
+                .then((value) => _refreshPage());
+          },
+          child: Text('edit'.tr,
+              style: TextStyle(fontSize: 15.0, color: Colors.white)),
+        ),
+      ]),
       drawer: const DonorDrawer(),
       body: _body(),
       bottomNavigationBar: _bottomNavigationBar(),
@@ -78,17 +74,16 @@ class _DonorProfileState extends State<DonorProfile> {
   }
 
   _body() {
-    return  SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children:  [
-                ProfileRow('YOUR EMAIL', donor.email),
-                ProfileRow('FIRST NAME', donor.firstName),
-                ProfileRow('LAST NAME', donor.lastName),
-                ProfileRow('YOUR PHONE', donor.phoneNumber),
-              ],
-            )
-        );
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            ProfileRow('YOUR EMAIL', donor.email),
+            ProfileRow('FIRST NAME', donor.firstName),
+            ProfileRow('LAST NAME', donor.lastName),
+            ProfileRow('YOUR PHONE', donor.phoneNumber),
+          ],
+        ));
   }
 
   _bottomNavigationBar() {
@@ -108,7 +103,7 @@ class _DonorProfileState extends State<DonorProfile> {
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-             Text('home'.tr,
+            Text('home'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -122,7 +117,7 @@ class _DonorProfileState extends State<DonorProfile> {
                 size: 35,
               ),
             ),
-             Text('search'.tr,
+            Text('search'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -133,7 +128,7 @@ class _DonorProfileState extends State<DonorProfile> {
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-             Text('notifications'.tr,
+            Text('notifications'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -143,7 +138,7 @@ class _DonorProfileState extends State<DonorProfile> {
               onPressed: () {},
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-             Text('message'.tr,
+            Text('message'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),

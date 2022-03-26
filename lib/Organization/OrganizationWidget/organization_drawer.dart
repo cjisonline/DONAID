@@ -1,4 +1,5 @@
 import 'package:donaid/Models/message.dart';
+import 'package:donaid/contactUs.dart';
 import 'package:donaid/Organization/settings.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,7 +61,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),
-              title:  Text("profile".tr),
+              title: Text("profile".tr),
               onTap: () {
                 Navigator.pushNamed(context, OrganizationProfile.id);
               },
@@ -100,6 +101,14 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 });
               },
             ),
+            if (FirebaseAuth.instance.currentUser != null)
+              ListTile(
+                leading: const Icon(Icons.assignment_ind_outlined),
+                title: Text("contact_admin".tr),
+                onTap: () {
+                  Get.to(ContactUs("OrganizationUsers"));
+                },
+              ),
             ListTile(
               leading: Icon(Icons.logout),
               title: Text("logout".tr),
