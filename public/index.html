@@ -3,7 +3,7 @@
 
 <head>
 
-<link rel="stylesheet" href="login.css">
+<link rel="stylesheet" href="index.css">
 
 <!-- JS Loads -->
 <script src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
@@ -50,13 +50,15 @@ import {getFirestore} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-fi
         // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
         signInFlow: 'popup',
         signInSuccessUrl: 'donor_dashboard.html',
-        signInOptions: [
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
-        ],
-        // Terms of service url.
-        tosUrl: 'index.html',
-        // Privacy policy url.
-        privacyPolicyUrl: 'index.html'
+        signInOptions: [{
+        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        disableSignUp: {
+              // Disable user from signing up with email providers.
+              status: true,
+              adminEmail: 'donaidmobileapp1@gmail.com',
+            }
+
+        }],
     };
 
     var ui = new firebaseui.auth.AuthUI(firebase.auth());
@@ -69,7 +71,7 @@ import {getFirestore} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-fi
 <body>
     
     <div id="firebaseui-auth-container">
-        <h1 class="firebaseui-title" style="text-align:center; font-size: 24px;">DONAID Admin</h1>
+        <div class="headerShader"><h4>DONAID Admin</h4></div><br>
     </div>
     
     <div id="loader">Please Wait...</div>     
