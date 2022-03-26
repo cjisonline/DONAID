@@ -23,7 +23,6 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
   final _firestore = FirebaseFirestore.instance;
   Organization? organization;
   var f = NumberFormat("###,##0.00", "en_US");
-  final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   var pointlist = [];
 
