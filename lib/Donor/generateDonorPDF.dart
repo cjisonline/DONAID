@@ -208,6 +208,7 @@ class PdfInvoiceApi {
     );
   }
 
+
   static buildText({
     required String title,
     required String value,
