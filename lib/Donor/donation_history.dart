@@ -287,11 +287,11 @@ class _DonationHistoryState extends State<DonationHistory> {
                 ),
                 items: [
                   InvoiceItem(
-                    description: 'Coffee',
+                    title: 'Coffee',
                     date: DateTime.now(),
-                    quantity: 3,
-                    vat: 0.19,
-                    unitPrice: 5.99,
+                    organization: "Red Cross",
+                    type: "Campaign",
+                    price: 5.99,
                   )
                 ],
               );

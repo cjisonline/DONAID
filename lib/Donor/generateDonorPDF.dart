@@ -117,11 +117,11 @@ class PdfInvoiceApi {
     final data = invoice.items.map((item) {
 
       return [
-        item.description,
-        '${item.quantity}',
-        '${item.vat} %',
+        item.title,
+        '${item.organization}',
+        '${item.type}',
         Utils.formatDate(item.date),
-        '\$ ${item.unitPrice}',
+        '\$ ${item.price}',
       ];
     }).toList();
 
@@ -145,7 +145,7 @@ class PdfInvoiceApi {
 
   static Widget buildTotal(Invoice invoice) {
     final netTotal = invoice.items
-        .map((item) => item.unitPrice * item.quantity)
+        .map((item) => item.price)
         .reduce((item1, item2) => item1 + item2);
 
     return Container(
