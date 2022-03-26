@@ -187,7 +187,7 @@ class PdfInvoiceApi {
       SizedBox(height: 2 * PdfPageFormat.mm),
       buildSimpleText(title: 'Email', value: invoice.supplier.emailaddress),
       SizedBox(height: 1 * PdfPageFormat.mm),
-      buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
+      buildSimpleText(title: 'Payment Method', value: invoice.supplier.paymentInfo),
     ],
   );
 
