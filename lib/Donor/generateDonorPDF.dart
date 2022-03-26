@@ -25,7 +25,7 @@ class PdfInvoiceApi {
       footer: (context) => buildFooter(invoice),
     ));
 
-    return PdfPreview.saveDocument(name: 'my_donitions.pdf', pdf: pdf);
+    return PdfPreview.saveDocument(name: 'my_donations.pdf', pdf: pdf);
   }
 
   static Widget buildHeader(Invoice invoice) => Column(
