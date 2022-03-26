@@ -35,9 +35,7 @@ class _DonorProfileState extends State<DonorProfile> {
   _refreshPage(){
     _getCurrentUser();
     _getDonorInformation();
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   void _getCurrentUser() {

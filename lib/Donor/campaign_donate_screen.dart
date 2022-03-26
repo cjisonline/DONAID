@@ -1,9 +1,15 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/category_campaigns_screen.dart';
+import 'package:donaid/Donor/updateFavorite.dart';
 import 'package:donaid/Models/Campaign.dart';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 // import 'package:flutter_stripe/flutter_stripe.dart';
@@ -32,10 +38,18 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   String donationAmount = "";
   bool showLoadingSpinner = false;
   var f = NumberFormat("###,##0.00", "en_US");
+  User? loggedInUser;
+  var pointlist = [];
 
   @override
   void initState(){
     super.initState();
+    _getCurrentUser();
+    _getFavorite();
+  }
+
+  void _getCurrentUser() {
+    loggedInUser = _auth.currentUser;
   }
 
   _refreshPage() async {
@@ -89,15 +103,38 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
         });
   }
 
+  _getFavorite() async {
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+      setState(() {
+        pointlist = List.from(value['favoriteList']);
+      });
+    });
+  }
+
   _campaignDonateBody() {
     return ModalProgressHUD(
       inAsyncCall: showLoadingSpinner,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Center(
+
             child: Padding(
           padding: const EdgeInsets.all(8.0),
+
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Align(
+              alignment: Alignment.topRight,
+              child:IconButton(
+                icon: Icon(
+                  pointlist.contains(widget.campaign.id.toString())? Icons.favorite: Icons.favorite_border,
+                  color: pointlist.contains(widget.campaign.id.toString())? Colors.red:null,
+                  size: 40,
+                ), onPressed: () async {
+                await updateFavorites(loggedInUser!.uid.toString(),widget.campaign.id.toString());
+                await _getFavorite();
+
+              },
+              ),),
             SizedBox(
                 height: 100,
                 child: Image.asset('assets/DONAID_LOGO.png')
@@ -331,7 +368,6 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   calculateAmount(String amount) {
     final price = (double.parse(amount)*100).toInt();
     return price.toString();
-    print(price);
   }
 
   @override

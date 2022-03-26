@@ -1,5 +1,6 @@
 import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
 import 'package:donaid/Donor/categories_screen.dart';
+import 'package:donaid/Donor/donor_favorite_screen.dart';
 import 'package:donaid/Donor/donor_search_screen.dart';
 import 'package:donaid/Donor/notifications_page.dart';
 import 'package:donaid/Donor/organizations_expanded_screen.dart';
@@ -110,6 +111,7 @@ class Donaid extends StatelessWidget {
               const OrganizationCampaignsExpandedScreen(),
           OrgSearchPage.id: (context) => const OrgSearchPage(),
           DonationHistory.id: (context) => const DonationHistory(),
+          DonorFavoritePage.id: (context) => const DonorFavoritePage(),
           DonorNotificationPage.id: (context) => const DonorNotificationPage(),
           OrganizationNotificationPage.id: (context) => const OrganizationNotificationPage(),
           DonorSettingsPage.id: (context) => const DonorSettingsPage(),
@@ -123,5 +125,3 @@ class Donaid extends StatelessWidget {
     );
   }
 }
-
-

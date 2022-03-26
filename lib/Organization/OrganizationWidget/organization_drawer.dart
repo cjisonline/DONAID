@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/message.dart';
 import 'package:donaid/Organization/gateway_visits.dart';
+import 'package:donaid/contactUs.dart';
 import 'package:donaid/Organization/settings.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -301,6 +302,14 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                     });
               },
             ),
+            if (FirebaseAuth.instance.currentUser != null)
+              ListTile(
+                leading: const Icon(Icons.assignment_ind_outlined),
+                title: Text("contact_admin".tr),
+                onTap: () {
+                  Get.to(ContactUs("OrganizationUsers"));
+                },
+              ),
             ListTile(
               leading: Icon(Icons.logout),
               title: Text("logout".tr),
