@@ -45,7 +45,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void loginUser() async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
       final userType = await getUserType();
       if (userType == 1) {
         //If user logging in is a donor user
@@ -53,10 +52,12 @@ class _LoginScreenState extends State<LoginScreen> {
         final enabled = donorUser.docs[0]['enabled'];
 
         if(enabled) {
+          await _auth.signInWithEmailAndPassword(email: email, password: password);
           Navigator.pushNamed(context, DonorDashboard.id);
         }
         else{
           _accountDisabledDialog();
+
         }
       } else if (userType == 2) {
         //If user logging in is an organization user
@@ -67,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final approved = organizationUser.docs[0]['approved'];
         print('APPROVAL STATUS: $approved');
         if (approved) {
+          await _auth.signInWithEmailAndPassword(email: email, password: password);
           Navigator.pushNamed(context, OrganizationDashboard.id);
         } else {
           _accountNotApprovedDialog();
@@ -141,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child:  Text('ok'.tr),
                 ),
               ),
             ],
@@ -173,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child:  Text('ok'.tr),
                 ),
               ),
             ],
