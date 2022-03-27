@@ -10,7 +10,6 @@ import 'package:donaid/Models/UrgentCase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../Models/Donor.dart';
 import 'DonorUser.dart';
@@ -52,6 +51,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   _refreshPage() {
     donations.clear();
     organizations.clear();
+    invoiceitems.clear();
     _getDonationHistory();
   }
 
@@ -180,7 +180,8 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _getDonorInformation() async {
-    var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
+    var ret = await _firestore.collection('DonorUsers').where(
+        'uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
     donor = Donor(
         email: doc['email'],
@@ -324,6 +325,30 @@ class _DonationHistoryState extends State<DonationHistory> {
       drawer: const DonorDrawer(),
       body: _donationHistoryBody(),
       bottomNavigationBar: DonorBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Can Not Generate A PDF'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("You currently have no donation history to generate a pdf."),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme
+              .of(context)
+              .primaryColor,
+          child: Text('Close'),
+        ),
+      ],
     );
   }
 }
