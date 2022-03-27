@@ -69,20 +69,34 @@ class _GatewayVisitsState extends State<GatewayVisits> {
 
   _getDonors() async {
     for (var visit in visits) {
+
+      if(visit.donorID!='Guest') {
       var ret = await _firestore
           .collection('DonorUsers')
           .where('uid', isEqualTo: visit.donorID)
           .get();
 
       var doc = ret.docs.first;
-      Donor donor = Donor(
-        email: doc.data()['email'],
-        firstName: doc.data()['firstName'],
-        lastName: doc.data()['lastName'],
-        phoneNumber: doc.data()['phoneNumber'],
-        id: doc.data()['id'],
-      );
-      donors.add(donor);
+        Donor donor = Donor(
+          email: doc.data()['email'],
+          firstName: doc.data()['firstName'],
+          lastName: doc.data()['lastName'],
+          phoneNumber: doc.data()['phoneNumber'],
+          id: doc.data()['id'],
+        );
+        donors.add(donor);
+      }
+      else{
+        Donor donor = Donor(
+          email: '',
+          firstName: 'Guest',
+          lastName: 'Donor',
+          phoneNumber: '',
+          id: '',
+        );
+        donors.add(donor);
+      }
+
     }
     setState(() {});
   }
@@ -136,19 +150,23 @@ class _GatewayVisitsState extends State<GatewayVisits> {
         'title': campaign.title
       });
 
-      var docRef = await _firestore.collection('Donations').add({});
-      await _firestore.collection('Donations').doc(docRef.id).set({
-        'category': campaign.category,
-        'charityID': campaign.id,
-        'charityName': campaign.title,
-        'charityType': 'Campaigns',
-        'donatedAt': visit.visitedAt,
-        'donationAmount': donationAmount,
-        'donorID': visit.donorID,
-        'organizationID': visit.organizationID,
-        'id': docRef.id
-      });
-    } else if (visit.charityType == 'Beneficiary') {
+      if(visit.donorID!='Guest') {
+        var docRef = await _firestore.collection('Donations').add({});
+        await _firestore.collection('Donations').doc(docRef.id).set({
+          'category': campaign.category,
+          'charityID': campaign.id,
+          'charityName': campaign.title,
+          'charityType': 'Campaigns',
+          'donatedAt': visit.visitedAt,
+          'donationAmount': donationAmount,
+          'donorID': visit.donorID,
+          'organizationID': visit.organizationID,
+          'id': docRef.id
+        });
+      }
+
+    }
+    else if (visit.charityType == 'Beneficiary') {
       var ret = await _firestore
           .collection('Beneficiaries')
           .where('id', isEqualTo: visit.charityID)
@@ -182,19 +200,22 @@ class _GatewayVisitsState extends State<GatewayVisits> {
         'name': beneficiary.name
       });
 
-      var docRef = await _firestore.collection('Donations').add({});
-      await _firestore.collection('Donations').doc(docRef.id).set({
-        'category': beneficiary.category,
-        'charityID': beneficiary.id,
-        'charityName': beneficiary.name,
-        'charityType': 'Beneficiaries',
-        'donatedAt': visit.visitedAt,
-        'donationAmount': donationAmount,
-        'donorID': visit.donorID,
-        'organizationID': visit.organizationID,
-        'id': docRef.id
-      });
-    } else if (visit.charityType == 'Urgent Case') {
+      if(visit.donorID !='Guest') {
+        var docRef = await _firestore.collection('Donations').add({});
+        await _firestore.collection('Donations').doc(docRef.id).set({
+          'category': beneficiary.category,
+          'charityID': beneficiary.id,
+          'charityName': beneficiary.name,
+          'charityType': 'Beneficiaries',
+          'donatedAt': visit.visitedAt,
+          'donationAmount': donationAmount,
+          'donorID': visit.donorID,
+          'organizationID': visit.organizationID,
+          'id': docRef.id
+        });
+      }
+    }
+    else if (visit.charityType == 'Urgent Case') {
       var ret = await _firestore
           .collection('UrgentCases')
           .where('id', isEqualTo: visit.charityID)
@@ -230,19 +251,22 @@ class _GatewayVisitsState extends State<GatewayVisits> {
         'approved': urgentCase.approved
       });
 
-      var docRef = await _firestore.collection('Donations').add({});
-      await _firestore.collection('Donations').doc(docRef.id).set({
-        'category': urgentCase.category,
-        'charityID': urgentCase.id,
-        'charityName': urgentCase.title,
-        'charityType': 'UrgentCases',
-        'donatedAt': visit.visitedAt,
-        'donationAmount': donationAmount,
-        'donorID': visit.donorID,
-        'organizationID': visit.organizationID,
-        'id': docRef.id
-      });
-    } else {
+      if(visit.donorID != 'Guest') {
+        var docRef = await _firestore.collection('Donations').add({});
+        await _firestore.collection('Donations').doc(docRef.id).set({
+          'category': urgentCase.category,
+          'charityID': urgentCase.id,
+          'charityName': urgentCase.title,
+          'charityType': 'UrgentCases',
+          'donatedAt': visit.visitedAt,
+          'donationAmount': donationAmount,
+          'donorID': visit.donorID,
+          'organizationID': visit.organizationID,
+          'id': docRef.id
+        });
+      }
+    }
+    else {
       return;
     }
   }
@@ -399,8 +423,8 @@ class _GatewayVisitsState extends State<GatewayVisits> {
                         children: [
                           ListTile(
                             title: Text(
-                                '${donors[index].firstName} ${donors[index].lastName.substring(0, 1)}. - ${visits[index].charityTitle}\n(${visits[index].charityType})'),
-                            subtitle: Text(DateFormat('yyyy-MM-dd')
+                                '${donors[index].firstName} ${donors[index].lastName} - ${visits[index].charityTitle}'),
+                            subtitle: Text('${visits[index].charityType}\n'+DateFormat('yyyy-MM-dd')
                                 .format(visits[index].visitedAt.toDate())),
                             trailing: Wrap(
                               spacing: 12,
