@@ -205,7 +205,7 @@ class _PendingApprovalsAndDenialsState extends State<PendingApprovalsAndDenials>
             ),
           );
         })
-        :  Center(child: Text('no_denied_urgent_cases_to_show.'.tr, style: TextStyle(fontSize: 18),));
+        :  Center(child: Text('No denied urgent cases to show.'.tr, style: TextStyle(fontSize: 18),));
   }
 
   @override
@@ -214,7 +214,7 @@ class _PendingApprovalsAndDenialsState extends State<PendingApprovalsAndDenials>
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom: TabBar(tabs: [Tab(text: '_pending_approvals'.tr), Tab(text: 'Denials')]),
+          bottom: TabBar(tabs: [Tab(text: '_pending_approvals'.tr), Tab(text: 'Denials'.tr)]),
           title:  Text('pending_approvals'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
