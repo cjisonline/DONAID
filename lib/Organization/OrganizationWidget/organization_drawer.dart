@@ -28,17 +28,21 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   String country="";
+  String organizationName="";
+  String profilePictureDownloadURL="";
 
   @override
   void initState(){
     super.initState();
-    _getCountry();
+    _getOrg();
   }
 
-  _getCountry() async{
+  _getOrg() async{
     var ret = await _firestore.collection('OrganizationUsers').where('uid', isEqualTo: _auth.currentUser!.uid).get();
     var doc = ret.docs.first;
     country = doc.data()['country'];
+    organizationName = doc.data()['organizationName'];
+    profilePictureDownloadURL = doc.data()['profilePictureDownloadURL'];
     setState(() {});
   }
 
@@ -59,7 +63,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                     bottom: 8.0,
                     left: 4.0,
                     child: Text(
-                      "_organization".tr,
+                      organizationName,
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   )
@@ -118,6 +122,14 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 });
               },
             ),
+            if (FirebaseAuth.instance.currentUser != null)
+              ListTile(
+                leading: const Icon(Icons.assignment_ind_outlined),
+                title: Text("contact_admin".tr),
+                onTap: () {
+                  Get.to(ContactUs("OrganizationUsers"));
+                },
+              ),
             ListTile(
               leading: const Icon(Icons.translate),
               title: Text("language".tr),
@@ -185,13 +197,14 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
         child: ListView(
           children: [
             DrawerHeader(
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: Stack(
                 children: [
                   Positioned(
                     bottom: 8.0,
                     left: 4.0,
                     child: Text(
-                      "_organization".tr,
+                      organizationName,
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   )
