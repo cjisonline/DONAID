@@ -67,6 +67,17 @@ body {
         box-shadow: inset 0px 0px 5px #c1c1c1;
 }
 
+.filterButton {
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  background-color: #6804ec;
+  cursor: pointer;
+  outline: none;
+  padding: 6px 1.6rem;
+}
+
 .approveButtonClass,.createButtonClass,.editButtonClass {
   width: 100%;
   border: none;

@@ -15,6 +15,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.material.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/b-2.2.2/datatables.min.js"></script>
 
 <!-- JS Loads -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -120,7 +121,8 @@ async function getDonorData(){
 
             var adminTableDef = $('#adminTable').DataTable({
                 responsive: true,
-                scrollX: true,
+                scrollX: false,
+                autoWidth: false,
                 columnDefs: [
                     {
                         targets: ['_all'],
@@ -129,9 +131,33 @@ async function getDonorData(){
                     {
                     "targets": [ 4 ],
                     "visible": false,
-                    "searchable": false
+                    "searchable": true
                     }
                 ],
+                dom: '<"toolbar">Blfrtip',
+                buttons: [
+                    {
+                        text: "All Users",
+                        action: function(e, dt, node, config){
+                            dt.column(5).search("").draw();
+                        },
+                        className: 'filterButton',
+                    },
+                    {
+                        text: "Enabled Users",
+                        action: function(e, dt, node, config){
+                            dt.column(5).search("Enabled").draw();
+                        },
+                        className: 'filterButton',
+                    },
+                    {
+                        text: "Disabled Users",
+                        action: function(e, dt, node, config){
+                            dt.column(5).search("Disabled").draw();
+                        },
+                        className: 'filterButton',
+                    }
+                    ],
                 "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
                 "info": false,
                 
@@ -140,9 +166,12 @@ async function getDonorData(){
                     $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
                 } else {
                     $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
-                }
+                }   
             }
+            
             });
+
+            $("div.toolbar").html('<b>User Filter:</b>');
 
             $(window).on('resize', function () {
                 $('#adminTable').dataTable().fnDraw();
@@ -150,6 +179,25 @@ async function getDonorData(){
 
             $('a#logoutButton').click(function() {
                 logoutAdmin();
+            });
+
+            $('#allButton').click(function() {
+                var rows = $("#adminTable").find("tr").hide();
+                rows.filter(":contains('')").show();
+            });
+
+            $('#enabledButton').click(function() {
+                var colIndex = +$(this).data('col')
+                var row = $(this).closest('tr')[0];
+                var data = table.row(row).data();
+                data[colIndex] = this.value
+                data[colIndex-1] = $(this).find(':Enabled').text();
+                table.row(row).data(data).draw();
+            });
+
+            $('#disabledButton').click(function() {
+                var rows = $("#adminTable").find("tr").hide();
+                rows.filter(":contains('Disabled')").show();
             });
     }
 }
