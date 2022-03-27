@@ -121,6 +121,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID'],
           active: element.data()['active'],
+          rejected: element.data()['rejected'],
           approved: element.data()['approved']
       );
       urgentCases.add(urgentCase);
@@ -293,7 +294,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          bottom:  TabBar(tabs: [Tab(text: '_campaigns'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,)],),
+          bottom:  TabBar(tabs: [Tab(text: '_campaign'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,)],),
           title:  Text('inactive_charities'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),

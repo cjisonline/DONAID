@@ -4,6 +4,7 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "_campaigns": "Campaigns",
           "No new visits":"No new visits",
           "Did this visit result in a donation?":"Did this visit result in a donation?",
           "Gateway Visits":"Gateway Visits",
@@ -106,7 +107,7 @@ class Messages extends Translations {
           "no_results_found": "No results found",
           "ugent_case_is_no_longer":
               "Urgent case is no longer available to donate to.",
-          "pending_approvals": "Pending Approvals",
+          "pending_approvals": "Pending Approvals & Denials",
           "expired_charities": "Expired Charities",
           "inactive_charities": "Inactive Charities",
           "success": "Success",

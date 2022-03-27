@@ -124,6 +124,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID'],
           active: element.data()['active'],
+          rejected: element.data()['rejected'],
           approved: element.data()['approved']);
       urgentCases.add(urgentCase);
       allUrgentCases.add(urgentCase);
@@ -292,6 +293,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
         id: doc.data()['id'],
         organizationID: doc.data()['organizationID'],
         active: doc.data()['active'],
+        rejected: doc.data()['rejected'],
         approved: doc.data()['approved']);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return (OrganizationUrgentCaseFullScreen(urgentCase));
