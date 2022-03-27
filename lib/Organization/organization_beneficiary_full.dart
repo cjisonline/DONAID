@@ -144,7 +144,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
         builder: (BuildContext context) {
           return AlertDialog(
             title: Center(
-              child: Text('are_you_sure'.tr),
+              child: Text('are_you_sure?'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
