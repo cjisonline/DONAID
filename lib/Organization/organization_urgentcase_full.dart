@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Organization/edit_urgent_case.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
@@ -32,6 +33,13 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
 
     var doc = ret.docs[0];
     widget.urgentCase.active = doc['active'];
+    widget.urgentCase.rejected = doc['rejected'];
+    widget.urgentCase.denialReason = doc['denialReason'];
+    widget.urgentCase.category = doc['category'];
+    widget.urgentCase.description = doc['description'];
+    widget.urgentCase.goalAmount = doc['goalAmount'];
+    widget.urgentCase.endDate = doc['endDate'];
+    widget.urgentCase.title = doc['title'];
     setState(() {
     });
 
@@ -302,95 +310,45 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                   child: Image.asset('assets/DONAID_LOGO.png')
               ),
               Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
-              Text(widget.urgentCase.description, style: TextStyle(fontSize: 18),),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '\$'+f.format(widget.urgentCase.amountRaised),
-                        style: const TextStyle(color: Colors.black, fontSize: 18),
-                      ),
-                      Text(
-                        '\$'+f.format(widget.urgentCase.goalAmount),
-                        style: const TextStyle(color: Colors.black, fontSize: 18),
-                      ),
-                    ]),
+              SizedBox(
+                height: 25,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    child: LinearProgressIndicator(
-                      backgroundColor: Colors.grey,
-                      valueColor:
-                      const AlwaysStoppedAnimation<Color>(Colors.green),
-                      value:
-                      (widget.urgentCase.amountRaised / widget.urgentCase.goalAmount),
-                      minHeight: 25,
-                    ),
-                  ),
-                ),
+              Text('Attention:'.tr,style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: Colors.red),),
+              Text('Your Urgent Case Was Denied'.tr+'\n',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),),
+              Text(
+                "After administrative review, your urgent case was denied for the following reason:".tr+'\n',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(widget.urgentCase.denialReason.toString(),style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
+              SizedBox(
+                height: 25,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                      child: (widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
-                          ? Material(
+                      child:Material(
                           elevation: 5.0,
-                          color: Colors.orange,
+                          color: Colors.blue,
                           borderRadius: BorderRadius.circular(32.0),
                           child: MaterialButton(
-                              child:  Text(
-                                'stop_charity'.tr,
-                                style: TextStyle(
+                              child: Text(
+                                'Edit & Resubmit'.tr,
+                                style: const TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,
                                 ),
                               ),
                               onPressed: () async {
-                                _stopCharityConfirm();
-
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return EditUrgentCase(urgentCase: widget.urgentCase);
+                                })).then((value) => _refreshUrgentCase());
                               }))
-                          : (!widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
-                          ? Material(
-                          elevation: 5.0,
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(32.0),
-                          child: MaterialButton(
-                              child:  Text(
-                                'resume_charity'.tr,
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onPressed: () async {
-                                _resumeCharityConfirm();
-                              }))
-                          : (widget.urgentCase.endDate.compareTo(Timestamp.now()) < 0)
-                          ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Container(
-                            child:  Text(
-                              '_note:this_charity_has_expired'.tr,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                          : Container()),
+                  ),
                   Container(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                      child: widget.urgentCase.amountRaised ==0 ? Material(
+                      child:  Material(
                           elevation: 5.0,
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(32.0),
@@ -405,7 +363,6 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                               onPressed: () async {
                                 _deleteCharityConfirm();
                               }))
-                          : Container()
                   ),
                 ],
               )
@@ -413,6 +370,61 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
         ));
   }
 
+  _urgentCasePendingBody() {
+    return Center(
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SizedBox(
+                  height: 100,
+                  child: Image.asset('assets/DONAID_LOGO.png')
+              ),
+              Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
+              SizedBox(
+                height: 25,
+              ),
+              Text('This urgent case is pending approval.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              SizedBox(
+                height: 25,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child:  Material(
+                          elevation: 5.0,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child: Text(
+                                'Delete'.tr,
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                _deleteCharityConfirm();
+                              }))
+                  ),
+                ],
+              )
+            ])
+        ));
+  }
+
+  _buildBody(){
+    if(widget.urgentCase.rejected){
+      return _urgentCaseDeniedBody();
+    }
+    else if(!widget.urgentCase.approved && !widget.urgentCase.rejected){
+      return _urgentCasePendingBody();
+    }
+    else{
+      return _urgentCaseFullBody();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -426,7 +438,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
         ),
       ),
       drawer: const OrganizationDrawer(),
-      body: _urgentCaseFullBody(),
+      body: _buildBody(),
       bottomNavigationBar: const OrganizationBottomNavigation(),
     );
   }
