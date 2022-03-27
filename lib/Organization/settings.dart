@@ -106,6 +106,12 @@ class _OrganizationSettingsPageState extends State<OrganizationSettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
       ),
       drawer: const OrganizationDrawer(),
       body:_body() ,
