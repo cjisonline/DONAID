@@ -59,10 +59,13 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
           id: element.data()['id'],
           organizationID: element.data()['organizationID'],
           active: element.data()['active'],
+          rejected: element.data()['rejected'],
           approved: element.data()['approved']
       );
       urgentCases.add(urgentCase);
     }
+
+    urgentCases.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 

@@ -84,7 +84,8 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
         'goalAmount': goalAmount,
         'id': docRef.id,
         'organizationID': loggedInUser?.uid,
-        'title': title
+        'title': title,
+        'rejected':false
       });
     } catch (e) {
       print(e);
@@ -233,7 +234,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: '\u0024 goal'.tr,
+                                          text: 'goal'.tr + ' (USD)',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -352,12 +353,12 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                             child: Center(
                               child: RichText(
                                   text:  TextSpan(
-                                      text: 'note '.tr,
+                                      text: 'note'.tr +' ',
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 15.0),
                                       children: [
                                         TextSpan(
-                                            text: 'urgetn_cases_must_recieves_approval'.tr,
+                                            text: 'urgent_cases_must_receive_approval'.tr,
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15.0

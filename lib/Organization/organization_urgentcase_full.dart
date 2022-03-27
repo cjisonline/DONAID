@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Organization/edit_urgent_case.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
+
+import 'organization_dashboard.dart';
 
 
 class OrganizationUrgentCaseFullScreen extends StatefulWidget {
@@ -30,6 +33,13 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
 
     var doc = ret.docs[0];
     widget.urgentCase.active = doc['active'];
+    widget.urgentCase.rejected = doc['rejected'];
+    widget.urgentCase.denialReason = doc['denialReason'];
+    widget.urgentCase.category = doc['category'];
+    widget.urgentCase.description = doc['description'];
+    widget.urgentCase.goalAmount = doc['goalAmount'];
+    widget.urgentCase.endDate = doc['endDate'];
+    widget.urgentCase.title = doc['title'];
     setState(() {
     });
 
@@ -41,6 +51,10 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
     });
 
 
+  }
+
+  _deleteUrgentCase() async {
+    await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).delete();
   }
 
   _resumeUrgentCase() async {
@@ -62,10 +76,8 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
               borderRadius: BorderRadius.circular(32.0),
             ),
             //doubt
-            content: const Text(
-                'Stopping this charity will make it not visible to donors. Once you stop this charity '
-                    'you can reactivate it from the Inactive Charities page. Would you like to continue '
-                    'with stopping this charity?'),
+            content: Text(
+                'Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -73,6 +85,44 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                     _stopUrgentCase();
                     Navigator.pop(context);
                     _refreshUrgentCase();
+                  },
+                  child:  Text('yes'.tr),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child:  Text('no'.tr),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _deleteCharityConfirm() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title:  Center(
+              child: Text('are_you_sure?'.tr),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            //doubt
+            content: Text(
+                'Deleting this charity will completely remove it from the application. Would you like to continue?'.tr),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    _deleteUrgentCase();
+                    Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
                   },
                   child:  Text('yes'.tr),
                 ),
@@ -103,10 +153,8 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
               borderRadius: BorderRadius.circular(32.0),
             ),
             //doubt
-            content: const Text(
-                'Resuming this charity will make it visible to donors again. Once you resume this charity '
-                    'you can deactivate it again from the dashboard or the My Urgent Cases page. Would you like '
-                    'to continue?'),
+            content: Text(
+                'Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -181,7 +229,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                     child: (widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
                         ? Material(
                         elevation: 5.0,
-                        color: Colors.red,
+                        color: Colors.orange,
                         borderRadius: BorderRadius.circular(32.0),
                         child: MaterialButton(
                             child:  Text(
@@ -227,12 +275,156 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                       ),
                     )
                         : Container()),
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child: widget.urgentCase.amountRaised ==0 ? Material(
+                          elevation: 5.0,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child: Text(
+                                'Delete'.tr,
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                _deleteCharityConfirm();
+                              }))
+                          : Container()
+                  ),
                 ],
               )
             ])
         ));
   }
 
+  _urgentCaseDeniedBody() {
+    return Center(
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SizedBox(
+                  height: 100,
+                  child: Image.asset('assets/DONAID_LOGO.png')
+              ),
+              Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
+              SizedBox(
+                height: 25,
+              ),
+              Text('Attention:'.tr,style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: Colors.red),),
+              Text('Your Urgent Case Was Denied'.tr+'\n',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),),
+              Text(
+                "After administrative review, your urgent case was denied for the following reason:".tr+'\n',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(widget.urgentCase.denialReason.toString(),style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
+              SizedBox(
+                height: 25,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child:Material(
+                          elevation: 5.0,
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child: Text(
+                                'Edit & Resubmit'.tr,
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return EditUrgentCase(urgentCase: widget.urgentCase);
+                                })).then((value) => _refreshUrgentCase());
+                              }))
+                  ),
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child:  Material(
+                          elevation: 5.0,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child: Text(
+                                'Delete'.tr,
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                _deleteCharityConfirm();
+                              }))
+                  ),
+                ],
+              )
+            ])
+        ));
+  }
+
+  _urgentCasePendingBody() {
+    return Center(
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SizedBox(
+                  height: 100,
+                  child: Image.asset('assets/DONAID_LOGO.png')
+              ),
+              Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
+              SizedBox(
+                height: 25,
+              ),
+              Text('This urgent case is pending approval.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              SizedBox(
+                height: 25,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child:  Material(
+                          elevation: 5.0,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child: Text(
+                                'Delete'.tr,
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                _deleteCharityConfirm();
+                              }))
+                  ),
+                ],
+              )
+            ])
+        ));
+  }
+
+  _buildBody(){
+    if(widget.urgentCase.rejected){
+      return _urgentCaseDeniedBody();
+    }
+    else if(!widget.urgentCase.approved && !widget.urgentCase.rejected){
+      return _urgentCasePendingBody();
+    }
+    else{
+      return _urgentCaseFullBody();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -246,7 +438,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
         ),
       ),
       drawer: const OrganizationDrawer(),
-      body: _urgentCaseFullBody(),
+      body: _buildBody(),
       bottomNavigationBar: const OrganizationBottomNavigation(),
     );
   }

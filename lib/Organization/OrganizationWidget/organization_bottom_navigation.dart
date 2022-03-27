@@ -1,5 +1,6 @@
 
 import 'package:donaid/Chat/conversation.dart';
+import 'package:donaid/Organization/notifications_page.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -63,6 +64,7 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
             IconButton(
               enableFeedback: false,
               onPressed: () {
+                Navigator.pushNamed(context, OrganizationNotificationPage.id);
               },
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),

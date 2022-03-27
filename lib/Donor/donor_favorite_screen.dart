@@ -9,6 +9,7 @@ import 'package:donaid/Models/UrgentCase.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
@@ -60,14 +61,16 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     super.initState();
   }
 
-  void _reset() {
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-        transitionDuration: Duration.zero,
-        pageBuilder: (_, __, ___) => ResetWidget(),
-      ),
-    );
+  _refresh(){
+
+    setState(() {
+      pointlist.clear();
+      _favUserUrgentCase.clear();
+      _favUserBeneficiary.clear();
+      _favUserCampaign.clear();
+      _getFavorite();
+    });
+
   }
 
 
@@ -88,7 +91,6 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
           organizationID: element.data()['organizationID'],
           active: element.data()['active']);
       campaigns.add(campaign);
-      print(campaign.title);
 
       campaignsID.add(element.data()['id']);
     }
@@ -129,9 +131,9 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID'],
           active: element.data()['active'],
+          rejected: element.data()['rejected'],
           approved: element.data()['approved']);
       urgentCases.add(urgentCase);
-      print(urgentCase.title);
 
       urgentCasesID.add(element.data()['id']);
     }
@@ -156,7 +158,6 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
           organizationID: element.data()['organizationID'],
           active: element.data()['active']); // need to add category
       beneficiaries.add(beneficiary);
-      print(beneficiary.name);
 
       beneficiariesID.add(element.data()['id']);
     }
@@ -164,7 +165,6 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
   }
 
   _getAllData() {
-    print(urgentCases.length);
     for (var i = 0; i < urgentCases.length; i++) {
       _allUsers.add({
         "charityType": "Urgent Case",
@@ -199,7 +199,6 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
 
         });
     }
-    print(_allUsers.length);
     _getFavorite();
   }
 
@@ -212,13 +211,12 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     _findFavorite();
   }
 
-  _findFavorite() async {
+  _findFavorite() {
     List<Map<String, dynamic>> resultsUrgentCase = [];
     List<Map<String, dynamic>> resultsBeneficiary = [];
     List<Map<String, dynamic>> resultsCampaign = [];
     print(pointlist.length);
       for(int i=0; i< pointlist.length; i++){
-        print(resultsUrgentCase);
         resultsUrgentCase.addAll(_allUsers
             .where((user) =>
             user["id"] == pointlist[i].toString() &&  user["charityType"] == "Urgent Case")
@@ -235,15 +233,12 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     setState(() {
       if(resultsUrgentCase.isNotEmpty){
         _favUserUrgentCase = resultsUrgentCase;
-        print(_favUserUrgentCase.length);
       }
       if(resultsCampaign.isNotEmpty){
         _favUserCampaign = resultsCampaign;
-        print(_favUserCampaign.length);
       }
       if(resultsBeneficiary.isNotEmpty){
         _favUserBeneficiary = resultsBeneficiary;
-        print(_favUserBeneficiary.length);
       }
     });
 
@@ -272,39 +267,27 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: FavoriteButton(
                                     isFavorite: true,
-                                    valueChanged: (_isFavorite) {
-                                      updateFavorites(loggedInUser!.uid.toString(),_favUserCampaign[index]["id"].toString());
-                                      _reset();
-                                      print('Is Favorite : $_isFavorite');
+                                    valueChanged: (_isFavorite) async {
+                                      await updateFavorites(loggedInUser!.uid.toString(),_favUserCampaign[index]["id"].toString());
+                                      _refresh();
                                     },
                                   ),
                                 ),
 
                                 onTap: () {
-                                  if (campaignsID
-                                      .contains(_favUserCampaign[index]['id'])) {
                                     _goToChosenCampaign(
                                         _favUserCampaign[index]['id']);
-                                  } else if (beneficiariesID
-                                      .contains(_favUserCampaign[index]['id'])) {
-                                    _goToChosenBeneficiary(
-                                        _favUserCampaign[index]['id']);
-                                  } else if (urgentCasesID
-                                      .contains(_favUserCampaign[index]['id'])) {
-                                    _goToChosenUrgentCase(
-                                        _favUserCampaign[index]['id']);
-                                  }
-                                  setState(() {
-                                  });
                                 },
                               ),
                               const Divider()
                             ])),
                       )
-                          : const Text(
-                        'No favorites found',
+                          : Center(
+                            child: Text(
+                        'No favorites found'.tr,
                         style: TextStyle(fontSize: 24),
                       ),
+                          ),
                     ),
                   ],
                 )
@@ -332,40 +315,27 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                           padding: const EdgeInsets.all(10.0),
                           child: FavoriteButton(
                             isFavorite: true,
-                            valueChanged: (_isFavorite) {
-                              updateFavorites(loggedInUser!.uid.toString(),_favUserBeneficiary[index]["id"].toString());
-                              _reset();
-                              print('Is Favorite : $_isFavorite');
+                            valueChanged: (_isFavorite) async {
+                              await updateFavorites(loggedInUser!.uid.toString(),_favUserBeneficiary[index]["id"].toString());
+                              _refresh();
                             },
                           ),
                         ),
 
                         onTap: () {
-                          if (campaignsID
-                              .contains(_favUserBeneficiary[index]['id'])) {
-                            _goToChosenCampaign(
-                                _favUserBeneficiary[index]['id']);
-                          } else if (beneficiariesID
-                              .contains(_favUserBeneficiary[index]['id'])) {
                             _goToChosenBeneficiary(
                                 _favUserBeneficiary[index]['id']);
-                          } else if (urgentCasesID
-                              .contains(_favUserBeneficiary[index]['id'])) {
-                            _goToChosenUrgentCase(
-                                _favUserBeneficiary[index]['id']);
-                          }
-                          setState(() {
-                            //Add the extended view page here
-                          });
                         },
                       ),
                       const Divider()
                     ])),
               )
-                  : const Text(
-                'No favorites found',
+                  : Center(
+                    child: Text(
+                'No favorites found'.tr,
                 style: TextStyle(fontSize: 24),
               ),
+                  ),
             ),
           ],
         )
@@ -394,40 +364,27 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                           padding: const EdgeInsets.all(10.0),
                           child: FavoriteButton(
                             isFavorite: true,
-                            valueChanged: (_isFavorite) {
-                              updateFavorites(loggedInUser!.uid.toString(),_favUserUrgentCase[index]["id"].toString());
-                              _reset();
-                              print('Is Favorite : $_isFavorite');
+                            valueChanged: (_isFavorite) async {
+                              await updateFavorites(loggedInUser!.uid.toString(),_favUserUrgentCase[index]["id"].toString());
+                              _refresh();
                             },
                           ),
                         ),
 
                         onTap: () {
-                          if (campaignsID
-                              .contains(_favUserUrgentCase[index]['id'])) {
-                            _goToChosenCampaign(
-                                _favUserUrgentCase[index]['id']);
-                          } else if (beneficiariesID
-                              .contains(_favUserUrgentCase[index]['id'])) {
-                            _goToChosenBeneficiary(
-                                _favUserUrgentCase[index]['id']);
-                          } else if (urgentCasesID
-                              .contains(_favUserUrgentCase[index]['id'])) {
                             _goToChosenUrgentCase(
-                                _favUserUrgentCase[index]['id']);
-                          }
-                          setState(() {
-                            //Add the extended view page here
-                          });
+                                _favUserUrgentCase[index]['id']);;
                         },
                       ),
                       const Divider()
                     ])),
               )
-                  : const Text(
-                'No favorites found',
+                  : Center(
+                    child: Text(
+                'No favorites found'.tr,
                 style: TextStyle(fontSize: 24),
               ),
+                  ),
             ),
           ],
         )
@@ -499,82 +456,12 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
         id: doc.data()['id'],
         organizationID: doc.data()['organizationID'],
         active: doc.data()['active'],
+        rejected: doc.data()['rejected'],
         approved: doc.data()['approved']);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return (UrgentCaseDonateScreen(urgentCase));
     }));
   }
-
-
-
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text('DONAID'),
-  //       ),
-  //
-  //       body: Padding(
-  //         padding: const EdgeInsets.all(10),
-  //         child: Column(
-  //           children: [
-  //             Expanded(
-  //               child: _favUser.isNotEmpty
-  //                   ? ListView.builder(
-  //                 itemCount: _favUser.length,
-  //                 itemBuilder: (context, index) => Card(
-  //                     key: ValueKey(_favUser[index]["name"]),
-  //                     child: Column(children: [
-  //                       ListTile(
-  //                         title: Text(
-  //                           _favUser[index]["name"].toString(),
-  //                         ),
-  //                         subtitle: Text(_favUser[index]["description"].toString(),),
-  //                         trailing: Padding(
-  //                           padding: const EdgeInsets.all(10.0),
-  //                           child: FavoriteButton(
-  //                             isFavorite: true,
-  //                             valueChanged: (_isFavorite) {
-  //                               updateFavorites(loggedInUser!.uid.toString(),_favUser[index]["id"].toString());
-  //                               _reset();
-  //                               print('Is Favorite : $_isFavorite');
-  //                             },
-  //                           ),
-  //                         ),
-  //
-  //                         onTap: () {
-  //                           if (campaignsID
-  //                               .contains(_favUser[index]['id'])) {
-  //                             _goToChosenCampaign(
-  //                                 _favUser[index]['id']);
-  //                           } else if (beneficiariesID
-  //                               .contains(_favUser[index]['id'])) {
-  //                             _goToChosenBeneficiary(
-  //                                 _favUser[index]['id']);
-  //                           } else if (urgentCasesID
-  //                               .contains(_favUser[index]['id'])) {
-  //                             _goToChosenUrgentCase(
-  //                                 _favUser[index]['id']);
-  //                           }
-  //                           setState(() {
-  //                             //Add the extended view page here
-  //                           });
-  //                         },
-  //                       ),
-  //                       const Divider()
-  //                     ])),
-  //               )
-  //                   : const Text(
-  //                 'No favorites found',
-  //                 style: TextStyle(fontSize: 24),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       bottomNavigationBar: DonorBottomNavigationBar());
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -583,7 +470,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
       child: Scaffold(
         appBar: AppBar(
           bottom: const TabBar(tabs: [Tab(text: 'Campaigns',), Tab(text: 'Beneficiaries',), Tab(text: 'Urgent Cases',)],),
-          title: const Text('Favorite Page'),
+          title: Text('Favorite Page'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {

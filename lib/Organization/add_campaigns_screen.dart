@@ -232,7 +232,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: '\u0024 goal'.tr,
+                                          text: 'goal'.tr + ' (USD)',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),

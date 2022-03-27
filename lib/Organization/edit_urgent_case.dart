@@ -1,33 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EditBeneficiary extends StatefulWidget {
-  Beneficiary beneficiary;
+import '../Models/UrgentCase.dart';
 
-  EditBeneficiary({Key? key, required this.beneficiary}) : super(key: key);
+class EditUrgentCase extends StatefulWidget {
+  UrgentCase urgentCase;
+
+  EditUrgentCase({Key? key, required this.urgentCase}) : super(key: key);
 
   @override
-  _EditBeneficiaryState createState() => _EditBeneficiaryState();
+  _EditUrgentCaseState createState() => _EditUrgentCaseState();
 }
 
-class _EditBeneficiaryState extends State<EditBeneficiary> {
+class _EditUrgentCaseState extends State<EditUrgentCase> {
   final _firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  int beneficiaryTimeLimit=0;
+  int urgentCaseTimeLimit=0;
 
   static final goalRegExp = RegExp(
       r"^(?!0\.00)\d{1,13}(,\d{3})*(\.\d\d)?$"
   );
   var category = [];
 
-  TextEditingController? _beneficiaryNameController;
-  TextEditingController? _beneficiaryBiographyController;
-  TextEditingController? _beneficiaryGoalAmountController;
-  TextEditingController? _beneficiaryEndDateController;
-  TextEditingController? _beneficiaryCategoryController;
+  TextEditingController? _urgentCaseTitleController;
+  TextEditingController? _urgentCaseDescriptionController;
+  TextEditingController? _urgentCaseGoalAmountController;
+  TextEditingController? _urgentCaseEndDateController;
+  TextEditingController? _urgentCaseCategoryController;
 
   @override
   void initState(){
@@ -40,7 +41,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     var ret = await _firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
 
     var doc = ret.docs[0];
-    beneficiaryTimeLimit = doc['beneficiaries'];
+    urgentCaseTimeLimit = doc['urgentCases'];
   }
 
   _getCategories() async {
@@ -54,24 +55,27 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     setState(() {});
   }
 
-  _submitForm() async{
+  _submitForm()async{
     if (!_formKey.currentState!.validate()) {
       return;
     }
     else{
-      await _updateBeneficiary();
+      await _updateUrgentCase();
       Navigator.pop(context,true);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Urgent case resubmitted!')));
     }
     _formKey.currentState!.save();
   }
 
-  _updateBeneficiary() async{
-    _firestore.collection('Beneficiaries').doc(widget.beneficiary.id).update({
-      "name": _beneficiaryNameController?.text,
-      "biography": _beneficiaryBiographyController?.text,
-      "category": _beneficiaryCategoryController?.text,
-      "goalAmount": double.parse(_beneficiaryGoalAmountController!.text.toString()),
-      "endDate": Timestamp.fromDate(DateTime.parse(_beneficiaryEndDateController!.text.toString())),
+  _updateUrgentCase()async{
+    _firestore.collection('UrgentCases').doc(widget.urgentCase.id).update({
+      "title": _urgentCaseTitleController?.text,
+      "description": _urgentCaseDescriptionController?.text,
+      "category": _urgentCaseCategoryController?.text,
+      "goalAmount": double.parse(_urgentCaseGoalAmountController!.text.toString()),
+      "endDate": Timestamp.fromDate(DateTime.parse(_urgentCaseEndDateController!.text.toString())),
+      "rejected":false,
+      "denialReason":""
     });
   }
 
@@ -80,7 +84,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title:  Text('edit_beneficiary'.tr),
+          title:  Text('Edit Urgent Case'.tr),
           leadingWidth: 80,
           leading: TextButton(
             onPressed: () {
@@ -93,6 +97,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
             TextButton(
               onPressed: () async {
                 _submitForm();
+
               },
               child:  Text('save'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
@@ -113,8 +118,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              _buildCampaignNameField(),
-              _buildBeneficiaryBiographyField(),
+              _buildUrgentCaseTitleField(),
+              _buildUrgentCaseDescriptionField(),
               _buildGoalAmountField(),
               _buildEndDateField(),
               _buildCategoryField(),
@@ -126,18 +131,18 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     );
   }
 
-  Widget _buildCampaignNameField() {
-    _beneficiaryNameController = TextEditingController(text: widget.beneficiary.name);
+  Widget _buildUrgentCaseTitleField() {
+    _urgentCaseTitleController = TextEditingController(text: widget.urgentCase.title);
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
-          readOnly: widget.beneficiary.amountRaised > 0,
-          controller: _beneficiaryNameController,
+          readOnly: widget.urgentCase.amountRaised > 0,
+          controller: _urgentCaseTitleController,
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
                   text:  TextSpan(
-                    text: 'name'.tr,
+                    text: 'title'.tr,
                     style: TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
@@ -148,20 +153,20 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               )),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'please_enter_beneficiary_name.'.tr;
+              return 'please_enter_a_title.'.tr;
             }
             return null;
           },
         ));
   }
 
-  Widget _buildBeneficiaryBiographyField() {
-    _beneficiaryBiographyController = TextEditingController(text: widget.beneficiary.biography);
+  Widget _buildUrgentCaseDescriptionField() {
+    _urgentCaseDescriptionController = TextEditingController(text: widget.urgentCase.description);
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        readOnly: widget.beneficiary.amountRaised > 0,
-        controller: _beneficiaryBiographyController,
+        readOnly: widget.urgentCase.amountRaised > 0,
+        controller: _urgentCaseDescriptionController,
         minLines: 2,
         maxLines: 5,
         maxLength: 240,
@@ -169,7 +174,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
             label: Center(
               child: RichText(
                 text:  TextSpan(
-                  text: 'biography'.tr,
+                  text: 'please_enter_a_description.'.tr,
                   style: TextStyle(
                       color: Colors.black, fontSize: 20.0),
                 ),
@@ -183,13 +188,13 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
   }
 
   Widget _buildGoalAmountField(){
-    _beneficiaryGoalAmountController = TextEditingController(text: widget.beneficiary.goalAmount.toStringAsFixed(2));
+    _urgentCaseGoalAmountController = TextEditingController(text: widget.urgentCase.goalAmount.toStringAsFixed(2));
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        readOnly: widget.beneficiary.amountRaised > 0,
+        readOnly: widget.urgentCase.amountRaised > 0,
         keyboardType: TextInputType.number,
-        controller: _beneficiaryGoalAmountController,
+        controller: _urgentCaseGoalAmountController,
         validator: (value) {
           if (value!.isEmpty) {
             return "please_enter_a_goal_amount.".tr;
@@ -228,19 +233,19 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
   }
 
   Widget _buildEndDateField(){
-    var date = DateTime.fromMicrosecondsSinceEpoch(widget.beneficiary.endDate.microsecondsSinceEpoch);
-    _beneficiaryEndDateController = TextEditingController(text: date.toString().substring(0,10));
+    var date = DateTime.fromMicrosecondsSinceEpoch(widget.urgentCase.endDate.microsecondsSinceEpoch);
+    _urgentCaseEndDateController = TextEditingController(text: date.toString().substring(0,10));
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
-          controller: _beneficiaryEndDateController,
+          controller: _urgentCaseEndDateController,
           readOnly: true,
           validator: (value) {
             if (value!.isEmpty) {
               return "please_enter_end_date.".tr;
             }
-            else if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
-              return 'beneficiaries_cannot_have_a_duration_longer_than_1_year.'.tr;
+            if(DateTime.parse(value).difference(DateTime.now()).inDays > urgentCaseTimeLimit){
+              return 'urgent_cases_cannot_have_a_duration_longer'.tr;
             }
             else {
               return null;
@@ -271,14 +276,13 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               )
           ),
           onTap: () async {
-            if(widget.beneficiary.amountRaised < widget.beneficiary.goalAmount) {
-              var date = await showDatePicker(
+            if(widget.urgentCase.amountRaised < widget.urgentCase.goalAmount){
+              var date =  await showDatePicker(
                   context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
+                  initialDate:DateTime.now(),
+                  firstDate:DateTime.now(),
                   lastDate: DateTime(2100));
-              _beneficiaryEndDateController?.text =
-                  date.toString().substring(0, 10);
+              _urgentCaseEndDateController?.text = date.toString().substring(0,10);
             }
             else{
               return;
@@ -287,11 +291,11 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
   }
 
   Widget _buildCategoryField(){
-    _beneficiaryCategoryController = TextEditingController(text: widget.beneficiary.category);
+    _urgentCaseCategoryController = TextEditingController(text: widget.urgentCase.category);
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: DropdownButtonFormField <String>(
-          value: _beneficiaryCategoryController?.text,
+          value: _urgentCaseCategoryController?.text,
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
@@ -322,7 +326,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
             );
           }).toList(),
           onChanged: (val) => setState(() {
-            _beneficiaryCategoryController?.text = val.toString();
+            _urgentCaseCategoryController?.text = val.toString();
           }),
           validator: (value) => value == null
               ? 'please_fill_in_the_category'.tr : null,

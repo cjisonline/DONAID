@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/category_campaigns_screen.dart';
 import 'package:donaid/Donor/updateFavorite.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:favorite_button/favorite_button.dart';
@@ -18,6 +19,8 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
+import 'donor_dashboard.dart';
+
 class CampaignDonateScreen extends StatefulWidget {
   final Campaign campaign;
   const CampaignDonateScreen(this.campaign, {Key? key}) : super(key: key);
@@ -31,7 +34,6 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
 
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
-
   Map<String, dynamic>? paymentIntentData;
   String donationAmount = "";
   bool showLoadingSpinner = false;
@@ -55,6 +57,50 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
 
     var doc = ret.docs[0];
     widget.campaign.amountRaised = doc['amountRaised'];
+    widget.campaign.active = doc['active'];
+
+    setState(() {
+
+    });
+  }
+
+  Future<void> _confirmDonationAmount() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(
+              child: Text('Are You Sure?'.tr),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: Text(
+                "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.".tr),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () async{
+                    Navigator.pop(context);
+                    await makePayment();
+
+
+                  },
+                  child: const Text('Yes'),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No'),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   _getFavorite() async {
@@ -152,7 +198,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                             }
                           },
                           keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
+                              decimal: true, signed: false),
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                               label: Center(
@@ -188,7 +234,13 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                                 setState(() {
                                   showLoadingSpinner = true;
                                 });
-                                await makePayment();
+                                if(double.parse(donationAmount) > 999){
+                                  _confirmDonationAmount();
+                                }
+                                else{
+                                  await makePayment();
+                                }
+
 
                                 setState(() {
                                   showLoadingSpinner=false;
@@ -275,6 +327,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
       setState(() {
         // paymentIntentData = null;
       });
+
       ScaffoldMessenger.of(context)
           .showSnackBar( SnackBar(content: Text('paid_successfully'.tr)));
 
@@ -322,7 +375,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
     return Scaffold(
       appBar: AppBar(
         //doubt
-        title: Text('Donate - ${widget.campaign.title}'),
+        title: Text('donate'.tr + ' - ${widget.campaign.title}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

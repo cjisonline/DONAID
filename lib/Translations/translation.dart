@@ -4,6 +4,48 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "Denials":"Denials",
+          "Edit Urgent Case":"Edit Urgent Case",
+          "Urgent case resubmitted!":"Urgent case resubmitted!",
+          "This urgent case is pending approval.":"This urgent case is pending approval",
+          "Attention:":"Attention:",
+          "Your Urgent Case Was Denied":"Your Urgent Case Was Denied",
+          "After administrative review, your urgent case was denied for the following reason:":
+          "After administrative review, your urgent case was denied for the following reason:",
+          "No denied urgent cases to show.":"No denied urgent cases to show.",
+          "_campaigns": "Campaigns",
+          "No new visits":"No new visits",
+          "Did this visit result in a donation?":"Did this visit result in a donation?",
+          "Gateway Visits":"Gateway Visits",
+          "Please enter the amount that was donated.":"Please enter the amount that was donated.",
+          "Confirm Donation":"Confirm Donation",
+          "Please confirm that this visit to your gateway did not result in a donation.":"Please confirm that this visit to your gateway did not result in a donation.",
+          "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
+      "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?",
+          "Deleting this charity will completely remove it from the application. Would you like to continue?":"Deleting this charity will completely remove it from the application. Would you like to continue?",
+          "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
+"Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?",
+          "Delete":"Delete",
+          "The email you chose is already in use.":"The email you chose is already in use.",
+          "Are You Sure?":"Are You Sure?",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.",
+          "Sort By":"Sort By",
+          "Country":"Country",
+          "Send":"Send",
+          "Message":"Message",
+          "Subject":"Subject",
+          "Question":"Question",
+          "Help":"Help",
+          "Suggestion":"Suggestion",
+          "Other":"Other",
+          "Please select a category":"Please select a category",
+          "Please enter a valid subject":"Please enter a valid subject",
+          "Please enter a valid message":"Please enter a valid message",
+          "Contact Us":"Contact Us",
+          "contact_admin": "Contact Admin",
+          "My Favorites":"My Favorites",
+          "Favorite Page":"Favorite Page",
+          "No favorites found":"No favorites found",
           "type_a_message": "Type a message",
           "message": "Messages",
           "no": "No",
@@ -14,7 +56,7 @@ class Messages extends Translations {
           "_organization": "Organization",
           "detour!": "Detour!",
           "the_organization_that_created":
-              'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment.',
+              'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment. A link to the payment gateway is below',
           "ok": "OK",
           "donate": "Donate",
           "home": "Home",
@@ -74,7 +116,7 @@ class Messages extends Translations {
           "no_results_found": "No results found",
           "ugent_case_is_no_longer":
               "Urgent case is no longer available to donate to.",
-          "pending_approvals": "Pending Approvals",
+          "pending_approvals": "Pending Approvals & Denials",
           "expired_charities": "Expired Charities",
           "inactive_charities": "Inactive Charities",
           "success": "Success",
@@ -116,7 +158,7 @@ class Messages extends Translations {
           "add_urgent_case": "Add Urgent Case",
           "urgent_cases_cannot_have_a_duration_longer":
               "Urgent cases cannot have a duration longer than 6 months.",
-          "urgetn_cases_must_recieves_approval":
+          "urgent_cases_must_receive_approval":
               "Urgent cases must receive approval from an administrator before they are displayed to donors.",
           "note": "Note:",
           "urgent_case_submitted!": "Urgent case submitted!",
@@ -145,7 +187,7 @@ class Messages extends Translations {
           "no_expired_campaigns_to_show.": "No expired campaigns to show.",
           "no_expired_urgent_cases_to_show.":
               "No expired urgent cases to show.",
-          "_campaigns": "Campaigns",
+          "campaigns": "Campaigns",
           "no_inactive_beneficiaries_to_show.":
               "No inactive beneficiaries to show.",
           "no_inactive_campaigns_to_show.": "No inactive campaigns to show.",
@@ -211,7 +253,7 @@ class Messages extends Translations {
           "hang_on!": "Hang on!",
           "your_organizationaccount_has_not_yet_been_approved":
               "Your organization account has not yet been approved by the admin. You must wait for approval before you can login to this account.",
-          "your_donor_account_has_been_disbaled_by_the_administrator":
+          "your_donor_account_has_been_disabled_by_the_administrator":
               "Your donor account has been disabled by the administrator. If you think this may have been a mistake,please send an email to donaidmobileapp1@gmail.com",
           "reset_link_sent!": "Reset Link Sent!",
           "check_your_email_to_reset_password":
@@ -219,6 +261,48 @@ class Messages extends Translations {
           "forgot_password!": "Forgot Password?",
         },
         'fr_FR': {
+          "Denials":"Refus",
+          "Edit Urgent Case":"Modifier le cas urgent",
+          "Urgent case resubmitted!":"Cas urgent soumis à nouveau",
+          "This urgent case is pending approval.":"Cette affaire urgente est en attente d’approbation.",
+          "Attention:":"Attention:",
+          "Your Urgent Case Was Denied":"Votre cas urgent a été refusé",
+          "After administrative review, your urgent case was denied for the following reason:":
+          "Après examen administratif, votre cas urgent a été refusé pour la raison suivante:",
+          "No denied urgent cases to show.":"Aucun cas urgent refusé à montrer.",
+          "No new visits":"Pas de nouvelles visites",
+          "Did this visit result in a donation?":"Cette visite a-t-elle donné lieu à un don?",
+          "Gateway Visits":"Visites de passerelle",
+          "Please enter the amount that was donated.":"Veuillez entrer le montant qui a été donné.",
+          "Confirm Donation":"Confirmer le don",
+          "Please confirm that this visit to your gateway did not result in a donation.":"Veuillez confirmer que cette visite à votre portail n’a pas donné lieu à un don.",
+          "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
+      "La reprise de cet organisme de bienfaisance le rendra à nouveau visible pour les donateurs. Une fois que vous avez repris cet organisme de bienfaisance, vous pouvez le désactiver à nouveau à partir du tableau de bord ou de la page Mes bénéficiaires. Voulez-vous continuer?",
+          "Deleting this charity will completely remove it from the application. Would you like to continue?":
+      "La suppression de cet organisme de bienfaisance le supprimera complètement de l’application. Voulez-vous continuer?",
+          "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
+      "L’arrêt de cet organisme de bienfaisance le rendra invisible pour les donateurs. Une fois que vous avez arrêté cet organisme de bienfaisance, vous pouvez le réactiver à partir de la page Organismes de bienfaisance inactifs. Aimeriez-vous continuer à mettre fin à cet organisme de bienfaisance?",
+          "Delete":"Supprimer",
+          "The email you chose is already in use.":"L’e-mail que vous avez choisi est déjà utilisé",
+          "Are You Sure?":"",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"Nous voyons que vous avez inscrit un montant de don supérieur à 999 \$. Nous apprécions votre générosité, mais veuillez confirmer que ce montant est correct pour continuer.",
+          "Sort By": "Trier par",
+          "Country":"Pays",
+          "Send":"Envoyer",
+          "Message":"Message",
+          "Subject":"Objet",
+          "Question":"Question",
+          "Help":"Aide",
+          "Suggestion":"Suggestion",
+          "Other":"Autre",
+          "Please select a category":"Veuillez sélectionner une catégorie",
+          "Please enter a valid subject":"Veuillez saisir un sujet valide",
+          "Please enter a valid message":"Veuillez saisir un message valide",
+          "Contact Us":"Contactez-nous",
+          "My Favorites":"Mes favoris",
+          "Favorite Page":"Favorite Page",
+          "No favorites found":"Aucun favori trouvé",
+          "contact_admin": "Contacter l'administrateur",
           "type_a_message": "Tapez/écrivez un message",
           "message": "Message",
           "no": "Non",
@@ -267,7 +351,7 @@ class Messages extends Translations {
           "make_a_donation_to_see_it_here!": "Faites un don pour le voir ici!",
           "dashboard": "Tableau de bord",
           "see_more": "Voir plus >",
-          "urgent_cases": "Cas urgents",
+          "urgent_cases": "Cas Urgents",
           "no_active_urgent_sases_show": "Aucun cas urgent actif à afficher.",
           "edit_profile": "Editer le Profile",
           "cancel": "Annuler",
@@ -292,7 +376,7 @@ class Messages extends Translations {
           "no_results_found": "Aucun resultat trouver",
           "ugent_case_is_no_longer":
               "Le cas urgent n'est plus disponible pour faire un don.",
-          "pending_approvals": "Approbations en attente",
+          "pending_approvals": "Approbations et refus en attente",
           "expired_charities": "Charités Expiré",
           "inactive_charities": "Charités Inactive",
           "success": "Succès",
@@ -315,14 +399,14 @@ class Messages extends Translations {
           "beneficiaries_cannot_have_a_duration_longer_than_1_year.":
               "Les bénéficiaires ne peuvent avoir une durée supérieure à 1 an..",
           "enter_end_date": "Saisir une date de fin",
-          "please_fill_in_the_category": "Please fill in the category.",
-          "submit": "Submit",
-          "beneficiary_created!": "Beneficiary created!",
-          "add_campaign": "Add Campaign",
-          "please_enter_a_title.": "Please enter a title.",
-          "title": "Title",
-          "_campaign": "Campaign",
-          "please_enter_a_description.": "Please enter a description.",
+          "please_fill_in_the_category": "S’il vous plaît remplir la catégorie.",
+          "submit": "Envoyer",
+          "beneficiary_created!": "Bénéficiaire créé!",
+          "add_campaign": "Ajouter une campagne",
+          "please_enter_a_title.": "Veuillez saisir un titre.",
+          "title": "Titre",
+          "_campaign": "Campagne",
+          "please_enter_a_description.": "Veuillez saisir une description.",
           "description": "Description",
           "campaigns_cannot_have_a_duration_longer_than_1_year.":
               "Les campagnes ne peuvent avoir une durée supérieure à un an..",
@@ -335,7 +419,7 @@ class Messages extends Translations {
           "add_urgent_case": "Ajouter un Cas Urgent",
           "urgent_cases_cannot_have_a_duration_longer":
               "Les cas urgents ne peuvent avoir une durée supérieure à 6 mois.",
-          "urgetn_cases_must_recieves_approval":
+          "urgent_cases_must_receive_approval":
               "Les cas urgents doivent être approuvés par un administrateur avant d'être affichés aux donneurs.",
           "note": "Note:",
           "urgent_case_submitted!": "Cas urgent soumis!",
@@ -438,7 +522,7 @@ class Messages extends Translations {
           "hang_on!": "Attendez!",
           "your_organizationaccount_has_not_yet_been_approved":
               "Le compte de votre organisation n'a pas encore été approuvé par l'administrateur. Vous devez attendre la validation avant de pouvoir vous connecter à ce compte.",
-          "your_donor_account_has_been_disbaled_by_the_administrator":
+          "your_donor_account_has_been_disabled_by_the_administrator":
               "Votre compte de donneur a été désactivé par l'administrateur. Si vous pensez qu'il s'agit d'une erreur, veuillez envoyer un courriel à donaidmobileapp1@gmail.com.",
           "reset_link_sent!": "Lien de réinitialisation envoyé!",
           "check_your_email_to_reset_password":
@@ -446,6 +530,48 @@ class Messages extends Translations {
           "forgot_password!": "Mot de passe oublié?",
         },
         'ar_SA': {
+          "Denials":"النفي",
+          "Edit Urgent Case":"تعديل الحالة العاجلة",
+          "Urgent case resubmitted!":"إعادة تقديم حالة عاجلة!",
+          "This urgent case is pending approval.":"ولا تزال هذه الحالة العاجلة في انتظار الموافقة.",
+          "Attention:":"اهتمام:",
+          "Your Urgent Case Was Denied":"تم رفض قضيتك العاجلة",
+          "After administrative review, your urgent case was denied for the following reason:":
+          "بعد المراجعة الإدارية، تم رفض قضيتك العاجلة للسبب التالي:",
+          "No denied urgent cases to show.":"لا يوجد حالات عاجلة مرفوضة لإظهارها.",
+          "No new visits":"لا توجد زيارات جديدة",
+          "Did this visit result in a donation?":"هل أسفرت هذه الزيارة عن تبرع؟",
+          "Gateway Visits":"زيارات البوابة",
+          "Please enter the amount that was donated.":"يرجى إدخال المبلغ الذي تم التبرع به.",
+          "Confirm Donation":"تأكيد التبرع",
+          "Please confirm that this visit to your gateway did not result in a donation.": "يرجى التأكد من أن هذه الزيارة إلى بوابتك لم تسفر عن تبرع",
+          "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
+      "إن استئناف هذه المؤسسة الخيرية سيجعلها مرئية للمتبرعين مرة أخرى. بمجرد استئناف هذه المؤسسة الخيرية ، يمكنك إلغاء تنشيطها مرة أخرى من لوحة التحكم أو صفحة المستفيدين مني. هل ترغب في المتابعة؟",
+          "Deleting this charity will completely remove it from the application. Would you like to continue?":
+      "سيؤدي حذف هذه المؤسسة الخيرية إلى إزالتها تماما من التطبيق. هل ترغب في المتابعة؟",
+          "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
+      "إن وقف هذه المؤسسة الخيرية سيجعلها غير مرئية للمانحين. بمجرد إيقاف هذه المؤسسة الخيرية ، يمكنك إعادة تنشيطها من صفحة الجمعيات الخيرية غير النشطة. هل ترغب في الاستمرار في إيقاف هذه المؤسسة الخيرية؟",
+          "Delete":"حذف",
+          "The email you chose is already in use.":"البريد الإلكتروني الذي اخترته قيد الاستخدام بالفعل",
+          "Are You Sure?":"هل أنت متأكد؟",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"نرى أنك أدخلت مبلغ تبرع أكبر من 999 دولارا. نحن نقدر كرمك ، ولكن يرجى التأكد من أن هذا المبلغ صحيح للمتابعة.",
+          "Sort By": "ترتيب حسب",
+          "Country":"بلد",
+          "Send":"ارسل",
+          "Message":"رسالة",
+          "Subject":"موضوع",
+          "Question":"سؤال",
+          "Help":"تعليمات",
+          "Suggestion":"اقتراح",
+          "Other":"آخر",
+          "Please select a category":"يرجى اختيار فئة",
+          "Please enter a valid subject":"الرجاء إدخال موضوع صالح",
+          "Please enter a valid message":"الرجاء إدخال رسالة صحيحة",
+          "Contact Us":"اتصل بنا",
+          "My Favorites":"مفضلاتي",
+          "Favorite Page":"الصفحة المفضلة",
+          "No favorites found":"لم يتم العثور على المفضلة",
+          "contact_admin": "اتصل بالمسؤول",
           "type_a_message": " اكتب رسالة",
           "message": " رسائل",
           "no": " لا",
@@ -512,7 +638,7 @@ class Messages extends Translations {
           "end_date": " تاريخ الانتهاء",
           "no_results_found": " لم يتم العثور على نتائج",
           "ugent_case_is_no_longer": " الحالة العاجلة لم تعد متاحة للتبرع لها",
-          "pending_approvals": " الموافقات المعلقة",
+          "pending_approvals": " الموافقات المعلقة والرفض",
           "expired_charities": " الجمعيات الخيرية منتهية الصلاحية",
           "inactive_charities": " الجمعيات الخيرية غير النشطة",
           "success": " نجاح",
@@ -553,7 +679,7 @@ class Messages extends Translations {
           "add_urgent_case": " إضافة حالة عاجلة",
           "urgent_cases_cannot_have_a_duration_longer":
               " لا يمكن أن تزيد مدة الحالات المستعجلة عن 6 أشهر",
-          "urgetn_cases_must_recieves_approval":
+          "urgent_cases_must_receive_approval":
               " يجب أن تحصل الحالات العاجلة على موافقة من المسؤول قبل عرضها على المتبرعين",
           "note": " ملحوظة:",
           "urgent_case_submitted!": " تم إرسال الحالة العاجلة!",
@@ -649,7 +775,7 @@ class Messages extends Translations {
           "hang_on!": " انتظر!",
           "your_organizationaccount_has_not_yet_been_approved":
               " لم يوافق المسؤول على حساب مؤسستك. يجب أن تنتظر الموافقة قبل أن تتمكن من تسجيل الدخول إلى هذا الحساب.",
-          "your_donor_account_has_been_disbaled_by_the_administrator":
+          "your_donor_account_has_been_disabled_by_the_administrator":
               " تم تعطيل حساب المتبرع الخاص بك من قبل المسؤول. إذا كنت تعتقد أن هذا قد يكون خطأً ، فيرجى إرسال بريد إلكتروني إلى donaidmobileapp1@gmail.com ",
           "reset_link_sent!": " تم إرسال رابط إعادة التعيين!",
           "check_your_email_to_reset_password":
@@ -657,6 +783,48 @@ class Messages extends Translations {
           "forgot_password!": " هل نسيت كلمة السر؟",
         },
         'es_ES': {
+          "Denials":"Negaciones",
+          "Edit Urgent Case":"Editar caso urgente",
+          "Urgent case resubmitted!":"¡Caso urgente reenviado!",
+          "This urgent case is pending approval.":"Este caso urgente está pendiente de aprobación.",
+          "Attention:":"Atención:",
+          "Your Urgent Case Was Denied":"Su caso urgente fue denegado",
+          "After administrative review, your urgent case was denied for the following reason:":
+          "Después de la revisión administrativa, su caso urgente fue denegado por la siguiente razón:",
+          "No denied urgent cases to show.":"No se negaron casos urgentes para mostrar.",
+          "No new visits":"No hay nuevas visitas",
+          "Did this visit result in a donation?":"¿Esta visita resultó en una donación?",
+          "Gateway Visits":"Visitas a la puerta de enlace",
+          "Please enter the amount that was donated.":"Por favor, introduzca la cantidad que fue donada.",
+          "Confirm Donation":"Confirmar donación",
+          "Please confirm that this visit to your gateway did not result in a donation.":"Por favor, confirme que esta visita a su puerta de enlace no resultó en una donación",
+          "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
+      "Reanudar esta organización benéfica la hará visible nuevamente para los donantes. Una vez que reanude esta organización benéfica, puede desactivarla nuevamente desde el panel de control o la página Mis beneficiarios. ¿Te gustaría continuar?",
+          "Deleting this charity will completely remove it from the application. Would you like to continue?":
+      "Eliminar esta organización benéfica la eliminará por completo de la aplicación. ¿Te gustaría continuar?",
+          "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
+          "Detener esta organización benéfica hará que no sea visible para los donantes. Una vez que detenga esta organización benéfica, puede reactivarla desde la página Organizaciones benéficas inactivas. ¿Te gustaría seguir parando esta caridad?",
+          "Delete":"Borrar",
+          "The email you chose is already in use.":"El correo electrónico que elegiste ya está en uso",
+          "Are You Sure?":"¿Estás seguro?",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"Vemos que ha ingresado un monto de donación superior a \$999. Agradecemos su generosidad, pero por favor confirme que esta cantidad es correcta para proceder.",
+          "Sort By": "Ordenar por",
+          "Country": "País",
+          "Send":"Enviar",
+          "Message":"Mensaje",
+          "Subject":"Asunto",
+          "Question":"Pregunta",
+          "Help":"Ayuda",
+          "Suggestion":"Sugerencia",
+          "Other":"Otro",
+          "Please select a category":"Seleccione una categoría",
+          "Please enter a valid subject":"Introduzca un asunto válido",
+          "Please enter a valid message":"Introduce un mensaje válido",
+          "Contact Us":"Contáctenos",
+          "My Favorites":"Mis favoritos",
+          "Favorite Page":"Página favorita",
+          "No favorites found":"No se han encontrado favoritos",
+          "contact_admin": "Administrador de contacto",
           "type_a_message": "Escriba un mensaje",
           "message": "Mensajes",
           "no": "No",
@@ -682,7 +850,7 @@ class Messages extends Translations {
           "logout": "Cerrar sesión",
           "no_active_beneficiaries_to_show":
               "No hay beneficiarios activos para mostrar.",
-          "beneficiaries": "beneficiarios",
+          "beneficiaries": "Beneficiarios",
           "please_enter_a_valid_payment_amount":
               "Ingrese un monto de pago válido.",
           "please_provide_a_donation_minimum":
@@ -705,7 +873,7 @@ class Messages extends Translations {
               "¡Haz una donación para verlo aquí!",
           "dashboard": "Tablero",
           "see_more": "Ver más",
-          "urgent_cases": "Casos urgentes",
+          "urgent_cases": "Casos Urgentes",
           "no_active_urgent_sases_show":
               "No hay casos urgentes activos para mostrar.",
           "edit_profile": "Editar perfil",
@@ -731,7 +899,7 @@ class Messages extends Translations {
           "no_results_found": "No se han encontrado resultados",
           "ugent_case_is_no_longer":
               "El caso urgente ya no está disponible para donar a.",
-          "pending_approvals": "Aprobaciones pendientes",
+          "pending_approvals": "Aprobaciones y denegaciones pendientes",
           "expired_charities": "Organizaciones benéficas vencidas",
           "inactive_charities": "Organizaciones benéficas inactivas",
           "success": "Éxito",
@@ -773,7 +941,7 @@ class Messages extends Translations {
           "add_urgent_case": "Agregar Caso Urgente",
           "urgent_cases_cannot_have_a_duration_longer":
               "Los casos urgentes no pueden tener una duración superior a 6 meses.",
-          "urgetn_cases_must_recieves_approval":
+          "urgent_cases_must_receive_approval":
               "Los casos urgentes deben recibir la aprobación de un administrador antes de mostrarse a los donantes.",
           "note": "Nota:",
           "urgent_case_submitted!": "¡Caso urgente enviado!",
@@ -880,7 +1048,7 @@ class Messages extends Translations {
           "hang_on!": "¡Aférrate!",
           "your_organizationaccount_has_not_yet_been_approved":
               "El administrador aún no ha aprobado la cuenta de su organización. Debe esperar la aprobación antes de poder iniciar sesión en esta cuenta.",
-          "your_donor_account_has_been_disbaled_by_the_administrator":
+          "your_donor_account_has_been_disabled_by_the_administrator":
               "Su cuenta de donante ha sido deshabilitada por el administrador. Si cree que esto puede haber sido un error, envíe un correo electrónico a donaidmobileapp1@gmail.com",
           "reset_link_sent!": "Restablecer enlace enviado!",
           "check_your_email_to_reset_password":

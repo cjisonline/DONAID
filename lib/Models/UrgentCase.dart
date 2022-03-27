@@ -12,6 +12,8 @@ class UrgentCase{
   String organizationID;
   bool active;
   bool approved;
+  String? denialReason;
+  bool rejected;
 
   UrgentCase(
       {
@@ -26,5 +28,7 @@ class UrgentCase{
         required this.organizationID,
         required this.active,
         required this.approved,
+        required this.rejected,
+        this.denialReason
       });
 }

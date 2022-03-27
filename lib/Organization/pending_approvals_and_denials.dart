@@ -1,83 +1,57 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
-import 'package:donaid/Models/Beneficiary.dart';
-import 'package:donaid/Models/Campaign.dart';
-import 'package:donaid/Models/Organization.dart';
+import 'package:donaid/Models/UrgentCase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'DonorWidgets/donor_bottom_navigation_bar.dart';
-import 'DonorWidgets/donor_drawer.dart';
-import 'beneficiary_donate_screen.dart';
-import 'campaign_donate_screen.dart';
+import 'OrganizationWidget/organization_bottom_navigation.dart';
+import 'OrganizationWidget/organization_drawer.dart';
+import 'organization_urgentcase_full.dart';
 import 'package:get/get.dart';
 
 
-class OrganizationTabViewScreen extends StatefulWidget {
-  final Organization organization;
-  const OrganizationTabViewScreen({Key? key, required this.organization}) : super(key: key);
+class PendingApprovalsAndDenials extends StatefulWidget {
+  const PendingApprovalsAndDenials({Key? key}) : super(key: key);
 
   @override
-  _OrganizationTabViewScreenState createState() => _OrganizationTabViewScreenState();
+  _PendingApprovalsAndDenialsState createState() => _PendingApprovalsAndDenialsState();
 }
 
-class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
+class _PendingApprovalsAndDenialsState extends State<PendingApprovalsAndDenials> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
-  List<Beneficiary> beneficiaries=[];
-  List<Campaign> campaigns=[];
+  List<UrgentCase> pendingUrgentCases = [];
+  List<UrgentCase> deniedUrgentCases = [];
   var f = NumberFormat("###,##0.00", "en_US");
 
   @override
   void initState() {
     super.initState();
-    _getOrganizationCampaigns();
-    _getOrganizationBeneficiaries();
+    _getPendingUrgentCases();
+    _getDeniedUrgentCases();
   }
-  
-  _refreshPage(){
-    beneficiaries.clear();
-    campaigns.clear();
-    _getOrganizationCampaigns();
-    _getOrganizationBeneficiaries();
+
+  _refreshPage() async{
+    pendingUrgentCases.clear();
+    deniedUrgentCases.clear();
+    _getPendingUrgentCases();
+    _getDeniedUrgentCases();
+    setState(() {
+
+    });
   }
-  
-  _getOrganizationBeneficiaries() async {
-    var ret = await _firestore.collection('Beneficiaries')
-        .where('organizationID', isEqualTo: widget.organization.uid)
-        .where('active',isEqualTo: true)
+
+  _getPendingUrgentCases() async {
+    var ret = await _firestore.collection('UrgentCases')
+        .where('organizationID', isEqualTo: _auth.currentUser?.uid)
         .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
-        .orderBy('endDate',descending: false)
-        .get();
-
-    for (var element in ret.docs) {
-      Beneficiary beneficiary = Beneficiary(
-          name: element.data()['name'],
-          biography: element.data()['biography'],
-          goalAmount: element.data()['goalAmount'].toDouble(),
-          amountRaised: element.data()['amountRaised'].toDouble(),
-          category: element.data()['category'],
-          endDate: element.data()['endDate'],
-          dateCreated: element.data()['dateCreated'],
-          id: element.data()['id'],
-          organizationID: element.data()['organizationID'],
-          active: element.data()['active'],
-      );
-      beneficiaries.add(beneficiary);
-    }
-    setState(() {});
-  }
-
-  _getOrganizationCampaigns()async{
-    var ret = await _firestore.collection('Campaigns')
-        .where('organizationID',isEqualTo: widget.organization.uid)
         .where('active', isEqualTo: true)
-        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
-        .orderBy('endDate',descending: false)
+        .where('approved',isEqualTo: false)
+        .where('rejected',isEqualTo: false)
+        .orderBy('endDate', descending: false)
         .get();
 
     for (var element in ret.docs) {
-      Campaign campaign = Campaign(
+      UrgentCase urgentCase = UrgentCase(
           title: element.data()['title'],
           description: element.data()['description'],
           goalAmount: element.data()['goalAmount'].toDouble(),
@@ -88,16 +62,50 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID'],
           active: element.data()['active'],
+          rejected: element.data()['rejected'],
+          approved: element.data()['approved']
       );
-      campaigns.add(campaign);
+      pendingUrgentCases.add(urgentCase);
     }
     setState(() {});
   }
 
-  _organizationCampaignsBody(){
-    return campaigns.isNotEmpty
+  _getDeniedUrgentCases() async {
+    var ret = await _firestore.collection('UrgentCases')
+        .where('organizationID', isEqualTo: _auth.currentUser?.uid)
+        .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
+        .where('active', isEqualTo: true)
+        .where('approved',isEqualTo: false)
+        .where('rejected',isEqualTo: true)
+        .orderBy('endDate', descending: false)
+        .get();
+
+    for (var element in ret.docs) {
+      UrgentCase urgentCase = UrgentCase(
+          title: element.data()['title'],
+          description: element.data()['description'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
+          category: element.data()['category'],
+          endDate: element.data()['endDate'],
+          dateCreated: element.data()['dateCreated'],
+          id: element.data()['id'],
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+          rejected: element.data()['rejected'],
+          approved: element.data()['approved'],
+        denialReason: element.data()['denialReason']
+      );
+      deniedUrgentCases.add(urgentCase);
+    }
+    setState(() {});
+  }
+
+
+  _pendingBody() {
+    return pendingUrgentCases.isNotEmpty
     ? ListView.builder(
-        itemCount: campaigns.length,
+        itemCount: pendingUrgentCases.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
           return Card(
@@ -105,33 +113,23 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
               children: [
                 ListTile(
                   onTap: () {
-                    if(widget.organization.country =='United States'){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return (CampaignDonateScreen(campaigns[index]));
-                      })).then((value) => _refreshPage());
-                    }
-                    else{
-                      Map<String, dynamic> charity = {
-                        'charityID':campaigns[index].id,
-                        'charityType':'Campaign',
-                        'charityTitle':campaigns[index].title
-                      };
-                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid, charity);
-                    }
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return (OrganizationUrgentCaseFullScreen(pendingUrgentCases[index]));
+                    })).then((value) => _refreshPage());
                   },
-                  title: Text(campaigns[index].title),
-                  subtitle: Text(campaigns[index].description),
+                  title: Text(pendingUrgentCases[index].title),
+                  subtitle: Text(pendingUrgentCases[index].description),
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
                       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text('\$'+f.format(campaigns[index].amountRaised),
+                        Text('\$'+f.format(pendingUrgentCases[index].amountRaised),
                             textAlign: TextAlign.left,
                             style: const TextStyle(color: Colors.black, fontSize: 15)),
                         Text(
-                          '\$'+f.format(campaigns[index].goalAmount),
+                          '\$'+f.format(pendingUrgentCases[index].goalAmount),
                           textAlign: TextAlign.start,
                           style: const TextStyle(color: Colors.black, fontSize: 15),
                         ),
@@ -142,7 +140,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                           backgroundColor: Colors.grey,
                           valueColor: const AlwaysStoppedAnimation<Color>(
                               Colors.green),
-                          value: (campaigns[index].amountRaised/campaigns[index].goalAmount),
+                          value: (pendingUrgentCases[index].amountRaised/pendingUrgentCases[index].goalAmount),
                           minHeight: 10,
                         ),
                       ),
@@ -154,14 +152,13 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
             ),
           );
         })
-        //doubt
-    : const Center(child: Text('This organization doesn\'t have any \nactive campaigns at this time.', style: TextStyle(fontSize: 18),));
+        :  Center(child: Text('no_pending_urgent_cases_to_show.'.tr, style: TextStyle(fontSize: 18),));
   }
 
-  _organizationBeneficiariesBody(){
-    return beneficiaries.isNotEmpty
-    ? ListView.builder(
-        itemCount: beneficiaries.length,
+  _denialsBody() {
+    return deniedUrgentCases.isNotEmpty
+        ? ListView.builder(
+        itemCount: deniedUrgentCases.length,
         shrinkWrap: true,
         itemBuilder: (context, int index) {
           return Card(
@@ -169,33 +166,23 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
               children: [
                 ListTile(
                   onTap: () {
-                    if(widget.organization.country =='United States'){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return (BeneficiaryDonateScreen(beneficiaries[index]));
-                      })).then((value) => _refreshPage());
-                    }
-                    else{
-                      Map<String, dynamic> charity = {
-                        'charityID':beneficiaries[index].id,
-                        'charityType':'Beneficiary',
-                        'charityTitle':beneficiaries[index].name
-                      };
-                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid, charity);
-                    }
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return (OrganizationUrgentCaseFullScreen(deniedUrgentCases[index]));
+                    })).then((value) => _refreshPage());
                   },
-                  title: Text(beneficiaries[index].name),
-                  subtitle: Text(beneficiaries[index].biography),
+                  title: Text(deniedUrgentCases[index].title),
+                  subtitle: Text(deniedUrgentCases[index].description),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
                       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text('\$'+f.format(beneficiaries[index].amountRaised),
+                        Text('\$'+f.format(deniedUrgentCases[index].amountRaised),
                             textAlign: TextAlign.left,
                             style: const TextStyle(color: Colors.black, fontSize: 15)),
                         Text(
-                          '\$'+f.format(beneficiaries[index].goalAmount),
+                          '\$'+f.format(deniedUrgentCases[index].goalAmount),
                           textAlign: TextAlign.start,
                           style: const TextStyle(color: Colors.black, fontSize: 15),
                         ),
@@ -206,7 +193,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                           backgroundColor: Colors.grey,
                           valueColor: const AlwaysStoppedAnimation<Color>(
                               Colors.green),
-                          value: (beneficiaries[index].amountRaised/beneficiaries[index].goalAmount),
+                          value: (deniedUrgentCases[index].amountRaised/deniedUrgentCases[index].goalAmount),
                           minHeight: 10,
                         ),
                       ),
@@ -218,8 +205,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
             ),
           );
         })
-        //doubt
-    : const Center(child: Text('This organization doesn\'t have any \nactive beneficiaries at this time.', style: TextStyle(fontSize: 18),));
+        :  Center(child: Text('No denied urgent cases to show.'.tr, style: TextStyle(fontSize: 18),));
   }
 
   @override
@@ -228,8 +214,8 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom: const TabBar(tabs: [Tab(text: 'Campaigns',), Tab(text: 'Beneficiaries',)],),
-          title: Text(widget.organization.organizationName),
+          bottom: TabBar(tabs: [Tab(text: '_pending_approvals'.tr), Tab(text: 'Denials'.tr)]),
+          title:  Text('pending_approvals'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -237,14 +223,14 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
             },
           ),
         ),
-        drawer: const DonorDrawer(),
+        drawer: const OrganizationDrawer(),
         body: TabBarView(
           children: [
-            _organizationCampaignsBody(),
-            _organizationBeneficiariesBody()
+            _pendingBody(),
+            _denialsBody()
           ],
         ),
-        bottomNavigationBar:  DonorBottomNavigationBar(),
+        bottomNavigationBar: const OrganizationBottomNavigation(),
       ),
     );
   }

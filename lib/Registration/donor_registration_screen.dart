@@ -1,9 +1,11 @@
 import 'package:donaid/login_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class DonorRegistrationScreen extends StatefulWidget {
@@ -18,6 +20,7 @@ class DonorRegistrationScreen extends StatefulWidget {
 class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -35,6 +38,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
   String phoneNumber = "";
 
   Future<bool> isEmailAvailable() async {
+    //This method checks to make sure the email is not already being used in Firebase
     final list = await _auth.fetchSignInMethodsForEmail(email);
 
     if (list.isEmpty) {
@@ -45,7 +49,9 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
   }
 
   void createNewDonorUser() async {
+    //This method creates the new user in Firebase
     if (await isEmailAvailable()) {
+      //If the email is available
       try {
         dynamic newUser = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
@@ -60,25 +66,30 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             'lastName': lastName,
             'email': email,
             'phoneNumber': phoneNumber,
-            'enabled': true
+            'enabled':true
           });
 
           final usersDocRef = await _firestore.collection('Users').add({});
 
           await _firestore.collection('Users').doc(usersDocRef.id).set({
             'id': usersDocRef.id,
-            'uid': newUser.user.uid,
-            'email': email,
-            'userType': 1
+            'uid':newUser.user.uid,
+            'email':email,
+            'userType':1
           });
 
-          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id));
-          Navigator.pushNamed(context, LoginScreen.id);
+          await FirebaseMessaging.instance.subscribeToTopic('UrgentCaseApprovals');
+          final SharedPreferences prefs = await _prefs;
+          await prefs.setBool('urgentCaseApprovalsNotifications', true);
+
+          Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id)); //remove all screens on the stack and return to home screen
+          Navigator.pushNamed(context, LoginScreen.id); //redirect to login screen
         }
       } catch (signUpError) {
         print(signUpError);
       }
     } else {
+      //If the email is already in use
       print('Email not available.');
       _emailInUseDialog();
     }
@@ -100,14 +111,14 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
               borderRadius: BorderRadius.circular(32.0),
             ),
             content:  Text(
-                'the_email_you_choose_is_already_in_use'.tr),
+                'The email you chose is already in use.'.tr),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child:  Text('ok'.tr),
                 ),
               ),
             ],
@@ -396,7 +407,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       child: Center(
                         child: RichText(
                             text:  TextSpan(
-                                text: 'note '.tr,
+                                text: 'note'.tr+' ',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 15.0),
                                 children: [
