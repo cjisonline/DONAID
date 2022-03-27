@@ -38,9 +38,7 @@ class _MyAdoptionsState extends State<MyAdoptions> {
   void initState() {
     super.initState();
     _getCurrentUser();
-    _getDonorID().whenComplete( () =>
-    _getAdoptions()
-    );
+    _getAdoptions();
   }
 
   _refreshPage() {
@@ -55,14 +53,7 @@ class _MyAdoptionsState extends State<MyAdoptions> {
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
-  _getDonorID() async {
-    var ret = await _firestore
-        .collection('DonorUsers')
-        .where('uid', isEqualTo: loggedInUser?.uid)
-        .get();
-    final doc = ret.docs[0];
-    donorID = doc['id'];
-  }
+
 
   _getAdoptions() async {
     try{
@@ -70,20 +61,21 @@ class _MyAdoptionsState extends State<MyAdoptions> {
           .collection('Adoptions')
           .where('active', isEqualTo: true)
           .get();
-
       for (var element in ret.docs) {
-        Adoption adoption = Adoption(
-          name: element.data()['name'],
-          biography: element.data()['biography'],
-          goalAmount: element.data()['goalAmount'].toDouble(),
-          amountRaised: element.data()['amountRaised'].toDouble(),
-          category: element.data()['category'],
-          dateCreated: element.data()['dateCreated'],
-          id: element.data()['id'],
-          organizationID: element.data()['organizationID'],
-          active: element.data()['active'],
-        );
-        adoptions.add(adoption);
+        if( element.data()['donorMap'] != null && element.data()['donorMap'].containsKey(_auth.currentUser?.uid)) {
+          Adoption adoption = Adoption(
+            name: element.data()['name'],
+            biography: element.data()['biography'],
+            goalAmount: element.data()['goalAmount'].toDouble(),
+            amountRaised: element.data()['amountRaised'].toDouble(),
+            category: element.data()['category'],
+            dateCreated: element.data()['dateCreated'],
+            id: element.data()['id'],
+            organizationID: element.data()['organizationID'],
+            active: element.data()['active'],
+          );
+          adoptions.add(adoption);
+        }
       }
     }
     catch(e){

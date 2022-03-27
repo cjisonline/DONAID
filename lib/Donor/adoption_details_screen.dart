@@ -21,7 +21,6 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   var f = NumberFormat("###,##0.00", "en_US");
   bool isAdopted = false;
   double monthlyAmount = 0;
-  String donorID = "";
   String donorAdopteeID = "";
   final _formKey = GlobalKey<FormState>();
   var donorMap;
@@ -31,7 +30,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     super.initState();
     _getCurrentUser();
     _refreshAdoption();
-    _getDonorID().whenComplete(() => _getAdoption());
+    _getAdoption();
   }
 
   _refreshAdoption() async {
@@ -53,15 +52,6 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     loggedInUser = _auth.currentUser;
   }
 
-  _getDonorID() async {
-    var ret = await _firestore
-        .collection('DonorUsers')
-        .where('uid', isEqualTo: loggedInUser?.uid)
-        .get();
-    final doc = ret.docs[0];
-    donorID = doc['id'];
-  }
-
   _getAdoption() async {
     try{
 
@@ -74,9 +64,9 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
           isAdopted = false;
         } else {
           var doc = ret.docs[0];
-          if(doc['donorMap'] != null && doc['donorMap'].containsKey(donorID)) {
+          if(doc['donorMap'] != null && doc['donorMap'].containsKey(_auth.currentUser?.uid)) {
             isAdopted = true;
-            monthlyAmount = doc['donorMap'][donorID].toDouble();
+            monthlyAmount = doc['donorMap'][_auth.currentUser?.uid].toDouble();
             donorMap = doc['donorMap'];
           }
           else{
@@ -94,7 +84,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     try {
       // update adoption and add entry to donorMap
       _firestore.collection('Adoptions').doc(widget.adoption.id).update({
-        "donorMap.$donorID": monthlyAmount
+        "donorMap.${_auth.currentUser?.uid}": monthlyAmount
       });
     } catch (e) {
       print(e);
@@ -105,7 +95,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     // delete entry from donorMap
     try {
       _firestore.collection('Adoptions').doc(widget.adoption.id).update({
-        "donorMap": donorMap.remove({donorID: monthlyAmount})
+        "donorMap": donorMap.remove({_auth.currentUser?.uid: monthlyAmount})
       });
     } catch (e) {
       print(e);
