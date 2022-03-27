@@ -183,17 +183,61 @@ class _DonationHistoryState extends State<DonationHistory> {
     var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
     donor = Donor(
-        doc['email'],
-        doc['firstName'],
-        doc['lastName'],
-        doc['phoneNumber'],
-        doc['id']
+        email: doc['email'],
+        firstName: doc['firstName'],
+        lastName: doc['lastName'],
+        phoneNumber: doc['phoneNumber'],
+        id: doc['id']
     );
     setState(() {});
   }
 
+  _createPDF() async {
+    final date = DateTime.now();
+    var type="";
+
+    for(var donation in donations){
+      if(donation.charityType == "Campaigns"){
+        type = "Campaign";
+      }
+      if(donation.charityType == "Beneficiaries"){
+        type = "Beneficiary";
+      }
+      if(donation.charityType == "UrgentCases"){
+        type = "Urgent Case";
+      }
+      var invoiceitem = InvoiceItem(
+        title: donation.charityName,
+        date: donation.donatedAt.toDate(),
+        organization: organizations[donations.indexOf(donation)].organizationName,
+        type: type,
+        price: donation.donationAmount,
+      );
+      invoiceitems.add(invoiceitem);
+    }
+    final invoice = Invoice(
+      supplier: DonaidInfo(
+        name: 'DONAID',
+        emailaddress: 'Donaidmobileapp1@gmail.com',
+        paymentInfo: 'https://stripe.com/',
+      ),
+      customer: DonorUser(
+        name: donor.firstName +" "+ donor.lastName,
+        emailaddress: donor.email,
+      ),
+      info: InvoiceInfo(
+        date: date,
+        description: 'This is an official list of all the organization charities ' + donor.firstName +" " + donor.lastName
+            +' has donated to using the DONAID app.',
+        number: donor.id,
+      ),
+      items: invoiceitems,
+    );
+    final pdfFile = await PdfInvoiceApi.generate(invoice);
+    PdfPreview.openFile(pdfFile);
+  }
   _donationHistoryBody() {
-    return donations.isNotEmpty
+    return donations.isNotEmpty && organizations.length == donations.length
         ? ListView.builder(
             itemCount: donations.length,
             shrinkWrap: true,
@@ -271,37 +315,7 @@ class _DonationHistoryState extends State<DonationHistory> {
           IconButton(
             icon: Icon(Icons.picture_as_pdf),
             onPressed: () async {
-              final date = DateTime.now();
-              for(var donation in donations){
-                var invoiceitem = InvoiceItem(
-                  title: donation.charityName,
-                  date: donation.donatedAt.toDate(),
-                  organization: organizations[donations.indexOf(donation)].organizationName,
-                  type: donation.charityType,
-                  price: donation.donationAmount,
-                );
-                invoiceitems.add(invoiceitem);
-              }
-                final invoice = Invoice(
-                  supplier: DonaidInfo(
-                    name: 'DONAID',
-                    emailaddress: 'Donaidmobileapp1@gmail.com',
-                    paymentInfo: 'https://stripe.com/',
-                  ),
-                  customer: DonorUser(
-                    name: donor.firstName +" "+ donor.lastName,
-                    emailaddress: donor.email,
-                  ),
-                  info: InvoiceInfo(
-                    date: date,
-                    description: 'This is an official list of all the organization charities ' + donor.firstName +" " + donor.lastName
-                        +' has donated to using the DONAID app.',
-                    number: donor.id,
-                  ),
-                  items: invoiceitems,
-                );
-              final pdfFile = await PdfInvoiceApi.generate(invoice);
-              PdfPreview.openFile(pdfFile);
+              await _createPDF();
             },
           ),
           SizedBox(width: 10),
