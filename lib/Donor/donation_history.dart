@@ -10,7 +10,6 @@ import 'package:donaid/Models/UrgentCase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../Models/Donor.dart';
 import 'DonorUser.dart';
@@ -35,7 +34,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   List<Donation> donations = [];
-  List<InvoiceItem>  invoiceitems = [];
+  List<InvoiceItem> invoiceitems = [];
   List<Organization> organizations = [];
   var f = NumberFormat("###,##0.00", "en_US");
   User? loggedInUser;
@@ -52,6 +51,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   _refreshPage() {
     donations.clear();
     organizations.clear();
+    invoiceitems.clear();
     _getDonationHistory();
   }
 
@@ -177,7 +177,8 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _getDonorInformation() async {
-    var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
+    var ret = await _firestore.collection('DonorUsers').where(
+        'uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
     donor = Donor(
         doc['email'],
@@ -192,65 +193,65 @@ class _DonationHistoryState extends State<DonationHistory> {
   _donationHistoryBody() {
     return donations.isNotEmpty
         ? ListView.builder(
-            itemCount: donations.length,
-            shrinkWrap: true,
-            itemBuilder: (context, int index) {
-              return Card(
-                  child: Column(
+        itemCount: donations.length,
+        shrinkWrap: true,
+        itemBuilder: (context, int index) {
+          return Card(
+              child: Column(
                 children: [
                   (donations[index].charityType == 'UrgentCases')
                       ? ListTile(
-                          onTap: () {
-                            _goToChosenUrgentCase(
-                                donations[index].charityID.toString());
-                          },
-                          title: Text(donations[index].charityName),
-                          subtitle: Text('urgent_case\n'.tr +
-                              organizations[index].organizationName),
-                          trailing: Text("\u0024" +
-                              f.format(donations[index].donationAmount)),
-                        )
+                    onTap: () {
+                      _goToChosenUrgentCase(
+                          donations[index].charityID.toString());
+                    },
+                    title: Text(donations[index].charityName),
+                    subtitle: Text('urgent_case\n'.tr +
+                        organizations[index].organizationName),
+                    trailing: Text("\u0024" +
+                        f.format(donations[index].donationAmount)),
+                  )
                       : (donations[index].charityType == 'Campaigns')
-                          ? ListTile(
-                              onTap: () {
-                                _goToChosenCampaign(
-                                    donations[index].charityID.toString());
-                              },
-                              title: Text(donations[index].charityName),
-                              subtitle: Text('campaign\n'.tr +
-                                  organizations[index].organizationName),
-                              trailing: Text("\u0024" +
-                                  f.format(donations[index].donationAmount)),
-                            )
-                          : ListTile(
-                              onTap: () {
-                                _goToChosenBeneficiary(
-                                    donations[index].charityID.toString());
-                              },
-                              title: Text(donations[index].charityName),
-                              subtitle: Text('beneficiary\n'.tr +
-                                  organizations[index].organizationName),
-                              trailing: Text("\u0024" +
-                                  f.format(donations[index].donationAmount)),
-                            ),
+                      ? ListTile(
+                    onTap: () {
+                      _goToChosenCampaign(
+                          donations[index].charityID.toString());
+                    },
+                    title: Text(donations[index].charityName),
+                    subtitle: Text('campaign\n'.tr +
+                        organizations[index].organizationName),
+                    trailing: Text("\u0024" +
+                        f.format(donations[index].donationAmount)),
+                  )
+                      : ListTile(
+                    onTap: () {
+                      _goToChosenBeneficiary(
+                          donations[index].charityID.toString());
+                    },
+                    title: Text(donations[index].charityName),
+                    subtitle: Text('beneficiary\n'.tr +
+                        organizations[index].organizationName),
+                    trailing: Text("\u0024" +
+                        f.format(donations[index].donationAmount)),
+                  ),
                   const Divider()
                 ],
               ));
-            })
+        })
         : Center(
-            child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'no_donation_history'.tr,
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                'make_a_donation_to_see_it_here!'.tr,
-                style: TextStyle(fontSize: 18),
-              ),
-            ],
-          ));
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'no_donation_history'.tr,
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              'make_a_donation_to_see_it_here!'.tr,
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ));
   }
 
   @override
@@ -268,35 +269,46 @@ class _DonationHistoryState extends State<DonationHistory> {
           IconButton(
             icon: Icon(Icons.picture_as_pdf),
             onPressed: () async {
+              invoiceitems.clear();
               final date = DateTime.now();
-              for(var donation in donations){
-                var invoiceitem = InvoiceItem(
-                  title: donation.charityName,
-                  date: donation.donatedAt.toDate(),
-                  organization: organizations[donations.indexOf(donation)].organizationName,
-                  type: donation.charityType,
-                  price: donation.donationAmount,
+              if (donations.isEmpty) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => _buildPopupDialog(context),
                 );
-                invoiceitems.add(invoiceitem);
               }
-                final invoice = Invoice(
-                  supplier: DonaidInfo(
-                    name: 'DONAID',
-                    emailaddress: 'Donaidmobileapp1@gmail.com',
-                    paymentInfo: 'https://stripe.com/',
-                  ),
-                  customer: DonorUser(
-                    name: donor.firstName +" "+ donor.lastName,
-                    emailaddress: donor.email,
-                  ),
-                  info: InvoiceInfo(
-                    date: date,
-                    description: 'This is an official list of all the organization charities ' + donor.firstName +" " + donor.lastName
-                        +' has donated to using the DONAID app.',
-                    number: donor.id,
-                  ),
-                  items: invoiceitems,
-                );
+              else {
+                for (var donation in donations) {
+                  var invoiceitem = InvoiceItem(
+                    title: donation.charityName,
+                    date: donation.donatedAt.toDate(),
+                    organization: organizations[donations.indexOf(donation)]
+                        .organizationName,
+                    type: donation.charityType,
+                    price: donation.donationAmount,
+                  );
+                  invoiceitems.add(invoiceitem);
+                }
+              }
+              final invoice = Invoice(
+                supplier: DonaidInfo(
+                  name: 'DONAID',
+                  emailaddress: 'Donaidmobileapp1@gmail.com',
+                  paymentInfo: 'https://stripe.com/',
+                ),
+                customer: DonorUser(
+                  name: donor.firstName + " " + donor.lastName,
+                  emailaddress: donor.email,
+                ),
+                info: InvoiceInfo(
+                  date: date,
+                  description: 'This is an official list of all the organization charities ' +
+                      donor.firstName + " " + donor.lastName
+                      + ' has donated to using the DONAID app.',
+                  number: donor.id,
+                ),
+                items: invoiceitems,
+              );
               final pdfFile = await PdfInvoiceApi.generate(invoice);
               PdfPreview.openFile(pdfFile);
             },
@@ -307,6 +319,30 @@ class _DonationHistoryState extends State<DonationHistory> {
       drawer: const DonorDrawer(),
       body: _donationHistoryBody(),
       bottomNavigationBar: DonorBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Can Not Generate A PDF'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("You currently have no donation history to generate a pdf."),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme
+              .of(context)
+              .primaryColor,
+          child: Text('Close'),
+        ),
+      ],
     );
   }
 }
