@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 class BeneficiaryCard extends StatefulWidget {
   final Beneficiary beneficiary;
 
-  const BeneficiaryCard( this.beneficiary, {Key? key}) : super(key: key);
+  const BeneficiaryCard(this.beneficiary, {Key? key}) : super(key: key);
 
   @override
   State<BeneficiaryCard> createState() => _BeneficiaryCardState();
@@ -137,25 +137,25 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                     if (organization?.country == 'United States') {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                            return (BeneficiaryDonateScreen(widget.beneficiary));
-                          })).then((value) {
+                        return (BeneficiaryDonateScreen(widget.beneficiary));
+                      })).then((value) {
                         setState(() {});
                       });
                     } else {
-    Map<String, dynamic> charity = {
-    'charityType':'Beneficiary',
-    'charityID':widget.beneficiary.id,
-    'charityTitle':widget.beneficiary.name
-    };
-    DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid, charity);
+                      Map<String, dynamic> charity = {
+                        'charityType': 'Beneficiary',
+                        'charityID': widget.beneficiary.id,
+                        'charityTitle': widget.beneficiary.name
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, organization!,
+                          _auth.currentUser!.uid, charity);
                     }
                   },
                   child: Row(children: [
-                    const Icon(Icons.favorite,
-                        color: Colors.white, size: 20),
+                    const Icon(Icons.favorite, color: Colors.white, size: 20),
                     Container(
                       margin: const EdgeInsets.only(left: 0.0, right: 10.0),
-                      child:  Text('donate'.tr,
+                      child: Text('donate'.tr,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
@@ -170,6 +170,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
               color: Colors.pink,
               borderRadius: BorderRadius.all(Radius.circular(10)),
             )),
+        (_auth.currentUser?.email != null) ?
         Align(
           alignment: Alignment.center,
           child: IconButton(
@@ -189,6 +190,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
             },
           ),
         )
+            : Container(),
       ]),
     );
   }
