@@ -35,6 +35,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   List<Donation> donations = [];
+  List<InvoiceItem>  invoiceitems = [];
   List<Organization> organizations = [];
   var f = NumberFormat("###,##0.00", "en_US");
   User? loggedInUser;
@@ -169,6 +170,7 @@ class _DonationHistoryState extends State<DonationHistory> {
       active: doc.data()['active'],
     );
 
+
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return (BeneficiaryDonateScreen(beneficiary));
     })).then((value) => _refreshPage());
@@ -267,37 +269,35 @@ class _DonationHistoryState extends State<DonationHistory> {
             icon: Icon(Icons.picture_as_pdf),
             onPressed: () async {
               final date = DateTime.now();
-              final dueDate = date.add(Duration(days: 7));
-
-              final invoice = Invoice(
-                supplier: DonaidInfo(
-                  name: 'DONAID',
-                  emailaddress: 'Donaidmobileapp1@gmail.com',
-                  paymentInfo: 'https://stripe.com/',
-                ),
-                customer: DonorUser(
-                  name: donor.firstName +" "+ donor.lastName,
-                  emailaddress: donor.email,
-                ),
-                info: InvoiceInfo(
-                  date: date,
-                  description: 'This is an official list of all the organization charities ' + donor.firstName +" " + donor.lastName
-                  +' has donated to using the DONAID app.',
-                  number: donor.id,
-                ),
-                items: [
-                  InvoiceItem(
-                    title: 'Coffee',
-                    date: DateTime.now(),
-                    organization: "Red Cross",
-                    type: "Campaign",
-                    price: 5.99,
-                  )
-                ],
-              );
-
+              for(var donation in donations){
+                var invoiceitem = InvoiceItem(
+                  title: donation.charityName,
+                  date: donation.donatedAt.toDate(),
+                  organization: organizations[donations.indexOf(donation)].organizationName,
+                  type: donation.charityType,
+                  price: donation.donationAmount,
+                );
+                invoiceitems.add(invoiceitem);
+              }
+                final invoice = Invoice(
+                  supplier: DonaidInfo(
+                    name: 'DONAID',
+                    emailaddress: 'Donaidmobileapp1@gmail.com',
+                    paymentInfo: 'https://stripe.com/',
+                  ),
+                  customer: DonorUser(
+                    name: donor.firstName +" "+ donor.lastName,
+                    emailaddress: donor.email,
+                  ),
+                  info: InvoiceInfo(
+                    date: date,
+                    description: 'This is an official list of all the organization charities ' + donor.firstName +" " + donor.lastName
+                        +' has donated to using the DONAID app.',
+                    number: donor.id,
+                  ),
+                  items: invoiceitems,
+                );
               final pdfFile = await PdfInvoiceApi.generate(invoice);
-
               PdfPreview.openFile(pdfFile);
             },
           ),

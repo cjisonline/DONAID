@@ -39,7 +39,6 @@ class PdfInvoiceApi {
           Container(
             height: 50,
             width: 50,
-             // child: Image.asset('assets/DONAID_LOGO.png')
           ),
         ],
       ),
@@ -112,7 +111,7 @@ class PdfInvoiceApi {
       'Organization',
       'Type',
       'Date',
-      'Amount',
+      'Paid',
     ];
     final data = invoice.items.map((item) {
 
@@ -129,15 +128,15 @@ class PdfInvoiceApi {
       headers: headers,
       data: data,
       border: null,
-      headerStyle: TextStyle(fontWeight: FontWeight.bold),
+      headerStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
       cellHeight: 30,
       cellAlignments: {
         0: Alignment.centerLeft,
-        1: Alignment.centerRight,
-        2: Alignment.centerRight,
-        3: Alignment.centerRight,
-        4: Alignment.centerRight,
+        1: Alignment.centerLeft,
+        2: Alignment.centerLeft,
+        3: Alignment.centerLeft,
+        4: Alignment.centerLeft,
         5: Alignment.centerRight,
       },
     );
