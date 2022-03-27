@@ -102,6 +102,7 @@ class _DonationHistoryState extends State<DonationHistory> {
         id: doc.data()['id'],
         organizationID: doc.data()['organizationID'],
         active: doc.data()['active'],
+        rejected: doc.data()['rejected'],
         approved: doc.data()['approved']
     );
 

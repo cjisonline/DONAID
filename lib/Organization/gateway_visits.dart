@@ -211,6 +211,7 @@ class _GatewayVisitsState extends State<GatewayVisits> {
           id: doc.data()['id'],
           organizationID: doc.data()['organizationID'],
           title: doc.data()['title'],
+          rejected: doc.data()['rejected'],
           approved: doc.data()['approved']);
 
       urgentCase.amountRaised += double.parse(donationAmount);
