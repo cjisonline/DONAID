@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/pdf_preview_screen.dart';
+import 'package:donaid/Donor/DonaidInfo.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
@@ -9,12 +11,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../Models/Donor.dart';
+import 'DonorUser.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:intl/intl.dart';
 
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
+import 'generateDonorPDF.dart';
+import 'invoice.dart';
 
 class DonationHistory extends StatefulWidget {
   static const id = 'donation_history';
@@ -28,19 +34,29 @@ class _DonationHistoryState extends State<DonationHistory> {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   List<Donation> donations = [];
+  List<InvoiceItem>  invoiceitems = [];
   List<Organization> organizations = [];
   var f = NumberFormat("###,##0.00", "en_US");
+  User? loggedInUser;
+  Donor donor = Donor.c1();
 
   @override
   void initState() {
     super.initState();
     _getDonationHistory();
+    _getCurrentUser();
+    _getDonorInformation();
   }
 
-  _refreshPage(){
+  _refreshPage() {
     donations.clear();
     organizations.clear();
+    invoiceitems.clear();
     _getDonationHistory();
+  }
+
+  void _getCurrentUser() {
+    loggedInUser = _auth.currentUser;
   }
 
   _getDonationHistory() async {
@@ -88,8 +104,11 @@ class _DonationHistoryState extends State<DonationHistory> {
     setState(() {});
   }
 
-  _goToChosenUrgentCase(String id)async{
-    var ret = await _firestore.collection('UrgentCases').where('id',isEqualTo: id).get();
+  _goToChosenUrgentCase(String id) async {
+    var ret = await _firestore
+        .collection('UrgentCases')
+        .where('id', isEqualTo: id)
+        .get();
     var doc = ret.docs[0];
     UrgentCase urgentCase = UrgentCase(
         title: doc.data()['title'],
@@ -111,8 +130,9 @@ class _DonationHistoryState extends State<DonationHistory> {
     })).then((value) => _refreshPage());
   }
 
-  _goToChosenCampaign(String id)async {
-    var ret = await _firestore.collection('Campaigns')
+  _goToChosenCampaign(String id) async {
+    var ret = await _firestore
+        .collection('Campaigns')
         .where('id', isEqualTo: id)
         .get();
     var doc = ret.docs[0];
@@ -134,8 +154,9 @@ class _DonationHistoryState extends State<DonationHistory> {
     })).then((value) => _refreshPage());
   }
 
-  _goToChosenBeneficiary(String id)async {
-    var ret = await _firestore.collection('Beneficiaries')
+  _goToChosenBeneficiary(String id) async {
+    var ret = await _firestore
+        .collection('Beneficiaries')
         .where('id', isEqualTo: id)
         .get();
     var doc = ret.docs[0];
@@ -152,80 +173,182 @@ class _DonationHistoryState extends State<DonationHistory> {
       active: doc.data()['active'],
     );
 
+
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return (BeneficiaryDonateScreen(beneficiary));
     })).then((value) => _refreshPage());
   }
 
+  _getDonorInformation() async {
+    var ret = await _firestore.collection('DonorUsers').where(
+        'uid', isEqualTo: loggedInUser?.uid).get();
+    final doc = ret.docs[0];
+    donor = Donor(
+        email: doc['email'],
+        firstName: doc['firstName'],
+        lastName: doc['lastName'],
+        phoneNumber: doc['phoneNumber'],
+        id: doc['id']
+    );
+    setState(() {});
+  }
+
+  _createPDF() async {
+    final date = DateTime.now();
+    var type="";
+
+    for(var donation in donations){
+      if(donation.charityType == "Campaigns"){
+        type = "Campaign";
+      }
+      if(donation.charityType == "Beneficiaries"){
+        type = "Beneficiary";
+      }
+      if(donation.charityType == "UrgentCases"){
+        type = "Urgent Case";
+      }
+      var invoiceitem = InvoiceItem(
+        title: donation.charityName,
+        date: donation.donatedAt.toDate(),
+        organization: organizations[donations.indexOf(donation)].organizationName,
+        type: type,
+        price: donation.donationAmount,
+      );
+      invoiceitems.add(invoiceitem);
+    }
+    final invoice = Invoice(
+      supplier: DonaidInfo(
+        name: 'DONAID',
+        emailaddress: 'Donaidmobileapp1@gmail.com',
+        paymentInfo: 'https://stripe.com/',
+      ),
+      customer: DonorUser(
+        name: donor.firstName +" "+ donor.lastName,
+        emailaddress: donor.email,
+      ),
+      info: InvoiceInfo(
+        date: date,
+        description: 'This is an official list of all the organization charities ' + donor.firstName +" " + donor.lastName
+            +' has donated to using the DONAID app.',
+        number: donor.id,
+      ),
+      items: invoiceitems,
+    );
+    final pdfFile = await PdfInvoiceApi.generate(invoice);
+    PdfPreview.openFile(pdfFile);
+  }
   _donationHistoryBody() {
-    return donations.isNotEmpty
-    ? ListView.builder(
-        itemCount: donations.length,
-        shrinkWrap: true,
-        itemBuilder: (context, int index) {
-          return Card(
-              child: Column(
-            children: [
-              (donations[index].charityType == 'UrgentCases')
-                  ? ListTile(
-                      onTap: () {
-                        _goToChosenUrgentCase(donations[index].charityID.toString());
-                      },
-                      title: Text(donations[index].charityName),
-                      subtitle: Text('urgent_case'.tr +'\n'+
-                          organizations[index].organizationName),
-                      trailing: Text(
-                          "\u0024" + f.format(donations[index].donationAmount)),
-                    )
-                  : (donations[index].charityType == 'Campaigns')
+    return donations.isNotEmpty && organizations.length == donations.length
+        ? ListView.builder(
+            itemCount: donations.length,
+            shrinkWrap: true,
+            itemBuilder: (context, int index) {
+              return Card(
+                  child: Column(
+                children: [
+                  (donations[index].charityType == 'UrgentCases')
                       ? ListTile(
                           onTap: () {
-                            _goToChosenCampaign(donations[index].charityID.toString());
+                            _goToChosenUrgentCase(
+                                donations[index].charityID.toString());
                           },
                           title: Text(donations[index].charityName),
-                          subtitle: Text('campaign'.tr + '\n'+
+                      subtitle: Text('urgent_case'.tr +'\n'+
                               organizations[index].organizationName),
                           trailing: Text("\u0024" +
                               f.format(donations[index].donationAmount)),
                         )
-                      : ListTile(
-                onTap: () {
-                  _goToChosenBeneficiary(donations[index].charityID.toString());
-                },
-                title: Text(donations[index].charityName),
+                      : (donations[index].charityType == 'Campaigns')
+                          ? ListTile(
+                              onTap: () {
+                                _goToChosenCampaign(
+                                    donations[index].charityID.toString());
+                              },
+                              title: Text(donations[index].charityName),
+                          subtitle: Text('campaign'.tr + '\n'+
+                                  organizations[index].organizationName),
+                              trailing: Text("\u0024" +
+                                  f.format(donations[index].donationAmount)),
+                            )
+                          : ListTile(
+                              onTap: () {
+                                _goToChosenBeneficiary(
+                                    donations[index].charityID.toString());
+                              },
+                              title: Text(donations[index].charityName),
                 subtitle: Text('beneficiary'.tr + '\n'+
-                    organizations[index].organizationName),
-                trailing: Text("\u0024" +
-                    f.format(donations[index].donationAmount)),
+                                  organizations[index].organizationName),
+                              trailing: Text("\u0024" +
+                                  f.format(donations[index].donationAmount)),
+                            ),
+                  const Divider()
+                ],
+              ));
+            })
+        : Center(
+            child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'no_donation_history'.tr,
+                style: TextStyle(fontSize: 18),
               ),
-              const Divider()
+              Text(
+                'make_a_donation_to_see_it_here!'.tr,
+                style: TextStyle(fontSize: 18),
+              ),
             ],
           ));
-        })
-    : Center(child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('no_donation_history'.tr, style: TextStyle(fontSize: 18),),
-        Text('make_a_donation_to_see_it_here!'.tr, style: TextStyle(fontSize: 18),),
-      ],
-    ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('donation_history'.tr),
+        title: Text('donation_history'.tr),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.picture_as_pdf),
+            onPressed: () async {
+              await _createPDF();
+            },
+          ),
+          SizedBox(width: 10),
+        ],
       ),
       drawer: const DonorDrawer(),
       body: _donationHistoryBody(),
       bottomNavigationBar: DonorBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Can Not Generate A PDF'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("You currently have no donation history to generate a pdf."),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme
+              .of(context)
+              .primaryColor,
+          child: Text('Close'),
+        ),
+      ],
     );
   }
 }
