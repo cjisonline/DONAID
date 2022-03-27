@@ -112,6 +112,49 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     }
   }
 
+  Future<void> _cancelAdoptionConfirm() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Are You Sure?'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: const Text(
+                'Are you sure you want to cancel this adoption '
+                    'you can readopt this beneficiary from the Beneficiaries page. Would you like to continue'
+                    ' with canceling this adoption?'),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    _cancelBeneficiaryAdoption()
+                        .whenComplete(() {
+                      _getAdoption();
+                    });
+                    Navigator.pop(context);
+
+                  },
+                  child: const Text('Yes'),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
   _submitForm() {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -198,10 +241,12 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                           ),
                                         ),
                                         onPressed: () async {
-                                          _cancelBeneficiaryAdoption()
-                                              .whenComplete(() {
-                                            _getAdoption();
-                                          });
+                                          // _cancelBeneficiaryAdoption()
+                                          //     .whenComplete(() {
+                                          //   _getAdoption();
+                                          // });
+                                          _cancelAdoptionConfirm();
+
                                         }))
                               ],
                             )

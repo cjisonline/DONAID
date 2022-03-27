@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import '../Models/Adoptee.dart';
 import 'package:intl/intl.dart';
 
+import 'adoption_details_screen.dart';
+
 class MyAdoptions extends StatefulWidget {
   static const id = 'my_adoptions';
 
@@ -104,9 +106,8 @@ class _MyAdoptionsState extends State<MyAdoptions> {
                 children: [
                   ListTile(
                     onTap: () {
-                      // go to donate screen for adoptions
                       // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      //   return (OrganizationAdoptionFullScreen(adoptions[index]));
+                      //   return (AdoptionDetailsScreen(adoptions[index]));
                       // })).then((value) => _refreshPage());
                     },
                     title: Text(adoptions[index].name),
