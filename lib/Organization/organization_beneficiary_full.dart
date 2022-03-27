@@ -223,7 +223,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
+                  children: widget.beneficiary.amountRaised < widget.beneficiary.goalAmount ? [
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
                       child: Material(
@@ -314,6 +314,20 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                               }))
                           : Container()
                     ),
+                  ]
+                      : [
+                    SizedBox(
+                        height:50
+                    ),
+                    Center(
+                      child: Text(
+                        'This charity has reached it\'s goal!',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ])

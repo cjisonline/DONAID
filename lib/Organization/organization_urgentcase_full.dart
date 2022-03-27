@@ -223,7 +223,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+                children: widget.urgentCase.amountRaised < widget.urgentCase.goalAmount ? [
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                     child: (widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
@@ -294,7 +294,21 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                               }))
                           : Container()
                   ),
-                ],
+                ]
+                      : [
+                  SizedBox(
+                  height:50
+              ),
+              Center(
+                child: Text(
+                  'This charity has reached it\'s goal!',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+              )
+            ],
               )
             ])
         ));
