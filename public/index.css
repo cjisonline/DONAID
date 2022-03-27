@@ -35,3 +35,7 @@ body {
     padding-bottom: 2rem;
     transform: translateY(40%);
 }
+
+.progressbar {
+    background-color: #6804ec !important;
+}

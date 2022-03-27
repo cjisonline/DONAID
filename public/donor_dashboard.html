@@ -26,6 +26,7 @@
 <script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
 import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
     const firebaseConfig = {
@@ -43,14 +44,28 @@ import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc
   const db = getFirestore(app);
 
 // Logout
-function logoutAdmin(){
-    Firebase.auth().signOut()
-    .then(function(){
-        console.log("Logout Successful");
-        window.location = 'index.html'; // Index redirect upon logout
+const auth1 = getAuth();
+
+function logoutAdmin() {
+    signOut(auth1).then(() => {
+    // Sign-out successful.
+    }).catch((error) => {
+    // An error happened.
     });
-    alert("Logged Out");
 }
+
+onAuthStateChanged(auth1, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    // ...
+  } else {
+    // User is signed out
+    // ...
+    window.location = 'index.html'; // Index redirect upon logout
+  }
+});
 
 async function getDonorData(){
     window.onload = async function(){
@@ -131,6 +146,10 @@ async function getDonorData(){
 
             $(window).on('resize', function () {
                 $('#adminTable').dataTable().fnDraw();
+            });
+
+            $('a#logoutButton').click(function() {
+                logoutAdmin();
             });
     }
 }
@@ -249,6 +268,7 @@ getDonorData();
                         <a href="categories.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Categories</span></a>
                         <a href="messages.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Messages</span></a>
                         <a href="settings.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Settings</span></a>
+                        <a href="#" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="logoutButton"><span>Logout</span></a>
                     </div>
                 </div>
             </div>
@@ -269,20 +289,5 @@ getDonorData();
       </div>
     </div>
   </div>
-  
-    
-        <!-- <form class="inputWrapper">
-            <button onclick="logoutAdmin()" class="submitButton" id="logout">Logout</button>
-        </form> -->
-
-        <script type="module">
-            import {getAuth, signInWithEmailAndPassword} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
-            const auth = getAuth();
-
-            document.addEventListener('DOMContentLoaded', function() {
-                auth.onAuthStateChanged(user => {console.log("user: " + user);
-                });
-            });
-        </script>
 </body>
 </html>

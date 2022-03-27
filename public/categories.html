@@ -44,14 +44,28 @@ import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc
   const db = getFirestore(app);
 
 // Logout
-function logoutAdmin(){
-    Firebase.auth().signOut()
-    .then(function(){
-        console.log("Logout Successful");
-        window.location = 'index.html'; // Index redirect upon logout
+const auth1 = getAuth();
+
+function logoutAdmin() {
+    signOut(auth1).then(() => {
+    // Sign-out successful.
+    }).catch((error) => {
+    // An error happened.
     });
-    alert("Logged Out");
 }
+
+onAuthStateChanged(auth1, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    // ...
+  } else {
+    // User is signed out
+    // ...
+    window.location = 'index.html'; // Index redirect upon logout
+  }
+});
 
 async function getCategories(){
     window.onload = async function(){
@@ -114,6 +128,10 @@ async function getCategories(){
         });
     }
 }
+
+$('a#logoutButton').click(function() {
+    logoutAdmin();
+});
 
 async function createCategory() {
 
@@ -255,6 +273,7 @@ getCategories();
                         <a href="categories.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="nav-active"><span>Categories</span></a>
                         <a href="messages.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Messages</span></a>
                         <a href="settings.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Settings</span></a>
+                        <a href="#" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="logoutButton"><span>Logout</span></a>
                     </div>
                 </div>
             </div>
@@ -277,18 +296,6 @@ getCategories();
     </div>
 
     <br>
-    
-    
-
-        <script type="module">
-            import {getAuth, signInWithEmailAndPassword} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
-            const auth = getAuth();
-
-            document.addEventListener('DOMContentLoaded', function() {
-                auth.onAuthStateChanged(user => {console.log("user: " + user);
-                });
-            });
-        </script>
 
 </body>
 </html>
