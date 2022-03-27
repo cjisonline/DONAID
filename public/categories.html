@@ -27,6 +27,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-storage.js';
 import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
     const firebaseConfig = {
