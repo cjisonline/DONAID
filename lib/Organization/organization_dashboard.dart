@@ -4,12 +4,15 @@ import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/campaign_card.dart';
 import 'package:donaid/Organization/OrganizationWidget/urgent_case_card.dart';
+import 'package:donaid/Organization/notifications_page.dart';
 import 'package:donaid/Services/chatServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlay_support/overlay_support.dart';
 
+import '../Services/notifications.dart';
 import 'OrganizationWidget/beneficiary_card.dart';
 import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'OrganizationWidget/organization_drawer.dart';
@@ -30,6 +33,7 @@ class OrganizationDashboard extends StatefulWidget {
 class _OrganizationDashboardState extends State<OrganizationDashboard> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
+  final _messaging = FirebaseMessaging.instance;
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries = [];
@@ -43,6 +47,9 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   @override
   void initState() {
     super.initState();
+
+    handleNotifications();
+
     _getCurrentUser();
     _getCampaign();
     _getUrgentCases();
@@ -52,6 +59,55 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
 
   }
 
+  handleNotifications()async{
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return OrganizationNotificationPage();
+      }));
+
+    });
+    registerNotification();
+    checkForInitialMessage();
+  }
+
+  checkForInitialMessage() async{
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if(initialMessage != null){
+      addNotification(_auth.currentUser?.uid, initialMessage);
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return OrganizationNotificationPage();
+      }));
+    }
+  }
+
+  registerNotification() async {
+    NotificationSettings notificationSettings = await _messaging.requestPermission(
+        alert: true,
+        badge: true,
+        provisional: false,
+        sound: true
+    );
+
+    if(notificationSettings.authorizationStatus == AuthorizationStatus.authorized)
+    {
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        addNotification(_auth.currentUser?.uid, message);
+
+        if(message.notification!=null){
+          showSimpleNotification(
+            Text(message.notification!.title!),
+            subtitle: Text(message.notification!.body!),
+            duration: Duration(seconds: 5),
+            slideDismissDirection: DismissDirection.up,
+
+          );
+        }
+      });
+    }
+    else{
+      print("Permission declined by user.");
+    }
+  }
 
   _refreshPage() async{
     beneficiaries.clear();
@@ -86,6 +142,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       campaigns.add(campaign);
     }
 
+    campaigns.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 
@@ -115,7 +172,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       );
       urgentCases.add(urgentCase);
     }
-
+    urgentCases.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 
@@ -144,7 +201,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       beneficiaries.add(beneficiary);
     }
 
-    print('Beneficiaries list: $beneficiaries');
+    beneficiaries.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
 
     setState(() {});
   }

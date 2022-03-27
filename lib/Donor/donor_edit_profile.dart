@@ -47,11 +47,11 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
         .get();
     final doc = ret.docs[0];
     donor = Donor(
-      doc['email'],
-      doc['firstName'],
-      doc['lastName'],
-      doc['phoneNumber'],
-      doc['id']
+        email: doc['email'],
+        firstName: doc['firstName'],
+        lastName: doc['lastName'],
+        phoneNumber: doc['phoneNumber'],
+        id: doc['id']
     );
     setState(() {});
   }

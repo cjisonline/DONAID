@@ -19,10 +19,10 @@ class UrgentCaseCard extends StatefulWidget {
 }
 
 class _UrgentCaseCardState extends State<UrgentCaseCard> {
+  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   Organization? organization;
   var f = NumberFormat("###,##0.00", "en_US");
-  final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   var pointlist = [];
 
@@ -140,8 +140,12 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                         setState(() {});
                       });
                     } else {
-                      DonorAlertDialogs.paymentLinkPopUp(
-                          context, organization!);
+                      Map<String, dynamic> charity = {
+                        'charityID':widget.urgentCase.id,
+                        'charityType':'Urgent Case',
+                        'charityTitle':widget.urgentCase.title
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid, charity);
                     }
                   },
                   child: Row(children: [

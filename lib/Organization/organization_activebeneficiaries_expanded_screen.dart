@@ -61,6 +61,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
       );
       beneficiaries.add(beneficiary);
     }
+    beneficiaries.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 

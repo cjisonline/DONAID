@@ -131,6 +131,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
+          readOnly: widget.beneficiary.amountRaised > 0,
           controller: _beneficiaryNameController,
           decoration: InputDecoration(
               label: Center(
@@ -159,6 +160,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        readOnly: widget.beneficiary.amountRaised > 0,
         controller: _beneficiaryBiographyController,
         minLines: 2,
         maxLines: 5,
@@ -185,6 +187,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        readOnly: widget.beneficiary.amountRaised > 0,
         keyboardType: TextInputType.number,
         controller: _beneficiaryGoalAmountController,
         validator: (value) {
@@ -268,12 +271,18 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               )
           ),
           onTap: () async {
-            var date =  await showDatePicker(
-                context: context,
-                initialDate:DateTime.now(),
-                firstDate:DateTime.now(),
-                lastDate: DateTime(2100));
-            _beneficiaryEndDateController?.text = date.toString().substring(0,10);
+            if(widget.beneficiary.amountRaised < widget.beneficiary.goalAmount) {
+              var date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2100));
+              _beneficiaryEndDateController?.text =
+                  date.toString().substring(0, 10);
+            }
+            else{
+              return;
+            }
           },));
   }
 

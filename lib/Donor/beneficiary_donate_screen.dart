@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
+import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Donor/updateFavorite.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:favorite_button/favorite_button.dart';
@@ -52,6 +54,49 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
 
     var doc = ret.docs[0];
     widget.beneficiary.amountRaised = doc['amountRaised'];
+    widget.beneficiary.active = doc['active'];
+
+    setState(() {
+    });
+  }
+
+  Future<void> _confirmDonationAmount() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(
+              child: Text('Are You Sure?'.tr),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: Text(
+                "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.".tr),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () async{
+                    Navigator.pop(context);
+                    await makePayment();
+
+
+                  },
+                  child: const Text('Yes'),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No'),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   _getFavorite() async {
@@ -185,8 +230,12 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                                     setState(() {
                                       showLoadingSpinner = true;
                                     });
-                                    await makePayment();
-
+                                    if(double.parse(donationAmount) > 999){
+                                      _confirmDonationAmount();
+                                    }
+                                    else {
+                                      await makePayment();
+                                    }
                                     setState(() {
                                       showLoadingSpinner=false;
                                     });
@@ -319,7 +368,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
     return Scaffold(
       appBar: AppBar(
         //doubt
-        title: Text('donate - ${widget.beneficiary.name}'.tr),
+        title: Text('donate'.tr +' - ${widget.beneficiary.name}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

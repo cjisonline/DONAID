@@ -9,6 +9,7 @@ import 'package:donaid/Organization/add_beneficiary_screen.dart';
 import 'package:donaid/Organization/add_urgentcase_screen.dart';
 import 'package:donaid/Donor/donor_edit_profile.dart';
 import 'package:donaid/Donor/donor_profile.dart';
+import 'package:donaid/Organization/gateway_visits.dart';
 import 'package:donaid/Organization/notifications_page.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:donaid/Organization/organization_edit_profile.dart';
@@ -115,6 +116,7 @@ class Donaid extends StatelessWidget {
           OrganizationNotificationPage.id: (context) => const OrganizationNotificationPage(),
           DonorSettingsPage.id: (context) => const DonorSettingsPage(),
           OrganizationSettingsPage.id: (context) => const OrganizationSettingsPage(),
+          GatewayVisits.id: (context) => const GatewayVisits(),
         },
         translations: Messages(),
         locale: const Locale('en', 'US'),

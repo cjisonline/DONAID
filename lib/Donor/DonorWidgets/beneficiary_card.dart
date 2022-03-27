@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 class BeneficiaryCard extends StatefulWidget {
   final Beneficiary beneficiary;
 
-  const BeneficiaryCard(this.beneficiary, {Key? key}) : super(key: key);
+  const BeneficiaryCard( this.beneficiary, {Key? key}) : super(key: key);
 
   @override
   State<BeneficiaryCard> createState() => _BeneficiaryCardState();
@@ -20,9 +20,9 @@ class BeneficiaryCard extends StatefulWidget {
 
 class _BeneficiaryCardState extends State<BeneficiaryCard> {
   Organization? organization;
+  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   var f = NumberFormat("###,##0.00", "en_US");
-  final _auth = FirebaseAuth.instance;
   User? loggedInUser;
   var pointlist = [];
   bool favorite = false;
@@ -142,8 +142,12 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                         setState(() {});
                       });
                     } else {
-                      DonorAlertDialogs.paymentLinkPopUp(
-                          context, organization!);
+    Map<String, dynamic> charity = {
+    'charityType':'Beneficiary',
+    'charityID':widget.beneficiary.id,
+    'charityTitle':widget.beneficiary.name
+    };
+    DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid, charity);
                     }
                   },
                   child: Row(children: [

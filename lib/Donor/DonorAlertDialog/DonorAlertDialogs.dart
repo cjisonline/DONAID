@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -5,7 +6,31 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 
 class DonorAlertDialogs{
-  static paymentLinkPopUp(context, Organization organization){
+  static createGatewayVisit(Organization organization, String uidDonor, Map<String, dynamic> charity) async{
+    final _firestore = FirebaseFirestore.instance;
+
+    try{
+      var docRef = await _firestore.collection('GatewayVisits').add({});
+
+      await _firestore.collection('GatewayVisits').doc(docRef.id).set({
+        'organizationID':organization.uid,
+        'donorID':uidDonor,
+        'visitedAt': FieldValue.serverTimestamp(),
+        'id':docRef.id,
+        'charityType': charity['charityType'],
+        'charityTitle': charity['charityTitle'],
+        'charityID': charity['charityID'],
+        'read':false
+      });
+    }
+    catch(e){
+      print(e);
+    }
+
+
+  }
+
+  static paymentLinkPopUp(context, Organization organization, String uidDonor, Map<String, dynamic> charity){
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -19,15 +44,16 @@ class DonorAlertDialogs{
             ),
             content: Linkify(
               onOpen: (link) async {
+                print('IN ON OPEN');
                 if (await canLaunch(link.url)) {
                   await launch(link.url);
+                  await createGatewayVisit(organization, uidDonor, charity);
                 } else {
                   throw 'Could not launch $link';
                 }
               },
              //doubt
-              text: "the_organization_that_created"
-                  ' A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
+              text: "the_organization_that_created".tr +'\n\n ${organization.gatewayLink}',
               linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
               textAlign: TextAlign.center,
             ),

@@ -111,14 +111,14 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
               borderRadius: BorderRadius.circular(32.0),
             ),
             content:  Text(
-                'the_email_you_choose_is_already_in_use'.tr),
+                'The email you chose is already in use.'.tr),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child:  Text('ok'.tr),
                 ),
               ),
             ],
@@ -407,7 +407,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
                       child: Center(
                         child: RichText(
                             text:  TextSpan(
-                                text: 'note '.tr,
+                                text: 'note'.tr+' ',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 15.0),
                                 children: [
