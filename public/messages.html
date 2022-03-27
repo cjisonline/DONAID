@@ -73,27 +73,33 @@ async function getMessagesData(){
 
         const querySnapshot = await getDocs(collection(db, "AdminMessages"));
             querySnapshot.forEach((item) => {
+
+                if (item.data().read != true) {
                 let contactDate = item.data().ContactTime;
-                var cDate = new Date(contactDate);
-                var contactDateString = cDate.toLocaleDateString();
+                var cDate = new Date(contactDate.seconds*1000);
+                var contactDateString = cDate.toLocaleDateString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
                     document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
                     "<tr><td class='emailTD'>" + item.data().subject + 
                     "</td><td>" + item.data().email + 
                     "</td><td>" + item.data().message + 
                     "</td><td>" + item.data().userId + 
+                    "</td><td>" + item.data().id + 
                     "</td><td>" + item.data().category + 
                     "</td><td>" + contactDateString + 
                     "</td><td>" + '<button id="approveButton" class="approveButtonClass">View</button>' + "</td></tr>"; 
+                }
                     
                     $('button.approveButtonClass').click(function() {
                         var messageSubject = adminTableDef.row($(this).closest("tr")).data()[0];
                         var $item = adminTableDef.row($(this).closest("tr")).data()[2];
                         var userEmail = adminTableDef.row($(this).closest("tr")).data()[1];
-                        var userType = adminTableDef.row($(this).closest("tr")).data()[4];
+                        var userType = adminTableDef.row($(this).closest("tr")).data()[5];
+                        var messageID = adminTableDef.row($(this).closest("tr")).data()[4];
+                        var contactDatePass = adminTableDef.row($(this).closest("tr")).data()[6];
                         $("#resultas").append($item); 
                         var messageText = $item;
                          
-                        viewMessage(messageSubject, messageText, userEmail, userType);
+                        viewMessage(messageSubject, messageText, userEmail, userType, messageID, contactDatePass);
                     });
         });
 
@@ -106,7 +112,7 @@ async function getMessagesData(){
                     className: 'mdc-data-table__cell'
                 },
                 {
-                "targets": [ 2, 3 ],
+                "targets": [ 2, 3, 4 ],
                 "visible": false,
                 "searchable": false,
                 }
@@ -132,14 +138,51 @@ $('a#logoutButton').click(function() {
     logoutAdmin();
 });
 
-function viewMessage (messageSubject, messageText, userEmail, userType) {
+function viewMessage (messageSubject, messageText, userEmail, userType, messageID, contactDatePass) {
     swal.fire({
-            title: messageSubject,
+            title: 'Subject: ' + messageSubject,
             html: 'Message: ' + messageText + '<br>' +
             'Email: ' + userEmail + '<br>' +
-            'Category: ' + userType + '',
-            icon: 'info'
+            'Category: ' + userType + '<br>' +
+            'Contact Date: ' + contactDatePass + '',
+            icon: 'info',
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonColor: '#6804ec',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Mark as Read',
     })
+    .then((result) => {
+        if (result.isConfirmed) { 
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Marking as read will remove the message from this page!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#6804ec',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, mark as read!'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    const messageDoc = doc(db, "AdminMessages", messageID);
+                        updateDoc(messageDoc, {
+                            read: true,
+                    })
+                    Swal.fire(
+                    'Read!',
+                    'The message has been marked as read and removed from your inbox.',
+                    'success'
+                    ).then(function () {
+                        location.reload(); 
+                    })
+                    .catch((error) => {
+                    console.error("Error deleting this image: ", error);
+                })
+                }
+            })
+        }
+    })
+    
 }
 
 getMessagesData();
@@ -191,8 +234,9 @@ getMessagesData();
                 <th>Email</th>
                 <th>Message</th>
                 <th>User ID</th>
+                <th>Message ID</th>
                 <th>Category</th>
-                <th>Contact Time</th>
+                <th>Contact Date</th>
                 <th></th>
             </thead>
             <tbody>
