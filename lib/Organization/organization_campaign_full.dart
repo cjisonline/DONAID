@@ -319,7 +319,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                     ),
                     Center(
                       child: Text(
-                        'This charity has reached it\'s goal!',
+                        'This charity has reached it\'s goal!'.tr,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold
