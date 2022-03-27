@@ -4,6 +4,15 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "Denials":"Denials",
+          "Edit Urgent Case":"Edit Urgent Case",
+          "Urgent case resubmitted!":"Urgent case resubmitted!",
+          "This urgent case is pending approval.":"This urgent case is pending approval",
+          "Attention:":"Attention:",
+          "Your Urgent Case Was Denied":"Your Urgent Case Was Denied",
+          "After administrative review, your urgent case was denied for the following reason:":
+          "After administrative review, your urgent case was denied for the following reason:",
+          "No denied urgent cases to show.":"No denied urgent cases to show.",
           "_campaigns": "Campaigns",
           "No new visits":"No new visits",
           "Did this visit result in a donation?":"Did this visit result in a donation?",
@@ -252,6 +261,15 @@ class Messages extends Translations {
           "forgot_password!": "Forgot Password?",
         },
         'fr_FR': {
+          "Denials":"Refus",
+          "Edit Urgent Case":"Modifier le cas urgent",
+          "Urgent case resubmitted!":"Cas urgent soumis à nouveau",
+          "This urgent case is pending approval.":"Cette affaire urgente est en attente d’approbation.",
+          "Attention:":"Attention:",
+          "Your Urgent Case Was Denied":"Votre cas urgent a été refusé",
+          "After administrative review, your urgent case was denied for the following reason:":
+          "Après examen administratif, votre cas urgent a été refusé pour la raison suivante:",
+          "No denied urgent cases to show.":"Aucun cas urgent refusé à montrer.",
           "No new visits":"Pas de nouvelles visites",
           "Did this visit result in a donation?":"Cette visite a-t-elle donné lieu à un don?",
           "Gateway Visits":"Visites de passerelle",
@@ -358,7 +376,7 @@ class Messages extends Translations {
           "no_results_found": "Aucun resultat trouver",
           "ugent_case_is_no_longer":
               "Le cas urgent n'est plus disponible pour faire un don.",
-          "pending_approvals": "Approbations en attente",
+          "pending_approvals": "Approbations et refus en attente",
           "expired_charities": "Charités Expiré",
           "inactive_charities": "Charités Inactive",
           "success": "Succès",
@@ -512,6 +530,15 @@ class Messages extends Translations {
           "forgot_password!": "Mot de passe oublié?",
         },
         'ar_SA': {
+          "Denials":"النفي",
+          "Edit Urgent Case":"تعديل الحالة العاجلة",
+          "Urgent case resubmitted!":"إعادة تقديم حالة عاجلة!",
+          "This urgent case is pending approval.":"ولا تزال هذه الحالة العاجلة في انتظار الموافقة.",
+          "Attention:":"اهتمام:",
+          "Your Urgent Case Was Denied":"تم رفض قضيتك العاجلة",
+          "After administrative review, your urgent case was denied for the following reason:":
+          "بعد المراجعة الإدارية، تم رفض قضيتك العاجلة للسبب التالي:",
+          "No denied urgent cases to show.":"لا يوجد حالات عاجلة مرفوضة لإظهارها.",
           "No new visits":"لا توجد زيارات جديدة",
           "Did this visit result in a donation?":"هل أسفرت هذه الزيارة عن تبرع؟",
           "Gateway Visits":"زيارات البوابة",
@@ -611,7 +638,7 @@ class Messages extends Translations {
           "end_date": " تاريخ الانتهاء",
           "no_results_found": " لم يتم العثور على نتائج",
           "ugent_case_is_no_longer": " الحالة العاجلة لم تعد متاحة للتبرع لها",
-          "pending_approvals": " الموافقات المعلقة",
+          "pending_approvals": " الموافقات المعلقة والرفض",
           "expired_charities": " الجمعيات الخيرية منتهية الصلاحية",
           "inactive_charities": " الجمعيات الخيرية غير النشطة",
           "success": " نجاح",
@@ -756,6 +783,15 @@ class Messages extends Translations {
           "forgot_password!": " هل نسيت كلمة السر؟",
         },
         'es_ES': {
+          "Denials":"Negaciones",
+          "Edit Urgent Case":"Editar caso urgente",
+          "Urgent case resubmitted!":"¡Caso urgente reenviado!",
+          "This urgent case is pending approval.":"Este caso urgente está pendiente de aprobación.",
+          "Attention:":"Atención:",
+          "Your Urgent Case Was Denied":"Su caso urgente fue denegado",
+          "After administrative review, your urgent case was denied for the following reason:":
+          "Después de la revisión administrativa, su caso urgente fue denegado por la siguiente razón:",
+          "No denied urgent cases to show.":"No se negaron casos urgentes para mostrar.",
           "No new visits":"No hay nuevas visitas",
           "Did this visit result in a donation?":"¿Esta visita resultó en una donación?",
           "Gateway Visits":"Visitas a la puerta de enlace",
@@ -863,7 +899,7 @@ class Messages extends Translations {
           "no_results_found": "No se han encontrado resultados",
           "ugent_case_is_no_longer":
               "El caso urgente ya no está disponible para donar a.",
-          "pending_approvals": "Aprobaciones pendientes",
+          "pending_approvals": "Aprobaciones y denegaciones pendientes",
           "expired_charities": "Organizaciones benéficas vencidas",
           "inactive_charities": "Organizaciones benéficas inactivas",
           "success": "Éxito",
