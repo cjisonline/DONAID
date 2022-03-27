@@ -118,6 +118,7 @@ class Donaid extends StatelessWidget {
           DonorSettingsPage.id: (context) => const DonorSettingsPage(),
           OrganizationSettingsPage.id: (context) => const OrganizationSettingsPage(),
           GatewayVisits.id: (context) => const GatewayVisits(),
+          MyAdoptions.id: (context) => const MyAdoptions(),
         },
         translations: Messages(),
         locale: const Locale('en', 'US'),

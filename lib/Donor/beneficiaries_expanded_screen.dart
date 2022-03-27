@@ -32,6 +32,9 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
   List<Organization> organizations=[];
   var f = NumberFormat("###,##0.00", "en_US");
   List<Adoption> adoptions = [];
+  final _auth = FirebaseAuth.instance;
+  User? loggedInUser;
+
 
 
   @override
@@ -49,6 +52,9 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
     setState(() {
       
     });
+  }
+  void _getCurrentUser() {
+    loggedInUser = _auth.currentUser;
   }
 
 
@@ -245,25 +251,13 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('beneficiaries'.tr),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      drawer: const DonorDrawer(),
-      body: _beneficiariesBody(),
-      bottomNavigationBar: DonorBottomNavigationBar(),
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
           bottom: const TabBar(tabs: [Tab(text: 'Beneficiaries',), Tab(text: 'Adoptions',)],),
-          title: const Text('Beneficiaries'),
+          title:  Text('beneficiaries'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {

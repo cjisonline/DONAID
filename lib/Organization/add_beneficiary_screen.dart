@@ -350,55 +350,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                           ],
                         ))),
                         showEndDateField(),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: endDateController,
-                              readOnly: true,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "please_enter_end_date.".tr;
-                                }
-                                if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
-                                  return 'beneficiaries_cannot_have_a_duration_longer_than_1_year.'.tr;
-                                }
-                                else {
-                                  return null;
-                                }
-                              },
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                  label: Center(
-                                    child: RichText(
-                                        text: TextSpan(
-                                            text: 'enter_end_date'.tr,
-                                            style: TextStyle(
-                                                color: Colors.grey[600],
-                                                fontSize: 20.0),
-                                            children: const [
-                                              TextSpan(
-                                                  text: ' *',
-                                                  style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 20.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ])),
-                                  ),
-                                  border: const OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(32.0)),
-                                  )
-                              ),
-                              onTap: () async {
-                                var date = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime(2100));
-                                endDateController.text =
-                                    date.toString().substring(0, 10);
-                              },)),
+
 
                         Padding(
                             padding: const EdgeInsets.all(8.0),

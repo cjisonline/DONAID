@@ -224,7 +224,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
       child: Scaffold(
         appBar: AppBar(
           bottom: const TabBar(tabs: [Tab(text: 'Beneficiaries',), Tab(text: 'Adoptions',)],),
-          title: const Text('My Beneficiaries'),
+          title:  Text('my_beneficiaries'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -240,20 +240,6 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
           ],
         ),
         bottomNavigationBar:   const OrganizationBottomNavigation(),
-      ),
-    return Scaffold(
-      appBar: AppBar(
-        title:  Text('my_beneficiaries'.tr),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      drawer: const OrganizationDrawer(),
-      body: _beneficiariesBody(),
-      bottomNavigationBar: const OrganizationBottomNavigation(),
-    );
+      ));
   }
 }

@@ -11,6 +11,7 @@ import '../../home_screen.dart';
 import '../donation_history.dart';
 import '../donor_favorite_screen.dart';
 import '../donor_profile.dart';
+import '../my_adoptions.dart';
 import '../settings.dart';
 
 class DonorDrawer extends StatefulWidget {
