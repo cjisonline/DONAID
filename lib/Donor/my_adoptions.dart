@@ -4,9 +4,7 @@ import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
 import 'package:donaid/Models/Donor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:intl/intl.dart';
-
 import '../Models/Adoption.dart';
 import 'adoption_details_screen.dart';
 

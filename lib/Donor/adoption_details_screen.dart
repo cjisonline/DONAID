@@ -29,23 +29,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   void initState() {
     super.initState();
     _getCurrentUser();
-    _refreshAdoption();
     _getAdoption();
-  }
-
-  _refreshAdoption() async {
-    var ret = await _firestore
-        .collection('Adoptions')
-        .where('id', isEqualTo: widget.adoption.id)
-        .get();
-    var doc = ret.docs[0];
-    widget.adoption.name = doc['name'];
-    widget.adoption.biography = doc['biography'];
-    widget.adoption.category = doc['category'];
-    widget.adoption.goalAmount = doc['goalAmount'].toDouble();
-    widget.adoption.active = doc['active'];
-    widget.adoption.id = doc['id'];
-    setState(() {});
   }
 
   void _getCurrentUser() {
@@ -53,29 +37,33 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   }
 
   _getAdoption() async {
-    try{
-
+    try {
       var ret = await _firestore
           .collection('Adoptions')
-          .where('active',isEqualTo: true)
+          .where('active', isEqualTo: true)
           .where('id', isEqualTo: widget.adoption.id)
           .get();
-        if (ret.docs.isEmpty) {
-          isAdopted = false;
+      if (ret.docs.isEmpty) {
+        isAdopted = false;
+      } else {
+        var doc = ret.docs[0];
+        if (doc['donorMap'] != null &&
+            doc['donorMap'].containsKey(_auth.currentUser?.uid)) {
+          isAdopted = true;
+          monthlyAmount = doc['donorMap'][_auth.currentUser?.uid].toDouble();
+          donorMap = doc['donorMap'];
+          widget.adoption.name = doc['name'];
+          widget.adoption.biography = doc['biography'];
+          widget.adoption.category = doc['category'];
+          widget.adoption.goalAmount = doc['goalAmount'].toDouble();
+          widget.adoption.active = doc['active'];
+          widget.adoption.id = doc['id'];
         } else {
-          var doc = ret.docs[0];
-          if(doc['donorMap'] != null && doc['donorMap'].containsKey(_auth.currentUser?.uid)) {
-            isAdopted = true;
-            monthlyAmount = doc['donorMap'][_auth.currentUser?.uid].toDouble();
-            donorMap = doc['donorMap'];
-          }
-          else{
-            isAdopted = false;
-          }
+          isAdopted = false;
         }
+      }
       setState(() {});
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
   }
@@ -83,9 +71,10 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   Future<void> _adoptBeneficiary() async {
     try {
       // update adoption and add entry to donorMap
-      _firestore.collection('Adoptions').doc(widget.adoption.id).update({
-        "donorMap.${_auth.currentUser?.uid}": monthlyAmount
-      });
+      _firestore
+          .collection('Adoptions')
+          .doc(widget.adoption.id)
+          .update({"donorMap.${_auth.currentUser?.uid}": monthlyAmount});
     } catch (e) {
       print(e);
     }
@@ -114,20 +103,17 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content: const Text(
-                'Are you sure you want to cancel this adoption '
-                    'you can readopt this beneficiary from the Beneficiaries page. Would you like to continue'
-                    ' with canceling this adoption?'),
+            content: const Text('Are you sure you want to cancel this adoption '
+                'you can readopt this beneficiary from the Beneficiaries page. Would you like to continue'
+                ' with canceling this adoption?'),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
-                    _cancelBeneficiaryAdoption()
-                        .whenComplete(() {
+                    _cancelBeneficiaryAdoption().whenComplete(() {
                       _getAdoption();
                     });
                     Navigator.pop(context);
-
                   },
                   child: const Text('Yes'),
                 ),
@@ -212,10 +198,13 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Center(
-                                  child: Text(
-                                    'Monthly Amount: \$' +
-                                        f.format(monthlyAmount),
-                                    style: TextStyle(fontSize: 18),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Monthly Amount: \$' +
+                                          f.format(monthlyAmount),
+                                      style: TextStyle(fontSize: 18),
+                                    ),
                                   ),
                                 ),
                                 Material(
@@ -231,12 +220,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                           ),
                                         ),
                                         onPressed: () async {
-                                          // _cancelBeneficiaryAdoption()
-                                          //     .whenComplete(() {
-                                          //   _getAdoption();
-                                          // });
                                           _cancelAdoptionConfirm();
-
                                         }))
                               ],
                             )

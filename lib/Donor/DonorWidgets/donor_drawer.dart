@@ -66,7 +66,7 @@ class _DonorDrawerState extends State<DonorDrawer> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.history),
+              leading: const Icon(Icons.person_sharp ),
               title: const Text("My Adoptions"),
               onTap: () {
                 Navigator.pushNamed(context, MyAdoptions.id);
