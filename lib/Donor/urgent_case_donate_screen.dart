@@ -1,14 +1,21 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/donor_dashboard.dart';
+import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
+import 'package:donaid/Donor/updateFavorite.dart';
 import 'package:donaid/Models/UrgentCase.dart';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
+
 
 class UrgentCaseDonateScreen extends StatefulWidget {
   UrgentCase urgentCase;
@@ -28,11 +35,19 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   String donationAmount = "";
   bool showLoadingSpinner = false;
   var f = NumberFormat("###,##0.00", "en_US");
+  User? loggedInUser;
+  var pointlist = [];
 
   @override
   void initState(){
     super.initState();
+    _getCurrentUser();
+    _getFavorite();
 
+  }
+
+  void _getCurrentUser() {
+    loggedInUser = _auth.currentUser;
   }
 
   _refreshPage() async {
@@ -40,6 +55,57 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
 
     var doc = ret.docs[0];
     widget.urgentCase.amountRaised = doc['amountRaised'];
+    widget.urgentCase.active = doc['active'];
+
+    setState(() {
+    });
+  }
+
+  Future<void> _confirmDonationAmount() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(
+              child: Text('Are You Sure?'.tr),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: Text(
+                "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.".tr),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () async{
+                    Navigator.pop(context);
+                    await makePayment();
+
+
+                  },
+                  child: const Text('Yes'),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No'),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  _getFavorite() async {
+    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
+      setState(() {
+        pointlist = List.from(value['favoriteList']);
+      });
+    });
   }
 
   _campaignDonateBody() {
@@ -51,6 +117,19 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child:IconButton(
+                    icon: Icon(
+                      pointlist.contains(widget.urgentCase.id.toString())? Icons.favorite: Icons.favorite_border,
+                      color: pointlist.contains(widget.urgentCase.id.toString())? Colors.red:null,
+                      size: 40,
+                    ), onPressed: () async {
+                    await updateFavorites(loggedInUser!.uid.toString(),widget.urgentCase.id.toString());
+                    await _getFavorite();
+
+                  },
+                  ),),
                 SizedBox(
                     height: 100,
                     child: Image.asset('assets/DONAID_LOGO.png')
@@ -104,10 +183,10 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Please enter a valid payment amount.';
+                                  return 'please_enter_a_valid_payment_amount'.tr;
                                 }
                                 else if(double.parse(value)<0.50){
-                                  return 'Please provide a donation minimum of \$0.50';
+                                  return 'please_provide_a_donation_minimum'.tr;
                                 }
                                 else {
                                   return null;
@@ -120,7 +199,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                                   label: Center(
                                     child: RichText(
                                         text: TextSpan(
-                                          text: 'Donation Amount',
+                                          text: 'donation_amount'.tr,
                                           style: TextStyle(
                                               color: Colors.grey[600], fontSize: 20.0),
                                         )),
@@ -138,8 +217,8 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                               color: Colors.blue,
                               borderRadius: BorderRadius.circular(32.0),
                               child: MaterialButton(
-                                child: const Text(
-                                  'Donate',
+                                child:  Text(
+                                  'donate'.tr,
                                   style: TextStyle(
                                     fontSize: 25,
                                     color: Colors.white,
@@ -150,8 +229,12 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                                     setState(() {
                                       showLoadingSpinner = true;
                                     });
-                                    await makePayment();
-
+                                    if(double.parse(donationAmount) > 999){
+                                      _confirmDonationAmount();
+                                    }
+                                    else {
+                                      await makePayment();
+                                    }
                                     setState(() {
                                       showLoadingSpinner=false;
                                     });
@@ -162,7 +245,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                           ),
                         ],
                       ))
-                  : Text('Urgent case is no longer available to donate to.'),
+                  : Text('ugent_case_is_no_longer'.tr),
                 )
               ]),
             )),
@@ -237,17 +320,17 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
         // paymentIntentData = null;
       });
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Paid successfully!')));
+          .showSnackBar( SnackBar(content: Text('paid_successfully'.tr)));
 
       createDonationDocument();
       updateUrgentCase();
       await _refreshPage();
 
-    }on StripeException catch (e) {
+    }catch (e) {
       print('Stripe Exception: ${e.toString()}');
 
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Payment cancelled.')));
+          .showSnackBar( SnackBar(content: Text('payment_cancelled!'.tr)));
 
     }
   }
@@ -282,7 +365,8 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Donate - ${widget.urgentCase.title}'),
+        //doubt
+        title: Text('donate'.tr + ' - ${widget.urgentCase.title}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

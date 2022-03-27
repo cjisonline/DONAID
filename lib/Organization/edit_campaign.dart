@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EditCampaign extends StatefulWidget {
   Campaign campaign;
@@ -79,13 +80,13 @@ class _EditCampaignState extends State<EditCampaign> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: const Text('Edit Campaign'),
+          title:  Text('edit_campaign'.tr),
           leadingWidth: 80,
           leading: TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Cancel',
+            child:  Text('cancel'.tr,
                 style: TextStyle(fontSize: 15.0, color: Colors.white)),
           ),
           actions: [
@@ -94,7 +95,7 @@ class _EditCampaignState extends State<EditCampaign> {
                 _submitForm();
 
               },
-              child: const Text('Save',
+              child:  Text('save'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
@@ -131,12 +132,13 @@ class _EditCampaignState extends State<EditCampaign> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
+          readOnly: widget.campaign.amountRaised > 0,
           controller: _campaignTitleController,
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
-                  text: const TextSpan(
-                    text: 'Title',
+                  text:  TextSpan(
+                    text: 'title'.tr,
                     style: TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
@@ -147,7 +149,7 @@ class _EditCampaignState extends State<EditCampaign> {
               )),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter campaign title.';
+              return 'please_enter_campaign_title.'.tr;
             }
             return null;
           },
@@ -159,6 +161,7 @@ class _EditCampaignState extends State<EditCampaign> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        readOnly: widget.campaign.amountRaised > 0,
         controller: _campaignDescriptionController,
         minLines: 2,
         maxLines: 5,
@@ -166,8 +169,8 @@ class _EditCampaignState extends State<EditCampaign> {
         decoration: InputDecoration(
             label: Center(
               child: RichText(
-                text: const TextSpan(
-                  text: 'Campaign Description',
+                text:  TextSpan(
+                  text: 'campaign_description'.tr,
                   style: TextStyle(
                       color: Colors.black, fontSize: 20.0),
                 ),
@@ -185,13 +188,14 @@ class _EditCampaignState extends State<EditCampaign> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        readOnly: widget.campaign.amountRaised > 0,
         keyboardType: TextInputType.number,
         controller: _campaignGoalAmountController,
         validator: (value) {
           if (value!.isEmpty) {
-            return "Please enter a goal amount.";
+            return "please_enter_a_goal_amount.".tr;
           }else if (!goalRegExp.hasMatch(value)){
-            return "Please enter a valid goal amount.";
+            return "please_enter_a_valid_goal_amount".tr;
           }
           else {
             return null;
@@ -202,7 +206,7 @@ class _EditCampaignState extends State<EditCampaign> {
             label: Center(
               child: RichText(
                   text: TextSpan(
-                      text: 'Goal Amount',
+                      text: 'goal_amount'.tr,
                       style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 20.0),
@@ -234,10 +238,10 @@ class _EditCampaignState extends State<EditCampaign> {
           readOnly: true,
           validator: (value) {
             if (value!.isEmpty) {
-              return "Please enter end date.";
+              return "please_enter_end_date.".tr;
             }
             if(DateTime.parse(value).difference(DateTime.now()).inDays > campaignTimeLimit){
-              return 'Campaigns cannot have a duration longer than 1 year.';
+              return 'campaigns_cannot_have_a_duration_longer_than_1_year.'.tr;
             }
             else {
               return null;
@@ -248,7 +252,7 @@ class _EditCampaignState extends State<EditCampaign> {
               label: Center(
                 child: RichText(
                     text: TextSpan(
-                        text: 'Enter End Date',
+                        text: 'enter_end_date'.tr,
                         style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 20.0),
@@ -268,12 +272,17 @@ class _EditCampaignState extends State<EditCampaign> {
               )
           ),
           onTap: () async {
-            var date =  await showDatePicker(
-                context: context,
-                initialDate:DateTime.now(),
-                firstDate:DateTime.now(),
-                lastDate: DateTime(2100));
-            _campaignEndDateController?.text = date.toString().substring(0,10);
+            if(widget.campaign.amountRaised < widget.campaign.goalAmount){
+              var date =  await showDatePicker(
+                  context: context,
+                  initialDate:DateTime.now(),
+                  firstDate:DateTime.now(),
+                  lastDate: DateTime(2100));
+              _campaignEndDateController?.text = date.toString().substring(0,10);
+            }
+            else{
+              return;
+            }
           },));
   }
 
@@ -287,7 +296,7 @@ class _EditCampaignState extends State<EditCampaign> {
               label: Center(
                 child: RichText(
                     text: TextSpan(
-                        text: 'Category',
+                        text: 'category'.tr,
                         style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 20.0),
@@ -316,7 +325,7 @@ class _EditCampaignState extends State<EditCampaign> {
             _campaignCategoryController?.text = val.toString();
           }),
           validator: (value) => value == null
-              ? 'Please fill in the category.' : null,
+              ? 'please_fill_in_the_category'.tr : null,
         )
     );
   }

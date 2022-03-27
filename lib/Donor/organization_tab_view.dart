@@ -3,12 +3,15 @@ import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
+import 'package:get/get.dart';
+
 
 class OrganizationTabViewScreen extends StatefulWidget {
   final Organization organization;
@@ -19,6 +22,7 @@ class OrganizationTabViewScreen extends StatefulWidget {
 }
 
 class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
+  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries=[];
   List<Campaign> campaigns=[];
@@ -107,7 +111,12 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization);
+                      Map<String, dynamic> charity = {
+                        'charityID':campaigns[index].id,
+                        'charityType':'Campaign',
+                        'charityTitle':campaigns[index].title
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid, charity);
                     }
                   },
                   title: Text(campaigns[index].title),
@@ -145,6 +154,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
             ),
           );
         })
+        //doubt
     : const Center(child: Text('This organization doesn\'t have any \nactive campaigns at this time.', style: TextStyle(fontSize: 18),));
   }
 
@@ -165,7 +175,12 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization);
+                      Map<String, dynamic> charity = {
+                        'charityID':beneficiaries[index].id,
+                        'charityType':'Beneficiary',
+                        'charityTitle':beneficiaries[index].name
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, widget.organization, _auth.currentUser!.uid, charity);
                     }
                   },
                   title: Text(beneficiaries[index].name),
@@ -203,6 +218,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
             ),
           );
         })
+        //doubt
     : const Center(child: Text('This organization doesn\'t have any \nactive beneficiaries at this time.', style: TextStyle(fontSize: 18),));
   }
 

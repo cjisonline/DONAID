@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'organization_dashboard.dart';
+import 'package:get/get.dart';
 
 class AddBeneficiaryForm extends StatefulWidget {
   static const id = 'beneficiary_form_screen';
@@ -169,7 +170,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("DONAID"),
+          title:  Text("donaid".tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -190,20 +191,20 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         const SizedBox(
                           height: 15.0,
                         ),
-                        const Center(
+                         Center(
                           child: Text(
-                            'Add Beneficiary',
+                            'add_beneficiary'.tr,
                             style: TextStyle(fontSize: 32.0),
                           ),
                         ),
                         const SizedBox(
                           height: 15.0,
                         ),
-                        const Padding(
+                         Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 25.0),
                           child: Text(
-                            '* - required fields',
+                            '* - required_fields'.tr,
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
@@ -217,7 +218,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             ],
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a nickname.";
+                                return "please_enter_a_nickname".tr;
                               } else {
                                 return null;
                               }
@@ -227,7 +228,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'Nickname',
+                                          text: 'nickname'.tr,
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -256,7 +257,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             controller: biographyController,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a biography.";
+                                return "please_enter_a_biography".tr;
                               } else {
                                 return null;
                               }
@@ -266,7 +267,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'Biography',
+                                          text: 'biography'.tr,
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -293,9 +294,9 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             controller: goalAmountController,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a goal amount.";
+                                return "please_enter_a_goal_amount.".tr;
                               } else if (!goalRegExp.hasMatch(value)) {
-                                return "Please enter a valid goal amount.";
+                                return "please_enter_a_valid_goal_amount.".tr;
                               }
                               else {
                                 return null;
@@ -306,7 +307,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: '\u0024 Goal',
+                                          text: 'goal'.tr + ' (USD)',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -351,12 +352,62 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         showEndDateField(),
                         Padding(
                             padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: endDateController,
+                              readOnly: true,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "please_enter_end_date.".tr;
+                                }
+                                if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
+                                  return 'beneficiaries_cannot_have_a_duration_longer_than_1_year.'.tr;
+                                }
+                                else {
+                                  return null;
+                                }
+                              },
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                  label: Center(
+                                    child: RichText(
+                                        text: TextSpan(
+                                            text: 'enter_end_date'.tr,
+                                            style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize: 20.0),
+                                            children: const [
+                                              TextSpan(
+                                                  text: ' *',
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ])),
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(32.0)),
+                                  )
+                              ),
+                              onTap: () async {
+                                var date = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(2100));
+                                endDateController.text =
+                                    date.toString().substring(0, 10);
+                              },)),
+
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: DropdownButtonFormField <String>(
                               decoration: InputDecoration(
                                   label: Center(
                                     child: RichText(
                                         text: TextSpan(
-                                            text: 'Category',
+                                            text: 'category'.tr,
                                             style: TextStyle(
                                                 color: Colors.grey[600],
                                                 fontSize: 20.0),
@@ -388,7 +439,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   }),
                               validator: (value) =>
                               value == null
-                                  ? 'Please fill in the category.' : null,
+                                  ? 'please_fill_in_the_category'.tr : null,
                             )
                         ),
                         Padding(
@@ -399,8 +450,8 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(32.0),
                             child: MaterialButton(
-                              child: const Text(
-                                'Submit',
+                              child: Text(
+                                'submit'.tr,
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
@@ -428,7 +479,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
 
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(content: Text('Beneficiary created!')));
+                                      .showSnackBar( SnackBar(content: Text('beneficiary_created!'.tr)));
                                 }
                               },
                             ),
@@ -441,6 +492,4 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         )
     );
   }
-
-
 }

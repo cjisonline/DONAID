@@ -3,6 +3,7 @@ import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Models/Donor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'donor_profile.dart';
 
@@ -46,11 +47,11 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
         .get();
     final doc = ret.docs[0];
     donor = Donor(
-      doc['email'],
-      doc['firstName'],
-      doc['lastName'],
-      doc['phoneNumber'],
-      doc['id']
+        email: doc['email'],
+        firstName: doc['firstName'],
+        lastName: doc['lastName'],
+        phoneNumber: doc['phoneNumber'],
+        id: doc['id']
     );
     setState(() {});
   }
@@ -69,13 +70,13 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: const Text('Edit Profile'),
+          title:  Text('edit_profile'.tr),
           leadingWidth: 80,
           leading: TextButton(
             onPressed: () {
               Navigator.pushNamed(context, DonorProfile.id);
             },
-            child: const Text('Cancel',
+            child:  Text('cancel'.tr,
                 style: TextStyle(fontSize: 15.0, color: Colors.white)),
           ),
           actions: [
@@ -84,7 +85,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
                 _submitForm();
                 Navigator.pop(context);
               },
-              child: const Text('Save',
+              child:  Text('save'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
@@ -104,8 +105,8 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
-                  text: const TextSpan(
-                    text: 'First Name',
+                  text:  TextSpan(
+                    text: 'first_name'.tr,
                     style: TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
@@ -116,7 +117,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               )),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter first name.';
+              return 'please_enter_first_name.'.tr;
             }
             return null;
           },
@@ -135,8 +136,8 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
-                  text: const TextSpan(
-                    text: 'Last Name',
+                  text:  TextSpan(
+                    text: 'last_name'.tr,
                     style: TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
@@ -147,7 +148,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               )),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter last name.';
+              return 'please_enter_last_name.'.tr;
             }
             return null;
           },
@@ -166,8 +167,8 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
-                  text: const TextSpan(
-                    text: 'Phone Number',
+                  text:  TextSpan(
+                    text: 'phone_number'.tr,
                     style: TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
@@ -178,9 +179,9 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               )),
           validator: (value) {
             if (value!.isEmpty) {
-              return "Please enter your phone number.";
+              return "please_enter_your_phone_number.".tr;
             } else if (!phoneNumberRegExp.hasMatch(value)) {
-              return "Please enter a valid phone number.";
+              return "please_enter_a_valid_phone_number.".tr;
             } else {
               return null;
             }
@@ -249,7 +250,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
                 size: 35,
               ),
             ),
-            const Text('Search',
+             Text('search'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -260,7 +261,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-            const Text('Notifications',
+             Text('notifications'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -270,7 +271,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               onPressed: () {},
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-            const Text('Messages',
+             Text('message'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),

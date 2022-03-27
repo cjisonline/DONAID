@@ -5,6 +5,7 @@ import 'package:donaid/Donor/donor_edit_profile.dart';
 import 'package:donaid/Models/Donor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'DonorWidgets/profile_list_row.dart';
 
@@ -34,9 +35,7 @@ class _DonorProfileState extends State<DonorProfile> {
   _refreshPage(){
     _getCurrentUser();
     _getDonorInformation();
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   void _getCurrentUser() {
@@ -47,11 +46,11 @@ class _DonorProfileState extends State<DonorProfile> {
     var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
     donor = Donor(
-          doc['email'],
-        doc['firstName'],
-        doc['lastName'],
-           doc['phoneNumber'],
-      doc['id']
+        email: doc['email'],
+        firstName: doc['firstName'],
+        lastName: doc['lastName'],
+        phoneNumber: doc['phoneNumber'],
+        id: doc['id']
       );
     setState(() {});
   }
@@ -60,13 +59,13 @@ class _DonorProfileState extends State<DonorProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title:  Text('profile'.tr),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => DonorEditProfile())).then((value) => _refreshPage());
               },
-              child: const Text('Edit',
+              child:  Text('edit'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
@@ -107,7 +106,7 @@ class _DonorProfileState extends State<DonorProfile> {
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-            const Text('Home',
+             Text('home'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -121,7 +120,7 @@ class _DonorProfileState extends State<DonorProfile> {
                 size: 35,
               ),
             ),
-            const Text('Search',
+             Text('search'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -132,7 +131,7 @@ class _DonorProfileState extends State<DonorProfile> {
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-            const Text('Notifications',
+             Text('notifications'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -142,7 +141,7 @@ class _DonorProfileState extends State<DonorProfile> {
               onPressed: () {},
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-            const Text('Messages',
+             Text('message'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),

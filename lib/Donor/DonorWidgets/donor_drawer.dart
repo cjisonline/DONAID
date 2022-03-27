@@ -1,14 +1,17 @@
-import 'package:donaid/Donor/my_adoptions.dart';
 import 'package:donaid/Models/message.dart';
+import 'package:donaid/contactUs.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get.dart';
 
 import '../../home_screen.dart';
 import '../donation_history.dart';
+import '../donor_favorite_screen.dart';
 import '../donor_profile.dart';
+import '../settings.dart';
 
 class DonorDrawer extends StatefulWidget {
   const DonorDrawer({Key? key}) : super(key: key);
@@ -26,12 +29,12 @@ class _DonorDrawerState extends State<DonorDrawer> {
           children: [
             DrawerHeader(
               child: Stack(
-                children: const [
+                children: [
                   Positioned(
                     bottom: 8.0,
                     left: 4.0,
                     child: Text(
-                      "Donor",
+                      "donor".tr,
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   )
@@ -43,24 +46,28 @@ class _DonorDrawerState extends State<DonorDrawer> {
             ),
             ListTile(
               leading: const Icon(Icons.settings),
-              title: const Text("Settings"),
-              onTap: () {},
+              title: Text("settings".tr),
+              onTap: () {
+                Navigator.pushNamed(context, DonorSettingsPage.id);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),
-              title: const Text("Profile"),
+              title: Text("profile".tr),
               onTap: () {
                 Navigator.pushNamed(context, DonorProfile.id);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.article_outlined),
-              title: const Text("About"),
-              onTap: () {},
+              leading: const Icon(Icons.favorite),
+              title: Text("My Favorites".tr),
+              onTap: () {
+                Navigator.pushNamed(context, DonorFavoritePage.id);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.history),
-              title: const Text("Donation History"),
+              title: Text("donation_history".tr),
               onTap: () {
                 Navigator.pushNamed(context, DonationHistory.id);
               },
@@ -73,13 +80,61 @@ class _DonorDrawerState extends State<DonorDrawer> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.help),
-              title: const Text("Help"),
-              onTap: () {},
+              leading: const Icon(Icons.translate),
+              title: Text("language".tr),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return SimpleDialog(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          title: Center(child: Text("select_language".tr)),
+                          children: <Widget>[
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('en', 'US'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("English"))),
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('fr', 'FR'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("French"))),
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('ar', 'SA'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("Arabic"))),
+                            SimpleDialogOption(
+                                onPressed: () async {
+                                  await Get.updateLocale(
+                                      const Locale('es', 'ES'));
+                                  Navigator.pop(context);
+                                },
+                                child: const Center(child: Text("Spanish")))
+                          ]);
+                    });
+              },
             ),
+            if (FirebaseAuth.instance.currentUser?.email != null)
+              ListTile(
+                leading: const Icon(Icons.assignment_ind_outlined),
+                title: Text("contact_admin".tr),
+                onTap: () {
+                  Get.to(ContactUs("DonorUsers"));
+                },
+              ),
             ListTile(
               leading: const Icon(Icons.logout),
-              title: const Text("Logout"),
+              title: Text("logout".tr),
               onTap: () {
                 FirebaseAuth.instance.signOut();
                 MyGlobals.allMessages = <MessageModel>[].obs;

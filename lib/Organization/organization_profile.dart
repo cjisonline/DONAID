@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 import 'OrganizationWidget/profile_list_row.dart';
 import 'organization_edit_profile.dart';
+import 'package:get/get.dart';
+
 
 class OrganizationProfile extends StatefulWidget {
   static const id = 'organization_profile';
@@ -31,8 +33,8 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
     _getOrganizationInformation();
   }
 
-  _refreshPage()async{
-    await _getOrganizationInformation();
+  _refreshPage(){
+    _getOrganizationInformation();
     setState(() {});
   }
 
@@ -60,13 +62,13 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Profile'),
+          title:  Text('profile'.tr),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationEditProfile())).then((value) => _refreshPage());
               },
-              child: const Text('Edit',
+              child:  Text('edit'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
@@ -106,40 +108,32 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
   }
 
   Widget _buildUnitedStatesProfile(){
-    return  RefreshIndicator(
-      onRefresh: ()async{_refreshPage();},
-      child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children:  [
-              _buildProfilePictureDisplay(),
-              ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
-              ProfileRow('NAME', organization?.organizationName??'N/A'),
-              ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
-              ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
-            ],
-          )
-      ),
+    return  SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children:  [
+            _buildProfilePictureDisplay(),
+            ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
+            ProfileRow('NAME', organization?.organizationName??'N/A'),
+            ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
+            ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
+          ],
+        )
     );
   }
   Widget _buildOutsideUnitedStatesProfile(){
-    return  RefreshIndicator(
-      onRefresh: ()async{
-        _refreshPage();
-      },
-      child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children:  [
-              _buildProfilePictureDisplay(),
-              ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
-              ProfileRow('NAME', organization?.organizationName??'N/A'),
-              ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
-              ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
-              ProfileRow('GATEWAY LINK', organization?.gatewayLink??'N/A'),
-            ],
-          )
-      ),
+    return  SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children:  [
+            _buildProfilePictureDisplay(),
+            ProfileRow('YOUR EMAIL', organization?.organizationEmail??'N/A'),
+            ProfileRow('NAME', organization?.organizationName??'N/A'),
+            ProfileRow('YOUR PHONE', organization?.phoneNumber??'N/A'),
+            ProfileRow('DESCRIPTION', organization?.organizationDescription??'N/A'),
+            ProfileRow('GATEWAY LINK', organization?.gatewayLink??'N/A'),
+          ],
+        )
     );
   }
 

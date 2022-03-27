@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Models/UrgentCase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
+import 'package:get/get.dart';
 
 class UrgentCasesExpandedScreen extends StatefulWidget {
   static const id = 'urgent_cases_expanded_screen';
@@ -20,6 +23,7 @@ class UrgentCasesExpandedScreen extends StatefulWidget {
 }
 
 class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
+  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   List<UrgentCase> urgentCases = [];
   List<Organization> organizations=[];
@@ -86,44 +90,6 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
     }
   }
 
-  _paymentLinkPopUp(Organization organization){
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Center(
-              child: Text('Detour!'),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0),
-            ),
-            content: Linkify(
-              onOpen: (link) async {
-                if (await canLaunch(link.url)) {
-                  await launch(link.url);
-                } else {
-                  throw 'Could not launch $link';
-                }
-              },
-              text: 'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment.'
-                  ' A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
-              linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK'),
-                ),
-              ),
-            ],
-          );
-        });
-  }
   _urgentCasesBody() {
     return urgentCases.isNotEmpty
     ? ListView.builder(
@@ -141,7 +107,12 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      _paymentLinkPopUp(organizations[index]);
+                      Map<String, dynamic> charity = {
+                        'charityID':urgentCases[index].id,
+                        'charityType':'Urgent Case',
+                        'charityTitle':urgentCases[index].title
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid,charity);
                     }
                   },
                   title: Text(urgentCases[index].title),
@@ -179,14 +150,14 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
             ),
           );
         })
-    : const Center(child: Text('No active urgent cases to show.', style: TextStyle(fontSize: 18),));
+    :  Center(child: Text('no_active_urgent_sases_show'.tr, style: TextStyle(fontSize: 18),));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Urgent Cases'),
+        title: Text('urgent_cases'.tr),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

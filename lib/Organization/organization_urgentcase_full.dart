@@ -4,6 +4,10 @@ import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navig
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
+
+import 'organization_dashboard.dart';
+
 
 class OrganizationUrgentCaseFullScreen extends StatefulWidget {
   final UrgentCase urgentCase;
@@ -41,6 +45,10 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
 
   }
 
+  _deleteUrgentCase() async {
+    await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).delete();
+  }
+
   _resumeUrgentCase() async {
     await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).update({
       'active': true
@@ -53,16 +61,15 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Are You Sure?'),
+            title:  Center(
+              child: Text('are_you_sure?'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content: const Text(
-                'Stopping this charity will make it not visible to donors. Once you stop this charity '
-                    'you can reactivate it from the Inactive Charities page. Would you like to continue '
-                    'with stopping this charity?'),
+            //doubt
+            content: Text(
+                'Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -71,7 +78,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                     Navigator.pop(context);
                     _refreshUrgentCase();
                   },
-                  child: const Text('Yes'),
+                  child:  Text('yes'.tr),
                 ),
               ),
               Center(
@@ -79,7 +86,45 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('No'),
+                  child:  Text('no'.tr),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _deleteCharityConfirm() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title:  Center(
+              child: Text('are_you_sure?'.tr),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            //doubt
+            content: Text(
+                'Deleting this charity will completely remove it from the application. Would you like to continue?'.tr),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    _deleteUrgentCase();
+                    Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
+                  },
+                  child:  Text('yes'.tr),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child:  Text('no'.tr),
                 ),
               ),
             ],
@@ -93,16 +138,15 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Are You Sure?'),
+            title:  Center(
+              child: Text('are_you_sure?'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content: const Text(
-                'Resuming this charity will make it visible to donors again. Once you resume this charity '
-                    'you can deactivate it again from the dashboard or the My Urgent Cases page. Would you like '
-                    'to continue?'),
+            //doubt
+            content: Text(
+                'Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -111,7 +155,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                     Navigator.pop(context);
                     _refreshUrgentCase();
                   },
-                  child: const Text('Yes'),
+                  child:  Text('yes'.tr),
                 ),
               ),
               Center(
@@ -119,7 +163,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('No'),
+                  child:  Text('no'.tr),
                 ),
               ),
             ],
@@ -177,11 +221,11 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                     child: (widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
                         ? Material(
                         elevation: 5.0,
-                        color: Colors.red,
+                        color: Colors.orange,
                         borderRadius: BorderRadius.circular(32.0),
                         child: MaterialButton(
-                            child: const Text(
-                              'Stop Charity',
+                            child:  Text(
+                              'stop_charity'.tr,
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
@@ -197,8 +241,8 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(32.0),
                         child: MaterialButton(
-                            child: const Text(
-                              'Resume Charity',
+                            child:  Text(
+                              'resume_charity'.tr,
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
@@ -212,8 +256,8 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                         child: Container(
-                          child: const Text(
-                            'Note: This charity has expired.',
+                          child:  Text(
+                            '_note:this_charity_has_expired'.tr,
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.black,
@@ -223,6 +267,25 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                       ),
                     )
                         : Container()),
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child: widget.urgentCase.amountRaised ==0 ? Material(
+                          elevation: 5.0,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child: Text(
+                                'Delete'.tr,
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                _deleteCharityConfirm();
+                              }))
+                          : Container()
+                  ),
                 ],
               )
             ])

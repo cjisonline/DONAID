@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Donor/campaign_donate_screen.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
+import 'package:get/get.dart';
+
 
 class CategoryCampaignsScreen extends StatefulWidget {
   final categoryName;
@@ -20,6 +24,7 @@ class CategoryCampaignsScreen extends StatefulWidget {
 }
 
 class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
+  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   List<Campaign> campaigns = [];
   List<Organization> organizations=[];
@@ -85,44 +90,6 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
     }
   }
 
-  _paymentLinkPopUp(Organization organization){
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Center(
-              child: Text('Detour!'),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0),
-            ),
-            content: Linkify(
-              onOpen: (link) async {
-                if (await canLaunch(link.url)) {
-                  await launch(link.url);
-                } else {
-                  throw 'Could not launch $link';
-                }
-              },
-              text: 'The organization that created this charity is not based in the United States. Due to this, we cannot process your payment.'
-                      ' A link to the organization\'s payment gateway is below.\n\n ${organization.gatewayLink}',
-              linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK'),
-                ),
-              ),
-            ],
-          );
-        });
-  }
   _categoryCampaignsBody() {
     return campaigns.isNotEmpty
     ? ListView.builder(
@@ -140,7 +107,12 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                       })).then((value) => _refreshPage());
                     }
                     else{
-                      _paymentLinkPopUp(organizations[index]);
+                      Map<String, dynamic> charity = {
+                        'charityID':campaigns[index].id,
+                        'charityType':'Campaign',
+                        'charityTitle':campaigns[index].title
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid, charity);
                     }
                   },
                   title: Text(campaigns[index].title),
@@ -179,14 +151,15 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
             ),
           );
         })
-    : const Center(child: Text('No campaigns in this category.', style: TextStyle(fontSize: 18),));
+    :  Center(child: Text('no_compaigns_in_this_category'.tr, style: TextStyle(fontSize: 18),));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Campaigns - ${widget.categoryName}'),
+        //doubt
+        title: Text('campaigns'.tr+' - ${widget.categoryName}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

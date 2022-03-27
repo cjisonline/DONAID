@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:get/get.dart';
+
 
 class AddUrgentCaseForm extends StatefulWidget {
   static const id = 'urgentcase_form_screen';
@@ -94,7 +96,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("DONAID"),
+          title:  Text("donaid".tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -115,20 +117,20 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                         const SizedBox(
                           height: 15.0,
                         ),
-                        const Center(
+                         Center(
                           child: Text(
-                            'Add Urgent Case',
+                            'add_urgent_case'.tr,
                             style: TextStyle(fontSize: 32.0),
                           ),
                         ),
                         const SizedBox(
                           height: 15.0,
                         ),
-                        const Padding(
+                         Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 25.0),
                           child: Text(
-                            '* - required fields',
+                            '* - required_fields'.tr,
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
@@ -142,7 +144,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                             ],
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a title.";
+                                return "please_enter_a_title.".tr;
                               } else {
                                 return null;
                               }
@@ -152,7 +154,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'Title',
+                                          text: 'title'.tr,
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -181,7 +183,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                             controller: descriptionController,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a description.";
+                                return "please_enter_a_description.".tr;
                               } else {
                                 return null;
                               }
@@ -191,7 +193,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: 'Description',
+                                          text: 'description'.tr,
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -218,9 +220,9 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                             controller: goalAmountController,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a goal amount.";
+                                return "please_enter_a_goal_amount.".tr;
                               } else if (!goalRegExp.hasMatch(value)) {
-                                return "Please enter a valid goal amount.";
+                                return "please_enter_a_valid_goal_amount".tr;
                               }
                               else {
                                 return null;
@@ -231,7 +233,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 label: Center(
                                   child: RichText(
                                       text: TextSpan(
-                                          text: '\u0024 Goal',
+                                          text: 'goal'.tr + ' (USD)',
                                           style: TextStyle(
                                               color: Colors.grey[600],
                                               fontSize: 20.0),
@@ -258,10 +260,10 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                               readOnly: true,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return "Please enter end date.";
+                                  return "please_enter_end_date.".tr;
                                 }
                                 if(DateTime.parse(value).difference(DateTime.now()).inDays > urgentCaseTimeLimit){
-                                  return 'Urgent cases cannot have a duration longer than 6 months.';
+                                  return 'urgent_cases_cannot_have_a_duration_longer'.tr;
                                 }
                                 else {
                                   return null;
@@ -272,7 +274,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                   label: Center(
                                     child: RichText(
                                         text: TextSpan(
-                                            text: 'Enter End Date',
+                                            text: 'enter_end_date'.tr,
                                             style: TextStyle(
                                                 color: Colors.grey[600],
                                                 fontSize: 20.0),
@@ -308,7 +310,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                   label: Center(
                                     child: RichText(
                                         text: TextSpan(
-                                            text: 'Category',
+                                            text: 'category'.tr,
                                             style: TextStyle(
                                                 color: Colors.grey[600],
                                                 fontSize: 20.0),
@@ -340,7 +342,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                   }),
                               validator: (value) =>
                               value == null
-                                  ? 'Please fill in the category.' : null,
+                                  ? 'please_fill_in_the_category'.tr : null,
                             )
                         ),
                         Padding(
@@ -349,13 +351,13 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                             margin: EdgeInsets.symmetric(horizontal: 25.0),
                             child: Center(
                               child: RichText(
-                                  text: const TextSpan(
-                                      text: 'Note: ',
+                                  text:  TextSpan(
+                                      text: 'note'.tr +' ',
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 15.0),
                                       children: [
                                         TextSpan(
-                                            text: 'Urgent cases must receive approval from an administrator before they are displayed to donors.',
+                                            text: 'urgent_cases_must_receive_approval'.tr,
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15.0
@@ -372,8 +374,8 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(32.0),
                             child: MaterialButton(
-                              child: const Text(
-                                'Submit',
+                              child:  Text(
+                                'submit'.tr,
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
@@ -391,7 +393,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
 
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(content: Text('Urgent case submitted!')));
+                                      .showSnackBar( SnackBar(content: Text('urgent_case_submitted!'.tr)));
                                 }
                               },
                             ),

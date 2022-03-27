@@ -1,9 +1,11 @@
 
 import 'package:donaid/Chat/conversation.dart';
+import 'package:donaid/Organization/notifications_page.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../organization_dashboard.dart';
 import '../search_page.dart';
@@ -38,7 +40,7 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-            Text('Home',
+            Text('home'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -54,7 +56,7 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
                 size: 35,
               ),
             ),
-            Text('Search',
+            Text('search'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -62,11 +64,12 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
             IconButton(
               enableFeedback: false,
               onPressed: () {
+                Navigator.pushNamed(context, OrganizationNotificationPage.id);
               },
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-            Text('Notifications',
+            Text('notifications'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -80,7 +83,7 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
               },
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-            Text('Messages',
+            Text('message'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),

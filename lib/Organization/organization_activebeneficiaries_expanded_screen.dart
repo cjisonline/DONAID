@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'organization_adoption_full.dart';
+import 'package:get/get.dart';
+
 import 'organization_beneficiary_full.dart';
 
 class OrganizationBeneficiariesExpandedScreen extends StatefulWidget {
@@ -65,6 +67,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
       );
       beneficiaries.add(beneficiary);
     }
+    beneficiaries.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 
@@ -152,7 +155,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
               ),
             );
           })
-      : const Center(child: Text('No active beneficiaries to show.', style: TextStyle(fontSize: 18),)),
+      :  Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),)),
     );
   }
 
@@ -238,6 +241,19 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
         ),
         bottomNavigationBar:   const OrganizationBottomNavigation(),
       ),
+    return Scaffold(
+      appBar: AppBar(
+        title:  Text('my_beneficiaries'.tr),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      drawer: const OrganizationDrawer(),
+      body: _beneficiariesBody(),
+      bottomNavigationBar: const OrganizationBottomNavigation(),
     );
   }
 }

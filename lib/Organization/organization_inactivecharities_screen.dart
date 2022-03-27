@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'organization_adoption_full.dart';
 import 'organization_urgentcase_full.dart';
+import 'package:get/get.dart';
+
 
 class InactiveCharitiesScreen extends StatefulWidget {
   const InactiveCharitiesScreen({Key? key}) : super(key: key);
@@ -214,7 +216,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
             ),
           );
         })
-    : const Center(child: Text('No inactive beneficiaries to show.', style: TextStyle(fontSize: 18),));
+    :  Center(child: Text('no_inactive_beneficiaries_to_show.'.tr, style: TextStyle(fontSize: 18),));
   }
 
   _campaignsBody(){
@@ -267,7 +269,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
             ),
           );
         })
-        : const Center(child:  Text('No inactive campaigns to show.', style: TextStyle(fontSize: 18),));
+        :  Center(child:  Text('no_inactive_campaigns_to_show.'.tr, style: TextStyle(fontSize: 18),));
   }
 
   _urgentCasesBody(){
@@ -320,7 +322,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
             ),
           );
         })
-    : const Center(child: Text('No inactive urgent cases to show.', style: TextStyle(fontSize: 18),));
+    :  Center(child: Text('no_inactive_urgent_cases_to_show.'.tr, style: TextStyle(fontSize: 18),));
   }
 
   _getAdoptionsBody(){
@@ -381,8 +383,8 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          bottom: const TabBar(tabs: [Tab(text: 'Campaigns',), Tab(text: 'Beneficiaries',), Tab(text: 'Urgent Cases',),  Tab(text: 'Adoptions',)],),
-          title: const Text('Inactive Charities'),
+          bottom:  TabBar(tabs: [Tab(text: '_campaigns'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,), Tab(text: 'Adoptions',)],),
+          title:  Text('inactive_charities'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
