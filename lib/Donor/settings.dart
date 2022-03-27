@@ -103,6 +103,12 @@ class _DonorSettingsPageState extends State<DonorSettingsPage> {
    return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
       ),
       drawer: const DonorDrawer(),
       body:_body() ,

@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:donaid/Donor/pdf_preview_screen.dart';
-import 'package:donaid/Donor/DonaidInfo.dart';
+import 'package:donaid/Models/DonaidInfo.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 
-import 'DonorUser.dart';
-import 'formate.dart';
-import 'invoice.dart';
+import '../Models/DonorUser.dart';
+import '../Models/formate.dart';
+import '../Models/invoice.dart';
 
 class PdfInvoiceApi {
   static Future<File> generate(Invoice invoice) async {

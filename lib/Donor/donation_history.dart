@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/pdf_preview_screen.dart';
-import 'package:donaid/Donor/DonaidInfo.dart';
+import 'package:donaid/Models/DonaidInfo.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../Models/Donor.dart';
-import 'DonorUser.dart';
+import '../Models/DonorUser.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +20,7 @@ import 'package:intl/intl.dart';
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
 import 'generateDonorPDF.dart';
-import 'invoice.dart';
+import '../Models/invoice.dart';
 
 class DonationHistory extends StatefulWidget {
   static const id = 'donation_history';
