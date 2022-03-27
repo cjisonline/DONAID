@@ -5,9 +5,9 @@ import 'package:donaid/Models/Donor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../Models/Adoptee.dart';
 import 'package:intl/intl.dart';
 
+import '../Models/Adoption.dart';
 import 'adoption_details_screen.dart';
 
 class MyAdoptions extends StatefulWidget {
@@ -31,7 +31,7 @@ class _MyAdoptionsState extends State<MyAdoptions> {
   double monthlyAmount = 0;
   String donorID = "";
   String donorAdopteeID = "";
-  List<Adoptee> adoptions = [];
+  List<Adoption> adoptions = [];
 
 
   @override
@@ -64,32 +64,33 @@ class _MyAdoptionsState extends State<MyAdoptions> {
     donorID = doc['id'];
   }
 
-
   _getAdoptions() async {
     try{
       var ret = await _firestore
           .collection('Adoptions')
-          .where('active',isEqualTo: true)
+          .where('active', isEqualTo: true)
           .get();
+
       for (var element in ret.docs) {
-        if( element.data()['donorMap'] != null && element.data()['donorMap'].containsKey(donorID)){
-          Adoptee adoptee = Adoptee(
-            name: element.data()['name'],
-            biography: element.data()['biography'],
-            goalAmount: element.data()['goalAmount'].toDouble(),
-            amountRaised: element.data()['amountRaised'].toDouble(),
-            id: element.data()['id'],
-            monthlyAmount: element.data()['donorMap'][donorID].toDouble()
-          );
-          adoptions.add(adoptee);
-        }
+        Adoption adoption = Adoption(
+          name: element.data()['name'],
+          biography: element.data()['biography'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
+          category: element.data()['category'],
+          dateCreated: element.data()['dateCreated'],
+          id: element.data()['id'],
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+        );
+        adoptions.add(adoption);
       }
-      setState(() {});
     }
     catch(e){
       print(e);
     }
 
+    setState(() {});
   }
   _body() {
     return RefreshIndicator(
@@ -106,9 +107,9 @@ class _MyAdoptionsState extends State<MyAdoptions> {
                 children: [
                   ListTile(
                     onTap: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      //   return (AdoptionDetailsScreen(adoptions[index]));
-                      // })).then((value) => _refreshPage());
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return (AdoptionDetailsScreen(adoptions[index]));
+                      })).then((value) => _refreshPage());
                     },
                     title: Text(adoptions[index].name),
                     subtitle: Text(adoptions[index].biography),
