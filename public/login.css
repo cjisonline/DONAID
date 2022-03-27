@@ -258,3 +258,13 @@ body.swal2-shown > [aria-hidden="true"] {
   transition: 0.1s filter;
   filter: blur(8px);
 }
+
+.dataTables_length > label {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.dataTables_filter > label {
+  width: 100%;
+  padding: 0.5rem;
+}

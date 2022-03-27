@@ -10,6 +10,8 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.material.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.css"/>
+ 
 
 <!-- JQuery Loads -->
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
@@ -175,29 +177,6 @@ async function getDonorData(){
 
             $(window).on('resize', function () {
                 $('#adminTable').dataTable().fnDraw();
-            });
-
-            $('a#logoutButton').click(function() {
-                logoutAdmin();
-            });
-
-            $('#allButton').click(function() {
-                var rows = $("#adminTable").find("tr").hide();
-                rows.filter(":contains('')").show();
-            });
-
-            $('#enabledButton').click(function() {
-                var colIndex = +$(this).data('col')
-                var row = $(this).closest('tr')[0];
-                var data = table.row(row).data();
-                data[colIndex] = this.value
-                data[colIndex-1] = $(this).find(':Enabled').text();
-                table.row(row).data(data).draw();
-            });
-
-            $('#disabledButton').click(function() {
-                var rows = $("#adminTable").find("tr").hide();
-                rows.filter(":contains('Disabled')").show();
             });
     }
 }
