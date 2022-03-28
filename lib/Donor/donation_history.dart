@@ -195,7 +195,7 @@ class _DonationHistoryState extends State<DonationHistory> {
 
   _createPDF() async {
     if(donations.isEmpty){
-      _buildPopupDialog(context);
+      await _noDonationsForPDF();
     }
     else{
       final date = DateTime.now();
@@ -336,27 +336,33 @@ class _DonationHistoryState extends State<DonationHistory> {
     );
   }
 
-  Widget _buildPopupDialog(BuildContext context) {
-    return new AlertDialog(
-      title: const Text('Can Not Generate A PDF'),
-      content: new Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text("You currently have no donation history to generate a pdf."),
-        ],
-      ),
-      actions: <Widget>[
-        new FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          textColor: Theme
-              .of(context)
-              .primaryColor,
-          child: Text('Close'),
-        ),
-      ],
-    );
+
+  Future<void> _noDonationsForPDF() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title:  Center(
+              child: Text('Can Not Generate a PDF'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content:  Text("You currently have no donation history to generate a pdf."),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child:  Text('ok'.tr),
+                ),
+              ),
+            ],
+          );
+        });
   }
+
+
 }
