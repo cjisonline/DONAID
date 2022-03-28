@@ -63,10 +63,12 @@ class _PendingApprovalsAndDenialsState extends State<PendingApprovalsAndDenials>
           organizationID: element.data()['organizationID'],
           active: element.data()['active'],
           rejected: element.data()['rejected'],
-          approved: element.data()['approved']
+          approved: element.data()['approved'],
+        denialReason: element.data()['denialReason']
       );
       pendingUrgentCases.add(urgentCase);
     }
+    pendingUrgentCases.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 
@@ -94,10 +96,11 @@ class _PendingApprovalsAndDenialsState extends State<PendingApprovalsAndDenials>
           active: element.data()['active'],
           rejected: element.data()['rejected'],
           approved: element.data()['approved'],
-        denialReason: element.data()['denialReason']
+          denialReason: element.data()['denialReason']
       );
       deniedUrgentCases.add(urgentCase);
     }
+    deniedUrgentCases.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 

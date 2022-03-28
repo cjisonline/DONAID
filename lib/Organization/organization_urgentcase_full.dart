@@ -25,7 +25,6 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
   @override
   void initState(){
     super.initState();
-    _refreshUrgentCase();
   }
 
   _refreshUrgentCase() async{
