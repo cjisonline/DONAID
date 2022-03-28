@@ -215,7 +215,7 @@ const { value: formValues } = await Swal.fire({
         'Enter Image Name:' +
         '<input id="imageName-input" class="swal2-input"><br><br>' +
         'Upload Carousel Image:' +
-        '<input id="imageName-input2" class="swal2-file" type="file" accept="image/png, image/jpg">',
+        '<input id="imageName-input2" class="swal2-file" type="file" accept="image/.png,.jpg,.jpeg" data-max-size="1024">',
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonColor: '#6804ec',
@@ -331,7 +331,7 @@ async function editCarousel(imageName) {
         title: 'Edit image in the Dashboard Carousel',
         html:
             'Upload New Carousel Image:' +
-            '<input id="imageName-input2" class="swal2-file" type="file" accept="image/png, image/jpg">',
+            '<input id="imageName-input2" class="swal2-file" type="file" accept="image/.png,.jpg,.jpeg" data-max-size="1024">',
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonColor: '#6804ec',
