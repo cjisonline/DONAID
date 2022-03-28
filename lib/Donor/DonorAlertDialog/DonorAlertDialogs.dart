@@ -22,7 +22,8 @@ class DonorAlertDialogs{
           'charityType': charity['charityType'],
           'charityTitle': charity['charityTitle'],
           'charityID': charity['charityID'],
-          'read': false
+          'read': false,
+          'guest':false
         });
       }
       catch (e) {
@@ -36,13 +37,14 @@ class DonorAlertDialogs{
 
         await _firestore.collection('GatewayVisits').doc(docRef.id).set({
           'organizationID': organization.uid,
-          'donorID': 'Guest',
+          'donorID': uidDonor,
           'visitedAt': FieldValue.serverTimestamp(),
           'id': docRef.id,
           'charityType': charity['charityType'],
           'charityTitle': charity['charityTitle'],
           'charityID': charity['charityID'],
-          'read': false
+          'read': false,
+          'guest':true
         });
       }
       catch (e) {
