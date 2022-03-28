@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<!-- CSS Loads -->
+<link rel="stylesheet" href="login.css">
+<link rel="stylesheet" href="settings_page.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.material.min.css">
+
+<!-- JQuery Loads -->
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+<!-- JS Loads -->
+<script src="https://kit.fontawesome.com/3f6d9190cb.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@2.3.1/build/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.all.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css" />
+<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js"></script>
+<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js"></script>
+<script type="module" defer src="https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-storage.js';
+import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
+    const firebaseConfig = {
+    apiKey: "AIzaSyAZIToR8oHIIgWmayz0PncWAaiwmJ5n_64",
+    authDomain: "donaid-d3244.firebaseapp.com",
+    projectId: "donaid-d3244",
+    storageBucket: "donaid-d3244.appspot.com",
+    messagingSenderId: "240146097284",
+    appId: "1:240146097284:web:0e78cae430d624551cced1",
+    measurementId: "G-33T6FD2DK6"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+// Logout
+const auth1 = getAuth();
+
+function logoutAdmin() {
+    signOut(auth1).then(() => {
+    // Sign-out successful.
+    }).catch((error) => {
+    // An error happened.
+    });
+}
+
+onAuthStateChanged(auth1, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    // ...
+  } else {
+    // User is signed out
+    // ...
+    window.location = 'index.html'; // Index redirect upon logout
+  }
+});
+
+var DateTime = luxon.DateTime;
+
+async function getStatistics(){
+    getUserCount();
+    // getDonationAmount();
+    getCharityCount();
+}
+
+async function getUserCount(){
+    const donorCount = await getDocs(collection(db, "DonorUsers"));
+    const orgCount = await getDocs(collection(db, "OrganizationUsers"));
+
+    const labels = [
+        'Donor Users',
+        'Organization Users'
+    ]
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Total Application Users',
+            backgroundColor: '#b37bfd',
+            hoverBackgroundColor: '#6804ec',
+            borderColor: '#fff',
+            maxBarThickness: 200,
+            data: [donorCount.docs.length, orgCount.docs.length],
+        }]
+    }
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            layout: {
+            padding: 20
+        },
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        }
+        },
+    };
+
+    
+    const userCounts = new Chart(
+        document.getElementById('userCounts'),
+        config
+    );
+}
+
+async function getDonationAmount(){
+    const d = new Date();
+    const d2 = new Date();
+    d.setMonth(d.getMonth()+1);
+    const nextMonth = d.toLocaleString('default', { month: 'long' });
+    d2.setMonth(d2.getMonth()-1);
+    const previousMonth = d2.toLocaleString('default', { month: 'long' });
+
+    console.log(nextMonth);
+    console.log(previousMonth);
+    const conditions = [];
+
+    conditions.push(where("donatedAt", "<", nextMonth));
+    conditions.push(where("donatedAt", ">", previousMonth));
+    var donationAmountArray = [];
+    const donationQuery = query(collection(db, "Donations"), ...conditions);
+    console.log(donationQuery);
+    const donationCount = await getDocs(donationQuery);
+    donationCount.forEach((item) => {
+            donationAmountArray.push(item.data().donationAmount);
+    })
+    console.log(donationCount);
+    console.log(donationAmountArray);
+
+    const donationAmountSum = donationAmountArray.reduce((partialSum, a) => partialSum + a, 0);
+    console.log(donationAmountSum);
+    const labels1 = [
+        'This Month',
+    ]
+    const data1 = {
+        labels: labels1,
+        datasets: [{
+            label: 'Donations This Month',
+            backgroundColor: '#b37bfd',
+            hoverBackgroundColor: '#6804ec',
+            borderColor: '#fff',
+            maxBarThickness: 200,
+            data: [donationAmountSum],
+        }]
+    }
+    const config1 = {
+        type: 'bar',
+        data: data1,
+        options: {
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        }
+        },
+    };
+
+    const donationAmounts = new Chart(
+        document.getElementById('donationAmounts'),
+        config1
+    );
+}
+
+async function getCharityCount(){
+
+    const conditions = [];
+
+    conditions.push(where("active", "==", true));
+    conditions.push(where("approved", "==", true));
+                
+    const campaignQuery = query(collection(db, "Campaigns"), where("active", "==", true));
+    const beneficiaryQuery = query(collection(db, "Beneficiaries"), where("active", "==", true));
+    const urgentCaseQuery = query(collection(db, "UrgentCases"), ...conditions);
+
+    const campaignCount = await getDocs(campaignQuery);
+    const beneficiaryCount = await getDocs(beneficiaryQuery);
+    const urgentCaseCount = await getDocs(urgentCaseQuery);
+
+    const labels2 = [
+        'Campaigns',
+        'Beneficiaries',
+        'Urgent Cases'
+    ]
+
+    const data2 = {
+        labels: labels2,
+        datasets: [{
+            label: 'Charity Counts',
+            backgroundColor: [
+                'rgb(54, 162, 235)',
+                '#b37bfd',
+                'rgb(255, 99, 132)',
+            ],
+            data: [campaignCount.docs.length, beneficiaryCount.docs.length, urgentCaseCount.docs.length],
+        }]
+    }
+    const config2 = {
+        type: 'polarArea',
+        data: data2,
+        options: {
+            layout: {
+            padding: 20
+        }
+        }
+    };
+
+    
+    const userCounts = new Chart(
+        document.getElementById('charityCounts'),
+        config2
+    );
+}
+
+getStatistics();
+
+</script>
+
+<title>DONAID Admin Console</title>
+</head>
+
+    <body>
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                <div class="col-auto px-0">
+                    <div id="sidebar" class="collapse collapse-horizontal show border-end">
+                        <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
+                            <span style="text-align:center; font-size: 24px;">DONAID</span>
+                            <a href="donor_dashboard.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Donors</span> </a>
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="OrgPages" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Organizations
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="OrgPages">
+                                  <li><a class="dropdown-item" href="org_dashboard.html" data-bs-parent="#sidebar">Organizations</a></li>
+                                  <li><a class="dropdown-item" href="approvals.html" data-bs-parent="#sidebar">Approvals</a></li>
+                                  <li><a class="dropdown-item" href="rejections.html" data-bs-parent="#sidebar">Rejections</a></li>
+                                </ul>
+                              </div>
+                            <a href="beneficiaries.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Beneficiaries</span></a>
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="UCPages" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Urgent Cases
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="OrgPages">
+                                  <li><a class="dropdown-item" href="urgent_cases.html" data-bs-parent="#sidebar">Urgent Cases</a></li>
+                                  <li><a class="dropdown-item" href="urgentcase_rejections.html" data-bs-parent="#sidebar">Rejections</a></li>
+                                </ul>
+                              </div>
+                            <a href="categories.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Categories</span></a>
+                            <a href="messages.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Messages</span></a>
+                            <a href="statistics.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="nav-active"><span>Statistics</span></a>
+                            <a href="settings.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Settings</span></a>
+                            <a href="#" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="logoutButton"><span>Logout</span></a>
+                        </div>
+                    </div>
+                </div>
+        <div class="col">
+            <h1 class="page-title-header" style="text-align:center; font-size: 24px; padding-top: 0.5rem;">Statistics</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="text-center">
+                    <div class="headerShader" style="background-color: #f7f0ff; max-width: 40%; margin-bottom: 1rem;">
+                        <canvas id="userCounts">
+                        </canvas>
+                        <div class="text-center">
+                            <h4>DONAID Users</h4>
+                        </div>
+                        </div>
+                    
+
+            <!-- <div class="col">
+                <div>
+                    <canvas id="donationAmounts">
+                    </canvas>
+                </div>
+                </div> -->
+
+        </div>
+                    <div class="row">
+                        <div class="text-center">
+                        <div class="headerShader" style="background-color: #f7f0ff; max-width: 40%">
+                        <canvas id="charityCounts">
+                        </canvas>
+                        <div class="text-center">
+                            <h4>DONAID Charities</h4>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</body>
+</html>
