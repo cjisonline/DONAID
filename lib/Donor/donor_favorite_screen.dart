@@ -186,7 +186,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
         "charityType": "Beneficiary",
         "name": beneficiaries[i].name,
         "id": beneficiaries[i].id,
-        "description": campaigns[i].description,
+        "description": beneficiaries[i].biography,
 
       });
     }
