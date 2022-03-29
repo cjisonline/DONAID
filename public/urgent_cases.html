@@ -269,7 +269,7 @@ function sendOrganizationNotification(documentID, urgentCaseTitle, orgID){
         
     var url = "https://fcm.googleapis.com/fcm/send";
     var params = {
-        "to":`/topics/${orgID}`,
+        "to":`/topics/${orgID}Approvals`,
         "notification":{
             "title": "Urgent Case Approved!",
             "body": urgentCaseTitle,
@@ -293,7 +293,7 @@ function sendRejectionNotification(documentID, urgentCaseTitle, orgID){
         
     var url = "https://fcm.googleapis.com/fcm/send";
     var params = {
-        "to":`/topics/${orgID}`,
+        "to":`/topics/${orgID}Approvals`,
         "notification":{
             "title": "Urgent Case Denied.",
             "body": urgentCaseTitle,
