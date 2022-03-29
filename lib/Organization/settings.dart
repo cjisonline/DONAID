@@ -25,7 +25,7 @@ class _OrganizationSettingsPageState extends State<OrganizationSettingsPage> {
 
   _getSharedPreferences()async{
     final prefs = await _prefs;
-    urgentCaseApprovalsNotifications = prefs.getBool('urgentCaseApprovalsNotifications')!;
+    urgentCaseApprovalsNotifications = prefs.getBool('organizationUrgentCaseApprovalsNotifications')!;
 
     setState(() {
 
@@ -90,7 +90,7 @@ class _OrganizationSettingsPageState extends State<OrganizationSettingsPage> {
     });
 
     final prefs = await _prefs;
-    prefs.setBool('urgentCaseApprovalsNotifications', urgentCaseApprovalsNotifications);
+    prefs.setBool('organizationUrgentCaseApprovalsNotifications', urgentCaseApprovalsNotifications);
 
     if(urgentCaseApprovalsNotifications){
       FirebaseMessaging.instance.subscribeToTopic(_auth.currentUser!.uid.toString()+'Approvals');

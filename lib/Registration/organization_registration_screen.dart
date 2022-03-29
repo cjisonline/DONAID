@@ -102,7 +102,7 @@ class _OrganizationRegistrationScreenState
 
           await FirebaseMessaging.instance.subscribeToTopic(newUser.user.uid.toString()+'Approvals');
           final SharedPreferences prefs = await _prefs;
-          await prefs.setBool('urgentCaseApprovalsNotifications', true);
+          await prefs.setBool('organizationUrgentCaseApprovalsNotifications', true);
 
           Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen
               .id)); //remove all screens on the stack and return to home screen
