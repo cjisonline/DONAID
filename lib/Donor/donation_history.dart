@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/pdf_preview_screen.dart';
-import 'package:donaid/Donor/DonaidInfo.dart';
+import 'package:donaid/Models/DonaidInfo.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../Models/Donor.dart';
-import 'DonorUser.dart';
+import '../Models/DonorUser.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +20,7 @@ import 'package:intl/intl.dart';
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
 import 'generateDonorPDF.dart';
-import 'invoice.dart';
+import '../Models/invoice.dart';
 
 class DonationHistory extends StatefulWidget {
   static const id = 'donation_history';
@@ -194,49 +194,57 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _createPDF() async {
-    final date = DateTime.now();
-    var type="";
-
-    for(var donation in donations){
-      if(donation.charityType == "Campaigns"){
-        type = "Campaign";
-      }
-      if(donation.charityType == "Beneficiaries"){
-        type = "Beneficiary";
-      }
-      if(donation.charityType == "UrgentCases"){
-        type = "Urgent Case";
-      }
-      var invoiceitem = InvoiceItem(
-        title: donation.charityName,
-        date: donation.donatedAt.toDate(),
-        organization: organizations[donations.indexOf(donation)].organizationName,
-        type: type,
-        price: donation.donationAmount,
-      );
-      invoiceitems.add(invoiceitem);
+    if(donations.isEmpty){
+      await _noDonationsForPDF();
     }
-    final invoice = Invoice(
-      supplier: DonaidInfo(
-        name: 'DONAID',
-        emailaddress: 'Donaidmobileapp1@gmail.com',
-        paymentInfo: 'https://stripe.com/',
-      ),
-      customer: DonorUser(
-        name: donor.firstName +" "+ donor.lastName,
-        emailaddress: donor.email,
-      ),
-      info: InvoiceInfo(
-        date: date,
-        description: 'This is an official list of all the organization charities ' + donor.firstName +" " + donor.lastName
-            +' has donated to using the DONAID app.',
-        number: donor.id,
-      ),
-      items: invoiceitems,
-    );
-    final pdfFile = await PdfInvoiceApi.generate(invoice);
-    PdfPreview.openFile(pdfFile);
+    else{
+      final date = DateTime.now();
+      var type="";
+
+      for(var donation in donations){
+        if(donation.charityType == "Campaigns"){
+          type = "Campaign";
+        }
+        if(donation.charityType == "Beneficiaries"){
+          type = "Beneficiary";
+        }
+        if(donation.charityType == "UrgentCases"){
+          type = "Urgent Case";
+        }
+        var invoiceitem = InvoiceItem(
+          title: donation.charityName,
+          date: donation.donatedAt.toDate(),
+          organization: organizations[donations.indexOf(donation)].organizationName,
+          type: type,
+          price: donation.donationAmount,
+        );
+        invoiceitems.add(invoiceitem);
+    }
+
+      final invoice = Invoice(
+        supplier: DonaidInfo(
+          name: 'DONAID',
+          emailaddress: 'Donaidmobileapp1@gmail.com',
+          paymentInfo: 'https://stripe.com/',
+        ),
+        customer: DonorUser(
+          name: donor.firstName +" "+ donor.lastName,
+          emailaddress: donor.email,
+        ),
+        info: InvoiceInfo(
+          date: date,
+          description: 'This is an official list of all the organization charities ' + donor.firstName +" " + donor.lastName
+              +' has donated to using the DONAID app.',
+          number: donor.id,
+        ),
+        items: invoiceitems,
+      );
+      final pdfFile = await PdfInvoiceApi.generate(invoice);
+      PdfPreview.openFile(pdfFile);
+    }
+
   }
+
   _donationHistoryBody() {
     return donations.isNotEmpty && organizations.length == donations.length
         ? ListView.builder(
@@ -328,27 +336,33 @@ class _DonationHistoryState extends State<DonationHistory> {
     );
   }
 
-  Widget _buildPopupDialog(BuildContext context) {
-    return new AlertDialog(
-      title: const Text('Can Not Generate A PDF'),
-      content: new Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text("You currently have no donation history to generate a pdf."),
-        ],
-      ),
-      actions: <Widget>[
-        new FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          textColor: Theme
-              .of(context)
-              .primaryColor,
-          child: Text('Close'),
-        ),
-      ],
-    );
+
+  Future<void> _noDonationsForPDF() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title:  Center(
+              child: Text('Can Not Generate a PDF'),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content:  Text("You currently have no donation history to generate a pdf."),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child:  Text('ok'.tr),
+                ),
+              ),
+            ],
+          );
+        });
   }
+
+
 }

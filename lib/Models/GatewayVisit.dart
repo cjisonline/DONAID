@@ -8,6 +8,7 @@ class GatewayVisit {
   String organizationID;
   String charityID;
   Timestamp visitedAt;
+  bool guest;
 
   GatewayVisit({
     required this.charityTitle,
@@ -16,6 +17,7 @@ class GatewayVisit {
     required this.id,
     required this.organizationID,
     required this.visitedAt,
-    required this.charityID
+    required this.charityID,
+    required this.guest
   });
 }

@@ -4,6 +4,7 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "This charity has reached it\'s goal!":"This charity has reached it\'s goal!",
           "Denials":"Denials",
           "Edit Urgent Case":"Edit Urgent Case",
           "Urgent case resubmitted!":"Urgent case resubmitted!",
@@ -261,6 +262,7 @@ class Messages extends Translations {
           "forgot_password!": "Forgot Password?",
         },
         'fr_FR': {
+          "This charity has reached it\'s goal!":"Cet organisme de bienfaisance a atteint son objectif!",
           "Denials":"Refus",
           "Edit Urgent Case":"Modifier le cas urgent",
           "Urgent case resubmitted!":"Cas urgent soumis à nouveau",
@@ -530,6 +532,7 @@ class Messages extends Translations {
           "forgot_password!": "Mot de passe oublié?",
         },
         'ar_SA': {
+          "This charity has reached it\'s goal!":"لقد وصلت هذه المؤسسة الخيرية إلى هدفها!",
           "Denials":"النفي",
           "Edit Urgent Case":"تعديل الحالة العاجلة",
           "Urgent case resubmitted!":"إعادة تقديم حالة عاجلة!",
@@ -783,6 +786,7 @@ class Messages extends Translations {
           "forgot_password!": " هل نسيت كلمة السر؟",
         },
         'es_ES': {
+          "This charity has reached it\'s goal!":"¡Esta organización benéfica ha alcanzado su objetivo!",
           "Denials":"Negaciones",
           "Edit Urgent Case":"Editar caso urgente",
           "Urgent case resubmitted!":"¡Caso urgente reenviado!",
