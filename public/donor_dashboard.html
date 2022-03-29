@@ -178,6 +178,10 @@ async function getDonorData(){
             $(window).on('resize', function () {
                 $('#adminTable').dataTable().fnDraw();
             });
+
+            $('a#logoutButton').click(function() {
+                logoutAdmin();
+            });
     }
 }
 
