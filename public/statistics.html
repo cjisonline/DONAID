@@ -73,7 +73,7 @@ var DateTime = luxon.DateTime;
 
 async function getStatistics(){
     getUserCount();
-    // getDonationAmount();
+    getDonationAmount();
     getCharityCount();
 }
 
@@ -81,17 +81,20 @@ async function getUserCount(){
     const donorCount = await getDocs(collection(db, "DonorUsers"));
     const orgCount = await getDocs(collection(db, "OrganizationUsers"));
 
-    const labels = [
-        'Donor Users',
-        'Organization Users'
-    ]
     const data = {
-        labels: labels,
+        labels: ['Donor Users','Organization Users'],
         datasets: [{
-            label: 'Total Application Users',
-            backgroundColor: '#b37bfd',
-            hoverBackgroundColor: '#6804ec',
-            borderColor: '#fff',
+            label: ['Donor Users', 'Organization Users'],
+            backgroundColor: [
+            'rgba(255, 150, 172, 0.2)',
+            'rgba(124, 194, 242, 0.2)'
+            ],
+            hoverBackgroundColor: ['rgb(255, 99, 132)', 'rgba(124, 194, 242)'],
+            borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)'
+            ],
+            borderWidth: 1,
             maxBarThickness: 200,
             data: [donorCount.docs.length, orgCount.docs.length],
         }]
@@ -102,6 +105,11 @@ async function getUserCount(){
         options: {
             layout: {
             padding: 20
+        },
+        plugins: {
+            legend: {
+                display: false,
+            }
         },
         scales: {
             y: {
@@ -119,43 +127,35 @@ async function getUserCount(){
 }
 
 async function getDonationAmount(){
-    const d = new Date();
-    const d2 = new Date();
-    d.setMonth(d.getMonth()+1);
-    const nextMonth = d.toLocaleString('default', { month: 'long' });
-    d2.setMonth(d2.getMonth()-1);
-    const previousMonth = d2.toLocaleString('default', { month: 'long' });
-
-    console.log(nextMonth);
-    console.log(previousMonth);
-    const conditions = [];
-
-    conditions.push(where("donatedAt", "<", nextMonth));
-    conditions.push(where("donatedAt", ">", previousMonth));
-    var donationAmountArray = [];
-    const donationQuery = query(collection(db, "Donations"), ...conditions);
-    console.log(donationQuery);
-    const donationCount = await getDocs(donationQuery);
+    var donationArray = [];
+    const donationCount = await getDocs(collection(db, "Donations"));
     donationCount.forEach((item) => {
-            donationAmountArray.push(item.data().donationAmount);
+        donationArray.push(item.data().donationAmount);
     })
-    console.log(donationCount);
-    console.log(donationAmountArray);
-
-    const donationAmountSum = donationAmountArray.reduce((partialSum, a) => partialSum + a, 0);
-    console.log(donationAmountSum);
+    var donationSum = donationArray.map(Number);
+    
+    var donationSumCalc = 0;
+    for (var i = 0; i < donationSum.length; i++) {
+        donationSumCalc += +donationSum[i];
+    }
+    
     const labels1 = [
-        'This Month',
+        '',
     ]
     const data1 = {
         labels: labels1,
         datasets: [{
-            label: 'Donations This Month',
-            backgroundColor: '#b37bfd',
-            hoverBackgroundColor: '#6804ec',
-            borderColor: '#fff',
+            label: 'Total Donations ($ USD)',
+            backgroundColor: [
+            'rgba(153, 102, 255, 0.2)',
+            ],
+            hoverBackgroundColor: '#b37bfd',
+            borderColor: [
+            'rgb(153, 102, 255)',
+            ],
+            borderWidth: 1,
             maxBarThickness: 200,
-            data: [donationAmountSum],
+            data: [donationSumCalc],
         }]
     }
     const config1 = {
@@ -170,8 +170,8 @@ async function getDonationAmount(){
         },
     };
 
-    const donationAmounts = new Chart(
-        document.getElementById('donationAmounts'),
+    const donationCounts = new Chart(
+        document.getElementById('donationCounts'),
         config1
     );
 }
@@ -275,31 +275,34 @@ getStatistics();
             <div class="row">
                 <div class="col">
                     <div class="text-center">
-                    <div class="headerShader" style="background-color: #f7f0ff; max-width: 40%; margin-bottom: 1rem;">
+                    <div class="headerShader" style="background-color: #f7f0ff; margin-bottom: 1rem;">
                         <canvas id="userCounts">
                         </canvas>
                         <div class="text-center">
                             <h4>DONAID Users</h4>
                         </div>
                         </div>
-                    
 
-            <!-- <div class="col">
-                <div>
-                    <canvas id="donationAmounts">
-                    </canvas>
+                        <div class="row">
+                            <div class="text-center">
+                            <div class="headerShader" style="background-color: #f7f0ff; margin-bottom: 1rem;">
+                                <canvas id="donationCounts">
+                                </canvas>
+                                <div class="text-center">
+                                    <h4>DONAID Donations</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
                 </div>
-                </div> -->
-
-        </div>
-                    <div class="row">
+            </div>
+                    <div class="col">
                         <div class="text-center">
-                        <div class="headerShader" style="background-color: #f7f0ff; max-width: 40%">
+                        <div class="headerShader" style="background-color: #f7f0ff">
                         <canvas id="charityCounts">
                         </canvas>
                         <div class="text-center">
                             <h4>DONAID Charities</h4>
-                        </div>
                         </div>
                         </div>
                         </div>
