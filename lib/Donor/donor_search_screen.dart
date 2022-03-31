@@ -433,6 +433,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: const Icon(Icons.keyboard_arrow_down)),
+                    value: categoryFilterController.text.isNotEmpty ? categoryFilterController.text : null,
                     items: campaignCategory.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
@@ -488,6 +489,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    value: sortingController.text.isNotEmpty ? sortingController.text : null,
                     items: sortingChoices.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
@@ -571,6 +573,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: const Icon(Icons.keyboard_arrow_down)),
+                    value: categoryFilterController.text.isNotEmpty ? categoryFilterController.text : null,
                     items: campaignCategory.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
@@ -626,6 +629,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    value: sortingController.text.isNotEmpty ? sortingController.text : null,
                     items: sortingChoices.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
@@ -709,6 +713,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: const Icon(Icons.keyboard_arrow_down)),
+                    value: categoryFilterController.text.isNotEmpty ? categoryFilterController.text : null,
                     items: campaignCategory.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
@@ -764,6 +769,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    value: sortingController.text.isNotEmpty ? sortingController.text : null,
                     items: sortingChoices.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
