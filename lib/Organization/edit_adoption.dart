@@ -120,6 +120,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
+          readOnly: widget.adoption.amountRaised > 0,
           controller: _adoptionNameController,
           decoration: InputDecoration(
               label: Center(
@@ -148,6 +149,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        readOnly: widget.adoption.amountRaised > 0,
         controller: _adoptionBiographyController,
         minLines: 2,
         maxLines: 5,
@@ -174,7 +176,8 @@ class _EditAdoptionState extends State<EditAdoption> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        keyboardType: TextInputType.number,
+          readOnly: widget.adoption.amountRaised > 0,
+          keyboardType: TextInputType.number,
         controller: _adoptionGoalAmountController,
         validator: (value) {
           if (value!.isEmpty) {
@@ -218,6 +221,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: DropdownButtonFormField <String>(
+
           value: _adoptionCategoryController?.text,
           decoration: InputDecoration(
               label: Center(

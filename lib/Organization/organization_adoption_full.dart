@@ -142,7 +142,7 @@ class _OrganizationAdoptionFullScreenState extends State<OrganizationAdoptionFul
     return Center(
         child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children:[
               SizedBox(
                   height: 100,
                   child: Image.asset('assets/DONAID_LOGO.png')
@@ -181,29 +181,68 @@ class _OrganizationAdoptionFullScreenState extends State<OrganizationAdoptionFul
                   ),
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
-                    child: Material(
-                        elevation: 5.0,
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(32.0),
-                        child: MaterialButton(
-                            child: const Text(
-                              'Edit',
-                              style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.white,
+              Column (
+                children: (widget.adoption.amountRaised < widget.adoption.goalAmount) ?
+                [Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children:  widget.adoption.amountRaised == 0 ? [
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
+                      child: Material(
+                          elevation: 5.0,
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child: const Text(
+                                'Edit',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            onPressed: () async {
-                              Navigator.push(context, MaterialPageRoute(builder: (context){
-                                return EditAdoption(adoption: widget.adoption);
-                              })).then((value) => _refreshAdoption());
-                            })),),
-                  Container(
+                              onPressed: () async {
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return EditAdoption(adoption: widget.adoption);
+                                })).then((value) => _refreshAdoption());
+                              })),),
+                    Container(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                        child: (widget.adoption.active)
+                            ? Material(
+                            elevation: 5.0,
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(32.0),
+                            child: MaterialButton(
+                                child: const Text(
+                                  'Stop Charity',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  _stopCharityConfirm();
+
+                                }))
+                            : (!widget.adoption.active)
+                            ? Material(
+                            elevation: 5.0,
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(32.0),
+                            child: MaterialButton(
+                                child: const Text(
+                                  'Resume Charity',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  _resumeCharityConfirm();
+                                }))
+                            : Container()
+                    ),
+                  ] : [Container(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                       child: (widget.adoption.active)
                           ? Material(
@@ -239,11 +278,22 @@ class _OrganizationAdoptionFullScreenState extends State<OrganizationAdoptionFul
                                 _resumeCharityConfirm();
                               }))
                           : Container()
+                  )],
+                )]:
+                [                    const SizedBox(
+                    height:50
+                ),
+                  const Center(
+                  child: Text(
+                    'This charity has reached it\'s goal!',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
+                    ),
                   ),
-                ],
-              ),
-            ])
-        ));
+                )]
+    ),
+            ])));
   }
 
   @override
