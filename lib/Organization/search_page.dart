@@ -378,6 +378,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         BorderRadius.all(Radius.circular(12.0)),
                       )),
                   icon:  Visibility(visible: false, child: Icon(Icons.keyboard_arrow_down)),
+                  value: categoryFilterController.text.isNotEmpty ? categoryFilterController.text : null,
                   items: campaignCategory == null? []: campaignCategory.map((items) {
                     return DropdownMenuItem<String>(
                       child: Text(
@@ -410,6 +411,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    value: sortingController.text.isNotEmpty ? sortingController.text : null,
                     items: sortingChoices.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
@@ -487,6 +489,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         BorderRadius.all(Radius.circular(12.0)),
                       )),
                   icon:  Visibility(visible: false, child: Icon(Icons.keyboard_arrow_down)),
+                  value: categoryFilterController.text.isNotEmpty ? categoryFilterController.text : null,
                   items: campaignCategory == null? []: campaignCategory.map((items) {
                     return DropdownMenuItem<String>(
                       child: Text(
@@ -519,6 +522,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    value: sortingController.text.isNotEmpty ? sortingController.text : null,
                     items: sortingChoices.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
@@ -596,6 +600,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         BorderRadius.all(Radius.circular(12.0)),
                       )),
                   icon:  Visibility(visible: false, child: Icon(Icons.keyboard_arrow_down)),
+                  value: categoryFilterController.text.isNotEmpty ? categoryFilterController.text : null,
                   items: campaignCategory == null? []: campaignCategory.map((items) {
                     return DropdownMenuItem<String>(
                       child: Text(
@@ -628,6 +633,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    value: sortingController.text.isNotEmpty ? sortingController.text : null,
                     items: sortingChoices.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
