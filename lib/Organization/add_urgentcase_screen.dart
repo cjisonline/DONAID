@@ -388,7 +388,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                   });
                                   addUrgentCase(categoryController.text,
                                       descriptionController.text,
-                                      int.parse(goalAmountController.text).toDouble(),
+                                      double.parse(goalAmountController.text),
                                       titleController.text,
                                       endDateController.text);
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
