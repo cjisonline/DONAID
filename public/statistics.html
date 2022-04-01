@@ -69,7 +69,9 @@ onAuthStateChanged(auth1, (user) => {
   }
 });
 
-var DateTime = luxon.DateTime;
+$('a#logoutButton').click(function() {
+    logoutAdmin();
+});
 
 async function getStatistics(){
     getUserCount();
