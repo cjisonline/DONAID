@@ -60,12 +60,22 @@ onAuthStateChanged(auth1, (user) => {
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
     // ...
+    logoutNonAdmin(uid);
   } else {
     // User is signed out
     // ...
     window.location = 'index.html'; // Index redirect upon logout
   }
 });
+
+async function logoutNonAdmin(uid){
+    const querySnapshot = await getDocs(collection(db, "Admin"));
+        querySnapshot.forEach((item) => {
+            if(item.data().uid != uid) {
+                logoutAdmin();
+            }
+        })
+}
 
 async function getRejectionData(){
     window.onload = async function(){
