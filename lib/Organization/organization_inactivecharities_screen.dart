@@ -127,6 +127,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID'],
           active: element.data()['active'],
+          rejected: element.data()['rejected'],
           approved: element.data()['approved']
       );
       urgentCases.add(urgentCase);

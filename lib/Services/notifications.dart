@@ -36,12 +36,46 @@ Future<bool> addNotification(String? uid, RemoteMessage message) {
   });
 }
 
-Future<bool> deleteNotification(String? uid, PushNotification notification) {
+Future<bool> undoDeleteNotification(String? uid, PushNotification notification) {
   DocumentReference notificationsReference =
   FirebaseFirestore.instance.collection('Notifications').doc(uid);
 
   return FirebaseFirestore.instance.runTransaction((Transaction tx) async {
     DocumentSnapshot postSnapshot = await tx.get(notificationsReference);
+    if (postSnapshot.exists) {
+      await tx.update(notificationsReference, <String, dynamic>{
+        'notificationsList': FieldValue.arrayUnion([{
+          'notificationTitle': notification.title,
+          'notificationBody': notification.body,
+          'dataTitle': notification.dataTitle,
+          'dataBody': notification.dataBody
+        }
+        ])
+      });
+    } else {
+      await tx.set(notificationsReference, {
+        'notificationsList': [{
+          'notificationTitle': notification.title,
+          'notificationBody': notification.body,
+          'dataTitle': notification.dataTitle,
+          'dataBody': notification.dataBody
+        }
+        ]
+      });
+    }
+  }).then((result) {
+    return true;
+  }).catchError((error) {
+    print('Error: $error');
+    return false;
+  });
+}
+
+Future<bool> deleteNotification(String? uid, PushNotification notification) {
+  DocumentReference notificationsReference =
+  FirebaseFirestore.instance.collection('Notifications').doc(uid);
+
+  return FirebaseFirestore.instance.runTransaction((Transaction tx) async {
 
     await tx.update(notificationsReference, <String, dynamic>{
       'notificationsList': FieldValue.arrayRemove([{

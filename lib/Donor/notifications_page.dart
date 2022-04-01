@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
 import '../Models/PushNotification.dart';
 import '../Models/UrgentCase.dart';
 import '../Services/notifications.dart';
@@ -19,9 +17,10 @@ class DonorNotificationPage extends StatefulWidget {
 }
 
 class _DonorNotificationPageState extends State<DonorNotificationPage> {
-  final _messaging = FirebaseMessaging.instance;
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  var deletedNotification;
+  var deletedIndex;
   List<PushNotification> notifications=[];
 
   @override
@@ -44,6 +43,7 @@ class _DonorNotificationPageState extends State<DonorNotificationPage> {
         id: doc.data()['id'],
         organizationID: doc.data()['organizationID'],
         active: doc.data()['active'],
+        rejected: doc.data()['rejected'],
         approved: doc.data()['approved']
     );
 
@@ -82,9 +82,26 @@ class _DonorNotificationPageState extends State<DonorNotificationPage> {
               Dismissible(
                 key: UniqueKey(),
                 onDismissed: (direction){
+                  deletedIndex = index;
+                  deletedNotification = notifications[index];
+
                   deleteNotification(_auth.currentUser?.uid, notifications[index]);
                   notifications.removeAt(index);
                   setState(() {});
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Notification deleted.'),
+                        duration: Duration(seconds:3),
+                        action: SnackBarAction(
+                            label: 'UNDO',
+                            onPressed: () async{
+                              undoDeleteNotification(_auth.currentUser?.uid, deletedNotification);
+                              setState(() {
+                                notifications.insert(deletedIndex, deletedNotification);
+                              });
+
+                            }),
+                      ));
                 },
                 child: GestureDetector(
                   onTap: (){

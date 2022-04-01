@@ -84,7 +84,8 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
         'goalAmount': goalAmount,
         'id': docRef.id,
         'organizationID': loggedInUser?.uid,
-        'title': title
+        'title': title,
+        'rejected':false
       });
     } catch (e) {
       print(e);

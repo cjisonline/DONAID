@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Organization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,22 +10,46 @@ class DonorAlertDialogs{
   static createGatewayVisit(Organization organization, String uidDonor, Map<String, dynamic> charity) async{
     final _firestore = FirebaseFirestore.instance;
 
-    try{
-      var docRef = await _firestore.collection('GatewayVisits').add({});
+    if(FirebaseAuth.instance.currentUser?.email != null) {
+      try {
+        var docRef = await _firestore.collection('GatewayVisits').add({});
 
-      await _firestore.collection('GatewayVisits').doc(docRef.id).set({
-        'organizationID':organization.uid,
-        'donorID':uidDonor,
-        'visitedAt': FieldValue.serverTimestamp(),
-        'id':docRef.id,
-        'charityType': charity['charityType'],
-        'charityTitle': charity['charityTitle'],
-        'charityID': charity['charityID'],
-        'read':false
-      });
+        await _firestore.collection('GatewayVisits').doc(docRef.id).set({
+          'organizationID': organization.uid,
+          'donorID': uidDonor,
+          'visitedAt': FieldValue.serverTimestamp(),
+          'id': docRef.id,
+          'charityType': charity['charityType'],
+          'charityTitle': charity['charityTitle'],
+          'charityID': charity['charityID'],
+          'read': false,
+          'guest':false
+        });
+      }
+      catch (e) {
+        print(e);
+      }
     }
-    catch(e){
-      print(e);
+    else{
+
+      try {
+        var docRef = await _firestore.collection('GatewayVisits').add({});
+
+        await _firestore.collection('GatewayVisits').doc(docRef.id).set({
+          'organizationID': organization.uid,
+          'donorID': uidDonor,
+          'visitedAt': FieldValue.serverTimestamp(),
+          'id': docRef.id,
+          'charityType': charity['charityType'],
+          'charityTitle': charity['charityTitle'],
+          'charityID': charity['charityID'],
+          'read': false,
+          'guest':true
+        });
+      }
+      catch (e) {
+        print(e);
+      }
     }
 
 

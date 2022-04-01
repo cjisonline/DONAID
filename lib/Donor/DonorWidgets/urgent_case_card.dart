@@ -168,6 +168,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               color: Colors.pink,
               borderRadius: BorderRadius.all(Radius.circular(10)),
             )),
+        (_auth.currentUser?.email != null) ?
         Align(
           alignment: Alignment.center,
           child: IconButton(
@@ -187,6 +188,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
             },
           ),
         )
+            : Container()
       ]),
     );
   }

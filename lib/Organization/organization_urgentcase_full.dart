@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/UrgentCase.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Organization/edit_urgent_case.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
@@ -24,7 +25,6 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
   @override
   void initState(){
     super.initState();
-    _refreshUrgentCase();
   }
 
   _refreshUrgentCase() async{
@@ -32,6 +32,13 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
 
     var doc = ret.docs[0];
     widget.urgentCase.active = doc['active'];
+    widget.urgentCase.rejected = doc['rejected'];
+    widget.urgentCase.denialReason = doc['denialReason'];
+    widget.urgentCase.category = doc['category'];
+    widget.urgentCase.description = doc['description'];
+    widget.urgentCase.goalAmount = doc['goalAmount'];
+    widget.urgentCase.endDate = doc['endDate'];
+    widget.urgentCase.title = doc['title'];
     setState(() {
     });
 
@@ -215,7 +222,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+                children: widget.urgentCase.amountRaised < widget.urgentCase.goalAmount ? [
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                     child: (widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
@@ -286,12 +293,151 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                               }))
                           : Container()
                   ),
+                ]
+                      : [
+                  SizedBox(
+                  height:50
+              ),
+              Center(
+                child: Text(
+                  'This charity has reached it\'s goal!'.tr,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+              )
+            ],
+              )
+            ])
+        ));
+  }
+
+  _urgentCaseDeniedBody() {
+    return Center(
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SizedBox(
+                  height: 100,
+                  child: Image.asset('assets/DONAID_LOGO.png')
+              ),
+              Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
+              SizedBox(
+                height: 25,
+              ),
+              Text('Attention:'.tr,style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: Colors.red),),
+              Text('Your Urgent Case Was Denied'.tr+'\n',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),),
+              Text(
+                "After administrative review, your urgent case was denied for the following reason:".tr+'\n',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(widget.urgentCase.denialReason.toString(),style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
+              SizedBox(
+                height: 25,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child:Material(
+                          elevation: 5.0,
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child: Text(
+                                'Edit & Resubmit'.tr,
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return EditUrgentCase(urgentCase: widget.urgentCase);
+                                })).then((value) => _refreshUrgentCase());
+                              }))
+                  ),
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child:  Material(
+                          elevation: 5.0,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child: Text(
+                                'Delete'.tr,
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                _deleteCharityConfirm();
+                              }))
+                  ),
                 ],
               )
             ])
         ));
   }
 
+  _urgentCasePendingBody() {
+    return Center(
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SizedBox(
+                  height: 100,
+                  child: Image.asset('assets/DONAID_LOGO.png')
+              ),
+              Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
+              SizedBox(
+                height: 25,
+              ),
+              Text('This urgent case is pending approval.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              SizedBox(
+                height: 25,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child:  Material(
+                          elevation: 5.0,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child: Text(
+                                'Delete'.tr,
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                _deleteCharityConfirm();
+                              }))
+                  ),
+                ],
+              )
+            ])
+        ));
+  }
+
+  _buildBody(){
+    if(widget.urgentCase.rejected){
+      return _urgentCaseDeniedBody();
+    }
+    else if(!widget.urgentCase.approved && !widget.urgentCase.rejected){
+      return _urgentCasePendingBody();
+    }
+    else{
+      return _urgentCaseFullBody();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -305,7 +451,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
         ),
       ),
       drawer: const OrganizationDrawer(),
-      body: _urgentCaseFullBody(),
+      body: _buildBody(),
       bottomNavigationBar: const OrganizationBottomNavigation(),
     );
   }

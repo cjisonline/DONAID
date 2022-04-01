@@ -7,7 +7,7 @@ import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:donaid/Organization/organization_expiredcharities_screen.dart';
 import 'package:donaid/Organization/organization_inactivecharities_screen.dart';
-import 'package:donaid/Organization/pending_approvals_screen.dart';
+import 'package:donaid/Organization/pending_approvals_and_denials.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
@@ -92,7 +92,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               title: Text("pending_approvals".tr),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return PendingApprovals();
+                  return PendingApprovalsAndDenials();
                 })).then((value){
                   setState(() {
                   });
@@ -240,7 +240,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               title: Text("pending_approvals".tr),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return PendingApprovals();
+                  return PendingApprovalsAndDenials();
                 })).then((value){
                   setState(() {
                   });
