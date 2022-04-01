@@ -77,7 +77,7 @@ class _EditAdoptionState extends State<EditAdoption> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Cancel',
+            child: Text('cancel'.tr,
                 style: TextStyle(fontSize: 15.0, color: Colors.white)),
           ),
           actions: [
@@ -85,7 +85,7 @@ class _EditAdoptionState extends State<EditAdoption> {
               onPressed: () async {
                 _submitForm();
               },
-              child: const Text('Save',
+              child: Text('save'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
@@ -126,9 +126,9 @@ class _EditAdoptionState extends State<EditAdoption> {
           decoration: InputDecoration(
               label: Center(
                 child: RichText(
-                  text: const TextSpan(
-                    text: 'Name',
-                    style: TextStyle(
+                  text:  TextSpan(
+                    text: 'name'.tr,
+                    style: const TextStyle(
                         color: Colors.black, fontSize: 20.0),
                   ),
                 ),
@@ -158,9 +158,9 @@ class _EditAdoptionState extends State<EditAdoption> {
         decoration: InputDecoration(
             label: Center(
               child: RichText(
-                text: const TextSpan(
-                  text: 'Biography',
-                  style: TextStyle(
+                text: TextSpan(
+                  text: 'biography'.tr,
+                  style: const TextStyle(
                       color: Colors.black, fontSize: 20.0),
                 ),
               ),
@@ -182,9 +182,9 @@ class _EditAdoptionState extends State<EditAdoption> {
         controller: _adoptionGoalAmountController,
         validator: (value) {
           if (value!.isEmpty) {
-            return "Please enter a goal amount.";
+            return "please_enter_a_goal_amount.".tr;
           }else if (!goalRegExp.hasMatch(value)){
-            return "Please enter a valid goal amount.";
+            return "please_enter_a_valid_goal_amount".tr;
           }
           else {
             return null;
@@ -195,7 +195,7 @@ class _EditAdoptionState extends State<EditAdoption> {
             label: Center(
               child: RichText(
                   text: TextSpan(
-                      text: 'Goal Amount',
+                      text: 'goal_amount'.tr,
                       style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 20.0),
@@ -228,7 +228,7 @@ class _EditAdoptionState extends State<EditAdoption> {
               label: Center(
                 child: RichText(
                     text: TextSpan(
-                        text: 'Category',
+                        text: 'category'.tr,
                         style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 20.0),
@@ -257,7 +257,7 @@ class _EditAdoptionState extends State<EditAdoption> {
               _adoptionCategoryController?.text = val.toString();
             },
           validator: (value) => value == null
-              ? 'Please fill in the category.' : null,
+              ? 'please_fill_in_the_category'.tr : null,
         )
     );
   }

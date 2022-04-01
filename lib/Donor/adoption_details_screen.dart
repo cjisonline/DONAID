@@ -98,8 +98,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Are You Sure?'),
+            title:  Center(
+              child: Text('Are You Sure?'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
@@ -116,7 +116,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                     });
                     Navigator.pop(context);
                   },
-                  child: const Text('Yes'),
+                  child:  Text('yes'.tr),
                 ),
               ),
               Center(
@@ -124,7 +124,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('No'),
+                  child: Text('no'.tr),
                 ),
               ),
             ],
@@ -246,11 +246,11 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                 },
                                                 validator: (value) {
                                                   if (value!.isEmpty) {
-                                                    return 'Please enter a valid payment amount.';
+                                                    return 'please_enter_a_valid_payment_amount'.tr;
                                                   } else if (double.parse(
                                                           value) <
                                                       0.50) {
-                                                    return 'Please provide a monthly donation amount minimum of \$0.50';
+                                                    return 'please_provide_a_donation_minimum'.tr;
                                                   } else {
                                                     return null;
                                                   }

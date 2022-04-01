@@ -119,10 +119,10 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
             readOnly: true,
             validator: (value) {
               if (value!.isEmpty) {
-                return "Please enter end date.";
+                return "please_enter_end_date.".tr;
               }
               if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
-                return 'Beneficiaries cannot have a duration longer than 1 year.';
+                return 'beneficiaries_cannot_have_a_duration_longer_than_1_year.'.tr;
               }
               else {
                 return null;
@@ -133,7 +133,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 label: Center(
                   child: RichText(
                       text: TextSpan(
-                          text: 'Enter End Date',
+                          text: 'enter_end_date'.tr,
                           style: TextStyle(
                               color: Colors.grey[600],
                               fontSize: 20.0),

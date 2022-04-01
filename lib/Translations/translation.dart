@@ -4,6 +4,7 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "resuming_adoption_charity_would_you_like_to_continue": "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from My Beneficiaries page. Would you like to continue?",
           "no_inactive_adoptions_to_show" : "No inactive adoptions to show.",
           "please_enter_adoption_name" : "Please enter adoption name.",
           "edit_adoption" : "Edit Adoption",
@@ -273,6 +274,8 @@ class Messages extends Translations {
           "adoptions" : "Adoptions"
         },
         'fr_FR': {
+          "resuming_adoption_charity_would_you_like_to_continue":
+          "La reprise de cette association la rendra à nouveau visible pour les donateurs. Une fois que vous avez repris cet organisme de bienfaisance, vous pouvez le désactiver à nouveau à partir de la page Mes bénéficiaires. Voulez-vous continuer?",
           "no_inactive_adoptions_to_show" : "Aucune adoption inactive à afficher.",
           "please_enter_adoption_name" : "Veuillez entrer le nom d'adoption.",
           "edit_adoption" : "Modifier l'adoption",
@@ -554,6 +557,7 @@ class Messages extends Translations {
           "adoptions" : "Adoptions"
         },
         'ar_SA': {
+          "resuming_adoption_charity_would_you_like_to_continue": "استئناف هذه المؤسسة الخيرية سيجعلها مرئية للمانحين مرة أخرى. بمجرد استئناف هذه المؤسسة الخيرية ، يمكنك إلغاء تنشيطها مرة أخرى من صفحة المستفيدون. هل ترغب في الاستمرار؟",
           "no_inactive_adoptions_to_show" : "لا توجد عمليات تبني غير نشطة للعرض.",
           "please_enter_adoption_name" : "الرجاء إدخال اسم الاعتماد.",
           "edit_adoption" : "تحرير الاعتماد",
@@ -819,6 +823,7 @@ class Messages extends Translations {
           "adoptions" : "التبني"
         },
         'es_ES': {
+          "resuming_adoption_charity_would_you_like_to_continue": "Reanudar esta organización benéfica la hará visible para los donantes nuevamente. Una vez que reanude esta organización benéfica, puede desactivarla nuevamente desde la página Mis beneficiarios. ¿Te gustaria continuar?",
           "no_inactive_adoptions_to_show" : "No hay adopciones inactivas para mostrar.",
           "please_enter_adoption_name" : "Ingrese el nombre de adopción.",
           "edit_adoption" : "Editar adopción",

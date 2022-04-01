@@ -256,7 +256,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom:  TabBar(tabs: [Tab(text: 'Beneficiaries',), Tab(text: 'adoptions'.tr,)],),
+          bottom:  TabBar(tabs: [Tab(text: 'beneficiaries'.tr,), Tab(text: 'adoptions'.tr,)],),
           title:  Text('beneficiaries'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),

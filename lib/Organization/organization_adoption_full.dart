@@ -3,6 +3,7 @@ import 'package:donaid/Models/Adoption.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'edit_adoption.dart';
@@ -69,17 +70,14 @@ class _OrganizationAdoptionFullScreenState
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Are You Sure?'),
+            title:  Center(
+              child: Text('are_you_sure?'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            // TODO: edit this message
-            content: const Text(
-                'Stopping this charity will make it not visible to donors. Once you stop this charity '
-                'you can reactivate it from the Inactive Charities page. Would you like to continue'
-                'with stopping this charity?'),
+            content: Text(
+                'Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -88,7 +86,7 @@ class _OrganizationAdoptionFullScreenState
                     Navigator.pop(context);
                     _refreshAdoption();
                   },
-                  child: const Text('Yes'),
+                  child: Text('yes'.tr),
                 ),
               ),
               Center(
@@ -96,7 +94,7 @@ class _OrganizationAdoptionFullScreenState
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('No'),
+                  child: Text('no'.tr),
                 ),
               ),
             ],
@@ -110,17 +108,14 @@ class _OrganizationAdoptionFullScreenState
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(
-              child: Text('Are You Sure?'),
+            title:  Center(
+              child: Text('are_you_sure?'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            // TODO: edit this message
-            content: const Text(
-                'Resuming this charity will make it visible to donors again. Once you resume this charity '
-                'you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like '
-                'to continue?'),
+            content: Text(
+                'resuming_adoption_charity_would_you_like_to_continue'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -129,7 +124,7 @@ class _OrganizationAdoptionFullScreenState
                     Navigator.pop(context);
                     _refreshAdoption();
                   },
-                  child: const Text('Yes'),
+                  child: Text('yes'.tr),
                 ),
               ),
               Center(
@@ -137,7 +132,7 @@ class _OrganizationAdoptionFullScreenState
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('No'),
+                  child: Text('no'.tr),
                 ),
               ),
             ],
@@ -153,14 +148,14 @@ class _OrganizationAdoptionFullScreenState
         builder: (BuildContext context) {
           return AlertDialog(
             title:  Center(
-              child: Text('are_you_sure?'),
+              child: Text('are_you_sure?'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
             //doubt
             content: Text(
-                'Deleting this charity will completely remove it from the application. Would you like to continue?'),
+                'Deleting this charity will completely remove it from the application. Would you like to continue?'.tr),
             actions: [
               Center(
                 child: TextButton(
@@ -168,7 +163,7 @@ class _OrganizationAdoptionFullScreenState
                     _deleteAdoption();
                     Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
                   },
-                  child:  Text('yes'),
+                  child:  Text('yes'.tr),
                 ),
               ),
               Center(
@@ -176,7 +171,7 @@ class _OrganizationAdoptionFullScreenState
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('no'),
+                  child:  Text('no'.tr),
                 ),
               ),
             ],
@@ -251,9 +246,9 @@ class _OrganizationAdoptionFullScreenState
                                           borderRadius:
                                               BorderRadius.circular(32.0),
                                           child: MaterialButton(
-                                              child: const Text(
-                                                'Edit',
-                                                style: TextStyle(
+                                              child: Text(
+                                                'edit'.tr,
+                                                style: const TextStyle(
                                                   fontSize: 25,
                                                   color: Colors.white,
                                                 ),
@@ -279,9 +274,9 @@ class _OrganizationAdoptionFullScreenState
                                                 borderRadius:
                                                     BorderRadius.circular(32.0),
                                                 child: MaterialButton(
-                                                    child: const Text(
-                                                      'Stop Charity',
-                                                      style: TextStyle(
+                                                    child: Text(
+                                                      'stop_charity'.tr,
+                                                      style: const TextStyle(
                                                         fontSize: 25,
                                                         color: Colors.white,
                                                       ),
@@ -297,9 +292,9 @@ class _OrganizationAdoptionFullScreenState
                                                         BorderRadius.circular(
                                                             32.0),
                                                     child: MaterialButton(
-                                                        child: const Text(
-                                                          'Resume Charity',
-                                                          style: TextStyle(
+                                                        child: Text(
+                                                          'resume_charity'.tr,
+                                                          style: const TextStyle(
                                                             fontSize: 25,
                                                             color: Colors.white,
                                                           ),
@@ -315,8 +310,8 @@ Container(
       color: Colors.red,
       borderRadius: BorderRadius.circular(32.0),
       child: MaterialButton(
-          child: const Text(
-            'Delete',
+          child: Text(
+            'Delete'.tr,
             style: TextStyle(
               fontSize: 25,
               color: Colors.white,
@@ -338,8 +333,8 @@ Container(
                                                 borderRadius:
                                                     BorderRadius.circular(32.0),
                                                 child: MaterialButton(
-                                                    child: const Text(
-                                                      'Stop Charity',
+                                                    child: Text(
+                                                      'stop_charity'.tr,
                                                       style: TextStyle(
                                                         fontSize: 25,
                                                         color: Colors.white,
@@ -356,9 +351,9 @@ Container(
                                                         BorderRadius.circular(
                                                             32.0),
                                                     child: MaterialButton(
-                                                        child: const Text(
-                                                          'Resume Charity',
-                                                          style: TextStyle(
+                                                        child:  Text(
+                                                          'resume_charity'.tr,
+                                                          style: const TextStyle(
                                                             fontSize: 25,
                                                             color: Colors.white,
                                                           ),
@@ -372,10 +367,10 @@ Container(
                         ]
                       : [
                           const SizedBox(height: 50),
-                          const Center(
+                           Center(
                             child: Text(
-                              'This charity has reached it\'s goal!',
-                              style: TextStyle(
+                              'This charity has reached it\'s goal!'.tr,
+                              style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           )
