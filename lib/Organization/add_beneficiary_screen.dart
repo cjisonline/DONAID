@@ -90,7 +90,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   }
 
   Future<void> addAdoption(String category, String biography, double goalAmount,
-      String name, String endDateController) async {
+      String name) async {
     try {
       final docRef = await firestore.collection("Adoptions").add({});
       await firestore.collection("Adoptions").doc(docRef.id).set({
@@ -417,8 +417,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                     addAdoption(categoryController.text,
                                         biographyController.text,
                                         int.parse(goalAmountController.text).toDouble(),
-                                        nameController.text,
-                                        endDateController.text);
+                                        nameController.text);
                                   }
                                   else{
                                     addBeneficiary(categoryController.text,
