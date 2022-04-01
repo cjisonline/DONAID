@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Adoption.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EditAdoption extends StatefulWidget {
   Adoption adoption;
@@ -70,7 +71,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: const Text('Edit Adoption'),
+          title:  Text('edit_adoption'.tr),
           leadingWidth: 80,
           leading: TextButton(
             onPressed: () {
@@ -137,7 +138,7 @@ class _EditAdoptionState extends State<EditAdoption> {
               )),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter adoption name.';
+              return 'please_enter_adoption_name'.tr;
             }
             return null;
           },

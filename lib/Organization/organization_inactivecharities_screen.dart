@@ -375,7 +375,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
             ),
           );
         })
-        : const Center(child: Text('No inactive adoptions to show.', style: TextStyle(fontSize: 18),));
+        : Center(child: Text('no_inactive_adoptions_to_show'.tr, style: TextStyle(fontSize: 18),));
   }
   @override
   Widget build(BuildContext context) {
@@ -383,7 +383,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          bottom:  TabBar(tabs: [Tab(text: '_campaigns'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,), Tab(text: 'Adoptions',)],),
+          bottom:  TabBar(tabs: [Tab(text: 'campaigns'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,), Tab(text: 'adoptions'.tr,)],),
           title:  Text('inactive_charities'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),

@@ -315,9 +315,9 @@ Container(
       color: Colors.red,
       borderRadius: BorderRadius.circular(32.0),
       child: MaterialButton(
-          child: Text(
+          child: const Text(
             'Delete',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 25,
               color: Colors.white,
             ),

@@ -213,7 +213,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
               ),
             );
           })
-          : const Center(child: Text('No active adoptions to show.', style: TextStyle(fontSize: 18),)),
+          :  Center(child: Text('no_active_adoptions_to_show'.tr, style: TextStyle(fontSize: 18),)),
     );
   }
 
@@ -223,7 +223,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom: const TabBar(tabs: [Tab(text: 'Beneficiaries',), Tab(text: 'Adoptions',)],),
+          bottom:  TabBar(tabs: [Tab(text: 'beneficiaries'.tr,), Tab(text: 'adoptions'.tr,)],),
           title:  Text('my_beneficiaries'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),

@@ -335,8 +335,8 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            const Text(
-                              'Set beneficiary up for adoption: ',
+                             Text(
+                              'set_beneficiary_up_for_adoption'.tr,
                               style: TextStyle(fontSize: 17.0),
                             ),
                             Checkbox(

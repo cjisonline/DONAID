@@ -4,6 +4,16 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "no_inactive_adoptions_to_show" : "No inactive adoptions to show.",
+          "please_enter_adoption_name" : "Please enter adoption name.",
+          "edit_adoption" : "Edit Adoption",
+          "no_active_adoptions_to_show" : "No active adoptions to show.",
+          "monthly_donation_amount" : "Monthly Donation Amount",
+          "adopt" : "Adopt",
+          "monthly_amount" : "Monthly Amount: \$",
+          "cancel_adoption" : "Cancel Adoption",
+          "my_adoptions" : "My Adoptions",
+          "set_beneficiary_up_for_adoption"  : "Set beneficiary up for adoption: ",
           "No new visits":"No new visits",
           "Did this visit result in a donation?":"Did this visit result in a donation?",
           "Gateway Visits":"Gateway Visits",
@@ -249,8 +259,19 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               "Check Your Email to Reset Password",
           "forgot_password!": "Forgot Password?",
+          "adoptions" : "Adoptions"
         },
         'fr_FR': {
+          "no_inactive_adoptions_to_show" : "Aucune adoption inactive à afficher.",
+          "please_enter_adoption_name" : "Veuillez entrer le nom d'adoption.",
+          "edit_adoption" : "Modifier l'adoption",
+          "no_active_adoptions_to_show" : "Aucune adoption active à afficher.",
+          "monthly_donation_amount" : "Montant du don mensuel",
+          "adopt" : "Adopter",
+          "monthly_amount" : "Montant mensuel: \$",
+          "cancel_adoption" : "Annuler l'adoption",
+          "my_adoptions" : "Mes adoptions",
+          "set_beneficiary_up_for_adoption"  : "Configurer le bénéficiaire pour l'adoption: ",
           "No new visits":"Pas de nouvelles visites",
           "Did this visit result in a donation?":"Cette visite a-t-elle donné lieu à un don?",
           "Gateway Visits":"Visites de passerelle",
@@ -509,8 +530,19 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               "Vérifiez votre courriel pour réinitialiser votre mot de passe",
           "forgot_password!": "Mot de passe oublié?",
+          "adoptions" : "Adoptions"
         },
         'ar_SA': {
+          "no_inactive_adoptions_to_show" : "لا توجد عمليات تبني غير نشطة للعرض.",
+          "please_enter_adoption_name" : "الرجاء إدخال اسم الاعتماد.",
+          "edit_adoption" : "تحرير الاعتماد",
+          "no_active_adoptions_to_show" : "لا توجد عمليات تبني نشطة لعرضها.",
+          "monthly_donation_amount" : "مبلغ التبرع الشهري",
+          "adopt" : "يتبنى",
+          "monthly_amount" : "المبلغ الشهري: \$",
+          "cancel_adoption" : "إلغاء الاعتماد",
+          "my_adoptions" : "عمليات التبني الخاصة بي",
+          "set_beneficiary_up_for_adoption"  : "تعيين المستفيد للتبني: ",
           "No new visits":"لا توجد زيارات جديدة",
           "Did this visit result in a donation?":"هل أسفرت هذه الزيارة عن تبرع؟",
           "Gateway Visits":"زيارات البوابة",
@@ -753,8 +785,19 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               " تحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور",
           "forgot_password!": " هل نسيت كلمة السر؟",
+          "adoptions" : "التبني"
         },
         'es_ES': {
+          "no_inactive_adoptions_to_show" : "No hay adopciones inactivas para mostrar.",
+          "please_enter_adoption_name" : "Ingrese el nombre de adopción.",
+          "edit_adoption" : "Editar adopción",
+          "no_active_adoptions_to_show" : "No hay adopciones activas para mostrar.",
+          "monthly_donation_amount" : "Cantidad de donación mensual",
+          "adopt" : "Adoptar",
+          "monthly_amount" : "Cantidad mensual: \$",
+          "cancel_adoption" : "Cancelar Adopción",
+          "my_adoptions" : "Mis adopciones",
+          "set_beneficiary_up_for_adoption"  : "Establecer beneficiario para adopción: ",
           "No new visits":"No hay nuevas visitas",
           "Did this visit result in a donation?":"¿Esta visita resultó en una donación?",
           "Gateway Visits":"Visitas a la puerta de enlace",
@@ -1017,6 +1060,7 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               "Revise su correo electrónico para restablecer la contraseña",
           "forgot_password!": "¿Has olvidado tu contraseña?",
+          "adoptions" : "Adopciones"
         }
       };
 }

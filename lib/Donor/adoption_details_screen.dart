@@ -4,6 +4,7 @@ import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navig
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class AdoptionDetailsScreen extends StatefulWidget {
@@ -103,8 +104,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content: const Text('Are you sure you want to cancel this adoption '
-                'you can readopt this beneficiary from the Beneficiaries page. Would you like to continue'
+            content: const Text('Are you sure you want to cancel this adoption? '
+                'You can readopt this beneficiary from the Beneficiaries page. Would you like to continue'
                 ' with canceling this adoption?'),
             actions: [
               Center(
@@ -201,7 +202,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'Monthly Amount: \$' +
+                                      'monthly_amount'.tr +
                                           f.format(monthlyAmount),
                                       style: TextStyle(fontSize: 18),
                                     ),
@@ -212,8 +213,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                     color: Colors.red,
                                     borderRadius: BorderRadius.circular(32.0),
                                     child: MaterialButton(
-                                        child: const Text(
-                                          'Cancel Adoption',
+                                        child: Text(
+                                          'cancel_adoption'.tr,
                                           style: TextStyle(
                                             fontSize: 25,
                                             color: Colors.white,
@@ -264,7 +265,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                       child: RichText(
                                                           text: TextSpan(
                                                         text:
-                                                            'Monthly Donation Amount',
+                                                            'monthly_donation_amount'.tr,
                                                         style: TextStyle(
                                                             color: Colors
                                                                 .grey[600],
@@ -288,9 +289,9 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                         borderRadius:
                                             BorderRadius.circular(32.0),
                                         child: MaterialButton(
-                                            child: const Text(
-                                              'Adopt',
-                                              style: TextStyle(
+                                            child: Text(
+                                              'adopt'.tr,
+                                              style: const TextStyle(
                                                 fontSize: 25,
                                                 color: Colors.white,
                                               ),
