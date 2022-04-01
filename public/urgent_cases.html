@@ -182,7 +182,6 @@ function approveTheUrgentCase(documentID, urgentCaseTitle, orgName, orgID) {
 
         else if (result.isDenied) {
             runDenialDialogue(documentID, urgentCaseTitle);
-            sendRejectionNotification(documentID, urgentCaseTitle, orgID);
         }
 
         else {
@@ -215,7 +214,6 @@ async function runDenialDialogue(documentID, urgentCaseTitle){
                 const docSet = setDoc(approvals, {
                     denialReason: deniedReason,
                     rejected: true
-                
                 }, { merge: true })
             
 
@@ -223,6 +221,7 @@ async function runDenialDialogue(documentID, urgentCaseTitle){
                     swal.fire('Denied!',
                     'Urgent case "' + urgentCaseTitle + '" is denied due to: ' + deniedReason + '',
                     'info').then(function () {
+                        sendRejectionNotification(documentID, urgentCaseTitle, orgID);
                         location.reload(); 
                     })
             
