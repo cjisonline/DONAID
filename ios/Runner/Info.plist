@@ -73,5 +73,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need the documents to verify legitmate organizations and avoid scammers</string>
+
+	
 </dict>
 </plist>
