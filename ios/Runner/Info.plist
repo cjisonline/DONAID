@@ -12,9 +12,13 @@
   </dict>
 </array>
 <key>FacebookAppID</key>
+
 <string>927307591318939</string>
+
 <key>FacebookClientToken</key>
+
 <string>208cae1b282a017646e9da18dc3006e6</string>
+
 <key>FacebookDisplayName</key>
 <string>donaid</string>
 <key>LSApplicationQueriesSchemes</key>
