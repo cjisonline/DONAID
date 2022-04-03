@@ -8,6 +8,7 @@
     <key>CFBundleURLSchemes</key>
     <array>
       <string>fb927307591318939</string>
+	  <string>com.googleusercontent.apps.240146097284-95kjd110p1humu9opvji0kts5p35paqr</string>
     </array>
   </dict>
 </array>
@@ -28,6 +29,7 @@
   <string>fbauth2</string>
   <string>fbshareextension</string>
 </array> 
+
 
 
 	<key>CFBundleDevelopmentRegion</key>
