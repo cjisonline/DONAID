@@ -22,7 +22,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   User? loggedInUser;
   var f = NumberFormat("###,##0.00", "en_US");
   bool isAdopted = false;
-  double monthlyAmount = 0;
+  int monthlyAmount = 0;
   String donorAdopteeID = "";
   final _formKey = GlobalKey<FormState>();
   var donorMap;
@@ -52,7 +52,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
         if (doc['donorMap'] != null &&
             doc['donorMap'].containsKey(_auth.currentUser?.uid)) {
           isAdopted = true;
-          monthlyAmount = doc['donorMap'][_auth.currentUser?.uid].toDouble();
+          monthlyAmount = doc['donorMap'][_auth.currentUser?.uid].toInt();
           donorMap = doc['donorMap'];
           widget.adoption.name = doc['name'];
           widget.adoption.biography = doc['biography'];
@@ -95,21 +95,21 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
 
   Future<Map<String, dynamic>> _createCustomer() async {
     final body = {
-      'description':'new customer'
+      'description':'New customer'
     };
     var response = await http.post(
         Uri.https('donaidmobileapp.herokuapp.com','/create-new-customer'),
         body: jsonEncode(body),
         headers: {'Content-Type':'application/json'}
     );
-
+    print('CREATE CUSTOMER RESPONSE: '+response.statusCode.toString());
     if (response.statusCode == 200) {
-      var docRef = await _firestore.collection('StripeCustomersMap').add({});
+      var docRef = await _firestore.collection('StripeSubscriptions').add({});
 
-      await _firestore.collection('StripeCustomersMap').doc(docRef.id).set({
+      await _firestore.collection('StripeSubscriptions').doc(docRef.id).set({
         'id': docRef.id,
         'donorID': loggedInUser!.uid,
-        'customerID': json.decode(response.body)['id']
+        'customerID': json.decode(response.body)['id'],
       });
 
       return json.decode(response.body);
@@ -122,11 +122,10 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   Future<Map<String, dynamic>> _createPaymentMethod({required String number,required String expMonth,required String expYear,required String cvc}) async {
 
     final body = {
-      'type': 'card',
-      'card[number]': '$number',
-      'card[exp_month]': '$expMonth',
-      'card[exp_year]': '$expYear',
-      'card[cvc]': '$cvc',
+      'number': '$number',
+      'exp_month': '$expMonth',
+      'exp_year': '$expYear',
+      'cvc': '$cvc',
     };
 
     var response = await http.post(
@@ -145,6 +144,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   Future<Map<String, dynamic>> _attachPaymentMethod(String paymentMethodId, String customerId) async {
     final body = {
       'customer': customerId,
+      'paymentMethod': paymentMethodId
     };
 
     var response = await http.post(
@@ -162,14 +162,16 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
 
   Future<Map<String, dynamic>> _updateCustomer(String paymentMethodId, String customerId) async {
     final body = {
-      'invoice_settings[default_payment_method]': paymentMethodId,
+      'customer': customerId,
+      'default_payment_method': paymentMethodId,
     };
 
     var response = await http.post(
-      Uri.https('donaidmobileapp.herokuapp.com','/attach-payment-method'),
+      Uri.https('donaidmobileapp.herokuapp.com','/update-customer'),
       headers: {'Content-Type':'application/json'},
       body: jsonEncode(body),
     );
+    print('UPDATE CUSTOMER RESPONSE: '+response.statusCode.toString());
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -179,16 +181,23 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   }
 
   Future<Map<String, dynamic>> _createSubscriptions(String customerId) async {
-    final String url = 'https://api.stripe.com/v1/subscriptions';
 
     Map<String, dynamic> body = {
       'customer': customerId,
-      'items[0][price]': calculateAmount(monthlyAmount.toString()),
+      'quantity': monthlyAmount,
     };
 
-    var response =
-    await http.post(Uri.https('donaidmobileapp.herokuapp.com','/create-subscription'), headers: {'Content-Type':'application/json'}, body: jsonEncode(body));
+    var response = await http.post(
+        Uri.https('donaidmobileapp.herokuapp.com','/create-subscription'),
+        headers: {'Content-Type':'application/json'},
+        body: jsonEncode(body)
+    );
+
+    print('SUBSCRIPTION RESPONSE: '+response.statusCode.toString());
     if (response.statusCode == 200) {
+      print('SUBSCRIPTION ID: '+json.decode(response.body)['id']);
+      //TODO: add beneficiary ID and subscription ID to StripeSubscriptions
+
       return json.decode(response.body);
     } else {
       print(json.decode(response.body));
@@ -197,8 +206,9 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   }
 
   _subscribe() async{
-    var ret = await _firestore.collection('StripeCustomersMap').where('donorID', isEqualTo: loggedInUser!.uid).get();
+    var ret = await _firestore.collection('StripeSubscriptions').where('donorID', isEqualTo: loggedInUser!.uid).get();
     if(ret.docs.length > 0) {
+      print("IN THE IF BLOCK");
       //TODO: subscribe this customer
       final donorCustomerRecord = ret.docs.first;
       final customerID = donorCustomerRecord['customerID'];
@@ -206,9 +216,12 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
 
     }
     else{
+      print("IN THE ELSE BLOCK");
       //TODO: create new subscription
       final _customer = await _createCustomer();
+      print('CUSTOMER ID: '+_customer['id']);
       final _paymentMethod = await _createPaymentMethod(number: '4242424242424242', expMonth: '03', expYear: '23', cvc: '123');
+      print('PAYMENT METHOD ID: '+_paymentMethod['id']);
       await _attachPaymentMethod(_paymentMethod['id'], _customer['id']);
       await _updateCustomer(_paymentMethod['id'], _customer['id']);
       await _createSubscriptions(_customer['id']).then((value) => _adoptBeneficiary());
@@ -255,6 +268,14 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
           );
         });
   }
+
+  calculateAmount(String amount) {
+    final price = (double.parse(amount)*100).toInt();
+    return price.toString();
+  }
+
+  bool isInteger(num value) =>
+      value is int || value == value.roundToDouble();
 
   _submitForm() {
     if (!_formKey.currentState!.validate()) {
@@ -362,21 +383,27 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.stretch,
                                             children: [
+                                              Center(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text('Adoptions can only be made in whole dollar amounts.'),
+                                                ),
+                                              ),
                                               Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: TextFormField(
                                                   onSaved: (value) {
                                                     monthlyAmount =
-                                                        double.parse(value!);
+                                                        int.parse(value!);
                                                   },
                                                   validator: (value) {
-                                                    if (value!.isEmpty) {
+                                                    if (value!.isEmpty || !isInteger(double.parse(value))) {
                                                       return 'Please enter a valid payment amount.';
                                                     } else if (double.parse(
                                                             value) <
                                                         0.50) {
-                                                      return 'Please provide a monthly donation amount minimum of \$0.50';
+                                                      return 'Please provide a monthly donation amount minimum of \$1';
                                                     } else {
                                                       return null;
                                                     }
@@ -456,8 +483,5 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     );
   }
 
-  calculateAmount(String amount) {
-    final price = (double.parse(amount)*100).toInt();
-    return price.toString();
-  }
+
 }
