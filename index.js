@@ -80,8 +80,6 @@ res.send({
 
 app.post("/create-subscription", async (req, res) => {
   // Create a PaymentIntent with the order amount and currency
-  const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
-
 const subscription = await stripe.subscriptions.create({
   customer: req.body.customer,
   items: [
