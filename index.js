@@ -90,7 +90,7 @@ const subscription = await stripe.subscriptions.create({
   ],
 });
 
-req.send({
+res.send({
   id: subscription.id
 })
 });
