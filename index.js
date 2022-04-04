@@ -22,4 +22,78 @@ app.post("/create-payment-intent", async (req, res) => {
   });
 });
 
+app.post("/create-new-customer", async (req, res) => {
+  // Create a PaymentIntent with the order amount and currency
+  const customer = await stripe.customers.create({
+    description: 'New customer',
+  });
+
+res.send({
+  id: customer.id,
+});
+});
+
+app.post("/create-payment-method", async (req, res) => {
+  // Create a PaymentIntent with the order amount and currency
+const paymentMethod = await stripe.paymentMethods.create({
+  type: 'card',
+  card:{
+    number: req.body.number,
+    exp_month: req.body.exp_month,
+    exp_year: req.body.exp_month,
+    cvc: req.body.cvc
+  }
+});
+
+res.send({
+  id: paymentMethod.id,
+});
+});
+
+app.post("/attach-payment-method", async (req, res) => {
+  // Create a PaymentIntent with the order amount and currency
+  const paymentMethod = await stripe.paymentMethods.attach(
+    req.body.paymentMethod,
+    {customer: req.body.customer}
+  );
+
+res.send({
+  id: paymentMethod.id,
+});
+});
+
+app.post("/update-customer", async (req, res) => {
+  // Create a PaymentIntent with the order amount and currency
+  const paymentMethod = await stripe.paymentMethods.attach(
+    req.body.customer,
+    {
+      invoice_settings:{
+        default_payment_method: req.body.default_payment_method
+      }
+    }
+  );
+
+res.send({
+  id: paymentMethod.id,
+});
+});
+
+app.post("/create-subscription", async (req, res) => {
+  // Create a PaymentIntent with the order amount and currency
+  const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+
+const subscription = await stripe.subscriptions.create({
+  customer: req.body.customer,
+  items: [
+    {price: req.body.price},
+  ],
+});
+
+req.send({
+  id: subscription.id
+})
+});
+
+
+
 app.listen(port, () => console.log("Server on port 4242"));
