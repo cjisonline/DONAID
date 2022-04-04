@@ -73,7 +73,6 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   Future<void> _adoptBeneficiary() async {
     try {
       // update adoption and add entry to donorMap
-      _subscribe(); //create stripe subscription
       _firestore
           .collection('Adoptions')
           .doc(widget.adoption.id)
@@ -203,7 +202,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
       //TODO: subscribe this customer
       final donorCustomerRecord = ret.docs.first;
       final customerID = donorCustomerRecord['customerID'];
-      await _createSubscriptions(customerID);
+      await _createSubscriptions(customerID).then((value) => _adoptBeneficiary());
 
     }
     else{
@@ -212,7 +211,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
       final _paymentMethod = await _createPaymentMethod(number: '4242424242424242', expMonth: '03', expYear: '23', cvc: '123');
       await _attachPaymentMethod(_paymentMethod['id'], _customer['id']);
       await _updateCustomer(_paymentMethod['id'], _customer['id']);
-      await _createSubscriptions(_customer['id']);
+      await _createSubscriptions(_customer['id']).then((value) => _adoptBeneficiary());
     }
   }
 
@@ -425,7 +424,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                               ),
                                               onPressed: () async {
                                                 _submitForm();
-                                                _adoptBeneficiary()
+                                                _subscribe()
                                                     .whenComplete(() {
                                                   _getAdoption();
                                                 });
