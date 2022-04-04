@@ -74,6 +74,12 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need the documents to verify legitmate organizations and avoid scammers</string>
+	
+	<key>NSCameraUsageDescription</key>
+	<string>We need the documents to verify legitmate organizations and avoid scammers</string>
+
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need the documents to verify legitmate organizations and avoid scammers</string>
 
