@@ -64,7 +64,7 @@ res.send({
 
 app.post("/update-customer", async (req, res) => {
   // Create a PaymentIntent with the order amount and currency
-  const paymentMethod = await stripe.paymentMethods.attach(
+  const paymentMethod = await stripe.customers.update(
     req.body.customer,
     {
       invoice_settings:{
