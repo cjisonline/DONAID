@@ -86,7 +86,7 @@ const subscription = await stripe.subscriptions.create({
   customer: req.body.customer,
   items: [
     {
-      price: price_1Kky9GEvfimLlZrsVltR7krH,
+      price: 'price_1Kky9GEvfimLlZrsVltR7krH',
       quantity: req.body.quantity
     },
   ],
