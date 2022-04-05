@@ -206,6 +206,27 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
       }
     }
 
+  Future<Map<String, dynamic>> _cancelSubscription(String subscriptionId) async {
+    Map<String, dynamic> body = {
+      'subscription': subscriptionId,
+    };
+
+    var response = await http.post(
+        Uri.https('donaidmobileapp.herokuapp.com', '/cancel-subscription'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body)
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      print(json.decode(response.body));
+      throw 'Failed to cancel subscription.';
+    }
+  }
+
+
+
     _subscribe() async {
       var ret = await _firestore.collection('StripeAccounts').where(
           'donorID', isEqualTo: loggedInUser!.uid).get();
@@ -246,6 +267,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
           .toList()
           .first;
 
+
+      await _cancelSubscription(cancelSubscription.subscriptionsID);
 
       deleteSubscription(loggedInUser!.uid, cancelSubscription);
       await _firestore.collection('Adoptions').doc(widget.adoption.id).update({
