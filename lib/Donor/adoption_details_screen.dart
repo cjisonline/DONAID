@@ -330,13 +330,6 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     bool isInteger(num value) =>
         value is int || value == value.roundToDouble();
 
-    _submitForm() {
-      if (!_formKey.currentState!.validate()) {
-        return;
-      }
-      _formKey.currentState!.save();
-    }
-
     _beneficiaryFullBody() {
       return ModalProgressHUD(
         inAsyncCall: showLoadingSpinner,
@@ -478,7 +471,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                   child: RichText(
                                                       text: TextSpan(
                                                         text:
-                                                        'monthly_donation_amount.tr',
+                                                        'monthly_donation_amount'.tr,
                                                         style: TextStyle(
                                                             color: Colors
                                                                 .grey[600],
@@ -735,14 +728,15 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                           ),
                                         ),
                                         onPressed: () async {
-                                          _submitForm();
-                                          setState(() {
-                                            showLoadingSpinner=true;
-                                          });
-                                          await _subscribe();
-                                          setState(() {
-                                            showLoadingSpinner=false;
-                                          });
+                                          if(_formKey.currentState!.validate()){
+                                            setState(() {
+                                              showLoadingSpinner=true;
+                                            });
+                                            await _subscribe();
+                                            setState(() {
+                                              showLoadingSpinner=false;
+                                            });
+                                          }
                                         }))
                               ],
                             )
