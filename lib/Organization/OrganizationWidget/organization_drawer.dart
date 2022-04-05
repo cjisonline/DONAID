@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/message.dart';
 import 'package:donaid/Organization/gateway_visits.dart';
+import 'package:donaid/Services/chatServices.dart';
 import 'package:donaid/contactUs.dart';
 import 'package:donaid/Organization/settings.dart';
 import 'package:donaid/globals.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get.dart';
-
 
 import '../../home_screen.dart';
 import '../organization_profile.dart';
@@ -27,18 +27,21 @@ class OrganizationDrawer extends StatefulWidget {
 class _OrganizationDrawerState extends State<OrganizationDrawer> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
-  String country="";
-  String organizationName="";
-  String profilePictureDownloadURL="";
+  String country = "";
+  String organizationName = "";
+  String profilePictureDownloadURL = "";
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _getOrg();
   }
 
-  _getOrg() async{
-    var ret = await _firestore.collection('OrganizationUsers').where('uid', isEqualTo: _auth.currentUser!.uid).get();
+  _getOrg() async {
+    var ret = await _firestore
+        .collection('OrganizationUsers')
+        .where('uid', isEqualTo: _auth.currentUser!.uid)
+        .get();
     var doc = ret.docs.first;
     country = doc.data()['country'];
     organizationName = doc.data()['organizationName'];
@@ -48,10 +51,12 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return country == "United States" ? _buildUSDrawer() : _buildForeignDrawer();
+    return country == "United States"
+        ? _buildUSDrawer()
+        : _buildForeignDrawer();
   }
 
-  _buildUSDrawer(){
+  _buildUSDrawer() {
     return Container(
       child: Drawer(
         child: ListView(
@@ -82,7 +87,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),
-              title:  Text("profile".tr),
+              title: Text("profile".tr),
               onTap: () {
                 Navigator.pushNamed(context, OrganizationProfile.id);
               },
@@ -91,11 +96,10 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               leading: Icon(Icons.pending),
               title: Text("pending_approvals".tr),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context){
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return PendingApprovalsAndDenials();
-                })).then((value){
-                  setState(() {
-                  });
+                })).then((value) {
+                  setState(() {});
                 });
               },
             ),
@@ -103,11 +107,10 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               leading: Icon(Icons.watch_later_outlined),
               title: Text("expired_charities".tr),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context){
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return ExpiredCharitiesScreen();
-                })).then((value){
-                  setState(() {
-                  });
+                })).then((value) {
+                  setState(() {});
                 });
               },
             ),
@@ -115,9 +118,9 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               leading: Icon(Icons.not_interested),
               title: Text("inactive_charities".tr),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context){
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return InactiveCharitiesScreen();
-                })).then((value){
+                })).then((value) {
                   setState(() {});
                 });
               },
@@ -140,7 +143,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                       return SimpleDialog(
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(15))),
+                                  BorderRadius.all(Radius.circular(15))),
                           title: Center(child: Text("select_language".tr)),
                           children: <Widget>[
                             SimpleDialogOption(
@@ -179,6 +182,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               leading: Icon(Icons.logout),
               title: Text("logout".tr),
               onTap: () {
+                if (chatListener != null) chatListener.cancel();
+                chatListener = null;
                 FirebaseAuth.instance.signOut();
                 MyGlobals.allMessages = <MessageModel>[].obs;
                 Navigator.of(context)
@@ -191,7 +196,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
     );
   }
 
-  _buildForeignDrawer(){
+  _buildForeignDrawer() {
     return Container(
       child: Drawer(
         child: ListView(
@@ -223,14 +228,14 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),
-              title:  Text("profile".tr),
+              title: Text("profile".tr),
               onTap: () {
                 Navigator.pushNamed(context, OrganizationProfile.id);
               },
             ),
             ListTile(
               leading: const Icon(Icons.link),
-              title:  Text("Gateway Visits".tr),
+              title: Text("Gateway Visits".tr),
               onTap: () {
                 Navigator.pushNamed(context, GatewayVisits.id);
               },
@@ -239,11 +244,10 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               leading: Icon(Icons.pending),
               title: Text("pending_approvals".tr),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context){
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return PendingApprovalsAndDenials();
-                })).then((value){
-                  setState(() {
-                  });
+                })).then((value) {
+                  setState(() {});
                 });
               },
             ),
@@ -251,11 +255,10 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               leading: Icon(Icons.watch_later_outlined),
               title: Text("expired_charities".tr),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context){
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return ExpiredCharitiesScreen();
-                })).then((value){
-                  setState(() {
-                  });
+                })).then((value) {
+                  setState(() {});
                 });
               },
             ),
@@ -263,9 +266,9 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               leading: Icon(Icons.not_interested),
               title: Text("inactive_charities".tr),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context){
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return InactiveCharitiesScreen();
-                })).then((value){
+                })).then((value) {
                   setState(() {});
                 });
               },
@@ -280,7 +283,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                       return SimpleDialog(
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(15))),
+                                  BorderRadius.all(Radius.circular(15))),
                           title: Center(child: Text("select_language".tr)),
                           children: <Widget>[
                             SimpleDialogOption(
