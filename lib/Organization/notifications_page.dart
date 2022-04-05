@@ -21,6 +21,8 @@ class OrganizationNotificationPage extends StatefulWidget {
 class _OrganizationNotificationPageState extends State<OrganizationNotificationPage> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  var deletedNotification;
+  var deletedIndex;
   List<PushNotification> notifications=[];
 
   @override
@@ -43,6 +45,7 @@ class _OrganizationNotificationPageState extends State<OrganizationNotificationP
         id: doc.data()['id'],
         organizationID: doc.data()['organizationID'],
         active: doc.data()['active'],
+        rejected: doc.data()['rejected'],
         approved: doc.data()['approved']
     );
 
@@ -81,9 +84,26 @@ class _OrganizationNotificationPageState extends State<OrganizationNotificationP
               Dismissible(
                 key: UniqueKey(),
                 onDismissed: (direction){
+                  deletedIndex = index;
+                  deletedNotification = notifications[index];
+
                   deleteNotification(_auth.currentUser?.uid, notifications[index]);
                   notifications.removeAt(index);
                   setState(() {});
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Notification deleted.'),
+                        duration: Duration(seconds:3),
+                        action: SnackBarAction(
+                            label: 'UNDO',
+                            onPressed: () async{
+                              undoDeleteNotification(_auth.currentUser?.uid, deletedNotification);
+                              setState(() {
+                                notifications.insert(deletedIndex, deletedNotification);
+                              });
+
+                            }),
+                      ));
                 },
                 child: GestureDetector(
                   onTap: (){

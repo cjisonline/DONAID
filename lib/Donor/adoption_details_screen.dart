@@ -7,6 +7,7 @@ import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navig
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -285,8 +286,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Center(
-                child: Text('Are You Sure?'),
+              title: Center(
+                child: Text('Are You Sure?'.tr),
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(32.0),
@@ -310,7 +311,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                       });
 
                     },
-                    child: const Text('Yes'),
+                    child: Text('yes'.tr),
                   ),
                 ),
                 Center(
@@ -318,7 +319,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('No'),
+                    child: Text('no'.tr),
                   ),
                 ),
               ],
@@ -405,7 +406,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'Monthly Amount: \$' +
+                                      'monthly_amount'.tr +
                                           f.format(monthlyAmount),
                                       style: TextStyle(fontSize: 18),
                                     ),
@@ -416,8 +417,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                     color: Colors.red,
                                     borderRadius: BorderRadius.circular(32.0),
                                     child: MaterialButton(
-                                        child: const Text(
-                                          'Cancel Adoption',
+                                        child: Text(
+                                          'cancel_adoption'.tr,
                                           style: TextStyle(
                                             fontSize: 25,
                                             color: Colors.white,
@@ -458,11 +459,11 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                             validator: (value) {
                                               if (value!.isEmpty || !isInteger(
                                                   double.parse(value))) {
-                                                return 'Please enter a valid payment amount.';
+                                                return 'please_enter_a_valid_payment_amount'.tr;
                                               } else if (double.parse(
                                                   value) <
                                                   0.50) {
-                                                return 'Please provide a monthly donation amount minimum of \$1';
+                                                return 'please_provide_a_donation_minimum'.tr;
                                               } else {
                                                 return null;
                                               }
@@ -477,7 +478,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                   child: RichText(
                                                       text: TextSpan(
                                                         text:
-                                                        'Monthly Donation Amount',
+                                                        'monthly_donation_amount.tr',
                                                         style: TextStyle(
                                                             color: Colors
                                                                 .grey[600],
@@ -726,8 +727,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                     borderRadius:
                                     BorderRadius.circular(32.0),
                                     child: MaterialButton(
-                                        child: const Text(
-                                          'Adopt',
+                                        child: Text(
+                                          'adopt'.tr,
                                           style: TextStyle(
                                             fontSize: 25,
                                             color: Colors.white,

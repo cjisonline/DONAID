@@ -154,6 +154,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID'],
           active: element.data()['active'],
+          rejected: element.data()['rejected'],
           approved: element.data()['approved']);
       allUrgentCases.add(urgentCase);
       urgentCases.add(urgentCase);
@@ -358,6 +359,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
         id: doc.data()['id'],
         organizationID: doc.data()['organizationID'],
         active: doc.data()['active'],
+        rejected: doc.data()['rejected'],
         approved: doc.data()['approved']);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return (UrgentCaseDonateScreen(urgentCase));

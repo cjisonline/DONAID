@@ -138,11 +138,15 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _getFavorite() async {
-    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
-      setState(() {
-        pointlist = List.from(value['favoriteList']);
+    if(loggedInUser?.email != null) {
+      await _firestore.collection("Favorite").doc(loggedInUser!.uid)
+          .get()
+          .then((value) {
+        setState(() {
+          pointlist = List.from(value['favoriteList']);
+        });
       });
-    });
+    }
   }
 
 
@@ -220,6 +224,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID'],
           active: element.data()['active'],
+          rejected: element.data()['rejected'],
           approved: element.data()['approved']
       );
       urgentCases.add(urgentCase);

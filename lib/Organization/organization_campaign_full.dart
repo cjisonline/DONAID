@@ -221,7 +221,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+                children: (widget.campaign.amountRaised < widget.campaign.goalAmount) ? [
                   Container(
                       padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
                       child: Material(
@@ -312,6 +312,20 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
                               _deleteCharityConfirm();
                             }))
                   : Container()),
+                ]
+                  : [
+                    SizedBox(
+                      height:50
+                    ),
+                    Center(
+                      child: Text(
+                        'This charity has reached it\'s goal!'.tr,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    )
                 ],
               ),
             ])

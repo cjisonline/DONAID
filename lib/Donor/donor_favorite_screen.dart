@@ -131,6 +131,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
           id: element.data()['id'],
           organizationID: element.data()['organizationID'],
           active: element.data()['active'],
+          rejected: element.data()['rejected'],
           approved: element.data()['approved']);
       urgentCases.add(urgentCase);
 
@@ -185,7 +186,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
         "charityType": "Beneficiary",
         "name": beneficiaries[i].name,
         "id": beneficiaries[i].id,
-        "description": campaigns[i].description,
+        "description": beneficiaries[i].biography,
 
       });
     }
@@ -455,6 +456,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
         id: doc.data()['id'],
         organizationID: doc.data()['organizationID'],
         active: doc.data()['active'],
+        rejected: doc.data()['rejected'],
         approved: doc.data()['approved']);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return (UrgentCaseDonateScreen(urgentCase));

@@ -4,6 +4,7 @@ import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
 import 'package:donaid/Models/Donor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../Models/Adoption.dart';
 import 'adoption_details_screen.dart';
@@ -142,8 +143,8 @@ class _MyAdoptionsState extends State<MyAdoptions> {
               ),
             );
           })
-          : const Center(child: Text(
-        'No active adoptions to show.', style: TextStyle(fontSize: 18),)),
+          :  Center(child: Text(
+        'no_active_adoptions_to_show'.tr, style: TextStyle(fontSize: 18),)),
     );
   }
 
@@ -152,7 +153,7 @@ class _MyAdoptionsState extends State<MyAdoptions> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Adoptions'),
+        title: Text('my_adoptions'.tr),
       ),
       drawer: const DonorDrawer(),
       body: _body(),

@@ -63,6 +63,12 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
     return Scaffold(
       appBar: AppBar(
           title:  Text('profile'.tr),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
           actions: [
             TextButton(
               onPressed: () {

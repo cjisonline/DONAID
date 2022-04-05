@@ -52,6 +52,7 @@ class _DonorDrawerState extends State<DonorDrawer> {
                 Navigator.pushNamed(context, DonorSettingsPage.id);
               },
             ),
+            if (FirebaseAuth.instance.currentUser?.email != null)
             ListTile(
               leading: const Icon(Icons.account_circle),
               title: Text("profile".tr),
@@ -59,6 +60,7 @@ class _DonorDrawerState extends State<DonorDrawer> {
                 Navigator.pushNamed(context, DonorProfile.id);
               },
             ),
+            if (FirebaseAuth.instance.currentUser?.email != null)
             ListTile(
               leading: const Icon(Icons.favorite),
               title: Text("My Favorites".tr),
@@ -66,16 +68,17 @@ class _DonorDrawerState extends State<DonorDrawer> {
                 Navigator.pushNamed(context, DonorFavoritePage.id);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.history),
-              title: Text("donation_history".tr),
-              onTap: () {
-                Navigator.pushNamed(context, DonationHistory.id);
-              },
-            ),
+            if(FirebaseAuth.instance.currentUser?.email != null)
+              ListTile(
+                leading: const Icon(Icons.history),
+                title: Text("donation_history".tr),
+                onTap: () {
+                  Navigator.pushNamed(context, DonationHistory.id);
+                },
+              ),
             ListTile(
               leading: const Icon(Icons.person_sharp ),
-              title: const Text("My Adoptions"),
+              title: Text("my_adoptions".tr),
               onTap: () {
                 Navigator.pushNamed(context, MyAdoptions.id);
               },

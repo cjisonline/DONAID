@@ -74,7 +74,15 @@ class _HomeScreenState extends State<ContactUs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Contact Us".tr)),
+        appBar: AppBar(
+          title: Text("Contact Us".tr),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
+        ),
         backgroundColor: Colors.white,
         body: widget.type == "DonorUsers" ? _buildDonorBody() : _buildOrganizationBody(),
       drawer: widget.type == "DonorUsers" ? DonorDrawer() : OrganizationDrawer(),

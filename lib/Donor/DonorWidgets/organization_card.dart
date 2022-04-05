@@ -1,4 +1,5 @@
 
+import 'package:donaid/Donor/organization_full_details_screen.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,15 @@ class _OrganizationCardState extends State<OrganizationCard> {
         })).then((value){
           setState(() {
             
+          });
+        });
+      },
+      onLongPress: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return (OrganizationFullDetailsScreen(widget.organization));
+        })).then((value){
+          setState(() {
+
           });
         });
       },
