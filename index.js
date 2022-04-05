@@ -95,6 +95,16 @@ res.send({
 })
 });
 
+app.post("/cancel-subscription", async (req, res) => {
+const subscription = await stripe.subscriptions.del(
+  req.body.subscription
+);
+
+res.send({
+  id: subscription.id
+})
+});
+
 
 
 app.listen(port, () => console.log("Server on port 4242"));
