@@ -103,7 +103,6 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         'id': docRef.id,
         'organizationID': loggedInUser?.uid,
         'name': name,
-        'donorMap' : {}
       });
     } catch (e) {
       print(e);
