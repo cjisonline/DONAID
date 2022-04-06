@@ -76,25 +76,27 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
             content: Text(
                 "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.".tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () async{
-                    Navigator.pop(context);
-                    await makePayment();
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () async{
+                      Navigator.pop(context);
+                      await makePayment();
 
 
-                  },
-                  child: const Text('Yes'),
-                ),
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('No'),
+                  ),
+                ],
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('No'),
-                ),
-              ),
+
             ],
           );
         });

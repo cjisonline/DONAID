@@ -75,24 +75,25 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
             content: Text(
                 "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.".tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () async{
-                    Navigator.pop(context);
-                    await makePayment();
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () async{
+                      Navigator.pop(context);
+                      await makePayment();
 
 
-                  },
-                  child: const Text('Yes'),
-                ),
-              ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('No'),
-                ),
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('No'),
+                  ),
+                ],
               ),
             ],
           );
