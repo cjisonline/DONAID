@@ -94,6 +94,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
               await updateFavorites(loggedInUser!.uid.toString(),
                   widget.beneficiary.id.toString());
               await _getFavorite();
+
             },
           ),
         ),

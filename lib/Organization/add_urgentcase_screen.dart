@@ -85,7 +85,8 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
         'id': docRef.id,
         'organizationID': loggedInUser?.uid,
         'title': title,
-        'rejected':false
+        'rejected':false,
+        'denialReason':""
       });
     } catch (e) {
       print(e);

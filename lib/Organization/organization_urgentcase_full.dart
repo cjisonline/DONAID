@@ -79,24 +79,26 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
             content: Text(
                 'Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?'.tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    _stopUrgentCase();
-                    Navigator.pop(context);
-                    _refreshUrgentCase();
-                  },
-                  child:  Text('yes'.tr),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _stopUrgentCase();
+                      Navigator.pop(context);
+                      _refreshUrgentCase();
+                    },
+                    child:  Text('yes'.tr),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child:  Text('no'.tr),
+                  ),
+                ],
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:  Text('no'.tr),
-                ),
-              ),
+
             ],
           );
         });
@@ -118,23 +120,25 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
             content: Text(
                 'Deleting this charity will completely remove it from the application. Would you like to continue?'.tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    _deleteUrgentCase();
-                    Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
-                  },
-                  child:  Text('yes'.tr),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _deleteUrgentCase();
+                      Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
+                    },
+                    child:  Text('yes'.tr),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child:  Text('no'.tr),
+                  ),
+                ],
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:  Text('no'.tr),
-                ),
-              ),
+
             ],
           );
         });
@@ -156,148 +160,153 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
             content: Text(
                 'Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?'.tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    _resumeUrgentCase();
-                    Navigator.pop(context);
-                    _refreshUrgentCase();
-                  },
-                  child:  Text('yes'.tr),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _resumeUrgentCase();
+                      Navigator.pop(context);
+                      _refreshUrgentCase();
+                    },
+                    child:  Text('yes'.tr),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child:  Text('no'.tr),
+                  ),
+                ],
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:  Text('no'.tr),
-                ),
-              ),
+
             ],
           );
         });
   }
 
   _urgentCaseFullBody() {
-    return Center(
-        child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(
-                  height: 100,
-                  child: Image.asset('assets/DONAID_LOGO.png')
-              ),
-              Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
-              Text(widget.urgentCase.description, style: TextStyle(fontSize: 18),),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '\$'+f.format(widget.urgentCase.amountRaised),
-                        style: const TextStyle(color: Colors.black, fontSize: 18),
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Center(
+          child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                SizedBox(
+                    height: 100,
+                    child: Image.asset('assets/DONAID_LOGO.png')
+                ),
+                Text(widget.urgentCase.title, style: TextStyle(fontSize: 25)),
+                Text(widget.urgentCase.description, style: TextStyle(fontSize: 18),),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '\$'+f.format(widget.urgentCase.amountRaised),
+                          style: const TextStyle(color: Colors.black, fontSize: 18),
+                        ),
+                        Text(
+                          '\$'+f.format(widget.urgentCase.goalAmount),
+                          style: const TextStyle(color: Colors.black, fontSize: 18),
+                        ),
+                      ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      child: LinearProgressIndicator(
+                        backgroundColor: Colors.grey,
+                        valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.green),
+                        value:
+                        (widget.urgentCase.amountRaised / widget.urgentCase.goalAmount),
+                        minHeight: 25,
                       ),
-                      Text(
-                        '\$'+f.format(widget.urgentCase.goalAmount),
-                        style: const TextStyle(color: Colors.black, fontSize: 18),
-                      ),
-                    ]),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    child: LinearProgressIndicator(
-                      backgroundColor: Colors.grey,
-                      valueColor:
-                      const AlwaysStoppedAnimation<Color>(Colors.green),
-                      value:
-                      (widget.urgentCase.amountRaised / widget.urgentCase.goalAmount),
-                      minHeight: 25,
                     ),
                   ),
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                    child: (widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
-                        ? Material(
-                        elevation: 5.0,
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(32.0),
-                        child: MaterialButton(
-                            child:  Text(
-                              'stop_charity'.tr,
-                              style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.white,
-                              ),
-                            ),
-                            onPressed: () async {
-                              _stopCharityConfirm();
-
-                            }))
-                        : (!widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
-                        ? Material(
-                        elevation: 5.0,
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(32.0),
-                        child: MaterialButton(
-                            child:  Text(
-                              'resume_charity'.tr,
-                              style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.white,
-                              ),
-                            ),
-                            onPressed: () async {
-                              _resumeCharityConfirm();
-                            }))
-                        : (widget.urgentCase.endDate.compareTo(Timestamp.now()) < 0)
-                        ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Container(
-                          child:  Text(
-                            '_note:this_charity_has_expired'.tr,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                        : Container()),
-                  Container(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                      child: widget.urgentCase.amountRaised ==0 ? Material(
+                      child: (widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
+                          ? Material(
                           elevation: 5.0,
-                          color: Colors.red,
+                          color: Colors.orange,
                           borderRadius: BorderRadius.circular(32.0),
                           child: MaterialButton(
-                              child: Text(
-                                'Delete'.tr,
-                                style: const TextStyle(
+                              child:  Text(
+                                'stop_charity'.tr,
+                                style: TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,
                                 ),
                               ),
                               onPressed: () async {
-                                _deleteCharityConfirm();
+                                _stopCharityConfirm();
+
                               }))
-                          : Container()
-                  ),
-                ],
-              )
-            ])
-        ));
+                          : (!widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
+                          ? Material(
+                          elevation: 5.0,
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: MaterialButton(
+                              child:  Text(
+                                'resume_charity'.tr,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () async {
+                                _resumeCharityConfirm();
+                              }))
+                          : (widget.urgentCase.endDate.compareTo(Timestamp.now()) < 0)
+                          ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Container(
+                            child:  Text(
+                              '_note:this_charity_has_expired'.tr,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                          : Container()),
+                    Container(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                        child: widget.urgentCase.amountRaised ==0 ? Material(
+                            elevation: 5.0,
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(32.0),
+                            child: MaterialButton(
+                                child: Text(
+                                  'Delete'.tr,
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  _deleteCharityConfirm();
+                                }))
+                            : Container()
+                    ),
+                  ],
+                )
+              ])
+          )),
+    );
   }
 
   _urgentCaseDeniedBody() {
