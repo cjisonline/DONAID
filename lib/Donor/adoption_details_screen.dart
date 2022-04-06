@@ -445,9 +445,9 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                           padding:
                                           const EdgeInsets.all(8.0),
                                           child: TextFormField(
-                                            onSaved: (value) {
+                                            onChanged: (value) {
                                               monthlyAmount =
-                                                  int.parse(value!);
+                                                  int.parse(value);
                                             },
                                             validator: (value) {
                                               if (value!.isEmpty || !isInteger(
@@ -506,7 +506,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                 const EdgeInsets.all(8.0),
                                                 child: TextFormField(
                                                   maxLength: 16,
-                                                  onSaved: (value) {
+                                                  onChanged: (value) {
                                                     cardNumber = value.toString();
                                                   },
                                                   validator: (value) {
@@ -549,7 +549,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                       width: 110,
                                                       child: TextFormField(
                                                         maxLength: 2,
-                                                        onSaved: (value) {
+                                                        onChanged: (value) {
                                                           cardExpMonth = value.toString();
                                                         },
                                                         validator: (value) {
@@ -587,7 +587,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                       width: 110,
                                                       child: TextFormField(
                                                         maxLength: 2,
-                                                        onSaved: (value) {
+                                                        onChanged: (value) {
                                                           cardExpYear = value.toString();
                                                         },
                                                         validator: (value) {
@@ -625,7 +625,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                       width: 110,
                                                       child: TextFormField(
                                                         maxLength: 3,
-                                                        onSaved: (value) {
+                                                        onChanged: (value) {
                                                           cvc = value.toString();
                                                         },
                                                         validator: (value) {
@@ -669,9 +669,9 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                 padding:
                                                 const EdgeInsets.all(8.0),
                                                 child: TextFormField(
-                                                  onSaved: (value) {
+                                                  onChanged: (value) {
                                                     monthlyAmount =
-                                                        int.parse(value!);
+                                                        int.parse(value);
                                                   },
                                                   validator: (value) {
                                                     if (value!.isEmpty || !isInteger(
