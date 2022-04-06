@@ -79,24 +79,30 @@ class _OrganizationAdoptionFullScreenState
             content: Text(
                 'Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?'.tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    _stopAdoption();
-                    Navigator.pop(context);
-                    _refreshAdoption();
-                  },
-                  child: Text('yes'.tr),
-                ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        _stopAdoption();
+                        Navigator.pop(context);
+                        _refreshAdoption();
+                      },
+                      child: Text('yes'.tr),
+                    ),
+                  ),
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('no'.tr),
+                    ),
+                  ),
+                ]
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('no'.tr),
-                ),
-              ),
+
             ],
           );
         });
@@ -117,24 +123,30 @@ class _OrganizationAdoptionFullScreenState
             content: Text(
                 'resuming_adoption_charity_would_you_like_to_continue'.tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    _resumeAdoption();
-                    Navigator.pop(context);
-                    _refreshAdoption();
-                  },
-                  child: Text('yes'.tr),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        _resumeAdoption();
+                        Navigator.pop(context);
+                        _refreshAdoption();
+                      },
+                      child: Text('yes'.tr),
+                    ),
+                  ),
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('no'.tr),
+                    ),
+                  ),
+                ],
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('no'.tr),
-                ),
-              ),
+
             ],
           );
         });
@@ -157,23 +169,29 @@ class _OrganizationAdoptionFullScreenState
             content: Text(
                 'Deleting this charity will completely remove it from the application. Would you like to continue?'.tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    _deleteAdoption();
-                    Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
-                  },
-                  child:  Text('yes'.tr),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        _deleteAdoption();
+                        Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
+                      },
+                      child:  Text('yes'.tr),
+                    ),
+                  ),
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child:  Text('no'.tr),
+                    ),
+                  ),
+                ],
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:  Text('no'.tr),
-                ),
-              ),
+
             ],
           );
         });

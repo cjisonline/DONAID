@@ -292,36 +292,40 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(32.0),
               ),
-              content: const Text(
-                  'Are you sure you want to cancel this adoption '
-                      'you can readopt this beneficiary from the Beneficiaries page. Would you like to continue'
-                      ' with canceling this adoption?'),
+              content:  Text(
+                  'are_you_sure_you_want_to_cancel_this_adoption'.tr),
               actions: [
-                Center(
-                  child: TextButton(
-                    onPressed: () async {
-                      Navigator.pop(context);
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Center(
+                      child: TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
 
-                      setState(() {
-                        showLoadingSpinner=true;
-                      });
-                      await _unsubscribe();
-                      setState(() {
-                        showLoadingSpinner=false;
-                      });
+                          setState(() {
+                            showLoadingSpinner=true;
+                          });
+                          await _unsubscribe();
+                          setState(() {
+                            showLoadingSpinner=false;
+                          });
+                        },
+                        child: Text('yes'.tr),
+                      ),
+                    ),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('no'.tr),
+                      ),
+                    ),
+                  ],
+                ),
 
-                    },
-                    child: Text('yes'.tr),
-                  ),
-                ),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('no'.tr),
-                  ),
-                ),
+
               ],
             );
           });
@@ -438,7 +442,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Text(
-                                                'Adoptions can only be made in whole dollar amounts.'),
+                                                'adoptions_can_only_be_made_in_whole_dollar_amounts'.tr),
                                           ),
                                         ),
                                         Padding(
@@ -498,7 +502,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(8.0),
                                                   child: Text(
-                                                      'Adoptions can only be made in whole dollar amounts.'),
+                                                      'adoptions_can_only_be_made_in_whole_dollar_amounts'.tr),
                                                 ),
                                               ),
                                               Padding(
@@ -511,7 +515,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                   },
                                                   validator: (value) {
                                                     if (value!.isEmpty || value.length < 16) {
-                                                      return 'Please enter a valid card number.';
+                                                      return 'please_enter_a_valid_card_number'.tr;
                                                     }
                                                     else {
                                                       return null;
@@ -524,7 +528,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                         child: RichText(
                                                             text: TextSpan(
                                                               text:
-                                                              'Card Number',
+                                                              'card_number'.tr,
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .grey[600],
@@ -554,7 +558,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                         },
                                                         validator: (value) {
                                                           if (value!.isEmpty || value.length !=2) {
-                                                            return 'Please enter a valid expiration month.';
+                                                            return 'please_enter_a_valid_expiration_month'.tr;
                                                           }
                                                           else {
                                                             return null;
@@ -567,7 +571,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                               child: RichText(
                                                                   text: TextSpan(
                                                                     text:
-                                                                    'Month',
+                                                                    'month'.tr,
                                                                     style: TextStyle(
                                                                         color: Colors
                                                                             .grey[600],
@@ -592,7 +596,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                         },
                                                         validator: (value) {
                                                           if (value!.isEmpty || value.length !=2) {
-                                                            return 'Please enter a valid expiration year.';
+                                                            return 'please_enter_a_valid_expiration_year'.tr;
                                                           }
                                                           else {
                                                             return null;
@@ -605,7 +609,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                               child: RichText(
                                                                   text: TextSpan(
                                                                     text:
-                                                                    'Year',
+                                                                    'year'.tr,
                                                                     style: TextStyle(
                                                                         color: Colors
                                                                             .grey[600],
@@ -630,7 +634,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                         },
                                                         validator: (value) {
                                                           if (value!.isEmpty || value.length !=3) {
-                                                            return 'Please enter a valid cvc.';
+                                                            return 'please_enter_a_valid_cvc'.tr;
                                                           }
                                                           else {
                                                             return null;
@@ -676,11 +680,11 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                   validator: (value) {
                                                     if (value!.isEmpty || !isInteger(
                                                         double.parse(value))) {
-                                                      return 'Please enter a valid payment amount.';
+                                                      return 'please_enter_a_valid_payment_amount'.tr;
                                                     } else if (double.parse(
                                                         value) <
                                                         0.50) {
-                                                      return 'Please provide a monthly donation amount minimum of \$1';
+                                                      return 'please_provide_a_monthly_donation_amount_minimum_of_one_dollar'.tr;
                                                     } else {
                                                       return null;
                                                     }
@@ -695,7 +699,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                                         child: RichText(
                                                             text: TextSpan(
                                                               text:
-                                                              'Monthly Donation Amount',
+                                                              'monthly_donation_amount'.tr,
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .grey[600],

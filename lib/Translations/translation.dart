@@ -4,6 +4,16 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":"Please provide a monthly donation amount minimum of \$1",
+          "please_enter_a_valid_cvc":"Please enter a valid CVC.",
+          "year": "Year",
+          "please_enter_a_valid_expiration_year":"Please enter a valid expiration year.",
+          "month": "Month",
+          "please_enter_a_valid_expiration_month":"Please enter a valid expiration month.",
+          "card_number":"Card Number",
+          "please_enter_a_valid_card_number":"Please enter a valid card number.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":"Adoptions can only be made in whole dollar amounts.",
+          "are_you_sure_you_want_to_cancel_this_adoption":"Are you sure you want to cancel this adoption you can readopt this beneficiary from the Beneficiaries page. Would you like to continue with canceling this adoption?",
           "resuming_adoption_charity_would_you_like_to_continue": "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from My Beneficiaries page. Would you like to continue?",
           "no_inactive_adoptions_to_show" : "No inactive adoptions to show.",
           "please_enter_adoption_name" : "Please enter adoption name.",
@@ -274,6 +284,16 @@ class Messages extends Translations {
           "adoptions" : "Adoptions"
         },
         'fr_FR': {
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":"Veuillez fournir un montant de don mensuel minimum de 1 \$",
+          "please_enter_a_valid_cvc":"Veuillez entrer un CVC valide.",
+          "year": "An",
+          "please_enter_a_valid_expiration_year":"Veuillez saisir une année d'expiration valide.",
+          "month": "Mois",
+          "please_enter_a_valid_expiration_month":"Veuillez saisir un mois d'expiration valide.",
+          "card_number":"Numéro de carte",
+          "please_enter_a_valid_card_number":"S'il vous plaît entrez un numéro de carte valide.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":"Les adoptions ne peuvent être faites qu'en dollars entiers.",
+          "are_you_sure_you_want_to_cancel_this_adoption":"Êtes-vous sûr de vouloir annuler cette adoption, vous pouvez réadopter ce bénéficiaire à partir de la page Bénéficiaires. Voulez-vous continuer avec l'annulation de cette adoption ?",
           "resuming_adoption_charity_would_you_like_to_continue":
           "La reprise de cette association la rendra à nouveau visible pour les donateurs. Une fois que vous avez repris cet organisme de bienfaisance, vous pouvez le désactiver à nouveau à partir de la page Mes bénéficiaires. Voulez-vous continuer?",
           "no_inactive_adoptions_to_show" : "Aucune adoption inactive à afficher.",
@@ -557,6 +577,16 @@ class Messages extends Translations {
           "adoptions" : "Adoptions"
         },
         'ar_SA': {
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":"يرجى تقديم مبلغ تبرع شهري لا يقل عن 1 دولار",
+          "please_enter_a_valid_cvc":"الرجاء إدخال رمز التحقق من البطاقة (CVC) صالحًا.",
+          "year": "سنة",
+          "please_enter_a_valid_expiration_year":"الرجاء إدخال سنة انتهاء صالحة.",
+          "month": "شهر",
+          "please_enter_a_valid_expiration_month":"الرجاء إدخال شهر انتهاء صالح.",
+          "card_number":"رقم البطاقة",
+          "please_enter_a_valid_card_number":"الرجاء إدخال رقم بطاقة سارية المفعول.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":"لا يمكن إجراء عمليات التبني إلا بمبالغ كاملة بالدولار.",
+          "are_you_sure_you_want_to_cancel_this_adoption":"هل أنت متأكد أنك تريد إلغاء هذا التبني ، يمكنك إعادة اختيار هذا المستفيد من صفحة المستفيدين. هل ترغب في الاستمرار في إلغاء هذا التبني؟",
           "resuming_adoption_charity_would_you_like_to_continue": "استئناف هذه المؤسسة الخيرية سيجعلها مرئية للمانحين مرة أخرى. بمجرد استئناف هذه المؤسسة الخيرية ، يمكنك إلغاء تنشيطها مرة أخرى من صفحة المستفيدون. هل ترغب في الاستمرار؟",
           "no_inactive_adoptions_to_show" : "لا توجد عمليات تبني غير نشطة للعرض.",
           "please_enter_adoption_name" : "الرجاء إدخال اسم الاعتماد.",
@@ -823,6 +853,16 @@ class Messages extends Translations {
           "adoptions" : "التبني"
         },
         'es_ES': {
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":"Proporcione un monto de donación mensual mínimo de \$ 1",
+          "please_enter_a_valid_cvc":"Introduzca un CVC válido.",
+          "year": "Año",
+          "please_enter_a_valid_expiration_year":"Introduzca un año de caducidad válido.",
+          "month": "Mes",
+          "please_enter_a_valid_expiration_month":"Introduzca un mes de caducidad válido.",
+          "card_number":"Número de tarjeta",
+          "please_enter_a_valid_card_number": "Por favor, introduzca un número de tarjeta válido.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":"Las adopciones solo se pueden hacer en cantidades enteras en dólares.",
+          "are_you_sure_you_want_to_cancel_this_adoption":"¿Está seguro de que desea cancelar esta adopción? Puede volver a adoptar a este beneficiario desde la página Beneficiarios. ¿Le gustaría continuar con la cancelación de esta adopción?",
           "resuming_adoption_charity_would_you_like_to_continue": "Reanudar esta organización benéfica la hará visible para los donantes nuevamente. Una vez que reanude esta organización benéfica, puede desactivarla nuevamente desde la página Mis beneficiarios. ¿Te gustaria continuar?",
           "no_inactive_adoptions_to_show" : "No hay adopciones inactivas para mostrar.",
           "please_enter_adoption_name" : "Ingrese el nombre de adopción.",
