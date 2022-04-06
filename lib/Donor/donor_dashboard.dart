@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Services/notifications.dart';
 import 'notifications_page.dart';
 
@@ -37,6 +38,8 @@ class DonorDashboard extends StatefulWidget {
 class _DonorDashboardState extends State<DonorDashboard> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
+  final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
+
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   final _messaging = FirebaseMessaging.instance;

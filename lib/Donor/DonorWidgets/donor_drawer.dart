@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../home_screen.dart';
 import '../donation_history.dart';
@@ -21,6 +22,8 @@ class DonorDrawer extends StatefulWidget {
 }
 
 class _DonorDrawerState extends State<DonorDrawer> {
+  final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -90,6 +93,9 @@ class _DonorDrawerState extends State<DonorDrawer> {
                           children: <Widget>[
                             SimpleDialogOption(
                                 onPressed: () async {
+                                  final SharedPreferences prefs = await _prefs;
+                                  prefs.setStringList('Locale', ['en','US']);
+
                                   await Get.updateLocale(
                                       const Locale('en', 'US'));
                                   Navigator.pop(context);
@@ -97,6 +103,9 @@ class _DonorDrawerState extends State<DonorDrawer> {
                                 child: const Center(child: Text("English"))),
                             SimpleDialogOption(
                                 onPressed: () async {
+                                  final SharedPreferences prefs = await _prefs;
+                                  prefs.setStringList('Locale', ['fr','FR']);
+
                                   await Get.updateLocale(
                                       const Locale('fr', 'FR'));
                                   Navigator.pop(context);
@@ -104,6 +113,9 @@ class _DonorDrawerState extends State<DonorDrawer> {
                                 child: const Center(child: Text("French"))),
                             SimpleDialogOption(
                                 onPressed: () async {
+                                  final SharedPreferences prefs = await _prefs;
+                                  prefs.setStringList('Locale', ['ar','SA']);
+
                                   await Get.updateLocale(
                                       const Locale('ar', 'SA'));
                                   Navigator.pop(context);
@@ -111,6 +123,9 @@ class _DonorDrawerState extends State<DonorDrawer> {
                                 child: const Center(child: Text("Arabic"))),
                             SimpleDialogOption(
                                 onPressed: () async {
+                                  final SharedPreferences prefs = await _prefs;
+                                  prefs.setStringList('Locale', ['es','ES']);
+
                                   await Get.updateLocale(
                                       const Locale('es', 'ES'));
                                   Navigator.pop(context);
