@@ -76,15 +76,37 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
+        Align(
+          alignment: Alignment.topRight,
+          child: IconButton(
+            icon: Icon(
+              pointlist.contains(widget.urgentCase.id.toString())
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: pointlist.contains(widget.urgentCase.id.toString())
+                  ? Colors.red
+                  : null,
+              size: 30,
+            ),
+            onPressed: () async {
+              await updateFavorites(loggedInUser!.uid.toString(),
+                  widget.urgentCase.id.toString());
+              await _getFavorite();
+            },
+          ),
+        ),
         const Icon(
           Icons.assistant,
           color: Colors.blue,
           size: 40,
         ),
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Text(widget.urgentCase.title,
               textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
@@ -94,13 +116,14 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
             height: 75.0,
             child: Text(
               widget.urgentCase.description,
-              textAlign: TextAlign.left,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 15,
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
             )),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('\$' + f.format(widget.urgentCase.amountRaised),
@@ -168,25 +191,6 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               color: Colors.pink,
               borderRadius: BorderRadius.all(Radius.circular(10)),
             )),
-        Align(
-          alignment: Alignment.center,
-          child: IconButton(
-            icon: Icon(
-              pointlist.contains(widget.urgentCase.id.toString())
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: pointlist.contains(widget.urgentCase.id.toString())
-                  ? Colors.red
-                  : null,
-              size: 40,
-            ),
-            onPressed: () async {
-              await updateFavorites(loggedInUser!.uid.toString(),
-                  widget.urgentCase.id.toString());
-              await _getFavorite();
-            },
-          ),
-        )
       ]),
     );
   }

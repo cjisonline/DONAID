@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 class BeneficiaryCard extends StatefulWidget {
   final Beneficiary beneficiary;
 
-  const BeneficiaryCard( this.beneficiary, {Key? key}) : super(key: key);
+  const BeneficiaryCard(this.beneficiary, {Key? key}) : super(key: key);
 
   @override
   State<BeneficiaryCard> createState() => _BeneficiaryCardState();
@@ -78,15 +78,37 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
+        Align(
+          alignment: Alignment.topRight,
+          child: IconButton(
+            icon: Icon(
+              pointlist.contains(widget.beneficiary.id.toString())
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: pointlist.contains(widget.beneficiary.id.toString())
+                  ? Colors.red
+                  : null,
+              size: 30,
+            ),
+            onPressed: () async {
+              await updateFavorites(loggedInUser!.uid.toString(),
+                  widget.beneficiary.id.toString());
+              await _getFavorite();
+            },
+          ),
+        ),
         Icon(
           Icons.person,
           color: Colors.blue,
           size: 40,
         ),
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Text(widget.beneficiary.name,
               textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
@@ -96,13 +118,14 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
             height: 75.0,
             child: Text(
               widget.beneficiary.biography,
-              textAlign: TextAlign.left,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 15,
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
             )),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('\$' + f.format(widget.beneficiary.amountRaised),
@@ -137,25 +160,25 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                     if (organization?.country == 'United States') {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                            return (BeneficiaryDonateScreen(widget.beneficiary));
-                          })).then((value) {
+                        return (BeneficiaryDonateScreen(widget.beneficiary));
+                      })).then((value) {
                         setState(() {});
                       });
                     } else {
-    Map<String, dynamic> charity = {
-    'charityType':'Beneficiary',
-    'charityID':widget.beneficiary.id,
-    'charityTitle':widget.beneficiary.name
-    };
-    DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid, charity);
+                      Map<String, dynamic> charity = {
+                        'charityType': 'Beneficiary',
+                        'charityID': widget.beneficiary.id,
+                        'charityTitle': widget.beneficiary.name
+                      };
+                      DonorAlertDialogs.paymentLinkPopUp(context, organization!,
+                          _auth.currentUser!.uid, charity);
                     }
                   },
                   child: Row(children: [
-                    const Icon(Icons.favorite,
-                        color: Colors.white, size: 20),
+                    const Icon(Icons.favorite, color: Colors.white, size: 20),
                     Container(
                       margin: const EdgeInsets.only(left: 0.0, right: 10.0),
-                      child:  Text('donate'.tr,
+                      child: Text('donate'.tr,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
@@ -170,25 +193,6 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
               color: Colors.pink,
               borderRadius: BorderRadius.all(Radius.circular(10)),
             )),
-        Align(
-          alignment: Alignment.center,
-          child: IconButton(
-            icon: Icon(
-              pointlist.contains(widget.beneficiary.id.toString())
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: pointlist.contains(widget.beneficiary.id.toString())
-                  ? Colors.red
-                  : null,
-              size: 40,
-            ),
-            onPressed: () async {
-              await updateFavorites(loggedInUser!.uid.toString(),
-                  widget.beneficiary.id.toString());
-              await _getFavorite();
-            },
-          ),
-        )
       ]),
     );
   }
