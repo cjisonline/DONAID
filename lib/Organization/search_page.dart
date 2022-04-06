@@ -159,6 +159,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   }
 
   void _searchResults(String enteredKeyword) {
+    _filterResults();
     if (enteredKeyword.isEmpty) {
       campaigns = allCampaigns;
       beneficiaries = allBeneficiaries;
