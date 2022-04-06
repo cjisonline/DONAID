@@ -192,6 +192,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
 
 
   void _searchResults(String enteredKeyword) {
+    _filterResults();
     if (enteredKeyword.isEmpty) {
       campaigns = allCampaigns;
       beneficiaries = allBeneficiaries;
