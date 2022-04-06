@@ -78,7 +78,8 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
-        Align(
+        (_auth.currentUser?.email != null)
+        ? Align(
           alignment: Alignment.topRight,
           child: IconButton(
             icon: Icon(
@@ -97,7 +98,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
 
             },
           ),
-        ),
+        ): Container(),
         Icon(
           Icons.person,
           color: Colors.blue,
