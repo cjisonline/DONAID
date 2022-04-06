@@ -11,6 +11,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../Donor/DonorWidgets/donor_drawer.dart';
 import '../Organization/OrganizationWidget/organization_drawer.dart';
@@ -53,7 +54,7 @@ class _ConversationState extends State<Conversation> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return ConversationScreen(widget.currentUid, widget.type);
-                    }));
+                    })).then((value) => _refresh());
                   })
               : Container()
         ]),
@@ -61,7 +62,9 @@ class _ConversationState extends State<Conversation> {
           onRefresh: () async {
             _refresh();
           },
-          child: Column(
+          child: MyGlobals.allMessages.length == 0
+          ? Center(child: Text('No Messages', style: TextStyle(fontSize: 18),))
+          : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
@@ -166,6 +169,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   List<String> orgIDs = [];
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  bool showLoadingSpinner = false;
 
   @override
   initState() {
@@ -174,6 +178,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 
   _getOrganizationsFromDonations() async {
+    setState(() {
+      showLoadingSpinner = true;
+    });
     var ret = await _firestore
         .collection('Donations')
         .where('donorID', isEqualTo: _auth.currentUser?.uid)
@@ -202,32 +209,37 @@ class _ConversationScreenState extends State<ConversationScreen> {
         }
       }
     }
-    setState(() {});
+    setState(() {
+      showLoadingSpinner = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title:  Text("organization".tr)),
-        body: ListView.builder(
-            itemCount: organizations.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, int index) {
-              return InkWell(
-                  onTap: () {
-                    Get.to(Chat(
-                        organizations[index].uid,
-                        organizations[index].organizationName,
-                        widget.currentUid));
-                  },
-                  child: Column(children: [
-                    ListTile(
-                        title: Text(organizations[index].organizationName),
-                        subtitle: Text(organizations[index]
-                            .organizationDescription
-                            .toString())),
-                    const Divider(color: Colors.grey)
-                  ]));
-            }));
+        body: ModalProgressHUD(
+          inAsyncCall: showLoadingSpinner,
+          child: ListView.builder(
+              itemCount: organizations.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, int index) {
+                return InkWell(
+                    onTap: () {
+                      Get.to(Chat(
+                          organizations[index].uid,
+                          organizations[index].organizationName,
+                          widget.currentUid));
+                    },
+                    child: Column(children: [
+                      ListTile(
+                          title: Text(organizations[index].organizationName),
+                          subtitle: Text(organizations[index]
+                              .organizationDescription
+                              .toString())),
+                      const Divider(color: Colors.grey)
+                    ]));
+              }),
+        ));
   }
 }

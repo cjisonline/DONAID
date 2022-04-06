@@ -117,6 +117,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                (_auth.currentUser?.email != null) ?
                 Align(
                   alignment: Alignment.topRight,
                   child:IconButton(
@@ -129,7 +130,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                     await _getFavorite();
 
                   },
-                  ),),
+                  ),) : Container(),
                 SizedBox(
                     height: 100,
                     child: Image.asset('assets/DONAID_LOGO.png')

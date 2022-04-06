@@ -56,9 +56,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   @override
   void initState() {
     super.initState();
-
     handleNotifications();
-
     _getCurrentUser();
     _getBeneficiaries();
     _getUrgentCases();
@@ -138,11 +136,15 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _getFavorite() async {
-    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
-      setState(() {
-        pointlist = List.from(value['favoriteList']);
+    if(loggedInUser?.email != null) {
+      await _firestore.collection("Favorite").doc(loggedInUser!.uid)
+          .get()
+          .then((value) {
+        setState(() {
+          pointlist = List.from(value['favoriteList']);
+        });
       });
-    });
+    }
   }
 
 

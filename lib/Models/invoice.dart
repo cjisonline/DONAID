@@ -1,4 +1,4 @@
-import 'package:donaid/Donor/DonaidInfo.dart';
+import 'package:donaid/Models/DonaidInfo.dart';
 import 'DonorUser.dart';
 
 class Invoice {

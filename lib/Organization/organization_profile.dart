@@ -9,6 +9,7 @@ import 'OrganizationWidget/profile_list_row.dart';
 import 'organization_edit_profile.dart';
 import 'package:get/get.dart';
 
+
 class OrganizationProfile extends StatefulWidget {
   static const id = 'organization_profile';
 
@@ -87,7 +88,15 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('profile'.tr), actions: [
+      appBar: AppBar(
+          title:  Text('profile'.tr),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
+          actions: [
           TextButton(
             onPressed: () {
               Navigator.push(
