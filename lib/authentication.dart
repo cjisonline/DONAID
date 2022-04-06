@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:donaid/Services/chatServices.dart';
 import 'package:donaid/localServices.dart';
 import 'package:donaid/Models/user.dart';
 import 'package:donaid/Donor/donor_dashboard.dart';
@@ -147,6 +148,8 @@ class Auth {
 
   static Future<bool> logOut() async {
     try {
+      if (chatListener != null) chatListener.cancel();
+      chatListener=null;
       await _auth.signOut();
       try {
         await _googleSignIn.signOut();

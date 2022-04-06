@@ -707,14 +707,6 @@ class _OrganizationRegistrationScreenState
                         )),
                   ),
                 ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 25.0, horizontal: 5.0),
-                    child: Text("Selected Country: "+country),
-
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
@@ -723,9 +715,6 @@ class _OrganizationRegistrationScreenState
                           context: context,
                           onSelect: (Country selectedCountry) {
                             country = selectedCountry.name;
-                            setState(() {
-
-                            });
                           });
                     },
                     child: Row(
@@ -746,7 +735,6 @@ class _OrganizationRegistrationScreenState
                   child: TextButton(
                     onPressed: () async {
                       var status = await Permission.photos.status;
-                      await Permission.photos.request();
                       if (status.isDenied) {
                         _permissionDenied();
                       } else if (await Permission.photos.isRestricted) {
@@ -768,8 +756,6 @@ class _OrganizationRegistrationScreenState
                     ),
                   ),
                 ),
-
-
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 25.0, horizontal: 5.0),

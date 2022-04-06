@@ -56,9 +56,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   @override
   void initState() {
     super.initState();
-
     handleNotifications();
-
     _getCurrentUser();
     _getBeneficiaries();
     _getUrgentCases();

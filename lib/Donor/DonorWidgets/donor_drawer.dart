@@ -1,4 +1,5 @@
 import 'package:donaid/Models/message.dart';
+import 'package:donaid/Services/chatServices.dart';
 import 'package:donaid/contactUs.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -133,6 +134,8 @@ class _DonorDrawerState extends State<DonorDrawer> {
               leading: const Icon(Icons.logout),
               title: Text("logout".tr),
               onTap: () {
+                if (chatListener != null) chatListener.cancel();
+                chatListener = null;
                 FirebaseAuth.instance.signOut();
                 MyGlobals.allMessages = <MessageModel>[].obs;
                 Navigator.of(context)

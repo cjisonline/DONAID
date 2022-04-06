@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/message.dart';
 import 'package:donaid/Organization/gateway_visits.dart';
+import 'package:donaid/Services/chatServices.dart';
 import 'package:donaid/contactUs.dart';
 import 'package:donaid/Organization/settings.dart';
 import 'package:donaid/globals.dart';
@@ -181,6 +182,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               leading: Icon(Icons.logout),
               title: Text("logout".tr),
               onTap: () {
+                if (chatListener != null) chatListener.cancel();
+                chatListener = null;
                 FirebaseAuth.instance.signOut();
                 MyGlobals.allMessages = <MessageModel>[].obs;
                 Navigator.of(context)
