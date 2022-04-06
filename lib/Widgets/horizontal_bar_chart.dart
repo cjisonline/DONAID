@@ -2,10 +2,13 @@ import 'dart:math';
 // EXCLUDE_FROM_GALLERY_DOCS_END
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 
 class HorizontalBarLabelChart extends StatelessWidget {
   final List<charts.Series<dynamic, String>> seriesList;
   final bool animate;
+  static var f = NumberFormat("###,##0.00", "en_US");
 
   HorizontalBarLabelChart(this.seriesList, {this.animate = false});
 
@@ -24,7 +27,7 @@ class HorizontalBarLabelChart extends StatelessWidget {
           data: data,
           // Set a label accessor to control the text of the bar label.
           labelAccessorFn: (CharityTypeDonations donations, _) =>
-          '${donations.charityType}: \$${donations.donationAmount.toString()}')
+          '${donations.charityType}: \$${f.format(donations.donationAmount)}')
     ];
   }
 
