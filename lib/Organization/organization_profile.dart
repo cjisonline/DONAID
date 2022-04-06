@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart';
+import 'package:donaid/Widgets/horizontal_bar_chart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'OrganizationWidget/profile_list_row.dart';
 import 'organization_edit_profile.dart';
 import 'package:get/get.dart';
@@ -26,7 +26,10 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
   final _firestore = FirebaseFirestore.instance;
   Organization? organization;
 
-  double p1 = 0.0, p2 = 0.0;
+  double numberOfDonors = 0.0;
+  double urgentCasesRaised=0.0;
+  double campaignRaised=0.0;
+  double beneficiaryRaised=0.0;
 
   @override
   void initState() {
@@ -37,8 +40,11 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
   }
 
   getInfo() async {
-    p1 = 0.0;
-    p2 = 0.0;
+    numberOfDonors=0.0;
+    urgentCasesRaised=0.0;
+    campaignRaised=0.0;
+    beneficiaryRaised=0.0;
+
     var ret3 = await _firestore
         .collection("Donations")
         .where("organizationID", isEqualTo: _auth.currentUser?.uid ?? "")
@@ -46,15 +52,24 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
 
     //amountRaised
     for (var item in ret3.docs) {
-      p1 = p1 + (double.tryParse(item['donationAmount']) ?? 0.0);
+      if(item.data()['charityType'] == 'UrgentCases'){
+        urgentCasesRaised += double.tryParse(item.data()['donationAmount']) ?? 0.0;
+      }
+      else if(item.data()['charityType'] == 'Beneficiaries'){
+        beneficiaryRaised += double.tryParse(item.data()['donationAmount']) ?? 0.0;
+      }
+      else if(item.data()['charityType'] == 'Campaigns'){
+        campaignRaised += double.tryParse(item.data()['donationAmount']) ?? 0.0;
+      }
     }
 
 
+    //Number of donors
     var ret2 = await _firestore
         .collection("Donations")
-        .where("organizationID", isEqualTo: _auth.currentUser?.uid ?? "")
+        .where("organizationID", isEqualTo: _auth.currentUser!.uid)
         .get();
-    p2 = ret2.docs.length + .0;
+    numberOfDonors = ret2.docs.length+.0;
     setState(() {});
   }
 
@@ -152,25 +167,32 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
         child: Column(
           children: [
             _buildProfilePictureDisplay(),
+            Text(
+              'Your Information'.toUpperCase(),
+              style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold),
+            ),
             ProfileRow('YOUR EMAIL', organization?.organizationEmail ?? 'N/A'),
             ProfileRow('NAME', organization?.organizationName ?? 'N/A'),
             ProfileRow('YOUR PHONE', organization?.phoneNumber ?? 'N/A'),
             ProfileRow(
                 'DESCRIPTION', organization?.organizationDescription ?? 'N/A'),
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Container(
-                  margin: const EdgeInsets.only(
-                      left: 30.0, right: 30.0, bottom: 10.0, top: 10.0),
-                  child: Text(
-                    "Statistics".toUpperCase(),
-                    style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold),
-                  ))
-            ]),
-            ProfileRow('Total Money Raised', p1.toStringAsFixed(2)),
-            ProfileRow('Number of donors', p2.toStringAsFixed(0)),
+            SizedBox(height: 15),
+            Text(
+              "Statistics".toUpperCase(),
+              style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height:25),
+            Text('Donations'.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+           Container(
+             height: MediaQuery.of(context).size.height*0.5,
+               width: MediaQuery.of(context).size.width,
+               child: HorizontalBarLabelChart.withData(urgentCasesRaised, beneficiaryRaised, campaignRaised)),
+           // ProfileRow('Total Money Raised', p1.toStringAsFixed(2)),
+            Text(numberOfDonors.toStringAsFixed(0)+' unique donors'.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
             SizedBox(height: 10),
           ],
         ));
@@ -187,21 +209,21 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
             ProfileRow('YOUR PHONE', organization?.phoneNumber ?? 'N/A'),
             ProfileRow(
                 'DESCRIPTION', organization?.organizationDescription ?? 'N/A'),
-            SizedBox(height: 10),
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Container(
-                  margin: const EdgeInsets.only(
-                      left: 30.0, right: 30.0, bottom: 10.0, top: 10.0),
-                  child: Text(
-                    "Statistics".toUpperCase(),
-                    style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold),
-                  ))
-            ]),
-            ProfileRow('Total Money Raised', p1.toStringAsFixed(2)),
-            ProfileRow('Number of donors', p2.toStringAsFixed(0)),
+            SizedBox(height: 15),
+            Text(
+              "Statistics".toUpperCase(),
+              style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height:25),
+            Text('Donations'.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+            Container(
+                height: MediaQuery.of(context).size.height*0.5,
+                width: MediaQuery.of(context).size.width,
+                child: HorizontalBarLabelChart.withData(urgentCasesRaised, beneficiaryRaised, campaignRaised)),
+            // ProfileRow('Total Money Raised', p1.toStringAsFixed(2)),
+            Text(numberOfDonors.toStringAsFixed(0)+' unique donors'.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
             SizedBox(height: 10),
           ],
         ));
