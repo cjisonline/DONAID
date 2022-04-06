@@ -134,8 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () => Auth.googleLogin(context),
                         elevation: 5.0),
                   ),
-                  Row(children: [
-                    const SizedBox(width: 30),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     InkWell(
                         onTap: () {
                           showDialog(
