@@ -76,7 +76,8 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
-        Align(
+        (_auth.currentUser?.email != null)
+        ? Align(
           alignment: Alignment.topRight,
           child: IconButton(
             icon: Icon(
@@ -94,7 +95,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               await _getFavorite();
             },
           ),
-        ),
+        ) : Container(),
         const Icon(
           Icons.assistant,
           color: Colors.blue,

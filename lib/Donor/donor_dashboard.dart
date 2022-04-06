@@ -138,11 +138,15 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _getFavorite() async {
-    await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
-      setState(() {
-        pointlist = List.from(value['favoriteList']);
+    if(loggedInUser?.email != null) {
+      await _firestore.collection("Favorite").doc(loggedInUser!.uid)
+          .get()
+          .then((value) {
+        setState(() {
+          pointlist = List.from(value['favoriteList']);
+        });
       });
-    });
+    }
   }
 
 

@@ -60,6 +60,12 @@ class _DonorProfileState extends State<DonorProfile> {
     return Scaffold(
       appBar: AppBar(
         title:  Text('profile'.tr),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
           actions: [
             TextButton(
               onPressed: () {
