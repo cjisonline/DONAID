@@ -102,21 +102,22 @@ class _DonorDrawerState extends State<DonorDrawer> {
                                       const Locale('fr', 'FR'));
                                   Navigator.pop(context);
                                 },
-                                child: const Center(child: Text("French"))),
+                                child: const Center(child: Text("Francais"))),
                             SimpleDialogOption(
                                 onPressed: () async {
                                   await Get.updateLocale(
                                       const Locale('ar', 'SA'));
                                   Navigator.pop(context);
                                 },
-                                child: const Center(child: Text("Arabic"))),
+                                child:
+                                    const Center(child: Text("اللغة العربية"))),
                             SimpleDialogOption(
                                 onPressed: () async {
                                   await Get.updateLocale(
                                       const Locale('es', 'ES'));
                                   Navigator.pop(context);
                                 },
-                                child: const Center(child: Text("Spanish")))
+                                child: const Center(child: Text("Espanol")))
                           ]);
                     });
               },
