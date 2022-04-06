@@ -29,14 +29,14 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   );
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
-  User? loggedInUser;
   final firestore = FirebaseFirestore.instance;
   late DocumentSnapshot documentSnapshot;
   var category = [];
   int beneficiaryTimeLimit=0;
   bool? isAdopted = false;
+  bool userIsDomesticOrganization=false;
 
-  _getCampaign() async {
+  _getCategories() async {
     var ret = await firestore
         .collection('CharityCategories')
         .get();
@@ -57,13 +57,16 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   @override
   void initState() {
     super.initState();
-    _getCurrentUser();
-    _getCampaign();
+    _getCurrentOrganizationCountry();
+    _getCategories();
     _getTimeLimit();
   }
 
-  void _getCurrentUser() {
-    loggedInUser = _auth.currentUser;
+   _getCurrentOrganizationCountry() async {
+    var ret = await firestore.collection('OrganizationUsers').where('uid', isEqualTo: _auth.currentUser?.uid).get();
+    var organizationUserDoc = ret.docs.first;
+
+    userIsDomesticOrganization = organizationUserDoc['country'] == 'United States';
   }
 
 
@@ -81,7 +84,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         'endDate': Timestamp.fromDate(DateTime.parse(endDateController)),
         'goalAmount': goalAmount,
         'id': docRef.id,
-        'organizationID': loggedInUser?.uid,
+        'organizationID': _auth.currentUser?.uid,
         'name': name
       });
     } catch (e) {
@@ -101,7 +104,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         'goalAmount': goalAmount,
         'amountRaised': 0,
         'id': docRef.id,
-        'organizationID': loggedInUser?.uid,
+        'organizationID': _auth.currentUser?.uid,
         'name': name,
       });
     } catch (e) {
@@ -327,7 +330,8 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                           ),
                         ),
 
-                      Padding(
+                      userIsDomesticOrganization
+                      ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child:
                           Center(
@@ -347,7 +351,8 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                               },
                             ),
                           ],
-                        ))),
+                        )))
+                      : Container(),
                         showEndDateField(),
 
 
