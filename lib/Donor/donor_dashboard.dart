@@ -65,6 +65,11 @@ class _DonorDashboardState extends State<DonorDashboard> {
     _getOrganizationUsers();
     _getCharityCategories();
     _getCarouselImagesAndCardList();
+
+    if(_auth.currentUser?.email != null){
+      _getFavorite();
+    }
+
     Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
     Get.find<ChatService>().listenFriend(loggedInUser!.uid, 0);
   }
@@ -129,7 +134,11 @@ class _DonorDashboardState extends State<DonorDashboard> {
     _getUrgentCases();
     _getOrganizationUsers();
     _getCharityCategories();
-    _getFavorite();
+
+    if(_auth.currentUser?.email != null){
+      _getFavorite();
+    }
+
     setState(() {});
 }
 
@@ -277,8 +286,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
               options: CarouselOptions(
                 height: 200.0,
                 autoPlay: true,
-                autoPlayInterval: Duration(seconds: 3),
-                autoPlayAnimationDuration: Duration(milliseconds: 800),
+                autoPlayInterval: Duration(seconds: 5),
+                autoPlayAnimationDuration: Duration(milliseconds: 1000),
                 autoPlayCurve: Curves.fastOutSlowIn,
                 pauseAutoPlayOnTouch: true,
                 aspectRatio: 2.0,
@@ -295,7 +304,6 @@ class _DonorDashboardState extends State<DonorDashboard> {
                         height: MediaQuery.of(context).size.height*0.30,
                         width: MediaQuery.of(context).size.width,
                         child: Card(
-                          color: Colors.blueAccent,
                           child: card,
                         ),
                       );

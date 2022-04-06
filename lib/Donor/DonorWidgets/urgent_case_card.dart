@@ -55,15 +55,17 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
   }
 
   _getFavorite() async {
-    await _firestore
-        .collection("Favorite")
-        .doc(loggedInUser!.uid)
-        .get()
-        .then((value) {
-      setState(() {
-        pointlist = List.from(value['favoriteList']);
+    if(_auth.currentUser?.email != null){
+      await _firestore
+          .collection("Favorite")
+          .doc(loggedInUser!.uid)
+          .get()
+          .then((value) {
+        setState(() {
+          pointlist = List.from(value['favoriteList']);
+        });
       });
-    });
+    }
   }
 
   @override
