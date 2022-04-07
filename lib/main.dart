@@ -44,18 +44,22 @@ import 'Donor/donor_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling background message: ${message.messageId}');
   await Firebase.initializeApp();
   final _auth = FirebaseAuth.instance;
-  if(_auth.currentUser!=null) {
+  if (_auth.currentUser != null) {
     addNotification(_auth.currentUser?.uid, message);
   }
-
 }
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey = 'pk_test_51KTuiGEvfimLlZrsjvlq3mE1JEa8nGiejkGVgw9MvqJd9viDPIXCbUGbWp1QaXf50sQIQs3MNWlVjp99VAruB0qW00xrE9kMs7';
+  Stripe.publishableKey =
+      'pk_test_51KTuiGEvfimLlZrsjvlq3mE1JEa8nGiejkGVgw9MvqJd9viDPIXCbUGbWp1QaXf50sQIQs3MNWlVjp99VAruB0qW00xrE9kMs7';
+
+  Stripe.merchantIdentifier = 'Donaid';
+  await Stripe.instance.applySettings();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -72,60 +76,61 @@ class Donaid extends StatelessWidget {
   Widget build(BuildContext context) {
     return OverlaySupport.global(
       child: GetMaterialApp(
-        builder: EasyLoading.init(),
-        theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity),
-        initialRoute: HomeScreen.id,
-        routes: {
-          HomeScreen.id: (context) => const HomeScreen(),
-          LoginScreen.id: (context) => const LoginScreen(),
-          RegistrationScreen.id: (context) => const RegistrationScreen(),
-          DonorRegistrationScreen.id: (context) =>
-              const DonorRegistrationScreen(),
-          OrganizationRegistrationScreen.id: (context) =>
-              const OrganizationRegistrationScreen(),
-          DonorDashboard.id: (context) => const DonorDashboard(),
-          OrganizationDashboard.id: (context) => const OrganizationDashboard(),
-          CategoriesScreen.id: (context) => const CategoriesScreen(),
-          BeneficiaryExpandedScreen.id: (context) =>
-              const BeneficiaryExpandedScreen(),
-          UrgentCasesExpandedScreen.id: (context) =>
-              const UrgentCasesExpandedScreen(),
-          OrganizationsExpandedScreen.id: (context) =>
-              const OrganizationsExpandedScreen(),
-          OrgAddSelection.id: (context) => const OrgAddSelection(),
-          AddCampaignForm.id: (context) => AddCampaignForm(),
-          AddBeneficiaryForm.id: (context) => AddBeneficiaryForm(),
-          AddUrgentCaseForm.id: (context) => AddUrgentCaseForm(),
-          DonorProfile.id: (context) => const DonorProfile(),
-          DonorEditProfile.id: (context) => const DonorEditProfile(),
-          OrganizationProfile.id: (context) => const OrganizationProfile(),
-          OrganizationEditProfile.id: (context) =>
-              const OrganizationEditProfile(),
-          DonorSearchScreen.id: (context) => const DonorSearchScreen(),
-          OrganizationBeneficiariesExpandedScreen.id: (context) =>
-              const OrganizationBeneficiariesExpandedScreen(),
-          OrganizationUrgentCasesExpandedScreen.id: (context) =>
-              const OrganizationUrgentCasesExpandedScreen(),
-          OrganizationCampaignsExpandedScreen.id: (context) =>
-              const OrganizationCampaignsExpandedScreen(),
-          OrgSearchPage.id: (context) => const OrgSearchPage(),
-          DonationHistory.id: (context) => const DonationHistory(),
-          DonorFavoritePage.id: (context) => const DonorFavoritePage(),
-          DonorNotificationPage.id: (context) => const DonorNotificationPage(),
-          OrganizationNotificationPage.id: (context) => const OrganizationNotificationPage(),
-          DonorSettingsPage.id: (context) => const DonorSettingsPage(),
-          OrganizationSettingsPage.id: (context) => const OrganizationSettingsPage(),
-          GatewayVisits.id: (context) => const GatewayVisits(),
+          builder: EasyLoading.init(),
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+              visualDensity: VisualDensity.adaptivePlatformDensity),
+          initialRoute: HomeScreen.id,
+          routes: {
+            HomeScreen.id: (context) => const HomeScreen(),
+            LoginScreen.id: (context) => const LoginScreen(),
+            RegistrationScreen.id: (context) => const RegistrationScreen(),
+            DonorRegistrationScreen.id: (context) =>
+                const DonorRegistrationScreen(),
+            OrganizationRegistrationScreen.id: (context) =>
+                const OrganizationRegistrationScreen(),
+            DonorDashboard.id: (context) => const DonorDashboard(),
+            OrganizationDashboard.id: (context) =>
+                const OrganizationDashboard(),
+            CategoriesScreen.id: (context) => const CategoriesScreen(),
+            BeneficiaryExpandedScreen.id: (context) =>
+                const BeneficiaryExpandedScreen(),
+            UrgentCasesExpandedScreen.id: (context) =>
+                const UrgentCasesExpandedScreen(),
+            OrganizationsExpandedScreen.id: (context) =>
+                const OrganizationsExpandedScreen(),
+            OrgAddSelection.id: (context) => const OrgAddSelection(),
+            AddCampaignForm.id: (context) => AddCampaignForm(),
+            AddBeneficiaryForm.id: (context) => AddBeneficiaryForm(),
+            AddUrgentCaseForm.id: (context) => AddUrgentCaseForm(),
+            DonorProfile.id: (context) => const DonorProfile(),
+            DonorEditProfile.id: (context) => const DonorEditProfile(),
+            OrganizationProfile.id: (context) => const OrganizationProfile(),
+            OrganizationEditProfile.id: (context) =>
+                const OrganizationEditProfile(),
+            DonorSearchScreen.id: (context) => const DonorSearchScreen(),
+            OrganizationBeneficiariesExpandedScreen.id: (context) =>
+                const OrganizationBeneficiariesExpandedScreen(),
+            OrganizationUrgentCasesExpandedScreen.id: (context) =>
+                const OrganizationUrgentCasesExpandedScreen(),
+            OrganizationCampaignsExpandedScreen.id: (context) =>
+                const OrganizationCampaignsExpandedScreen(),
+            OrgSearchPage.id: (context) => const OrgSearchPage(),
+            DonationHistory.id: (context) => const DonationHistory(),
+            DonorFavoritePage.id: (context) => const DonorFavoritePage(),
+            DonorNotificationPage.id: (context) =>
+                const DonorNotificationPage(),
+            OrganizationNotificationPage.id: (context) =>
+                const OrganizationNotificationPage(),
+            DonorSettingsPage.id: (context) => const DonorSettingsPage(),
+            OrganizationSettingsPage.id: (context) =>
+                const OrganizationSettingsPage(),
+            GatewayVisits.id: (context) => const GatewayVisits(),
           MyAdoptions.id: (context) => const MyAdoptions(),
-        },
-        translations: Messages(),
-        locale: const Locale('en', 'US'),
-        fallbackLocale: const Locale('en', 'US')
-      ),
+          },
+          translations: Messages(),
+          locale: const Locale('en', 'US'),
+          fallbackLocale: const Locale('en', 'US')),
     );
   }
 }
-
-

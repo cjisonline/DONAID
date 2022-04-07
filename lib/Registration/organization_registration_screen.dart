@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -29,7 +29,7 @@ class _OrganizationRegistrationScreenState
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   final _firebaseStorage = FirebaseStorage.instance;
-  final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -47,9 +47,9 @@ class _OrganizationRegistrationScreenState
   String country = "";
   String gatewayLink = "";
   String organizationDescription = "";
-  String street ="";
-  String city="";
-  String postalCode="";
+  String street = "";
+  String city = "";
+  String postalCode = "";
 
   XFile? _image;
   String _uploadedFileURL = "";
@@ -66,6 +66,66 @@ class _OrganizationRegistrationScreenState
     }
   }
 
+  Future<void> _permissionDenied() async {
+    setState(() {
+      showLoadingSpinner = false;
+    });
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(
+              child: Text('hang_on!'.tr),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: Text('please_enable_photos_permission'.tr),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('ok'.tr),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _permissionRestriction() async {
+    setState(() {
+      showLoadingSpinner = false;
+    });
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(
+              child: Text('hang_on!'.tr),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            content: Text('Unable_to_sync_image'.tr),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('ok'.tr),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
   void createNewOrganizationUser() async {
     //This method creates the new user in Firebase and uploads verification docs
     if (await isEmailAvailable()) {
@@ -77,32 +137,41 @@ class _OrganizationRegistrationScreenState
         if (newUser != null) {
           await uploadFile(newUser);
 
-          final docRef = await _firestore.collection('OrganizationUsers').add({});
+          final docRef =
+              await _firestore.collection('OrganizationUsers').add({});
 
           await _firestore.collection('OrganizationUsers').doc(docRef.id).set({
-            'id':docRef.id,
+            'id': docRef.id,
             'uid': newUser.user.uid,
             'organizationName': organizationName,
             'organizationDescription': organizationDescription,
             'email': email,
             'phoneNumber': phoneNumber,
-            'address':{'street':street,'city':city,'postalCode':postalCode},
+            'address': {
+              'street': street,
+              'city': city,
+              'postalCode': postalCode
+            },
             'approved': false,
             'country': country,
             'gatewayLink': gatewayLink,
             'verificationDocumentURL': _uploadedFileURL,
-            'profilePictureDownloadURL':''
+            'profilePictureDownloadURL': ''
           });
 
           final usersDocRef = await _firestore.collection('Users').add({});
-          await _firestore
-              .collection('Users')
-              .doc(usersDocRef.id)
-              .set({'id': usersDocRef.id,'uid': newUser.user.uid, 'email': email, 'userType': 2});
+          await _firestore.collection('Users').doc(usersDocRef.id).set({
+            'id': usersDocRef.id,
+            'uid': newUser.user.uid,
+            'email': email,
+            'userType': 2
+          });
 
-          await FirebaseMessaging.instance.subscribeToTopic(newUser.user.uid.toString()+'Approvals');
+          await FirebaseMessaging.instance
+              .subscribeToTopic(newUser.user.uid.toString() + 'Approvals');
           final SharedPreferences prefs = await _prefs;
-          await prefs.setBool('organizationUrgentCaseApprovalsNotifications', true);
+          await prefs.setBool(
+              'organizationUrgentCaseApprovalsNotifications', true);
 
           Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen
               .id)); //remove all screens on the stack and return to home screen
@@ -128,21 +197,20 @@ class _OrganizationRegistrationScreenState
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
+            title: Center(
               child: Text('alert'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text(
-                'The email you chose is already in use.'.tr),
+            content: Text('The email you chose is already in use.'.tr),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('ok'.tr),
+                  child: Text('ok'.tr),
                 ),
               ),
             ],
@@ -159,21 +227,20 @@ class _OrganizationRegistrationScreenState
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
+            title: Center(
               child: Text('alert'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text(
-                'organizations_are_required_to_upload'.tr),
+            content: Text('organizations_are_required_to_upload'.tr),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child: Text('OK'.tr),
                 ),
               ),
             ],
@@ -190,21 +257,20 @@ class _OrganizationRegistrationScreenState
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
+            title: Center(
               child: Text('alert'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text(
-                'organizations_are_Required_to_specify'.tr),
+            content: Text('organizations_are_Required_to_specify'.tr),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('oK'.tr),
+                  child: Text('oK'.tr),
                 ),
               ),
             ],
@@ -237,7 +303,7 @@ class _OrganizationRegistrationScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('organization_registration'.tr),
+        title: Text('organization_registration'.tr),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -258,7 +324,7 @@ class _OrganizationRegistrationScreenState
                 const SizedBox(
                   height: 15.0,
                 ),
-                 Center(
+                Center(
                   child: Text(
                     'donaid'.tr,
                     style: TextStyle(fontSize: 32.0),
@@ -267,7 +333,7 @@ class _OrganizationRegistrationScreenState
                 const SizedBox(
                   height: 15.0,
                 ),
-                 Padding(
+                Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
                   child: Text(
@@ -362,14 +428,14 @@ class _OrganizationRegistrationScreenState
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                   children: const [
-                                    TextSpan(
-                                        text: ' *',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  ])),
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ])),
                         ),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
@@ -383,10 +449,11 @@ class _OrganizationRegistrationScreenState
                       phoneNumber = value;
                     },
                     validator: (value) {
-                      if(value!.isEmpty){
+                      if (value!.isEmpty) {
                         return "please_enter_a_phone_number.".tr;
                       }
-                      if (value.isNotEmpty && !phoneNumberRegExp.hasMatch(value)) {
+                      if (value.isNotEmpty &&
+                          !phoneNumberRegExp.hasMatch(value)) {
                         return "please_enter_a_valid_phone_number.".tr;
                       } else {
                         return null;
@@ -402,15 +469,14 @@ class _OrganizationRegistrationScreenState
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                   children: const [
-                                    TextSpan(
-                                        text: ' *',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  ]
-                                  )),
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ])),
                         ),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
@@ -418,7 +484,7 @@ class _OrganizationRegistrationScreenState
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 24.0,8.0 , 8.0),
+                  padding: const EdgeInsets.fromLTRB(8.0, 24.0, 8.0, 8.0),
                   child: TextFormField(
                     onChanged: (value) {
                       street = value;
@@ -438,15 +504,15 @@ class _OrganizationRegistrationScreenState
                                   text: 'street_address'.tr,
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
-                                  children: const[
-                                    TextSpan(
-                                        text: ' *',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  ])),
+                                  children: const [
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ])),
                         ),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
@@ -454,7 +520,7 @@ class _OrganizationRegistrationScreenState
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 8.0,8.0 , 24.0),
+                  padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 24.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -462,7 +528,7 @@ class _OrganizationRegistrationScreenState
                         width: 195,
                         child: TextFormField(
                           onChanged: (value) {
-                            city=value;
+                            city = value;
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -478,19 +544,21 @@ class _OrganizationRegistrationScreenState
                                     text: TextSpan(
                                         text: 'city'.tr,
                                         style: TextStyle(
-                                            color: Colors.grey[600], fontSize: 20.0),
-                                        children: const[
-                                          TextSpan(
-                                              text: ' *',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                        ])),
+                                            color: Colors.grey[600],
+                                            fontSize: 20.0),
+                                        children: const [
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
                               ),
                               border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(32.0)),
                               )),
                         ),
                       ),
@@ -498,7 +566,7 @@ class _OrganizationRegistrationScreenState
                         width: 195,
                         child: TextFormField(
                           onChanged: (value) {
-                            postalCode=value;
+                            postalCode = value;
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -514,19 +582,21 @@ class _OrganizationRegistrationScreenState
                                     text: TextSpan(
                                         text: 'postal_code'.tr,
                                         style: TextStyle(
-                                            color: Colors.grey[600], fontSize: 20.0),
-                                        children: const[
-                                          TextSpan(
-                                              text: ' *',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                        ])),
+                                            color: Colors.grey[600],
+                                            fontSize: 20.0),
+                                        children: const [
+                                      TextSpan(
+                                          text: ' *',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ])),
                               ),
                               border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(32.0)),
                               )),
                         ),
                       ),
@@ -555,15 +625,15 @@ class _OrganizationRegistrationScreenState
                                   text: 'password'.tr,
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
-                                  children: const[
-                                    TextSpan(
-                                        text: ' *',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  ])),
+                                  children: const [
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ])),
                         ),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
@@ -595,14 +665,14 @@ class _OrganizationRegistrationScreenState
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 20.0),
                                   children: const [
-                                    TextSpan(
-                                        text: ' *',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  ])),
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ])),
                         ),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
@@ -623,14 +693,14 @@ class _OrganizationRegistrationScreenState
                       }
                     },
                     textAlign: TextAlign.center,
-                    decoration:  InputDecoration(
+                    decoration: InputDecoration(
                         label: Center(
                           child: RichText(
                               text: TextSpan(
-                                  text: 'link_to_payment_gateway'.tr,
-                                  style: TextStyle(
-                                      color: Colors.grey[600], fontSize: 20.0),
-                                  )),
+                            text: 'link_to_payment_gateway'.tr,
+                            style: TextStyle(
+                                color: Colors.grey[600], fontSize: 20.0),
+                          )),
                         ),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
@@ -649,10 +719,13 @@ class _OrganizationRegistrationScreenState
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children:  [
+                      children: [
                         Icon(Icons.flag),
                         Text('select_country'.tr),
-                        Text(' *', style: TextStyle(color: Colors.red),)
+                        Text(
+                          ' *',
+                          style: TextStyle(color: Colors.red),
+                        )
                       ],
                     ),
                   ),
@@ -661,14 +734,24 @@ class _OrganizationRegistrationScreenState
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
                     onPressed: () async {
-                      chooseFile();
+                      var status = await Permission.photos.status;
+                      if (status.isDenied) {
+                        _permissionDenied();
+                      } else if (await Permission.photos.isRestricted) {
+                        _permissionRestriction();
+                      } else {
+                        chooseFile();
+                      }
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children:  [
+                      children: [
                         Icon(Icons.upload),
                         Text('upload_document_to_verify'.tr),
-                        Text(' *', style: TextStyle(color: Colors.red),)
+                        Text(
+                          ' *',
+                          style: TextStyle(color: Colors.red),
+                        )
                       ],
                     ),
                   ),
@@ -681,7 +764,7 @@ class _OrganizationRegistrationScreenState
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(32.0),
                     child: MaterialButton(
-                      child:  Text(
+                      child: Text(
                         'register'.tr,
                         style: TextStyle(
                           color: Colors.white,

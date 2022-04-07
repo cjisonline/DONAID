@@ -2,6 +2,36 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>fb927307591318939</string>
+	  <string>com.googleusercontent.apps.240146097284-95kjd110p1humu9opvji0kts5p35paqr</string>
+    </array>
+  </dict>
+</array>
+<key>FacebookAppID</key>
+
+<string>927307591318939</string>
+
+<key>FacebookClientToken</key>
+
+<string>208cae1b282a017646e9da18dc3006e6</string>
+
+<key>FacebookDisplayName</key>
+<string>donaid</string>
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>fbapi</string>
+  <string>fb-messenger-share-api</string>
+  <string>fbauth2</string>
+  <string>fbshareextension</string>
+</array> 
+
+
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -43,5 +73,16 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need the documents to verify legitmate organizations and avoid scammers</string>
+	
+	<key>NSCameraUsageDescription</key>
+	<string>We need the documents to verify legitmate organizations and avoid scammers</string>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need the documents to verify legitmate organizations and avoid scammers</string>
+
+	
 </dict>
 </plist>
