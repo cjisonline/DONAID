@@ -53,10 +53,6 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
       
     });
   }
-  void _getCurrentUser() {
-    loggedInUser = _auth.currentUser;
-  }
-
 
   _getBeneficiaries() async {
     var ret = await _firestore.collection('Beneficiaries')
@@ -91,18 +87,20 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
           .get();
 
       for (var element in ret.docs) {
-        Adoption adoption = Adoption(
-          name: element.data()['name'],
-          biography: element.data()['biography'],
-          goalAmount: element.data()['goalAmount'].toDouble(),
-          amountRaised: element.data()['amountRaised'].toDouble(),
-          category: element.data()['category'],
-          dateCreated: element.data()['dateCreated'],
-          id: element.data()['id'],
-          organizationID: element.data()['organizationID'],
-          active: element.data()['active'],
-        );
-        adoptions.add(adoption);
+        if(element.data()['amountRaised'].toDouble() < element.data()['goalAmount'].toDouble()){
+          Adoption adoption = Adoption(
+            name: element.data()['name'],
+            biography: element.data()['biography'],
+            goalAmount: element.data()['goalAmount'].toDouble(),
+            amountRaised: element.data()['amountRaised'].toDouble(),
+            category: element.data()['category'],
+            dateCreated: element.data()['dateCreated'],
+            id: element.data()['id'],
+            organizationID: element.data()['organizationID'],
+            active: element.data()['active'],
+          );
+          adoptions.add(adoption);
+        }
       }
     }
     catch(e){
