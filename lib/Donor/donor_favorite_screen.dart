@@ -16,7 +16,7 @@ import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'beneficiary_donate_screen.dart';
 import 'campaign_donate_screen.dart';
-
+// Reset the page
 class ResetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DonorFavoritePage();
@@ -53,7 +53,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
-
+// Initiate the functions when the page loads
   @override
   initState() {
     _getCurrentUser();
@@ -62,7 +62,6 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
   }
 
   _refresh(){
-
     setState(() {
       pointlist.clear();
       _favUserUrgentCase.clear();
@@ -73,7 +72,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
 
   }
 
-
+// Get campaign from firebase
   _getCampaign() async {
     var ret = await _firestore
         .collection('Campaigns')
@@ -96,7 +95,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     }
     _getOrganization();
   }
-
+// Get organization from firebase
   _getOrganization() async {
     var ret = await _firestore.collection('OrganizationUsers').where('approved', isEqualTo: true).get();
     for (var element in ret.docs) {
@@ -112,7 +111,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     setState(() {});
     _getUrgentCases();
   }
-
+// Get urgent case from firebase
   _getUrgentCases() async {
     var ret = await _firestore
         .collection('UrgentCases')
@@ -139,7 +138,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     }
     _getBeneficiaries();
   }
-
+// Get beneficiary from firebase
   _getBeneficiaries() async {
     var ret = await _firestore
         .collection('Beneficiaries')
@@ -163,7 +162,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     }
     _getAllData();
   }
-
+// Combine all the data from firebase
   _getAllData() {
     for (var i = 0; i < urgentCases.length; i++) {
       _allUsers.add({
@@ -201,7 +200,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     }
     _getFavorite();
   }
-
+// Get favorites form firebase under the user
   _getFavorite() async {
     await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
       setState(() {
@@ -210,7 +209,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     });
     _findFavorite();
   }
-
+// Find favorite to get the favorite information
   _findFavorite() {
     List<Map<String, dynamic>> resultsUrgentCase = [];
     List<Map<String, dynamic>> resultsBeneficiary = [];
@@ -244,7 +243,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
 
 
   }
-
+// Campaign tab body for favorite that are campaigns
   _campaignsBody(){
     return Padding(
                 padding: const EdgeInsets.all(10),
@@ -253,6 +252,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                     Expanded(
                       child: _favUserCampaign.isNotEmpty
                           ? ListView.builder(
+                        // Display name
                         itemCount: _favUserCampaign.length,
                         itemBuilder: (context, index) =>
                             Card(
@@ -262,6 +262,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                                 title: Text(
                                   _favUserCampaign[index]["name"].toString(),
                                 ),
+                                // display description
                                 subtitle: Text(_favUserCampaign[index]["description"].toString(),),
                                 trailing: Padding(
                                   padding: const EdgeInsets.all(10.0),
@@ -273,7 +274,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                                     },
                                   ),
                                 ),
-
+                                // Go to the selected campaign page
                                 onTap: () {
                                     _goToChosenCampaign(
                                         _favUserCampaign[index]['id']);
@@ -283,6 +284,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                             ])),
                       )
                           : Center(
+                        // No favorite campaign under the user
                             child: Text(
                         'No favorites found'.tr,
                         style: TextStyle(fontSize: 24),
@@ -293,7 +295,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                 )
     );
   }
-
+// Beneficiary tab body for favorite that are beneficiaries
   _beneficiariesBody(){
     return Padding(
         padding: const EdgeInsets.all(10),
@@ -302,6 +304,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
             Expanded(
               child: _favUserBeneficiary.isNotEmpty
                   ? ListView.builder(
+                // display name
                 itemCount: _favUserBeneficiary.length,
                 itemBuilder: (context, index) => Card(
                     key: ValueKey(_favUserBeneficiary[index]["name"]),
@@ -310,6 +313,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                         title: Text(
                           _favUserBeneficiary[index]["name"].toString(),
                         ),
+                        //Display description
                         subtitle: Text(_favUserBeneficiary[index]["description"].toString(),),
                         trailing: Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -321,7 +325,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                             },
                           ),
                         ),
-
+                        // Go to the selected beneficiary page
                         onTap: () {
                             _goToChosenBeneficiary(
                                 _favUserBeneficiary[index]['id']);
@@ -332,6 +336,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
               )
                   : Center(
                     child: Text(
+                      // No beneficiary favorite by this user.
                 'No favorites found'.tr,
                 style: TextStyle(fontSize: 24),
               ),
@@ -342,7 +347,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
     );
 
   }
-
+// Urgent case tab body for favorite that are beneficiaries
   _urgentCasesBody(){
     return Padding(
         padding: const EdgeInsets.all(10),
@@ -353,12 +358,14 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                   ? ListView.builder(
                 itemCount: _favUserUrgentCase.length,
                 itemBuilder: (context, index) => Card(
+                  // Display urgent case name
                     key: ValueKey(_favUserUrgentCase[index]["name"]),
                     child: Column(children: [
                       ListTile(
                         title: Text(
                           _favUserUrgentCase[index]["name"].toString(),
                         ),
+                        // Display urgent case description
                         subtitle: Text(_favUserUrgentCase[index]["description"].toString(),),
                         trailing: Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -370,7 +377,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                             },
                           ),
                         ),
-
+                        // go to the selected urgent case page
                         onTap: () {
                             _goToChosenUrgentCase(
                                 _favUserUrgentCase[index]['id']);;
@@ -381,6 +388,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
               )
                   : Center(
                     child: Text(
+                      // No urgent case favorite found for the user
                 'No favorites found'.tr,
                 style: TextStyle(fontSize: 24),
               ),
@@ -393,8 +401,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
   }
 
 
-
-
+// Get the information for the selected campaign from firebase
   _goToChosenCampaign(String id) async {
     var ret = await _firestore
         .collection('Campaigns')
@@ -416,7 +423,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
       return (CampaignDonateScreen(campaign));
     }));
   }
-
+// Get the information for the selected beneficiary from firebase
   _goToChosenBeneficiary(String id) async {
     var ret = await _firestore
         .collection('Beneficiaries')
@@ -438,7 +445,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
       return (BeneficiaryDonateScreen(beneficiary));
     }));
   }
-
+// Get the information for the selected urgent case from firebase
   _goToChosenUrgentCase(String id) async {
     var ret = await _firestore
         .collection('UrgentCases')
@@ -462,23 +469,27 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
       return (UrgentCaseDonateScreen(urgentCase));
     }));
   }
-
+// Favorite page UI
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          //Tab for favorite page
           bottom: const TabBar(tabs: [Tab(text: 'Campaigns',), Tab(text: 'Beneficiaries',), Tab(text: 'Urgent Cases',)],),
           title: Text('Favorite Page'.tr),
           leading: IconButton(
+            // Go back from favorite page
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
         ),
+        // Display donor drawer
         drawer: const DonorDrawer(),
+        //Donor body tab view
         body: TabBarView(
           children: [
             _campaignsBody(),
@@ -486,6 +497,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
             _urgentCasesBody()
           ],
         ),
+        //Display donor bottom navigation bar
         bottomNavigationBar: DonorBottomNavigationBar(),
       ),
     );

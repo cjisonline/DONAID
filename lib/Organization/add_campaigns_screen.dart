@@ -8,7 +8,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'organization_dashboard.dart';
 import 'package:get/get.dart';
 
-
+// Add campaign form
 class AddCampaignForm extends StatefulWidget {
   static const id = 'campaign_form_screen';
   AddCampaignForm({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   var category = [];
   int campaignTimeLimit=0;
 
-
+// Get category
   _getCategories() async {
     var ret = await firestore
         .collection('CharityCategories')
@@ -47,7 +47,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
 
     setState(() {});
   }
-
+// Get admin time limit from firebase
   _getTimeLimit() async {
     var ret = await firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
 
@@ -67,7 +67,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
     loggedInUser = _auth.currentUser;
   }
 
-
+//Add campaign to firebase
 
   Future<void> addCampaign(
       String category, String description, double goalAmount, String title, String endDateController) async {
@@ -92,7 +92,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
   }
 
 
-
+// UI for for campaign
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,6 +118,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                         const SizedBox(
                           height: 15.0,
                         ),
+                         // Add campaign from UI
                          Center(
                           child: Text(
                             'add_campaign'.tr,
@@ -130,11 +131,13 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                          Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 25.0),
+                           // Required field
                           child: Text(
                             '* - required_fields'.tr,
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
+                        // Error message please enter title
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -148,6 +151,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 return null;
                               }
                             },
+                            // UI for title enter field
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 label: Center(
@@ -173,6 +177,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 )),
                           ),
                         ),
+                        // Error message please enter description
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -187,6 +192,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 return null;
                               }
                             },
+                            //description field ui
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 label: Center(
@@ -212,6 +218,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 )),
                           ),
                         ),
+                        //Please enter goal amount error message or enter valid goal amount
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -227,6 +234,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 return null;
                               }
                             },
+                            //UI for goal amount
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 label: Center(
@@ -252,6 +260,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                 )),
                           ),
                         ),
+                        //Please valid enter end date error
                         Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
@@ -300,7 +309,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                     lastDate: DateTime(2100));
                                 endDateController.text = date.toString().substring(0,10);
                               },)),
-
+                        // Category field UI
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: DropdownButtonFormField <String>(
@@ -340,7 +349,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                  ? 'please_fill_in_the_category'.tr : null,
                           )
                         ),
-
+                        //Submit button and navigate to the dashboard
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 25.0, horizontal: 5.0),
@@ -361,7 +370,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                     showLoadingSpinner = true;
                                   });
                                   addCampaign(categoryController.text,descriptionController.text,
-                                      int.parse(goalAmountController.text).toDouble(), titleController.text, endDateController.text);
+                                      double.parse(goalAmountController.text).toDouble(), titleController.text, endDateController.text);
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
 
                                   ScaffoldMessenger.of(context)

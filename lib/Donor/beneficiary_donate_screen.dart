@@ -1,15 +1,11 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
-import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Donor/updateFavorite.dart';
 import 'package:donaid/Models/Beneficiary.dart';
-import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
@@ -99,7 +95,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
           );
         });
   }
-
+// get Favorite from firebase
   _getFavorite() async {
     await _firestore
         .collection("Favorite")
@@ -119,6 +115,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
         scrollDirection: Axis.vertical,
         child: Center(
             child: Padding(
+              // Favorite button
           padding: const EdgeInsets.all(8.0),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             (_auth.currentUser?.email != null)

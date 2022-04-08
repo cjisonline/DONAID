@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:get/get.dart';
 
-
+// Add urgent case form
 class AddUrgentCaseForm extends StatefulWidget {
   static const id = 'urgentcase_form_screen';
   AddUrgentCaseForm({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
   var category = [];
   int urgentCaseTimeLimit=0;
 
-
+// Get category
   _getCampaign() async {
     var ret = await firestore
         .collection('CharityCategories')
@@ -47,7 +47,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
 
     setState(() {});
   }
-
+// Get admin time limit from firebase
   _getTimeLimit() async {
     var ret = await firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
 
@@ -67,7 +67,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
     loggedInUser = _auth.currentUser;
   }
 
-
+//Add urgent case to firebase
   Future<void> addUrgentCase(String category, String description, double goalAmount,
       String title, String endDateController) async {
     try {
@@ -92,7 +92,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
     }
   }
 
-
+// UI for for urgent case
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,6 +118,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                         const SizedBox(
                           height: 15.0,
                         ),
+                        // Add urgent case from UI
                          Center(
                           child: Text(
                             'add_urgent_case'.tr,
@@ -131,10 +132,12 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                           padding: EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 25.0),
                           child: Text(
+                            // Required field
                             '* - required_fields'.tr,
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
+                        // Error message please enter title
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -150,6 +153,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 return null;
                               }
                             },
+                            //// UI for title enter field
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 label: Center(
@@ -175,6 +179,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 )),
                           ),
                         ),
+                        // Error message please enter description
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -189,6 +194,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 return null;
                               }
                             },
+                            //description field ui
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 label: Center(
@@ -214,6 +220,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 )),
                           ),
                         ),
+                        //Please enter goal amount error message or enter valid goal amount
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -229,6 +236,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 return null;
                               }
                             },
+                            //Goal amount UI
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 label: Center(
@@ -254,6 +262,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 )),
                           ),
                         ),
+                        //Please valid enter end date error
                         Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
@@ -303,7 +312,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                 endDateController.text =
                                     date.toString().substring(0, 10);
                               },)),
-
+                        // Category field UI
                         Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: DropdownButtonFormField <String>(
@@ -346,6 +355,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                   ? 'please_fill_in_the_category'.tr : null,
                             )
                         ),
+                        //Urgent case note for approval
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
@@ -367,6 +377,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                             ),
                           ),
                         ),
+                        //Submit button and navigate to the dashboard
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 20.0, horizontal: 5.0),
@@ -388,7 +399,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                   });
                                   addUrgentCase(categoryController.text,
                                       descriptionController.text,
-                                      int.parse(goalAmountController.text).toDouble(),
+                                      double.parse(goalAmountController.text).toDouble(),
                                       titleController.text,
                                       endDateController.text);
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));

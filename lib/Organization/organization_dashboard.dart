@@ -43,7 +43,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
-
+//initstate to initialize functions
   @override
   void initState() {
     super.initState();
@@ -106,7 +106,6 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       print("Permission declined by user.");
     }
   }
-
   _refreshPage() async{
     beneficiaries.clear();
     campaigns.clear();
@@ -115,7 +114,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     _getBeneficiaries();
     _getUrgentCases();
   }
-
+//Get campaigns from firebase
   _getCampaign() async {
     var ret = await _firestore
         .collection('Campaigns')
@@ -143,7 +142,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     campaigns.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
-
+// get urgent case from firebase
   _getUrgentCases() async {
     var ret = await _firestore
         .collection('UrgentCases')
@@ -174,7 +173,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     urgentCases.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
-
+// get beneficiary from firebase
   _getBeneficiaries() async {
     var ret = await _firestore
         .collection('Beneficiaries')
@@ -204,7 +203,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
 
     setState(() {});
   }
-
+//Dashboard UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,6 +211,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
         title:  Text('dashboard'.tr),
         backgroundColor: Colors.blue,
         actions: <Widget>[
+          // Icon to add charities
           IconButton(
               icon: const Icon(
                 Icons.add,
@@ -224,8 +224,11 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               }),
         ],
       ),
+      // Org UI Drawer
       drawer: const OrganizationDrawer(),
+      // Body for Org dashboard
       body: _body(),
+      //Bottom Nav bar
       bottomNavigationBar: const OrganizationBottomNavigation(),
     );
   }
@@ -246,6 +249,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Campaign display
                        Text(
                         '_campaign'.tr,
                         style: TextStyle(fontSize: 20),
@@ -281,7 +285,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               child: Text('no_active_campaigns_to_show'.tr, style: TextStyle(fontSize: 18),),
             ),
 
-            // organization list
+            // Urgent case display
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -325,7 +329,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
               child: Text('no_active_urgent_sases_show'.tr, style: TextStyle(fontSize: 18),),
             ),
 
-            // urgent case list
+            // beneficiary list
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(

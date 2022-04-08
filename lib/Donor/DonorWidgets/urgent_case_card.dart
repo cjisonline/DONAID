@@ -76,6 +76,25 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
+        Align(
+          alignment: Alignment.centerRight,
+          child: IconButton(
+            icon: Icon(
+              pointlist.contains(widget.urgentCase.id.toString())
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: pointlist.contains(widget.urgentCase.id.toString())
+                  ? Colors.red
+                  : null,
+              size: 40,
+            ),
+            onPressed: () async {
+              await updateFavorites(loggedInUser!.uid.toString(),
+                  widget.urgentCase.id.toString());
+              await _getFavorite();
+            },
+          ),
+        ),
         const Icon(
           Icons.assistant,
           color: Colors.blue,
@@ -171,22 +190,6 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
         (_auth.currentUser?.email != null) ?
         Align(
           alignment: Alignment.center,
-          child: IconButton(
-            icon: Icon(
-              pointlist.contains(widget.urgentCase.id.toString())
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: pointlist.contains(widget.urgentCase.id.toString())
-                  ? Colors.red
-                  : null,
-              size: 40,
-            ),
-            onPressed: () async {
-              await updateFavorites(loggedInUser!.uid.toString(),
-                  widget.urgentCase.id.toString());
-              await _getFavorite();
-            },
-          ),
         )
             : Container()
       ]),

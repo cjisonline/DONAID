@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 
 import '../organization_dashboard.dart';
 import '../search_page.dart';
-
+// Organization bottom navigation bar
 class OrganizationBottomNavigation extends StatefulWidget {
   const OrganizationBottomNavigation({Key? key}) : super(key: key);
 
@@ -19,7 +19,6 @@ class OrganizationBottomNavigation extends StatefulWidget {
 
 class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigation> {
   final _auth = FirebaseAuth.instance;
-  ///Author: Raisa Zaman
   @override
   Widget build(BuildContext context) {
     return Container(

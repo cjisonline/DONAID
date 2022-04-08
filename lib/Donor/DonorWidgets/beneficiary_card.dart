@@ -78,6 +78,25 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
+        Align(
+          alignment: Alignment.centerRight,
+          child: IconButton(
+            icon: Icon(
+              pointlist.contains(widget.beneficiary.id.toString())
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: pointlist.contains(widget.beneficiary.id.toString())
+                  ? Colors.red
+                  : null,
+              size: 40,
+            ),
+            onPressed: () async {
+              await updateFavorites(loggedInUser!.uid.toString(),
+                  widget.beneficiary.id.toString());
+              await _getFavorite();
+            },
+          ),
+        ),
         Icon(
           Icons.person,
           color: Colors.blue,
@@ -173,22 +192,6 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
         (_auth.currentUser?.email != null) ?
         Align(
           alignment: Alignment.center,
-          child: IconButton(
-            icon: Icon(
-              pointlist.contains(widget.beneficiary.id.toString())
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: pointlist.contains(widget.beneficiary.id.toString())
-                  ? Colors.red
-                  : null,
-              size: 40,
-            ),
-            onPressed: () async {
-              await updateFavorites(loggedInUser!.uid.toString(),
-                  widget.beneficiary.id.toString());
-              await _getFavorite();
-            },
-          ),
         )
             : Container(),
       ]),
