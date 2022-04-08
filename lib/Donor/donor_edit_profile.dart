@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'donor_profile.dart';
 
 class DonorEditProfile extends StatefulWidget {
@@ -58,9 +59,9 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
 
   _updateDonorInformation() async {
     _firestore.collection('DonorUsers').doc(donor.id).update({
-      "firstName": donor.firstName,
-      "lastName": donor.lastName,
-      "phoneNumber": donor.phoneNumber
+      "firstName": _firstNameController?.text,
+      "lastName": _lastNameController?.text,
+      "phoneNumber": _phoneNumberController?.text
     });
   }
 
@@ -74,7 +75,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           leadingWidth: 80,
           leading: TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, DonorProfile.id);
+              Navigator.pop(context);
             },
             child:  Text('cancel'.tr,
                 style: TextStyle(fontSize: 15.0, color: Colors.white)),
@@ -83,14 +84,13 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
             TextButton(
               onPressed: () {
                 _submitForm();
-                Navigator.pop(context);
               },
               child:  Text('save'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
       body: _body(),
-      bottomNavigationBar: _bottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 
@@ -121,9 +121,6 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
             }
             return null;
           },
-          onSaved: (value) {
-            donor.firstName = value!;
-          },
         ));
   }
 
@@ -151,9 +148,6 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               return 'please_enter_last_name.'.tr;
             }
             return null;
-          },
-          onSaved: (value) {
-            donor.lastName = value!;
           },
         ));
   }
@@ -186,18 +180,18 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               return null;
             }
           },
-          onSaved: (value) {
-            donor.phoneNumber = value!;
-          },
         ));
   }
 
-  _submitForm() {
+  _submitForm() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    else{
+      await _updateDonorInformation();
+      Navigator.pop(context,true);
+    }
     _formKey.currentState!.save();
-    _updateDonorInformation();
   }
 
   _body() {
@@ -219,64 +213,5 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     );
   }
 
-  _bottomNavigationBar() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {
-                Navigator.pushNamed(context, DonorDashboard.id);
-              },
-              icon: const Icon(Icons.home, color: Colors.white, size: 35),
-            ),
-            const Text('Home',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 35,
-              ),
-            ),
-             Text('search'.tr,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.notifications,
-                  color: Colors.white, size: 35),
-            ),
-             Text('notifications'.tr,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.message, color: Colors.white, size: 35),
-            ),
-             Text('message'.tr,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-        ],
-      ),
-    );
-  }
+
 }

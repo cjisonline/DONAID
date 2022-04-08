@@ -94,19 +94,19 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
       await uploadFile();
 
       _firestore.collection('OrganizationUsers').doc(organization.id).update({
-        "organizationName": organization.organizationName,
-        "phoneNumber": organization.phoneNumber,
-        "organizationDescription": organization.organizationDescription,
-        "gatewayLink": organization.gatewayLink,
+        "organizationName": _organizationNameController?.text,
+        "phoneNumber": _phoneNumberController?.text,
+        "organizationDescription": _organizationDescriptionController?.text,
+        "gatewayLink": _gatewayLinkController?.text,
         "profilePictureDownloadURL": _uploadedFileURL
       });
     }
     else{
       _firestore.collection('OrganizationUsers').doc(organization.id).update({
-        "organizationName": organization.organizationName,
-        "phoneNumber": organization.phoneNumber,
-        "organizationDescription": organization.organizationDescription,
-        "gatewayLink": organization.gatewayLink,
+        "organizationName": _organizationNameController?.text,
+        "phoneNumber": _phoneNumberController?.text,
+        "organizationDescription": _organizationDescriptionController?.text,
+        "gatewayLink": _gatewayLinkController?.text,
       });
     }
   }
@@ -121,7 +121,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           leadingWidth: 80,
           leading: TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, OrganizationProfile.id);
+                Navigator.pop(context);
               },
               child:  Text('cancel'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
@@ -130,8 +130,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
             TextButton(
               onPressed: () {
                 _submitForm();
-                _updateOrganizationInformation();
-                Navigator.pop(context);
               },
               child:  Text('save'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
@@ -202,9 +200,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         }
         return null;
       },
-      onSaved: (value) {
-        organization.organizationName = value!;
-      },
     ));
   }
 
@@ -236,9 +231,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           return null;
         }
       },
-      onSaved: (value) {
-        organization.phoneNumber = value!;
-      },
     ));
   }
 
@@ -252,7 +244,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
         minLines: 2,
         maxLines: 5,
         maxLength: 240,
-        onSaved: (value) {
+        onChanged: (value) {
           organization.organizationDescription = value;
         },
         decoration: InputDecoration(
@@ -298,9 +290,6 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
               }
               return null;
             },
-            onSaved: (value) {
-              organization.gatewayLink = value!;
-            },
           ));
     }
     else{
@@ -308,9 +297,13 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     }
   }
 
-  _submitForm(){
+  _submitForm() async{
     if (!_formKey.currentState!.validate()) {
       return;
+    }
+    else{
+      await _updateOrganizationInformation();
+      Navigator.pop(context,true);
     }
     _formKey.currentState!.save();
   }
