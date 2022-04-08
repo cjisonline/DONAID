@@ -168,31 +168,31 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
           children: [
             _buildProfilePictureDisplay(),
             Text(
-              'Your Information'.toUpperCase(),
+              'your_information'.tr.toUpperCase(),
               style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold),
             ),
-            ProfileRow('YOUR EMAIL', organization?.organizationEmail ?? 'N/A'),
-            ProfileRow('NAME', organization?.organizationName ?? 'N/A'),
-            ProfileRow('YOUR PHONE', organization?.phoneNumber ?? 'N/A'),
+            ProfileRow('email'.tr.toUpperCase(), organization?.organizationEmail ?? 'N/A'),
+            ProfileRow('name'.tr.toUpperCase(), organization?.organizationName ?? 'N/A'),
+            ProfileRow('phone_number'.tr.toUpperCase(), organization?.phoneNumber ?? 'N/A'),
             ProfileRow(
-                'DESCRIPTION', organization?.organizationDescription ?? 'N/A'),
+                'description'.tr.toUpperCase(), organization?.organizationDescription ?? 'N/A'),
             SizedBox(height: 15),
             Text(
-              "Statistics".toUpperCase(),
+              "statistics".tr.toUpperCase(),
               style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(height:25),
-            Text('Donations'.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+            Text('donations'.tr.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
            Container(
              height: MediaQuery.of(context).size.height*0.5,
                width: MediaQuery.of(context).size.width,
                child: HorizontalBarLabelChart.withData(urgentCasesRaised, beneficiaryRaised, campaignRaised)),
            // ProfileRow('Total Money Raised', p1.toStringAsFixed(2)),
-            Text(numberOfDonors.toStringAsFixed(0)+' unique donors'.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+            Text(numberOfDonors.toStringAsFixed(0)+'_unique_donors'.tr.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
             SizedBox(height: 10),
           ],
         ));
@@ -204,26 +204,26 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
         child: Column(
           children: [
             _buildProfilePictureDisplay(),
-            ProfileRow('YOUR EMAIL', organization?.organizationEmail ?? 'N/A'),
-            ProfileRow('NAME', organization?.organizationName ?? 'N/A'),
-            ProfileRow('YOUR PHONE', organization?.phoneNumber ?? 'N/A'),
+            ProfileRow('email'.tr.toUpperCase(), organization?.organizationEmail ?? 'N/A'),
+            ProfileRow('name'.tr.toUpperCase(), organization?.organizationName ?? 'N/A'),
+            ProfileRow('phone_number'.tr.toUpperCase(), organization?.phoneNumber ?? 'N/A'),
             ProfileRow(
-                'DESCRIPTION', organization?.organizationDescription ?? 'N/A'),
+                'description'.tr.toUpperCase(), organization?.organizationDescription ?? 'N/A'),
             SizedBox(height: 15),
             Text(
-              "Statistics".toUpperCase(),
-              style: TextStyle(
+              'statistics'.tr.toUpperCase(),
+              style: const TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(height:25),
-            Text('Donations'.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+            Text('donations'.tr.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
             Container(
                 height: MediaQuery.of(context).size.height*0.5,
                 width: MediaQuery.of(context).size.width,
                 child: HorizontalBarLabelChart.withData(urgentCasesRaised, beneficiaryRaised, campaignRaised)),
             // ProfileRow('Total Money Raised', p1.toStringAsFixed(2)),
-            Text(numberOfDonors.toStringAsFixed(0)+' unique donors'.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+            Text(numberOfDonors.toStringAsFixed(0)+'_unique_donors'.tr.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
             SizedBox(height: 10),
           ],
         ));

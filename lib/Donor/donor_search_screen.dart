@@ -413,8 +413,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
               _searchResults(val.toString());
             },
             controller: searchFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
+            decoration: InputDecoration(
+              labelText: 'search'.tr,
             ),
           ),
           const SizedBox(
@@ -551,8 +551,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
               _searchResults(val.toString());
             },
             controller: searchFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
+            decoration:  InputDecoration(
+              labelText: 'search'.tr,
             ),
           ),
           const SizedBox(
@@ -689,8 +689,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
               _searchResults(val.toString());
             },
             controller: searchFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
+            decoration:  InputDecoration(
+              labelText: 'search'.tr,
             ),
           ),
           const SizedBox(

@@ -86,10 +86,10 @@ class _DonorProfileState extends State<DonorProfile> {
             scrollDirection: Axis.vertical,
             child: Column(
               children:  [
-                ProfileRow('YOUR EMAIL', donor.email),
-                ProfileRow('FIRST NAME', donor.firstName),
-                ProfileRow('LAST NAME', donor.lastName),
-                ProfileRow('YOUR PHONE', donor.phoneNumber),
+                ProfileRow('email'.tr.toUpperCase(), donor.email),
+                ProfileRow('first_name'.tr.toUpperCase(), donor.firstName),
+                ProfileRow('last_name'.tr.toUpperCase(), donor.lastName),
+                ProfileRow('phone_number'.tr.toUpperCase(), donor.phoneNumber),
               ],
             )
         );

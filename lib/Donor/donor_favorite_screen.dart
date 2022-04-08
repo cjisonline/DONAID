@@ -469,7 +469,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          bottom: const TabBar(tabs: [Tab(text: 'Campaigns',), Tab(text: 'Beneficiaries',), Tab(text: 'Urgent Cases',)],),
+          bottom: TabBar(tabs: [Tab(text: 'campaigns'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,)],),
           title: Text('Favorite Page'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
