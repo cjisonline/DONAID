@@ -38,15 +38,14 @@ import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc
     messagingSenderId: "240146097284",
     appId: "1:240146097284:web:0e78cae430d624551cced1",
     measurementId: "G-33T6FD2DK6"
-  };
+    };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // Logout
 const auth1 = getAuth();
-
 function logoutAdmin() {
     signOut(auth1).then(() => {
     // Sign-out successful.
@@ -69,8 +68,11 @@ onAuthStateChanged(auth1, (user) => {
   }
 });
 
+// Function checks if the logged in user is in the Admin Collection in Firebase
 async function logoutNonAdmin(uid){
+    // Query Firebase Admin Collection
     const querySnapshot = await getDocs(collection(db, "Admin"));
+        // Iterate through each document in collection
         querySnapshot.forEach((item) => {
             if(item.data().uid != uid) {
                 logoutAdmin();
@@ -78,41 +80,54 @@ async function logoutNonAdmin(uid){
         })
 }
 
+// Function on window load gets all the Admin Messages
 async function getMessagesData(){
+    // Function call on window load
     window.onload = async function(){
-
+        // Query Firebase AdminMessages Collection
         const querySnapshot = await getDocs(collection(db, "AdminMessages"));
+            // Iterate through each document in collection
             querySnapshot.forEach((item) => {
-
+                // Checks if document has the boolean of read as false
                 if (item.data().read != true) {
-                let contactDate = item.data().ContactTime;
-                var cDate = new Date(contactDate.seconds*1000);
-                var contactDateString = cDate.toLocaleDateString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
-                    document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
-                    "<tr><td class='emailTD'>" + item.data().subject + 
-                    "</td><td>" + item.data().email + 
-                    "</td><td>" + item.data().message + 
-                    "</td><td>" + item.data().userId + 
-                    "</td><td>" + item.data().id + 
-                    "</td><td>" + item.data().category + 
-                    "</td><td>" + contactDateString + 
-                    "</td><td>" + '<button id="approveButton" class="approveButtonClass">View</button>' + "</td></tr>"; 
+                    // Variables to pass timestamp from firebase and convert it to a JS date
+                    let contactDate = item.data().ContactTime;
+                    var cDate = new Date(contactDate.seconds*1000);
+                    var contactDateString = cDate.toLocaleDateString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+                        // Creating HTML table element with Firebase results
+                        document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
+                        "<tr><td class='emailTD'>" + item.data().subject + 
+                        "</td><td>" + item.data().email + 
+                        "</td><td>" + item.data().message + 
+                        "</td><td>" + item.data().userId + 
+                        "</td><td>" + item.data().id + 
+                        "</td><td>" + item.data().category + 
+                        "</td><td>" + contactDateString + 
+                        "</td><td>" + '<button id="approveButton" class="approveButtonClass">View</button>' + "</td></tr>"; 
                 }
-                    
+                    // On Approve Button Click, Function contents are ran
+                    // It is called approve button on this page for styling purposes
+                    // to have the same styling for multiple buttons across all pages
+                    // with one style set
                     $('button.approveButtonClass').click(function() {
-                        var messageSubject = adminTableDef.row($(this).closest("tr")).data()[0];
+                        // Bind data from row to JQuery variables
                         var $item = adminTableDef.row($(this).closest("tr")).data()[2];
+                        // Bind data from row to variables
+                        var messageSubject = adminTableDef.row($(this).closest("tr")).data()[0];
                         var userEmail = adminTableDef.row($(this).closest("tr")).data()[1];
                         var userType = adminTableDef.row($(this).closest("tr")).data()[5];
                         var messageID = adminTableDef.row($(this).closest("tr")).data()[4];
                         var contactDatePass = adminTableDef.row($(this).closest("tr")).data()[6];
+                        // Append JQuery variables to JS variables
+                        // Not required, but preferred methodology for code quality
                         $("#resultas").append($item); 
                         var messageText = $item;
-                         
+                        // Pass variables to the viewMessage function call
                         viewMessage(messageSubject, messageText, userEmail, userType, messageID, contactDatePass);
                     });
         });
 
+        // JQuery Table Attributes
         var adminTableDef = $('#adminTable').DataTable({
             scrollX: true,
             responsive: true,
@@ -129,6 +144,7 @@ async function getMessagesData(){
             ],
             "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
             "info": false,
+            // Pagination is removed when items are less than one page
             "fnDrawCallback": function(oSettings) {
                 if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
                     $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
@@ -136,19 +152,22 @@ async function getMessagesData(){
                     $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
                 }
             }
-            
         });
+        // Responsiveness function for errors on window resize
         $(window).on('resize', function () {
             $('#adminTable').dataTable().fnDraw();
         });
     }
 }
 
+// Logout function bound to logout on Navbar
 $('a#logoutButton').click(function() {
     logoutAdmin();
 });
 
+// Function to view message on view button click
 function viewMessage (messageSubject, messageText, userEmail, userType, messageID, contactDatePass) {
+    // Popup to display message information to admin
     swal.fire({
             title: 'Subject: ' + messageSubject,
             html: 'Message: ' + messageText + '<br>' +
@@ -162,6 +181,7 @@ function viewMessage (messageSubject, messageText, userEmail, userType, messageI
             cancelButtonColor: '#d33',
             confirmButtonText: 'Mark as Read',
     })
+    // Once mark as read button is clicked
     .then((result) => {
         if (result.isConfirmed) { 
             Swal.fire({
@@ -174,14 +194,17 @@ function viewMessage (messageSubject, messageText, userEmail, userType, messageI
                 confirmButtonText: 'Yes, mark as read!'
                 }).then((result) => {
                 if (result.isConfirmed) {
+                    // Set the document to the message ID retrieved from the table
                     const messageDoc = doc(db, "AdminMessages", messageID);
+                        // Update document to have the read boolean as true
                         updateDoc(messageDoc, {
                             read: true,
                     })
+                    // Confirmation to admin that the message was read
                     Swal.fire(
-                    'Read!',
-                    'The message has been marked as read and removed from your inbox.',
-                    'success'
+                        'Read!',
+                        'The message has been marked as read and removed from your inbox.',
+                        'success'
                     ).then(function () {
                         location.reload(); 
                     })
@@ -202,6 +225,7 @@ getMessagesData();
 </head>
 
 <body>
+    <!-- Navbar -->
     <div class="container-fluid">
         <div class="row flex-nowrap">
             <div class="col-auto px-0">
@@ -238,7 +262,9 @@ getMessagesData();
                 </div>
             </div>
       <div class="col ps-md-2 pt-2">
+            <!-- Header at top of Page -->
             <h1 class="page-title-header" style="text-align:center; font-size: 24px;">Messages</h1>
+            <!-- Table Call and Headers-->
             <table id="adminTable">
             <thead>
                 <th>Subject</th>

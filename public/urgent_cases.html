@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <!-- CSS Loads -->
 <link rel="stylesheet" href="login.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.material.min.css">
 
@@ -29,7 +27,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-analytics.js";
 import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
 import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc, setDoc} from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js';
-
     const firebaseConfig = {
     apiKey: "AIzaSyAZIToR8oHIIgWmayz0PncWAaiwmJ5n_64",
     authDomain: "donaid-d3244.firebaseapp.com",
@@ -38,15 +35,14 @@ import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc
     messagingSenderId: "240146097284",
     appId: "1:240146097284:web:0e78cae430d624551cced1",
     measurementId: "G-33T6FD2DK6"
-  };
+    };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
   
 // Logout
 const auth1 = getAuth();
-
 function logoutAdmin() {
     signOut(auth1).then(() => {
     // Sign-out successful.
@@ -69,8 +65,11 @@ onAuthStateChanged(auth1, (user) => {
   }
 });
 
+// Function checks if the logged in user is in the Admin Collection in Firebase
 async function logoutNonAdmin(uid){
+    // Query Firebase Admin Collection
     const querySnapshot = await getDocs(collection(db, "Admin"));
+        // Iterate through each document in collection
         querySnapshot.forEach((item) => {
             if(item.data().uid != uid) {
                 logoutAdmin();
@@ -78,22 +77,36 @@ async function logoutNonAdmin(uid){
         })
 }
 
+// Function on window load gets all the Urgent Case data
 async function getCaseData(){
+    // Function call on window load
     window.onload = async function(){
-
+    // Array creation to push organization ID and name to an array
+    // to iterate and populate table from UID in beneficiary collection
+    // to organization in table
     var orgInfo = [];
+    // Query Firebase OrganizationUsers Collection
     const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
+        // Iterate through each document in collection
         querySnapshot2.forEach((doc) => {
+        // Push document ID and data of document to an array
         orgInfo.push(doc.id, " => ", doc.data());
     })
 
+    // Second array creation to push organization ID and name to an array
     var orgIDAndDocID=[];
-
+    // Query Firebase UrgentCases Collection
     const querySnapshot = await getDocs(collection(db, "UrgentCases"));
+    // Iterate through each document in collection
     querySnapshot.forEach((item) => {
+        // Checks if document has the approved boolean as false to check if the urgent case has
+        // the rejected boolean as false
         if(item.data().approved == false && item.data().rejected != true) {
+            // Iterate through JS array and find Organization Name from ID
             var orgName = orgInfo.find(t=>t.uid === item.data().organizationID).organizationName;
+            // Push matching organizations that are approved with their IDs to array
             orgIDAndDocID.push({"organizationID":item.data().organizationID, "documentID":item.data().id});
+            // Creating HTML table element with Firebase results
             document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
             "<tr><td>" + item.data().title + 
             "</td><td>" + item.data().category + 
@@ -103,22 +116,32 @@ async function getCaseData(){
             "</td><td>" + item.data().description + 
             "</td><td>" + '<button id="approveButton" class="approveButtonClass">Approve</button>' + "</td></tr>";
         }
+
+        // On Approve Button Click, Function contents are ran
+        // It is called approve button on this page for styling purposes
+        // to have the same styling for multiple buttons across all pages
+        // with one style set
         $('button.approveButtonClass').click(function() {
+            // Bind data from row to JQuery variables
             var $item = adminTableDef.row($(this).closest("tr")).data()[3];
             var $title = adminTableDef.row($(this).closest("tr")).data()[0];
             var $orgName = adminTableDef.row($(this).closest("tr")).data()[2];
+            // Append JQuery variables to JS variables
+            // Not required, but preferred methodology for code quality
             $("#resultas").append($item); 
             var documentID = $item;
             var urgentCaseTitle = $title;
             var orgName = $orgName;
-
+            // Pass org name and ID to bind it to urgent case
             var found = orgIDAndDocID.filter(function(item){return item.documentID == documentID})
             var orgID = found[0].organizationID
 
-            approveTheUrgentCase(documentID, urgentCaseTitle,orgName, orgID);
+            // Approve the urgent case function passing values to set document
+            approveTheUrgentCase(documentID, urgentCaseTitle, orgName, orgID);
         })
     });
 
+    // JQuery Table Attributes
     var adminTableDef = $('#adminTable').DataTable({
             responsive: true,
             scrollX: true,
@@ -135,7 +158,8 @@ async function getCaseData(){
             ],
             "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
             "info": false,
-
+            
+            // Pagination is removed when items are less than one page
             "fnDrawCallback": function(oSettings) {
                 if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
                     $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
@@ -144,14 +168,16 @@ async function getCaseData(){
                 }
             }
         });
+        // Responsiveness function for errors on window resize
         $(window).on('resize', function () {
             $('#adminTable').dataTable().fnDraw();
         });
     }
 }
 
+// Function to approve the urgent case from table
 function approveTheUrgentCase(documentID, urgentCaseTitle, orgName, orgID) {
-      
+    // Popup call for Urgent Case Approval once "Approve" button is clicked
     swal.fire({
         title: 'Approve the urgent case: ' + urgentCaseTitle + '?',
         icon: 'warning',
@@ -171,38 +197,39 @@ function approveTheUrgentCase(documentID, urgentCaseTitle, orgName, orgID) {
 })
     .then((result) => {
         if (result.isConfirmed) { 
+            // Run function for push notifications
             sendDonorNotification(documentID, urgentCaseTitle, orgName);
-            sendOrganizationNotification(documentID, urgentCaseTitle, orgID)
+            sendOrganizationNotification(documentID, urgentCaseTitle, orgID);
+            // Query Firebase UrgentCases Collection with the document ID that is to be approved
             const approvals = doc(db, "UrgentCases", documentID);
+            // Update the document based on the ID and add approved values and clear denial reasons
             updateDoc(approvals, {approved: true})
-    
+            // Second popup to confirm approval and request admin to email if needed
             .then(() => {
                 swal.fire('Approved!',
                 'Urgent Case: ' + urgentCaseTitle + ' approved.',
                 'success').then(function () {
                     location.reload(); 
-                    
                 })
-                
                 .catch((error) => {
                     console.error("Error approving urgent case: ", error);
                 })
             })
         }
-
+        // If urgent case is denied, denial function is called
         else if (result.isDenied) {
             runDenialDialogue(documentID, urgentCaseTitle);
         }
-
+        // Upon cancel, another popup informs admin as such
         else {
             swal.fire('Cancelled!',
             'The urgent case was not approved.',
             'error');
-        }
-            
+        } 
     })
 }
 
+// Function to deny the urgent case from table
 async function runDenialDialogue(documentID, urgentCaseTitle){
     const { value: deniedReason } = await Swal.fire({
             input: 'textarea',
@@ -212,21 +239,23 @@ async function runDenialDialogue(documentID, urgentCaseTitle){
                 'aria-label': 'Type your rejection reason here'
             },
             showCancelButton: true,
+            // InputValidator is used when only one field is in 
+            // swal2 instead of promise creation
             inputValidator: (value) => {
                 if (!value) {
                     return 'You need to give a denial reason!'
                 }
             }
             })
-
             if(deniedReason){
+                // Query Firebase UrgentCases Collection with the document ID that is to be denied 
                 const approvals = doc(db, "UrgentCases", documentID);
+                // Update the document based on the ID and add denial reason and set rejected boolean to true
                 const docSet = setDoc(approvals, {
                     denialReason: deniedReason,
                     rejected: true
                 }, { merge: true })
-            
-
+                // Second popup to confirm denial
                 .then(() => {
                     swal.fire('Denied!',
                     'Urgent case "' + urgentCaseTitle + '" is denied due to: ' + deniedReason + '',
@@ -234,14 +263,12 @@ async function runDenialDialogue(documentID, urgentCaseTitle){
                         sendRejectionNotification(documentID, urgentCaseTitle, orgID);
                         location.reload(); 
                     })
-            
-                
                 .catch((error) => {
                     console.error("Error denying urgent case: ", error);
-                
                 })
             })
         }
+        // Upon cancel, another popup informs admin as such
         else {
             swal.fire('Cancelled!',
             'No changes were made.',
@@ -249,9 +276,9 @@ async function runDenialDialogue(documentID, urgentCaseTitle){
         }
 }
 
+// Function to send donors a push notification on urgent case approval
 function sendDonorNotification(documentID, urgentCaseTitle, orgName){
     console.log('sending message')
-        
     var url = "https://fcm.googleapis.com/fcm/send";
     var params = {
         "to":"/topics/UrgentCaseApprovals",
@@ -273,9 +300,9 @@ function sendDonorNotification(documentID, urgentCaseTitle, orgName){
     fetch(url, {method: 'POST', body:JSON.stringify(params), headers: reqHeaders}).then(console.log);
 }
 
+// Function to send organization push notification that their urgent case was approved
 function sendOrganizationNotification(documentID, urgentCaseTitle, orgID){
-    console.log('sending organization message')
-        
+    console.log('sending organization message')   
     var url = "https://fcm.googleapis.com/fcm/send";
     var params = {
         "to":`/topics/${orgID}Approvals`,
@@ -297,9 +324,9 @@ function sendOrganizationNotification(documentID, urgentCaseTitle, orgID){
     fetch(url, {method: 'POST', body:JSON.stringify(params), headers: reqHeaders}).then(console.log);
 }
 
+// Function to send organization push notification that their urgent case was denied
 function sendRejectionNotification(documentID, urgentCaseTitle, orgID){
     console.log('sending organization message')
-        
     var url = "https://fcm.googleapis.com/fcm/send";
     var params = {
         "to":`/topics/${orgID}Approvals`,
@@ -321,10 +348,12 @@ function sendRejectionNotification(documentID, urgentCaseTitle, orgID){
     fetch(url, {method: 'POST', body:JSON.stringify(params), headers: reqHeaders}).then(console.log);
 }
 
+// Logout function bound to logout on Navbar
 $('a#logoutButton').click(function() {
     logoutAdmin();
 });
 
+// Run Function to get all data upon page load
 getCaseData();
 </script>
 
@@ -332,6 +361,7 @@ getCaseData();
 </head>
 
 <body>
+    <!-- Navbar -->
     <div class="container-fluid">
         <div class="row flex-nowrap">
             <div class="col-auto px-0">
@@ -368,7 +398,9 @@ getCaseData();
                 </div>
             </div>
       <div class="col ps-md-2 pt-2">
+            <!-- Header at top of Page -->
             <h1 class="page-title-header" style="text-align:center; font-size: 24px;">Urgent Cases</h1>
+            <!-- Table Call and Headers-->
             <table id="adminTable">
             <thead>
                 <th>Title</th>

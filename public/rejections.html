@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <!-- CSS Loads -->
 <link rel="stylesheet" href="login.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.material.min.css">
 
@@ -37,15 +35,14 @@ import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc
     messagingSenderId: "240146097284",
     appId: "1:240146097284:web:0e78cae430d624551cced1",
     measurementId: "G-33T6FD2DK6"
-  };
+    };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // Logout
 const auth1 = getAuth();
-
 function logoutAdmin() {
     signOut(auth1).then(() => {
     // Sign-out successful.
@@ -68,8 +65,11 @@ onAuthStateChanged(auth1, (user) => {
   }
 });
 
+// Function checks if the logged in user is in the Admin Collection in Firebase
 async function logoutNonAdmin(uid){
+    // Query Firebase Admin Collection
     const querySnapshot = await getDocs(collection(db, "Admin"));
+        // Iterate through each document in collection
         querySnapshot.forEach((item) => {
             if(item.data().uid != uid) {
                 logoutAdmin();
@@ -77,12 +77,17 @@ async function logoutNonAdmin(uid){
         })
 }
 
+// Function on window load gets all the Organizations that were rejected
 async function getRejectionData(){
+    // Function call on window load
     window.onload = async function(){
-
+    // Query Firebase OrganizationUsers Collection
     const querySnapshot = await getDocs(collection(db, "OrganizationUsers"));
+        // Iterate through each document in collection
         querySnapshot.forEach((item) => {
+            // Checks if document contains approved boolean as false and that the rejected boolean as true
             if(item.data().approved == false && item.data().rejected == true) {
+                // Creating HTML table element with Firebase results
                 document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
                 "<tr><td class='emailTD'>" + item.data().email + 
                 "</td><td>" + item.data().phoneNumber + 
@@ -94,18 +99,26 @@ async function getRejectionData(){
             }
         });
 
+        // On Approve Button Click, Function contents are ran
+        // It is called approve button on this page for styling purposes
+        // to have the same styling for multiple buttons across all pages
+        // with one style set
         $('button.approveButtonClass').click(function() {
+            // Bind data from row to JQuery variables
             var $item = adminTableDef.row($(this).closest("tr")).data()[3];
             var $orgName = adminTableDef.row($(this).closest("tr")).data()[2];
             var $orgEmail = adminTableDef.row($(this).closest("tr")).data()[0];
+            // Append JQuery variables to JS variables
+            // Not required, but preferred methodology for code quality
             $("#resultas").append($item); 
             var documentID = $item;
             var orgName = $orgName;
             var orgEmail = $orgEmail;
-
+            // Run approveTheOrganization Function and pass variables
             approveTheOrganization(documentID, orgName, orgEmail);
             });
-
+            
+            // JQuery Table Attributes
             var adminTableDef = $('#adminTable').DataTable({
                 responsive: true,
                 scrollX: true,
@@ -122,6 +135,8 @@ async function getRejectionData(){
                 ],
                 "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
                 "info": false,
+                
+                // Pagination is removed when items are less than one page
                 "fnDrawCallback": function(oSettings) {
                     if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
                         $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
@@ -130,165 +145,180 @@ async function getRejectionData(){
                     }
                 }
             });
+            // Responsiveness function for errors on window resize
             $(window).on('resize', function () {
                 $('#adminTable').dataTable().fnDraw();
             });
         }
 }
 
+// Function to approve or call denial of organization
 function approveTheOrganization(documentID, orgName, orgEmail) {
-      
-      swal.fire({
-          title: 'Approve the organization: ' + orgName + '?',
-          icon: 'warning',
-          showDenyButton: true,
-          showCancelButton: true,
-          confirmButtonText: 'Approve',
-          denyButtonText: 'Deny',
-          confirmButtonColor: '#6804ec',
-          cancelButtonColor: '#d33',
-          denyButtonColor: '#D70040',
-          customClass: {
-              actions: 'my-actions',
-              confirmButton: 'order-1',
-              denyButton: 'order-1',
-              cancelButton: 'order-3 left-gap',
-          }
-  
-      })
-      .then((result) => {
-          if (result.isConfirmed) { 
-              const approvals = doc(db, "OrganizationUsers", documentID);
-              updateDoc(approvals, {
-                  approved: true,
-                  rejected: false,
-                  denialReason: ""
-              })
-      
-              .then(() => {
-                  Swal.fire({
-                      title: 'Approved!',
-                      text: orgName + " was approved. Do you want to email them?",
-                      icon: 'info',
-                      showCancelButton: true,
-                      confirmButtonColor: '#6804ec',
-                      cancelButtonColor: '#d33',
-                      cancelButtonText: 'No',
-                      confirmButtonText: 'Email'
-                      }).then((result) => {
-                          if (result.isConfirmed) { 
+    // Popup call for Organization Approval once "Approve" button is clicked
+    swal.fire({
+        title: 'Approve the organization: ' + orgName + '?',
+        icon: 'warning',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Approve',
+        denyButtonText: 'Deny',
+        confirmButtonColor: '#6804ec',
+        cancelButtonColor: '#d33',
+        denyButtonColor: '#D70040',
+        customClass: {
+            actions: 'my-actions',
+            confirmButton: 'order-1',
+            denyButton: 'order-1',
+            cancelButton: 'order-3 left-gap',
+        }
+    })
+    .then((result) => {
+        if (result.isConfirmed) { 
+            // Query Firebase OrganizationUsers Collection with the document ID that is to be approved
+            const approvals = doc(db, "OrganizationUsers", documentID);
+            // Update the document based on the ID and add approved values and clear denial reasons
+            updateDoc(approvals, {
+                approved: true,
+                rejected: false,
+                denialReason: ""
+            })
+            // Second popup to confirm approval and request admin to email if needed
+            .then(() => {
+                Swal.fire({
+                    title: 'Approved!',
+                    text: orgName + " was approved. Do you want to email them?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#6804ec',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'No',
+                    confirmButtonText: 'Email'
+                    }).then((result) => {
+                        // If email user is chosen
+                        if (result.isConfirmed) { 
                             sendApprovedEmail(orgEmail, orgName);
                             location.reload(); 
-                          }
-                          else {
-                            location.reload();
                         }
-                      })
-                  
-                  .catch((error) => {
-                      console.error("Error approving organization: ", error);
-                  })
+                        // If do not email user is chosen
+                        else {
+                            location.reload();
+                    }
+                    })
+                .catch((error) => {
+                    console.error("Error approving organization: ", error);
+                })
+            })
+        }
+        // If organization is denied, denial function is called
+        else if (result.isDenied) {
+            runDenialDialogue(documentID, orgName, orgEmail);
+        }
+        // Upon cancel, another popup informs admin as such        
+        else {
+            swal.fire('Cancelled!',
+            'No changes were made.',
+            'error');
+        }   
+    });
+}
   
-              })
-          }
-  
-          else if (result.isDenied) {
-          runDenialDialogue(documentID, orgName, orgEmail);
-      }
-          
-          else {
-              swal.fire('Cancelled!',
-              'No changes were made.',
-              'error');
-          }
-              
-      });
-  }
-  
-  async function runDenialDialogue(documentID, orgName, orgEmail){
-      const { value: deniedReason } = await Swal.fire({
-              input: 'textarea',
-              inputLabel: 'Reason for Denial',
-              inputPlaceholder: 'Type your rejection reason here...',
-              inputAttributes: {
-                  'aria-label': 'Type your rejection reason here'
-              },
-              showCancelButton: true,
-              inputValidator: (value) => {
-                  if (!value) {
-                      return 'You need to give a denial reason!'
-                  }
-              }
-              })
-  
-              if(deniedReason){
-                  const approvals = doc(db, "OrganizationUsers", documentID);
-                  const docSet = setDoc(approvals, {
-                      denialReason: deniedReason,
-                      rejected: true
-                  }, { merge: true })
-  
-                  .then(() => {
-                      Swal.fire({
-                      title: 'Denied!',
-                      text: orgName + " was denied. Do you want to email them?",
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonColor: '#6804ec',
-                      cancelButtonColor: '#d33',
-                      cancelButtonText: 'No',
-                      confirmButtonText: 'Email'
-                      }).then((result) => {
-                          if (result.isConfirmed) { 
+async function runDenialDialogue(documentID, orgName, orgEmail){
+    // Popup to query admin for a denial reason
+    const { value: deniedReason } = await Swal.fire({
+            input: 'textarea',
+            inputLabel: 'Reason for Denial',
+            inputPlaceholder: 'Type your rejection reason here...',
+            inputAttributes: {
+                'aria-label': 'Type your rejection reason here'
+            },
+            showCancelButton: true,
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'You need to give a denial reason!'
+                }
+            }
+            })
+            // Statement to check for denial reason and not pass if there is not one
+            if(deniedReason){
+                // Query Firebase OrganizationUsers Collection with the document ID that is to be denied 
+                const approvals = doc(db, "OrganizationUsers", documentID);
+                // Update the document based on the ID and add approved values and clear denial reasons               
+                const docSet = setDoc(approvals, {
+                    denialReason: deniedReason,
+                    rejected: true
+                }, { merge: true })
+                // Second popup to confirm denial and request admin to email if needed
+                .then(() => {
+                    Swal.fire({
+                    title: 'Denied!',
+                    text: orgName + " was denied. Do you want to email them?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#6804ec',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'No',
+                    confirmButtonText: 'Email'
+                    }).then((result) => {
+                        // If email user is chosen
+                        if (result.isConfirmed) { 
                             sendRejectedEmail(orgEmail, orgName, deniedReason);
                             location.reload(); 
-                          }
-                          else {
+                        }
+                        // If do not email user is chosen
+                        else {
                             location.reload();
                         }
-                      })
-              
-                  .catch((error) => {
-                      console.error("Error denying organization: ", error);
-                  
-                  })
-              })
-          }
-          else {
-              swal.fire('Cancelled!',
-              'No changes were made.',
-              'error');
-          }
-  }
-  
-  $('a#logoutButton').click(function() {
-      logoutAdmin();
-  });
-  
-  async function sendRejectedEmail(orgEmail, orgName, deniedReason) {
-      
-      window.open('mailto:' + orgEmail + "?subject=Your DONAID Account has Been Denied." + 
-          '&body=Hello ' + orgName + '. DONAID is regretful to inform you ' +
-          'that your account has been denied. Your account has been denied ' +
-          'due to: ' + deniedReason + '.' + ' Sincerely, DONAID',
-      )
-      .then(function (message) {
-          console.log("Mail sent successfully")
-      });
-  }
-  
-  async function sendApprovedEmail(orgEmail, orgName) {
-      window.open('mailto:' + orgEmail + "?subject=Your DONAID Account has Been Approved!" +
-          '&body=Hello ' + orgName + '. DONAID is pleased to inform you ' +
-          'that your account has been approved. Open the DONAID ' +
-          'mobile app and login to create campaigns, beneficiaries, ' +
-          'or urgent cases that need donation!' + ' Sincerely, DONAID',
-      )
-      .then(function (message) {
-          console.log("Mail sent successfully")
-      });
-  }
+                    })
+                .catch((error) => {
+                    console.error("Error denying organization: ", error);
+                })
+            })
+        }
+        // Cancel popup shown if denial is cancelled
+        else {
+            swal.fire('Cancelled!',
+            'No changes were made.',
+            'error');
+        }
+}
 
+// Logout function bound to logout on Navbar
+$('a#logoutButton').click(function() {
+    logoutAdmin();
+});
+
+// Function to place info into an email for admin to send
+// All info sourced from denial reason and panel so that once ran,
+// the admin's email client will open and they simply have to press send
+async function sendRejectedEmail(orgEmail, orgName, deniedReason) {
+    window.open('mailto:' + orgEmail + "?subject=Your DONAID Account has Been Denied." + 
+        '&body=Hello ' + orgName + '. DONAID is regretful to inform you ' +
+        'that your account has been denied. Your account has been denied ' +
+        'due to: ' + deniedReason + '.' + ' Sincerely, DONAID',
+    )
+    // Confirm mail sent
+    .then(function (message) {
+        console.log("Mail sent successfully")
+    });
+}
+
+// Function to place info into an email for admin to send
+// All info sourced from panel so that once ran,
+// the admin's email client will open and they simply have to press send
+async function sendApprovedEmail(orgEmail, orgName) {
+    window.open('mailto:' + orgEmail + "?subject=Your DONAID Account has Been Approved!" +
+        '&body=Hello ' + orgName + '. DONAID is pleased to inform you ' +
+        'that your account has been approved. Open the DONAID ' +
+        'mobile app and login to create campaigns, beneficiaries, ' +
+        'or urgent cases that need donation!' + ' Sincerely, DONAID',
+    )
+    // Confirm mail sent
+    .then(function (message) {
+        console.log("Mail sent successfully")
+    });
+}
+
+// Run Function to get all data upon page load
 getRejectionData();
 </script>
 
@@ -296,6 +326,7 @@ getRejectionData();
 </head>
 
 <body>
+    <!-- Navbar -->
     <div class="container-fluid">
         <div class="row flex-nowrap">
             <div class="col-auto px-0">
@@ -332,7 +363,9 @@ getRejectionData();
                 </div>
             </div>
       <div class="col ps-md-2 pt-2">
+             <!-- Header at top of Page -->
             <h1 class="page-title-header" style="text-align:center; font-size: 24px;">Organization Rejections</h1>
+            <!-- Table Call and Headers-->
             <table id="adminTable">
             <thead>
                 <th>Email</th>

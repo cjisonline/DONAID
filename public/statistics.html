@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <!-- CSS Loads -->
@@ -39,15 +38,14 @@ import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc
     messagingSenderId: "240146097284",
     appId: "1:240146097284:web:0e78cae430d624551cced1",
     measurementId: "G-33T6FD2DK6"
-  };
+    };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // Logout
 const auth1 = getAuth();
-
 function logoutAdmin() {
     signOut(auth1).then(() => {
     // Sign-out successful.
@@ -70,8 +68,11 @@ onAuthStateChanged(auth1, (user) => {
   }
 });
 
+// Function checks if the logged in user is in the Admin Collection in Firebase
 async function logoutNonAdmin(uid){
+    // Query Firebase Admin Collection
     const querySnapshot = await getDocs(collection(db, "Admin"));
+        // Iterate through each document in collection
         querySnapshot.forEach((item) => {
             if(item.data().uid != uid) {
                 logoutAdmin();
@@ -79,24 +80,29 @@ async function logoutNonAdmin(uid){
         })
 }
 
+// Logout function bound to logout on Navbar
 $('a#logoutButton').click(function() {
     logoutAdmin();
 });
 
+// Function to call all statistics queries and populate graphs
 async function getStatistics(){
     getUserCount();
     getDonationAmount();
     getCharityCount();
 }
 
+// Function to get user counts
 async function getUserCount(){
+    // Query Firebase DonorUsers Collection
     const donorCount = await getDocs(collection(db, "DonorUsers"));
+    // Query Firebase OrganizationUsers Collection
     const orgCount = await getDocs(collection(db, "OrganizationUsers"));
-
+    // Create Bar Graph and inject data from queries
     const data = {
         labels: ['Donor Users','Organization Users'],
         datasets: [{
-            label: ['Donor Users', 'Organization Users'],
+            label: ['Users'],
             backgroundColor: [
             'rgba(255, 150, 172, 0.2)',
             'rgba(124, 194, 242, 0.2)'
@@ -111,6 +117,7 @@ async function getUserCount(){
             data: [donorCount.docs.length, orgCount.docs.length],
         }]
     }
+    // Settings for Bar Graph
     const config = {
         type: 'bar',
         data: data,
@@ -130,23 +137,30 @@ async function getUserCount(){
         }
         },
     };
-
-    
+    // Creation of Chart
     const userCounts = new Chart(
         document.getElementById('userCounts'),
         config
     );
 }
 
+// Function to get donation counts
 async function getDonationAmount(){
+    // Donation array to push all donation amounts into
     var donationArray = [];
+    // Query Firebase Donations Collection
     const donationCount = await getDocs(collection(db, "Donations"));
+    // Iterate through each document in collection
     donationCount.forEach((item) => {
+        // Push to array all the donation amounts
         donationArray.push(item.data().donationAmount);
     })
+    // Convert all donation amounts to JS numbers
+    // as Firebase doesn't store them as JS objects
     var donationSum = donationArray.map(Number);
-    
+    // Variable to sum all of the donation numbers
     var donationSumCalc = 0;
+    // Summation formula
     for (var i = 0; i < donationSum.length; i++) {
         donationSumCalc += +donationSum[i];
     }
@@ -154,6 +168,7 @@ async function getDonationAmount(){
     const labels1 = [
         '',
     ]
+    // Create Bar Graph and inject data from queries
     const data1 = {
         labels: labels1,
         datasets: [{
@@ -170,6 +185,7 @@ async function getDonationAmount(){
             data: [donationSumCalc],
         }]
     }
+    // Settings for Bar Graph
     const config1 = {
         type: 'bar',
         data: data1,
@@ -181,24 +197,28 @@ async function getDonationAmount(){
         }
         },
     };
-
+    // Creation of Chart
     const donationCounts = new Chart(
         document.getElementById('donationCounts'),
         config1
     );
 }
 
+// Function to get charity counts
 async function getCharityCount(){
-
+    // Array to push where statements to for a Firebase compound query
     const conditions = [];
-
+    // Array push for different where conditions
     conditions.push(where("active", "==", true));
     conditions.push(where("approved", "==", true));
-                
+    // Query Firebase Campaigns Collection where active boolean is true
     const campaignQuery = query(collection(db, "Campaigns"), where("active", "==", true));
+    // Query Firebase Beneficiaries Collection where active boolean is true
     const beneficiaryQuery = query(collection(db, "Beneficiaries"), where("active", "==", true));
+    // Query Firebase UrgentCases Collection where conditions are met
     const urgentCaseQuery = query(collection(db, "UrgentCases"), ...conditions);
 
+    // Get Documents for Firebase Queries
     const campaignCount = await getDocs(campaignQuery);
     const beneficiaryCount = await getDocs(beneficiaryQuery);
     const urgentCaseCount = await getDocs(urgentCaseQuery);
@@ -209,6 +229,7 @@ async function getCharityCount(){
         'Urgent Cases'
     ]
 
+    // Create Polar Graph and inject data from queries
     const data2 = {
         labels: labels2,
         datasets: [{
@@ -221,6 +242,7 @@ async function getCharityCount(){
             data: [campaignCount.docs.length, beneficiaryCount.docs.length, urgentCaseCount.docs.length],
         }]
     }
+    // Settings for Polar Graph
     const config2 = {
         type: 'polarArea',
         data: data2,
@@ -230,22 +252,22 @@ async function getCharityCount(){
         }
         }
     };
-
-    
+    // Creation of Chart
     const userCounts = new Chart(
         document.getElementById('charityCounts'),
         config2
     );
 }
 
+// Run Function to get all data upon page load
 getStatistics();
-
 </script>
 
 <title>DONAID Admin Console</title>
 </head>
 
     <body>
+        <!-- Navbar -->
         <div class="container-fluid">
             <div class="row flex-nowrap">
                 <div class="col-auto px-0">
@@ -282,7 +304,9 @@ getStatistics();
                     </div>
                 </div>
         <div class="col">
+            <!-- Header at top of Page -->
             <h1 class="page-title-header" style="text-align:center; font-size: 24px; padding-top: 0.5rem;">Statistics</h1>
+        <!-- Div container for Users Chart -->
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -295,6 +319,7 @@ getStatistics();
                         </div>
                         </div>
 
+                        <!-- Div container for Donations Chart -->
                         <div class="row">
                             <div class="text-center">
                             <div class="headerShader" style="background-color: #f7f0ff; margin-bottom: 1rem;">
@@ -308,6 +333,7 @@ getStatistics();
                     </div> 
                 </div>
             </div>
+                    <!-- Div container for Charities Chart -->
                     <div class="col">
                         <div class="text-center">
                         <div class="headerShader" style="background-color: #f7f0ff">

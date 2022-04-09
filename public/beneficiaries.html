@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <!-- CSS Loads -->
 <link rel="stylesheet" href="login.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.2/dist/sweetalert2.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.material.min.css">
 
@@ -37,15 +35,14 @@ import { getFirestore, getDocs, getDoc, collection, query, where, doc, updateDoc
     messagingSenderId: "240146097284",
     appId: "1:240146097284:web:0e78cae430d624551cced1",
     measurementId: "G-33T6FD2DK6"
-  };
+    };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // Logout
 const auth1 = getAuth();
-
 function logoutAdmin() {
     signOut(auth1).then(() => {
     // Sign-out successful.
@@ -68,8 +65,11 @@ onAuthStateChanged(auth1, (user) => {
   }
 });
 
+// Function checks if the logged in user is in the Admin Collection in Firebase
 async function logoutNonAdmin(uid){
+    // Query Firebase Admin Collection
     const querySnapshot = await getDocs(collection(db, "Admin"));
+        // Iterate through each document in collection
         querySnapshot.forEach((item) => {
             if(item.data().uid != uid) {
                 logoutAdmin();
@@ -77,19 +77,31 @@ async function logoutNonAdmin(uid){
         })
 }
 
+// Function on window load gets all the Organizations needing approval
 async function getBeneficiaryData(){
+    // Function call on window load
     window.onload = async function(){
-
+    // Array creation to push organization ID and name to an array
+    // to iterate and populate table from UID in beneficiary collection
+    // to organization in table
     var orgInfo = [];
+    // Query Firebase OrganizationUsers Collection
     const querySnapshot2 = await getDocs(collection(db, "OrganizationUsers"));
+        // Iterate through each document in collection
         querySnapshot2.forEach((doc) => {
+        // Push document ID and data of document to an array
         orgInfo.push(doc.id, " => ", doc.data());
     })
-
+    // Query Firebase Beneficiaries Collection
     const querySnapshot = await getDocs(collection(db, "Beneficiaries"));
+        // Iterate through each document in collection
         querySnapshot.forEach((item) => {
+            // Checks if document has the active boolean as true to check if the beneficiary is an
+            // active charity
             if(item.data().active == true) {
+                // Iterate through JS array and find Organization Name from ID
                 var orgName = orgInfo.find(t=>t.uid === item.data().organizationID).organizationName;
+                // Creating HTML table element with Firebase results
                 document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
                 "<tr><td>" + item.data().name + 
                 "</td><td>" + orgName + 
@@ -99,6 +111,7 @@ async function getBeneficiaryData(){
             }
         });
 
+        // JQuery Table Attributes
         var adminTableDef = $('#adminTable').DataTable({
                 responsive: true,
                 scrollX: true,
@@ -111,6 +124,7 @@ async function getBeneficiaryData(){
                 "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
                 "info": false,
 
+                // Pagination is removed when items are less than one page
                 "fnDrawCallback": function(oSettings) {
                     if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
                         $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
@@ -119,16 +133,19 @@ async function getBeneficiaryData(){
                     }
                 }
             });
+            // Responsiveness function for errors on window resize
             $(window).on('resize', function () {
                 $('#adminTable').dataTable().fnDraw();
             });
         }
 }
 
+// Logout function bound to logout on Navbar
 $('a#logoutButton').click(function() {
     logoutAdmin();
 });
 
+// Run Function to get all data upon page load
 getBeneficiaryData();
 
 </script>
@@ -137,6 +154,7 @@ getBeneficiaryData();
 </head>
 
 <body>
+    <!-- Navbar -->
     <div class="container-fluid">
         <div class="row flex-nowrap">
             <div class="col-auto px-0">
@@ -173,7 +191,9 @@ getBeneficiaryData();
                 </div>
             </div>
       <div class="col ps-md-2 pt-2">
+            <!-- Header at top of Page -->
             <h1 class="page-title-header" style="text-align:center; font-size: 24px;">Beneficiaries</h1>
+            <!-- Table Call and Headers-->
             <table id="adminTable">
             <thead>
                 <th>Name</th>
