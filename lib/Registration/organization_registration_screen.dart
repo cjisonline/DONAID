@@ -337,7 +337,7 @@ class _OrganizationRegistrationScreenState
                   padding:
                       EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
                   child: Text(
-                    '* - required_fields'.tr,
+                    '* '+'required_fields'.tr,
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
