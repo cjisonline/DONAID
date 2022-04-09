@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 
+// Organization edit profile form
 class OrganizationEditProfile extends StatefulWidget {
   static const id = 'organization_edit_profile';
 
@@ -72,6 +73,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     _uploadedFileURL = fileURL;
   }
 
+  // Get current organization user's information from Firebase
   _getOrganizationInformation() async {
     var ret = await _firestore.collection('OrganizationUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
@@ -89,6 +91,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     setState(() {});
   }
 
+  // Update current organization user's information in Firebase
   _updateOrganizationInformation() async {
     if(_profilePicture!=null) {
       await uploadFile();
@@ -111,7 +114,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     }
   }
 
-
+  // Display edit profile page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,6 +122,8 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           centerTitle: true,
           title:  Text('edit_profile'.tr),
           leadingWidth: 80,
+          // Display cancel button in top app bar
+          // On pressed, navigate to the profile page
           leading: TextButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -127,6 +132,8 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           actions: [
+            // Display save button in top app bar
+            // On pressed, submit edit profile form
             TextButton(
               onPressed: () {
                 _submitForm();
@@ -174,6 +181,8 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
       ),
     );
   }
+
+  // Create name text field and prepopulate organization's first name
   Widget _buildOrganizationNameField() {
     _organizationNameController = TextEditingController(text: organization.organizationName);
     return Padding(
@@ -193,6 +202,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(32.0)),
           )),
+      // Show error message if text field is left blank
       validator: (value) {
         if (value == null || value.isEmpty) {
           //doubt
@@ -203,6 +213,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     ));
   }
 
+  // Create phone number text field and prepopulate organization's phone number
   Widget _buildPhoneNumberField() {
     _phoneNumberController = TextEditingController(text: organization.phoneNumber);
     return Padding(
@@ -223,9 +234,12 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
             borderRadius: BorderRadius.all(Radius.circular(32.0)),
           )),
       validator: (value) {
+        // Show error message if text field is left blank
         if (value!.isEmpty) {
           return "please_enter_your_phone_number.".tr;
-        } else if (!phoneNumberRegExp.hasMatch(value)) {
+        }
+        // Show error message if phone number input does not follow correct phone number format
+        else if (!phoneNumberRegExp.hasMatch(value)) {
           return "please_enter_a_valid_phone_number.".tr;
         } else {
           return null;
@@ -234,7 +248,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     ));
   }
 
-
+  // Create description text field and prepopulate organization's description
   Widget _buildOrganizationDescriptionField() {
     _organizationDescriptionController = TextEditingController(text: organization.organizationDescription);
     return  Padding(
@@ -264,6 +278,9 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     );
   }
 
+  // For organization's outside the United States,
+  // create gateway link text field and
+  // prepopulate organization's gateway link
   Widget _buildGatewayLinkField() {
     _gatewayLinkController = TextEditingController(text: organization.gatewayLink);
     if(organization.country != "United States") {
@@ -284,6 +301,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 )),
+            // Show error message if text field is left blank
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'please_enter_gateway_link.'.tr;
@@ -297,16 +315,23 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     }
   }
 
+  // Submit and validate from
   _submitForm() async{
+    // Information inputted in the form is invalid
+    // Show errors
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    // Information inputted in the form is valid
+    // Update organization's information and navigate to profile page
     else{
       await _updateOrganizationInformation();
       Navigator.pop(context,true);
     }
     _formKey.currentState!.save();
   }
+
+  // Create profile for organizations in the United States
   Widget _buildUnitedStatesEditProfile(){
     return SingleChildScrollView(
       child: Container(
@@ -327,6 +352,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     );
   }
 
+  // Create profile for organizations outside the United States
   Widget _buildOutsideUnitedStatesEditProfile(){
     return SingleChildScrollView(
       child: Container(
@@ -348,6 +374,7 @@ class _OrganizationEditProfileState extends State<OrganizationEditProfile> {
     );
   }
 
+  // Create edit profile form
   _body() {
     if(organization.country == 'United States'){
       return _buildUnitedStatesEditProfile();

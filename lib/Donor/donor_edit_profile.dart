@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'donor_profile.dart';
-
+// Donor edit profile form
 class DonorEditProfile extends StatefulWidget {
   static const id = 'donor_edit_profile';
 
@@ -41,6 +41,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     loggedInUser = _auth.currentUser;
   }
 
+  // Get current donor user's information from Firebase
   _getDonorInformation() async {
     var ret = await _firestore
         .collection('DonorUsers')
@@ -57,6 +58,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     setState(() {});
   }
 
+  // Update current donor user's information in Firebase
   _updateDonorInformation() async {
     _firestore.collection('DonorUsers').doc(donor.id).update({
       "firstName": _firstNameController?.text,
@@ -65,7 +67,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     });
   }
 
-
+  // Display edit profile page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +75,8 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
           centerTitle: true,
           title:  Text('edit_profile'.tr),
           leadingWidth: 80,
+          // Display cancel button in top app bar
+          // On pressed, navigate to the profile page
           leading: TextButton(
             onPressed: () {
               Navigator.pop(context);
@@ -81,6 +85,8 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
                 style: TextStyle(fontSize: 15.0, color: Colors.white)),
           ),
           actions: [
+            // Display save button in top app bar
+            // On pressed, submit edit profile form
             TextButton(
               onPressed: () {
                 _submitForm();
@@ -96,6 +102,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  // Create first name text field and prepopulate donor's first name
   Widget _buildFirstNameField() {
     _firstNameController = TextEditingController(text: donor.firstName);
     return Padding(
@@ -115,6 +122,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(32.0)),
               )),
+          // Show error message if text field is left blank
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'please_enter_first_name.'.tr;
@@ -124,6 +132,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
         ));
   }
 
+  // Create last name text field and prepopulate donor's last name
   Widget _buildLastNameField() {
     _lastNameController = TextEditingController(text: donor.lastName);
     return Padding(
@@ -143,6 +152,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(32.0)),
               )),
+          // Show error message if text field is left blank
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'please_enter_last_name.'.tr;
@@ -152,6 +162,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
         ));
   }
 
+  // Create phone number text field and prepopulate donor's phone number
   Widget _buildPhoneNumberField() {
     _phoneNumberController = TextEditingController(text: donor.phoneNumber);
     return Padding(
@@ -172,9 +183,12 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
                 borderRadius: BorderRadius.all(Radius.circular(32.0)),
               )),
           validator: (value) {
+            // Show error message if text field is left blank
             if (value!.isEmpty) {
               return "please_enter_your_phone_number.".tr;
-            } else if (!phoneNumberRegExp.hasMatch(value)) {
+            }
+            // Show error message if phone number input does not follow correct phone number format
+            else if (!phoneNumberRegExp.hasMatch(value)) {
               return "please_enter_a_valid_phone_number.".tr;
             } else {
               return null;
@@ -183,10 +197,15 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
         ));
   }
 
+  // Submit and validate from
   _submitForm() async {
+    // Information inputted in the form is invalid
+    // Show errors
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    // Information inputted in the form is valid
+    // Update donor's information and navigate to profile page
     else{
       await _updateDonorInformation();
       Navigator.pop(context,true);
@@ -194,6 +213,7 @@ class _DonorEditProfileState extends State<DonorEditProfile> {
     _formKey.currentState!.save();
   }
 
+  // Display edit profile form
   _body() {
     return SingleChildScrollView(
       child: Container(

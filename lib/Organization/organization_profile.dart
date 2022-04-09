@@ -82,6 +82,7 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
     loggedInUser = _auth.currentUser;
   }
 
+  // Get current logged in organization's information from Firebase
   _getOrganizationInformation() async {
     var ret = await _firestore
         .collection('OrganizationUsers')
@@ -100,10 +101,13 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
     setState(() {});
   }
 
+  // Display profile page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // Display back button in top app bar
+        // On pressed, navigate to previous screen
           title:  Text('profile'.tr),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -112,6 +116,8 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
             },
           ),
           actions: [
+          // Display edit button in top app bar
+          // On pressed, navigate to edit profile screen
           TextButton(
             onPressed: () {
               Navigator.push(
@@ -161,79 +167,44 @@ class _OrganizationProfileState extends State<OrganizationProfile> {
     );
   }
 
-  Widget _buildUnitedStatesProfile() {
+  // Display profile page
+  _body() {
     return SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
+            // Display profile information of logged in organization user
             _buildProfilePictureDisplay(),
             Text(
               'your_information'.tr.toUpperCase(),
-              style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold),
-            ),
-            ProfileRow('email'.tr.toUpperCase(), organization?.organizationEmail ?? 'N/A'),
-            ProfileRow('name'.tr.toUpperCase(), organization?.organizationName ?? 'N/A'),
-            ProfileRow('phone_number'.tr.toUpperCase(), organization?.phoneNumber ?? 'N/A'),
-            ProfileRow(
-                'description'.tr.toUpperCase(), organization?.organizationDescription ?? 'N/A'),
-            SizedBox(height: 15),
-            Text(
-              "statistics".tr.toUpperCase(),
-              style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height:25),
-            Text('donations'.tr.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-           Container(
-             height: MediaQuery.of(context).size.height*0.5,
-               width: MediaQuery.of(context).size.width,
-               child: HorizontalBarLabelChart.withData(urgentCasesRaised, beneficiaryRaised, campaignRaised)),
-           // ProfileRow('Total Money Raised', p1.toStringAsFixed(2)),
-            Text(numberOfDonors.toStringAsFixed(0)+'_unique_donors'.tr.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-            SizedBox(height: 10),
-          ],
-        ));
-  }
-
-  Widget _buildOutsideUnitedStatesProfile() {
-    return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            _buildProfilePictureDisplay(),
-            ProfileRow('email'.tr.toUpperCase(), organization?.organizationEmail ?? 'N/A'),
-            ProfileRow('name'.tr.toUpperCase(), organization?.organizationName ?? 'N/A'),
-            ProfileRow('phone_number'.tr.toUpperCase(), organization?.phoneNumber ?? 'N/A'),
-            ProfileRow(
-                'description'.tr.toUpperCase(), organization?.organizationDescription ?? 'N/A'),
-            SizedBox(height: 15),
-            Text(
-              'statistics'.tr.toUpperCase(),
               style: const TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold),
             ),
-            SizedBox(height:25),
+            ProfileRow('email'.tr.toUpperCase(), organization?.organizationEmail ?? 'N/A'),
+            ProfileRow('name'.tr.toUpperCase(), organization?.organizationName ?? 'N/A'),
+            ProfileRow('phone_number'.tr.toUpperCase(), organization?.phoneNumber ?? 'N/A'),
+            ProfileRow(
+                'description'.tr.toUpperCase(), organization?.organizationDescription ?? 'N/A'),
+            const SizedBox(height: 15),
+
+
+            // Display statistics of logged in organization user
+            Text(
+              "statistics".tr.toUpperCase(),
+              style: const TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height:25),
             Text('donations'.tr.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
             Container(
                 height: MediaQuery.of(context).size.height*0.5,
                 width: MediaQuery.of(context).size.width,
                 child: HorizontalBarLabelChart.withData(urgentCasesRaised, beneficiaryRaised, campaignRaised)),
-            // ProfileRow('Total Money Raised', p1.toStringAsFixed(2)),
             Text(numberOfDonors.toStringAsFixed(0)+'_unique_donors'.tr.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
           ],
         ));
-  }
-
-  _body() {
-    if (organization?.country == 'United States') {
-      return _buildUnitedStatesProfile();
-    } else {
-      return _buildOutsideUnitedStatesProfile();
-    }
   }
 }
