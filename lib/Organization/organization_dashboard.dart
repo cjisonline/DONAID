@@ -11,6 +11,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Services/notifications.dart';
 import 'OrganizationWidget/beneficiary_card.dart';
@@ -32,6 +33,7 @@ class OrganizationDashboard extends StatefulWidget {
 
 class _OrganizationDashboardState extends State<OrganizationDashboard> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
   final _auth = FirebaseAuth.instance;
   final _messaging = FirebaseMessaging.instance;
   User? loggedInUser;

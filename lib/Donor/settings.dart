@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
@@ -37,13 +38,13 @@ class _DonorSettingsPageState extends State<DonorSettingsPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text('Notifications', style: TextStyle(fontSize: 20),),
+            Text('notifications'.tr, style: TextStyle(fontSize: 20),),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Urgent Case Approvals', style: TextStyle(fontSize: 16),),
+                  Text('urgent_case_approvals'.tr, style: TextStyle(fontSize: 16),),
                   AnimatedContainer(duration: Duration(milliseconds: 500),height: 40, width: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
@@ -102,7 +103,7 @@ class _DonorSettingsPageState extends State<DonorSettingsPage> {
   Widget build(BuildContext context) {
    return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title:  Text('settings'.tr),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: (){

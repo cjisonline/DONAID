@@ -74,22 +74,23 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                 "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed."
                     .tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    await makePayment();
-                  },
-                  child: const Text('Yes'),
-                ),
-              ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('No'),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () async{
+                      Navigator.pop(context);
+                      await makePayment();
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('No'),
+                  ),
+                ],
               ),
             ],
           );
@@ -136,7 +137,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                         await updateFavorites(loggedInUser!.uid.toString(),
                             widget.beneficiary.id.toString());
                         await _getFavorite();
-                      },
+                  },
                     ),
                   )
                 : Container(),
@@ -268,7 +269,6 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
       ),
     );
   }
-
   void createDonationDocument() async {
     final docRef = await _firestore.collection('Donations').add({});
 
@@ -349,7 +349,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
       print('Stripe Exception: ${e.toString()}');
 
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('payment_cancelled!'.tr)));
+          .showSnackBar( SnackBar(content: Text('payment_cancelled!'.tr)));
     }
   }
 

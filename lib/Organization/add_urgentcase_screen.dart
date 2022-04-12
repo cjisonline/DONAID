@@ -85,7 +85,8 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
         'id': docRef.id,
         'organizationID': loggedInUser?.uid,
         'title': title,
-        'rejected':false
+        'rejected':false,
+        'denialReason':""
       });
     } catch (e) {
       print(e);
@@ -132,8 +133,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                           padding: EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 25.0),
                           child: Text(
-                            // Required field
-                            '* - required_fields'.tr,
+                            '* - '+'required_fields'.tr,
                             style: TextStyle(color: Colors.red),
                           ),
                         ),

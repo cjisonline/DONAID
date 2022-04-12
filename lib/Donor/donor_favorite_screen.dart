@@ -267,6 +267,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                                 trailing: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: FavoriteButton(
+                                    iconSize: 50,
                                     isFavorite: true,
                                     valueChanged: (_isFavorite) async {
                                       await updateFavorites(loggedInUser!.uid.toString(),_favUserCampaign[index]["id"].toString());
@@ -318,6 +319,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                         trailing: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: FavoriteButton(
+                            iconSize: 50,
                             isFavorite: true,
                             valueChanged: (_isFavorite) async {
                               await updateFavorites(loggedInUser!.uid.toString(),_favUserBeneficiary[index]["id"].toString());
@@ -370,6 +372,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                         trailing: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: FavoriteButton(
+                            iconSize: 50,
                             isFavorite: true,
                             valueChanged: (_isFavorite) async {
                               await updateFavorites(loggedInUser!.uid.toString(),_favUserUrgentCase[index]["id"].toString());
@@ -476,8 +479,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          //Tab for favorite page
-          bottom: const TabBar(tabs: [Tab(text: 'Campaigns',), Tab(text: 'Beneficiaries',), Tab(text: 'Urgent Cases',)],),
+          bottom: TabBar(tabs: [Tab(text: 'campaigns'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,)],),
           title: Text('Favorite Page'.tr),
           leading: IconButton(
             // Go back from favorite page

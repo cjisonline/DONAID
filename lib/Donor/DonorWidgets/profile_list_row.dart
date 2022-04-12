@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+// Display donor's profile page row
 class ProfileRow extends StatelessWidget {
   final String label;
   final String field;
@@ -9,6 +9,7 @@ class ProfileRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Column(
       children: [
+        // Display the label of the field
        Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children:  [
@@ -21,6 +22,7 @@ class ProfileRow extends StatelessWidget {
               )
             ]
         ),
+        // Display the field
         Container(
             margin: const EdgeInsets.only(left: 30.0, right: 30.0),
             decoration: BoxDecoration(
@@ -33,25 +35,19 @@ class ProfileRow extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
                       Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-
                           children: [
                             Container(
-
                               margin: const EdgeInsets.only(bottom: 10.0),
                               child : Text(
                                 field,
                                 style: TextStyle(fontSize: 20.0),
                               ),
                             )])
-
                     ])
-
             ))
       ]
-
     );
 
   }

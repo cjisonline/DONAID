@@ -314,16 +314,20 @@ class _EditCampaignState extends State<EditCampaign> {
                 borderRadius:
                 BorderRadius.all(Radius.circular(32.0)),
               )),
-          icon: const Icon(Icons.keyboard_arrow_down),
-          items: category == null? []: category.map((items) {
+          icon: widget.campaign.amountRaised > 0
+              ? Visibility(child: Icon(Icons.keyboard_arrow_down,),visible: false,)
+              : Icon(Icons.keyboard_arrow_down),
+          items: widget.campaign.amountRaised > 0
+              ? [DropdownMenuItem<String>(child: Text(_campaignCategoryController!.text), value: _campaignCategoryController!.text,)]
+              : category.map((items) {
             return DropdownMenuItem<String>(
               child: Text(items),
               value: items,
             );
           }).toList(),
-          onChanged: (val) => setState(() {
+          onChanged: (val) {
             _campaignCategoryController?.text = val.toString();
-          }),
+          },
           validator: (value) => value == null
               ? 'please_fill_in_the_category'.tr : null,
         )

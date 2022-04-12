@@ -133,7 +133,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                               vertical: 8.0, horizontal: 25.0),
                            // Required field
                           child: Text(
-                            '* - required_fields'.tr,
+                            '* - '+'required_fields'.tr,
                             style: TextStyle(color: Colors.red),
                           ),
                         ),

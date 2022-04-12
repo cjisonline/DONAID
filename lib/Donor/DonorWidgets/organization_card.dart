@@ -29,11 +29,12 @@ class _OrganizationCardState extends State<OrganizationCard> {
   }
 
 
-
+  // Create organization card
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
+        // Navigate to organization's Tab View screen
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return (OrganizationTabViewScreen(organization: widget.organization));
         })).then((value){
@@ -43,6 +44,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
         });
       },
       onLongPress: (){
+        // Navigate to organization's Full Details screen
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return (OrganizationFullDetailsScreen(widget.organization));
         })).then((value){
@@ -51,6 +53,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
           });
         });
       },
+      // Display organization card
       child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
@@ -60,11 +63,13 @@ class _OrganizationCardState extends State<OrganizationCard> {
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 border: Border.all(color: Colors.grey.shade300, width: 2.0)),
             child: Column(children: [
+              // Display icon
               const Icon(
                 Icons.apartment,
                 color: Colors.blue,
                 size: 40,
               ),
+              // Display organization's name
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(widget.organization.organizationName,
@@ -74,6 +79,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                       fontSize: 20,
                     )),
               ),
+              // Display organization's description
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(widget.organization.organizationDescription.toString(),

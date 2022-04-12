@@ -1,21 +1,14 @@
 # donaid
 
-A new Flutter project.
+APPENDIX
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+I. How to Run app on iOS simulator/device -- contact Kamal if you need more assistance.
+II. How to add enable apple sign in and push notifications(iOS) -- contact Kamal if you need more assistance.
 
 
+
+
+I.
 
 ----- STEPS TO RUN APP ON IOS SIMULATOR / REAL OS DEVICE ------
 
@@ -53,5 +46,27 @@ TO RUN ON REAL IOS DEVICE( YOUR PERSONAL IPHONE):
  11. click Run again ( the play button )
  12. wait another 2-5 mins
  13. App should run on the iPhone, do NOT disconnect your device or it will kick you out of the app.
+
+
+
+
+II.
+
+----HOW TO ENABLE PUSH NOTIFICATIONS FOR iOS AND ENBALE APPLE SIGN IN----
+
+The application already has Apple sign in and Push notifications implemented.
+In case you need to use them, you need a paid apple developer account(priced at 100$/year)
+After you get the account, follow the steps below to enable:
+
+1. Go into your iOS folder inside the donaid project.
+2. Find Runner.cxworkspace and open it
+3. Xcode should automatically open, on the left, click files(first folder icon on the left side of the IDE)
+4. Double click Runner
+5. in Sign-in and capabilities, sign in with your PAID apple developer account
+6. after signing in, click (+) or "capabilities", whichever shows.
+7. in there search for apple sign in, apple background and push notifications
+8. enable all of them and click "try again" below the signing 
+
+Everything should work fine after this, and the app could use both those features and would have the capability to be released on the apple store.
 
 

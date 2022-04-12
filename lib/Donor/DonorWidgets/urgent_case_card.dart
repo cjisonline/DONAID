@@ -9,6 +9,7 @@ import '../updateFavorite.dart';
 import '../urgent_case_donate_screen.dart';
 import 'package:get/get.dart';
 
+// Set up urgent case card
 class UrgentCaseCard extends StatefulWidget {
   final UrgentCase urgentCase;
 
@@ -38,6 +39,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
     loggedInUser = _auth.currentUser;
   }
 
+  // Get the organization's information of this urgent case from Firebase
   _getUrgentCaseOrganization() async {
     var ret = await _firestore
         .collection('OrganizationUsers')
@@ -55,17 +57,20 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
   }
 
   _getFavorite() async {
-    await _firestore
-        .collection("Favorite")
-        .doc(loggedInUser!.uid)
-        .get()
-        .then((value) {
-      setState(() {
-        pointlist = List.from(value['favoriteList']);
+    if(_auth.currentUser?.email != null){
+      await _firestore
+          .collection("Favorite")
+          .doc(loggedInUser!.uid)
+          .get()
+          .then((value) {
+        setState(() {
+          pointlist = List.from(value['favoriteList']);
+        });
       });
-    });
+    }
   }
 
+  // Display the urgent case card
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -76,8 +81,9 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
-        Align(
-          alignment: Alignment.centerRight,
+        (_auth.currentUser?.email != null)
+        ? Align(
+          alignment: Alignment.topRight,
           child: IconButton(
             icon: Icon(
               pointlist.contains(widget.urgentCase.id.toString())
@@ -86,7 +92,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               color: pointlist.contains(widget.urgentCase.id.toString())
                   ? Colors.red
                   : null,
-              size: 40,
+              size: 30,
             ),
             onPressed: () async {
               await updateFavorites(loggedInUser!.uid.toString(),
@@ -94,43 +100,53 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               await _getFavorite();
             },
           ),
-        ),
+        ) : Container(),
+        // Display icon
         const Icon(
           Icons.assistant,
           color: Colors.blue,
           size: 40,
         ),
+        // Display urgent case's title
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Text(widget.urgentCase.title,
               textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
               )),
         ),
+        // Display urgent case's description
         SizedBox(
             height: 75.0,
             child: Text(
               widget.urgentCase.description,
-              textAlign: TextAlign.left,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 15,
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
             )),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          // Display urgent case's amount raised
           Text('\$' + f.format(widget.urgentCase.amountRaised),
               textAlign: TextAlign.left,
               style: const TextStyle(color: Colors.black, fontSize: 15)),
+          // Display urgent case's goal amount
           Text(
             '\$' + f.format(widget.urgentCase.goalAmount),
             textAlign: TextAlign.start,
             style: const TextStyle(color: Colors.black, fontSize: 15),
           ),
         ]),
+        // Display urgent case's progress bar
         Container(
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -151,6 +167,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () {
+                    // For organizations in the United States, navigate to urgent case's donate screen
                     if (organization?.country == 'United States') {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
@@ -158,7 +175,9 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                       })).then((value) {
                         setState(() {});
                       });
-                    } else {
+                    }
+                    // For organizations outside the United States, display the dialog with gateway link
+                    else {
                       Map<String, dynamic> charity = {
                         'charityID':widget.urgentCase.id,
                         'charityType':'Urgent Case',
@@ -167,6 +186,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
                       DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid, charity);
                     }
                   },
+                  // Display donate button
                   child: Row(children: [
                     const Icon(Icons.favorite,
                         color: Colors.white, size: 20),
@@ -187,11 +207,6 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               color: Colors.pink,
               borderRadius: BorderRadius.all(Radius.circular(10)),
             )),
-        (_auth.currentUser?.email != null) ?
-        Align(
-          alignment: Alignment.center,
-        )
-            : Container()
       ]),
     );
   }

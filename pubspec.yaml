@@ -55,6 +55,7 @@ dependencies:
   flutter_stripe: ^2.2.0
   http: ^0.13.4
   cupertino_icons: ^1.0.2
+  sign_in_with_apple:
 
 
 dev_dependencies:
@@ -67,3 +68,4 @@ flutter:
   assets:
     - assets/
 
+# 
