@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
+import 'package:donaid/Models/Organization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../Models/PushNotification.dart';
@@ -21,6 +23,9 @@ class _DonorNotificationPageState extends State<DonorNotificationPage> {
   final _firestore = FirebaseFirestore.instance;
   var deletedNotification;
   var deletedIndex;
+  Organization? organization;
+  Map<String, dynamic>? charity;
+
   List<PushNotification> notifications=[];
 
   @override
@@ -29,7 +34,39 @@ class _DonorNotificationPageState extends State<DonorNotificationPage> {
     _getNotifications();
   }
 
+  _urgentCaseOrganizationIsInUnitedStates(String urgentCaseId) async{
+    //Get the organization that created the urgent case for the notification
+    //Check if that organization is based in the US. Return true if it is based in the US, return false otherwise.
+
+    var urgentCaseRef = await _firestore.collection('UrgentCases').where('id',isEqualTo: urgentCaseId).get();
+    var urgentCaseDoc = urgentCaseRef.docs.first;
+
+    var organizationRef = await _firestore.collection('OrganizationUsers').where('uid', isEqualTo: urgentCaseDoc.data()['organizationID']).get();
+    var organizationDoc = organizationRef.docs.first;
+    organization = Organization(
+      uid: organizationDoc.data()['uid'],
+      organizationName: organizationDoc.data()['organizationName'],
+      organizationEmail: organizationDoc.data()['organizationEmail'],
+      organizationDescription: organizationDoc.data()['organizationDescription'],
+      id: organizationDoc.data()['id'],
+      profilePictureDownloadURL: organizationDoc.data()['profilePictureDownloadURL'],
+      phoneNumber: organizationDoc.data()['phoneNumber'],
+      gatewayLink: organizationDoc.data()['gatewayLink'],
+      country: organizationDoc.data()['country'],
+    );
+
+    charity = {
+      'charityID': urgentCaseDoc.data()['id'],
+      'charityType':'Urgent Case',
+      'charityTitle': urgentCaseDoc.data()['title']
+    };
+
+    return organization?.country == 'United States';
+  }
+
   _goToChosenUrgentCase(String id)async{
+    //Get full urgent case information and go to the full details page for that urgent case
+
     var ret = await _firestore.collection('UrgentCases').where('id',isEqualTo: id).get();
     var doc = ret.docs[0];
     UrgentCase urgentCase = UrgentCase(
@@ -53,6 +90,8 @@ class _DonorNotificationPageState extends State<DonorNotificationPage> {
   }
 
   _getNotifications() async {
+    //Get all notifications for the current user
+
     var notificationsDoc = await _firestore.collection('Notifications').doc(_auth.currentUser?.uid).get();
 
     for(var item in notificationsDoc['notificationsList']){
@@ -104,9 +143,17 @@ class _DonorNotificationPageState extends State<DonorNotificationPage> {
                       ));
                 },
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: ()async{
                     if(notifications[index].dataTitle.toString() == 'UrgentCaseApprovals'){
-                      _goToChosenUrgentCase(notifications[index].dataBody.toString());
+                      
+                      var urgentCaseIsInUnitedStates = await _urgentCaseOrganizationIsInUnitedStates(notifications[index].dataBody.toString());
+                      if(urgentCaseIsInUnitedStates){
+                        _goToChosenUrgentCase(notifications[index].dataBody.toString());
+
+                      }
+                      else{
+                        DonorAlertDialogs.paymentLinkPopUp(context, organization!, _auth.currentUser!.uid, charity!);
+                      }
                     }
                   },
                   child: ListTile(

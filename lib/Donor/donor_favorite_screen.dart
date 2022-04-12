@@ -266,6 +266,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                                 trailing: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: FavoriteButton(
+                                    iconSize: 50,
                                     isFavorite: true,
                                     valueChanged: (_isFavorite) async {
                                       await updateFavorites(loggedInUser!.uid.toString(),_favUserCampaign[index]["id"].toString());
@@ -314,6 +315,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                         trailing: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: FavoriteButton(
+                            iconSize: 50,
                             isFavorite: true,
                             valueChanged: (_isFavorite) async {
                               await updateFavorites(loggedInUser!.uid.toString(),_favUserBeneficiary[index]["id"].toString());
@@ -363,6 +365,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                         trailing: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: FavoriteButton(
+                            iconSize: 50,
                             isFavorite: true,
                             valueChanged: (_isFavorite) async {
                               await updateFavorites(loggedInUser!.uid.toString(),_favUserUrgentCase[index]["id"].toString());

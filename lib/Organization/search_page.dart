@@ -159,6 +159,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
   }
 
   void _searchResults(String enteredKeyword) {
+    _filterResults();
     if (enteredKeyword.isEmpty) {
       campaigns = allCampaigns;
       beneficiaries = allBeneficiaries;
@@ -365,42 +366,41 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
           const SizedBox(
             height: 20,
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: DropdownButtonFormField <String>(
-                  decoration: InputDecoration(
-                      label: Center(
-                          child: Text('category'.tr)
-                      ),
-                      border: const OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(12.0)),
-                      )),
-                  icon:  Visibility(visible: false, child: Icon(Icons.keyboard_arrow_down)),
-                  items: campaignCategory == null? []: campaignCategory.map((items) {
-                    return DropdownMenuItem<String>(
-                      child: Text(
-                        items,
-                      ),
-                      value: items,
-                    );
-                  }).toList(),
-                  onChanged: (val) => setState(() {
-                    categoryFilterController.text = val.toString();
-                    _filterResults();
-                  }),
+          Container(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: DropdownButtonFormField <String>(
+                    decoration: InputDecoration(
+                        label: Center(
+                            child: Text('category'.tr)
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(12.0)),
+                        )),
+                    icon:  Visibility(visible: false, child: Icon(Icons.keyboard_arrow_down)),
+                    value: categoryFilterController.text.isNotEmpty ? categoryFilterController.text : null,
+                    items: campaignCategory == null? []: campaignCategory.map((items) {
+                      return DropdownMenuItem<String>(
+                        child: Text(
+                          items,
+                        ),
+                        value: items,
+                      );
+                    }).toList(),
+                    onChanged: (val) => setState(() {
+                      categoryFilterController.text = val.toString();
+                      _filterResults();
+                    }),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
-              Expanded(
+                SizedBox(
+                  width: 20,
+                ),
+                Expanded(
                   child: DropdownButtonFormField<String>(
+                    isExpanded: true,
                     decoration: InputDecoration(
                         label: Center(
                             child: Text('Sort By'.tr)
@@ -410,6 +410,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    value: sortingController.text.isNotEmpty ? sortingController.text : null,
                     items: sortingChoices.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
@@ -420,8 +421,13 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                       sortingController.text = val.toString();
                       _sortResults();
                     }),
-                  )),
-            ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
           ),
 
           Expanded(
@@ -487,6 +493,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         BorderRadius.all(Radius.circular(12.0)),
                       )),
                   icon:  Visibility(visible: false, child: Icon(Icons.keyboard_arrow_down)),
+                  value: categoryFilterController.text.isNotEmpty ? categoryFilterController.text : null,
                   items: campaignCategory == null? []: campaignCategory.map((items) {
                     return DropdownMenuItem<String>(
                       child: Text(
@@ -501,15 +508,10 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                   }),
                 ),
               ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
+              SizedBox(width: 20,),
               Expanded(
                   child: DropdownButtonFormField<String>(
+                    isExpanded: true,
                     decoration: InputDecoration(
                         label: Center(
                             child: Text('Sort By'.tr)
@@ -519,6 +521,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    value: sortingController.text.isNotEmpty ? sortingController.text : null,
                     items: sortingChoices.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
@@ -531,6 +534,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                     }),
                   )),
             ],
+          ),
+          const SizedBox(
+            height: 20,
           ),
 
           Expanded(
@@ -596,6 +602,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                         BorderRadius.all(Radius.circular(12.0)),
                       )),
                   icon:  Visibility(visible: false, child: Icon(Icons.keyboard_arrow_down)),
+                  value: categoryFilterController.text.isNotEmpty ? categoryFilterController.text : null,
                   items: campaignCategory == null? []: campaignCategory.map((items) {
                     return DropdownMenuItem<String>(
                       child: Text(
@@ -610,15 +617,10 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                   }),
                 ),
               ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
+              SizedBox(width: 20,),
               Expanded(
                   child: DropdownButtonFormField<String>(
+                    isExpanded: true,
                     decoration: InputDecoration(
                         label: Center(
                             child: Text('Sort By'.tr)
@@ -628,6 +630,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                           BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Visibility(visible: false,child: Icon(Icons.keyboard_arrow_down)),
+                    value: sortingController.text.isNotEmpty ? sortingController.text : null,
                     items: sortingChoices.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
@@ -640,6 +643,9 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                     }),
                   )),
             ],
+          ),
+          const SizedBox(
+            height: 20,
           ),
 
           Expanded(

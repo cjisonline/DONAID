@@ -314,8 +314,12 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                 borderRadius:
                 BorderRadius.all(Radius.circular(32.0)),
               )),
-          icon: const Icon(Icons.keyboard_arrow_down),
-          items: category == null? []: category.map((items) {
+          icon: widget.beneficiary.amountRaised > 0
+              ? Visibility(child: Icon(Icons.keyboard_arrow_down,),visible: false,)
+              : Icon(Icons.keyboard_arrow_down),
+          items: widget.beneficiary.amountRaised > 0
+              ? [DropdownMenuItem<String>(child: Text(_beneficiaryCategoryController!.text), value: _beneficiaryCategoryController!.text,)]
+              : category.map((items) {
             return DropdownMenuItem<String>(
               child: Text(items),
               value: items,

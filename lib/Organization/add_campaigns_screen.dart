@@ -361,7 +361,7 @@ class _AddCampaignFormState extends State<AddCampaignForm> {
                                     showLoadingSpinner = true;
                                   });
                                   addCampaign(categoryController.text,descriptionController.text,
-                                      int.parse(goalAmountController.text).toDouble(), titleController.text, endDateController.text);
+                                      double.parse(goalAmountController.text), titleController.text, endDateController.text);
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
 
                                   ScaffoldMessenger.of(context)

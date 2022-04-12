@@ -59,18 +59,20 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
   }
 
   _getFavorite() async {
-    await _firestore
-        .collection("Favorite")
-        .doc(loggedInUser!.uid)
-        .get()
-        .then((value) {
-      setState(() {
-        pointlist = List.from(value['favoriteList']);
+    if (_auth.currentUser?.email != null) {
+      await _firestore
+          .collection("Favorite")
+          .doc(loggedInUser!.uid)
+          .get()
+          .then((value) {
+        setState(() {
+          pointlist = List.from(value['favoriteList']);
+        });
       });
-    });
+    }
   }
-
   // create the beneficiary card
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -82,6 +84,27 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
         // display icon
+        (_auth.currentUser?.email != null)
+        ? Align(
+          alignment: Alignment.topRight,
+          child: IconButton(
+            icon: Icon(
+              pointlist.contains(widget.beneficiary.id.toString())
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: pointlist.contains(widget.beneficiary.id.toString())
+                  ? Colors.red
+                  : null,
+              size: 30,
+            ),
+            onPressed: () async {
+              await updateFavorites(loggedInUser!.uid.toString(),
+                  widget.beneficiary.id.toString());
+              await _getFavorite();
+
+            },
+          ),
+        ): Container(),
         Icon(
           Icons.person,
           color: Colors.blue,
@@ -89,9 +112,12 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
         ),
         // display beneficiary name populated from Firebase
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Text(widget.beneficiary.name,
               textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
@@ -102,13 +128,14 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
             height: 75.0,
             child: Text(
               widget.beneficiary.biography,
-              textAlign: TextAlign.left,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 15,
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
             )),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           // Display beneficiary amount raised populated from firebase
@@ -183,27 +210,6 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
               color: Colors.pink,
               borderRadius: BorderRadius.all(Radius.circular(10)),
             )),
-        (_auth.currentUser?.email != null) ?
-        Align(
-          alignment: Alignment.center,
-          child: IconButton(
-            icon: Icon(
-              pointlist.contains(widget.beneficiary.id.toString())
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: pointlist.contains(widget.beneficiary.id.toString())
-                  ? Colors.red
-                  : null,
-              size: 40,
-            ),
-            onPressed: () async {
-              await updateFavorites(loggedInUser!.uid.toString(),
-                  widget.beneficiary.id.toString());
-              await _getFavorite();
-            },
-          ),
-        )
-            : Container(),
       ]),
     );
   }

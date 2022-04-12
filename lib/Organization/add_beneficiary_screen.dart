@@ -364,7 +364,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   });
                                   addBeneficiary(categoryController.text,
                                       biographyController.text,
-                                      int.parse(goalAmountController.text).toDouble(),
+                                      double.parse(goalAmountController.text),
                                       nameController.text,
                                       endDateController.text);
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));

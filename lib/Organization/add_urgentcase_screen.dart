@@ -85,7 +85,8 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
         'id': docRef.id,
         'organizationID': loggedInUser?.uid,
         'title': title,
-        'rejected':false
+        'rejected':false,
+        'denialReason':""
       });
     } catch (e) {
       print(e);
@@ -388,7 +389,7 @@ class _AddUrgentCaseFormState extends State<AddUrgentCaseForm> {
                                   });
                                   addUrgentCase(categoryController.text,
                                       descriptionController.text,
-                                      int.parse(goalAmountController.text).toDouble(),
+                                      double.parse(goalAmountController.text),
                                       titleController.text,
                                       endDateController.text);
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
