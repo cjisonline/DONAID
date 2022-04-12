@@ -1,4 +1,5 @@
 import 'package:donaid/Models/message.dart';
+import 'package:donaid/Services/chatServices.dart';
 import 'package:donaid/contactUs.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -55,22 +56,22 @@ class _DonorDrawerState extends State<DonorDrawer> {
               },
             ),
             if (FirebaseAuth.instance.currentUser?.email != null)
-            ListTile(
-              leading: const Icon(Icons.account_circle),
-              title: Text("profile".tr),
-              onTap: () {
-                Navigator.pushNamed(context, DonorProfile.id);
-              },
-            ),
+              ListTile(
+                leading: const Icon(Icons.account_circle),
+                title: Text("profile".tr),
+                onTap: () {
+                  Navigator.pushNamed(context, DonorProfile.id);
+                },
+              ),
             if (FirebaseAuth.instance.currentUser?.email != null)
-            ListTile(
-              leading: const Icon(Icons.favorite),
-              title: Text("My Favorites".tr),
-              onTap: () {
-                Navigator.pushNamed(context, DonorFavoritePage.id);
-              },
-            ),
-            if(FirebaseAuth.instance.currentUser?.email != null)
+              ListTile(
+                leading: const Icon(Icons.favorite),
+                title: Text("My Favorites".tr),
+                onTap: () {
+                  Navigator.pushNamed(context, DonorFavoritePage.id);
+                },
+              ),
+            if (FirebaseAuth.instance.currentUser?.email != null)
               ListTile(
                 leading: const Icon(Icons.history),
                 title: Text("donation_history".tr),
@@ -110,7 +111,7 @@ class _DonorDrawerState extends State<DonorDrawer> {
                                       const Locale('fr', 'FR'));
                                   Navigator.pop(context);
                                 },
-                                child: const Center(child: Text("French"))),
+                                child: const Center(child: Text("Francais"))),
                             SimpleDialogOption(
                                 onPressed: () async {
                                   final SharedPreferences prefs = await _prefs;
@@ -120,7 +121,8 @@ class _DonorDrawerState extends State<DonorDrawer> {
                                       const Locale('ar', 'SA'));
                                   Navigator.pop(context);
                                 },
-                                child: const Center(child: Text("Arabic"))),
+                                child:
+                                    const Center(child: Text("اللغة العربية"))),
                             SimpleDialogOption(
                                 onPressed: () async {
                                   final SharedPreferences prefs = await _prefs;
@@ -130,7 +132,7 @@ class _DonorDrawerState extends State<DonorDrawer> {
                                       const Locale('es', 'ES'));
                                   Navigator.pop(context);
                                 },
-                                child: const Center(child: Text("Spanish")))
+                                child: const Center(child: Text("Espanol")))
                           ]);
                     });
               },
@@ -147,6 +149,8 @@ class _DonorDrawerState extends State<DonorDrawer> {
               leading: const Icon(Icons.logout),
               title: Text("logout".tr),
               onTap: () {
+                if (chatListener != null) chatListener.cancel();
+                chatListener = null;
                 FirebaseAuth.instance.signOut();
                 MyGlobals.allMessages = <MessageModel>[].obs;
                 Navigator.of(context)

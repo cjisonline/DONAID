@@ -1,3 +1,4 @@
+import 'package:donaid/Services/chatServices.dart';
 import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,8 @@ class Accounts {
   }
 
   static logoutUser(context) async {
+    if (chatListener != null) chatListener.cancel();      chatListener=null;
+
     FirebaseAuth _auth = FirebaseAuth.instance;
     // MyGlobals.currentUser = '';
     await MyGlobals.myBox.erase();

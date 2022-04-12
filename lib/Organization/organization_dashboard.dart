@@ -49,9 +49,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   @override
   void initState() {
     super.initState();
-
     handleNotifications();
-
     _getCurrentUser();
     _getCampaign();
     _getUrgentCases();

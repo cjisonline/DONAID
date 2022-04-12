@@ -4,6 +4,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/state_manager.dart';
 
+var chatListener;
+
 class ChatService extends GetxService {
   DatabaseReference dbRefMessages =
       FirebaseDatabase.instance.ref().child('chat');
@@ -24,6 +26,13 @@ class ChatService extends GetxService {
               }
             });
           });
+          var temp = MyGlobals.allMessages.toList();
+          MyGlobals.allMessages.clear();
+          for (var item in temp) {
+            if (MyGlobals.allMessages.where((p0) => p0.id == item.id).isEmpty) {
+              MyGlobals.allMessages.add(item);
+            }
+          }
           MyGlobals.allMessages
               .sort((a, b) => a.creationDate.compareTo(b.creationDate));
           print(MyGlobals.allMessages);
@@ -37,9 +46,9 @@ class ChatService extends GetxService {
 
   listenFriend(myId, type) {
     try {
-      dbRefMessages.child(myId).onChildChanged.listen((event) {
+      print(MyGlobals.allMessages);
+      chatListener = dbRefMessages.child(myId).onChildChanged.listen((event) {
         if (event.snapshot.value != null) {
-//          MyGlobals.allMessages.clear();
           (event.snapshot.value as Map).forEach((key, myvalue) async {
             try {
               MessageModel temp = MessageModel.toModel(key, myvalue);

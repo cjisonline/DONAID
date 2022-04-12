@@ -156,9 +156,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           vertical: 10.0, horizontal: 15.0),
                       child: SignInButton(Buttons.Google,
                           onPressed: () => Auth.googleLogin(context),
-                          elevation: 5.0),),
-                      Row(children: [
-                        const SizedBox(width: 30),
+                        elevation: 5.0),
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                         InkWell(
                             onTap: () {
                               showDialog(
@@ -213,8 +213,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ]);
                                   });
                             },
-                            child: Text(Get.locale?.languageCode.toUpperCase() ?? "lan".tr,
-                                style: const TextStyle(fontSize: 22)))
+                            splashColor: Colors.white60,
+                            child: Container(
+                              width: 150,
+                              height: 40,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Text("language".tr,
+                                  style: const TextStyle(
+                                      fontSize: 22,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700)),
+                            ))
                       ]),
                 ]))));
   }
