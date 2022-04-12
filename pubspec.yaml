@@ -20,7 +20,7 @@ dependencies:
   firebase_storage: ^10.2.7
   firebase_messaging: ^11.2.8
   permission_handler: ^9.2.0
-
+  charts_flutter: ^0.12.0
   modal_progress_hud_nsn: ^0.1.0-nullsafety-0
   overlay_support: ^1.2.1
   flutter_local_notifications: ^9.4.0
@@ -55,6 +55,7 @@ dependencies:
   flutter_stripe: ^2.2.0
   http: ^0.13.4
   cupertino_icons: ^1.0.2
+  sign_in_with_apple:
 
 
 dev_dependencies:
@@ -67,3 +68,4 @@ flutter:
   assets:
     - assets/
 
+# 
