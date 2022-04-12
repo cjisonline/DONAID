@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:donaid/Services/chatServices.dart';
 import 'package:donaid/localServices.dart';
@@ -8,10 +9,12 @@ import 'package:donaid/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class Auth {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -146,10 +149,57 @@ class Auth {
     }
   }
 
+  static Future<bool> appleLogin(context) async {
+    try {
+      final rawNonce = generateNonce();
+      final nonce = sha256ofString(rawNonce);
+      AuthorizationCredentialAppleID appleCredential =
+          await SignInWithApple.getAppleIDCredential(
+              scopes: [
+            AppleIDAuthorizationScopes.email,
+            AppleIDAuthorizationScopes.fullName
+          ],
+              nonce: nonce,
+              webAuthenticationOptions: WebAuthenticationOptions(
+                  clientId: 'com.youme.login',
+                  redirectUri: Uri.parse(
+                      'https://donaid-d3244.firebaseapp.com/__/auth/handler')));
+
+      OAuthCredential authCredential = OAuthProvider("apple.com").credential(
+          idToken: appleCredential.identityToken, rawNonce: rawNonce);
+      User? user =
+          (await FirebaseAuth.instance.signInWithCredential(authCredential))
+              .user;
+      if (user == null) {
+        EasyLoading.showInfo("something_wrong".tr,
+            duration: const Duration(seconds: 3));
+        return false;
+      } else {
+        currentUser.name =
+            '${appleCredential.givenName} ${appleCredential.familyName}';
+        currentUser.email = '${appleCredential.email}';
+        currentUser.image = "";
+        currentUser.id = user.uid;
+        await LocalServices.write("user", currentUser.toJSON());
+        Navigator.pushNamed(context, DonorDashboard.id);
+        return true;
+      }
+    } on FirebaseAuthException catch (error) {
+      EasyLoading.showInfo(error.message.toString(),
+          duration: const Duration(seconds: 3));
+    } on PlatformException catch (e) {
+      EasyLoading.showInfo(e.message.toString(),
+          duration: const Duration(seconds: 3));
+    } on Exception catch (e) {
+      EasyLoading.showInfo(e.toString(), duration: const Duration(seconds: 3));
+    }
+    return false;
+  }
+
   static Future<bool> logOut() async {
     try {
       if (chatListener != null) chatListener.cancel();
-      chatListener=null;
+      chatListener = null;
       await _auth.signOut();
       try {
         await _googleSignIn.signOut();
@@ -170,5 +220,19 @@ class Auth {
       return false;
     }
     return true;
+  }
+
+  static String generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  static String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 }

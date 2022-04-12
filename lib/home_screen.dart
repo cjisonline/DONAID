@@ -23,26 +23,27 @@ class _HomeScreenState extends State<HomeScreen> {
   final _firestore = FirebaseFirestore.instance;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     checkAuthState();
   }
 
-  checkAuthState() async{
-    _auth.authStateChanges().listen((User? user)async{
-      if(user == null){
+  checkAuthState() async {
+    _auth.authStateChanges().listen((User? user) async {
+      if (user == null) {
         print('User signed out.');
-      }
-      else{
-        var userRef = await _firestore.collection('Users').where('uid', isEqualTo: user.uid).get();
-        var userDoc= userRef.docs.first;
+      } else {
+        var userRef = await _firestore
+            .collection('Users')
+            .where('uid', isEqualTo: user.uid)
+            .get();
+        var userDoc = userRef.docs.first;
 
         var userType = userDoc.data()['userType'];
 
-        if(userType == 1){
+        if (userType == 1) {
           Navigator.pushNamed(context, DonorDashboard.id);
-        }
-        else if(userType == 2){
+        } else if (userType == 2) {
           Navigator.pushNamed(context, OrganizationDashboard.id);
         }
       }
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
             scrollDirection: Axis.vertical,
             child: SafeArea(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -122,75 +123,87 @@ class _HomeScreenState extends State<HomeScreen> {
                               }))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15.0),
+                          vertical: 10.0, horizontal: 10.0),
                       child: SignInButton(Buttons.Facebook,
                           onPressed: () async => Auth.fbLogin(context),
                           elevation: 5.0)),
                   Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15.0),
+                          vertical: 10.0, horizontal: 10.0),
                       child: SignInButton(Buttons.Google,
                           onPressed: () => Auth.googleLogin(context),
-                        elevation: 5.0),
-                  ),
+                          elevation: 5.0)),
+                  if (GetPlatform.isIOS)
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 10.0),
+                        child: SignInButton(Buttons.Apple,
+                            onPressed: () => Auth.appleLogin(context),
+                            elevation: 5.0)),
+                  const SizedBox(height: 5),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return SimpleDialog(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius:
-                                            BorderRadius.all(Radius.circular(15))),
-                                        title: Center(child: Text("select_language".tr)),
-                                        children: <Widget>[
-                                          SimpleDialogOption(
-                                              onPressed: () async {
-                                                await Get.updateLocale(
-                                                    const Locale('en', 'US'));
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Center(child: Text("English"))),
-                                          SimpleDialogOption(
-                                              onPressed: () async {
-                                                await Get.updateLocale(
-                                                    const Locale('fr', 'FR'));
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Center(child: Text("French"))),
-                                          SimpleDialogOption(
-                                              onPressed: () async {
-                                                await Get.updateLocale(
-                                                    const Locale('ar', 'SA'));
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Center(child: Text("Arabic"))),
-                                          SimpleDialogOption(
-                                              onPressed: () async {
-                                                await Get.updateLocale(
-                                                    const Locale('es', 'ES'));
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Center(child: Text("Spanish")))
-                                        ]);
-                                  });
-                            },
-                            splashColor: Colors.white60,
-                            child: Container(
-                              width: 150,
-                              height: 40,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Text("language".tr,
-                                  style: const TextStyle(
-                                      fontSize: 22,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700)),
-                            ))
-                      ]),
+                    InkWell(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SimpleDialog(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    title: Center(
+                                        child: Text("select_language".tr)),
+                                    children: <Widget>[
+                                      SimpleDialogOption(
+                                          onPressed: () async {
+                                            await Get.updateLocale(
+                                                const Locale('en', 'US'));
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Center(
+                                              child: Text("English"))),
+                                      SimpleDialogOption(
+                                          onPressed: () async {
+                                            await Get.updateLocale(
+                                                const Locale('fr', 'FR'));
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Center(
+                                              child: Text("French"))),
+                                      SimpleDialogOption(
+                                          onPressed: () async {
+                                            await Get.updateLocale(
+                                                const Locale('ar', 'SA'));
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Center(
+                                              child: Text("Arabic"))),
+                                      SimpleDialogOption(
+                                          onPressed: () async {
+                                            await Get.updateLocale(
+                                                const Locale('es', 'ES'));
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Center(
+                                              child: Text("Spanish")))
+                                    ]);
+                              });
+                        },
+                        splashColor: Colors.white60,
+                        child: Container(
+                          width: 150,
+                          height: 40,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text("language".tr,
+                              style: const TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700)),
+                        ))
+                  ]),
                 ]))));
   }
 }
