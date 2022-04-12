@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
 import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Donor/donor_edit_profile.dart';
@@ -42,6 +43,7 @@ class _DonorProfileState extends State<DonorProfile> {
     loggedInUser = _auth.currentUser;
   }
 
+  // Get current logged in donor's information from Firebase
   _getDonorInformation() async {
     var ret = await _firestore
         .collection('DonorUsers')
@@ -57,10 +59,13 @@ class _DonorProfileState extends State<DonorProfile> {
     setState(() {});
   }
 
+  // Display profile page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // Display back button in top app bar
+        // On pressed, navigate to previous screen
           title: Text('profile'.tr),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -69,6 +74,8 @@ class _DonorProfileState extends State<DonorProfile> {
             },
           ),
           actions: [
+            // Display edit button in top app bar
+            // On pressed, navigate to edit profile screen
             TextButton(
               onPressed: () {
                 Navigator.push(
@@ -83,81 +90,23 @@ class _DonorProfileState extends State<DonorProfile> {
           ]),
       drawer: const DonorDrawer(),
       body: _body(),
-      bottomNavigationBar: _bottomNavigationBar(),
+      bottomNavigationBar: DonorBottomNavigationBar(),
     );
   }
 
+  // Display profile page
   _body() {
-    return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            ProfileRow('YOUR EMAIL', donor.email),
-            ProfileRow('FIRST NAME', donor.firstName),
-            ProfileRow('LAST NAME', donor.lastName),
-            ProfileRow('YOUR PHONE', donor.phoneNumber),
-          ],
-        ));
-  }
-
-  _bottomNavigationBar() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {
-                Navigator.pushNamed(context, DonorDashboard.id);
-              },
-              icon: const Icon(Icons.home, color: Colors.white, size: 35),
-            ),
-            Text('home'.tr,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 35,
-              ),
-            ),
-            Text('search'.tr,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.notifications,
-                  color: Colors.white, size: 35),
-            ),
-            Text('notifications'.tr,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {},
-              icon: const Icon(Icons.message, color: Colors.white, size: 35),
-            ),
-            Text('message'.tr,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
-          ]),
-        ],
-      ),
-    );
+    return  SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children:  [
+                // Display donor's email, first name, last name, and phone number
+                ProfileRow('email'.tr.toUpperCase(), donor.email),
+                ProfileRow('first_name'.tr.toUpperCase(), donor.firstName),
+                ProfileRow('last_name'.tr.toUpperCase(), donor.lastName),
+                ProfileRow('phone_number'.tr.toUpperCase(), donor.phoneNumber),
+              ],
+            )
+        );
   }
 }

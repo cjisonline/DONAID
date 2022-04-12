@@ -325,9 +325,9 @@ class _EditUrgentCaseState extends State<EditUrgentCase> {
               value: items,
             );
           }).toList(),
-          onChanged: (val) => setState(() {
+          onChanged: (val) {
             _urgentCaseCategoryController?.text = val.toString();
-          }),
+          },
           validator: (value) => value == null
               ? 'please_fill_in_the_category'.tr : null,
         )

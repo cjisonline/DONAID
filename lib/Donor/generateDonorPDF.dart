@@ -8,7 +8,7 @@ import 'package:pdf/widgets.dart';
 import '../Models/DonorUser.dart';
 import '../Models/formate.dart';
 import '../Models/invoice.dart';
-
+// Generate PDF file
 class PdfInvoiceApi {
   static Future<File> generate(Invoice invoice) async {
     final pdf = Document();
@@ -24,7 +24,7 @@ class PdfInvoiceApi {
       ],
       footer: (context) => buildFooter(invoice),
     ));
-
+// File name
     return PdfPreview.saveDocument(name: 'my_donations.pdf', pdf: pdf);
   }
 
@@ -53,7 +53,7 @@ class PdfInvoiceApi {
       ),
     ],
   );
-
+// number and date of the donation history
   static Widget buildCustomerAddress(DonorUser customer) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -91,7 +91,7 @@ class PdfInvoiceApi {
       Text(supplier.emailaddress),
     ],
   );
-
+// Title UI for donation history
   static Widget buildTitle(Invoice invoice) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -104,7 +104,7 @@ class PdfInvoiceApi {
       SizedBox(height: 0.8 * PdfPageFormat.cm),
     ],
   );
-
+// Table to display all the donation the donor made
   static Widget buildInvoice(Invoice invoice) {
     final headers = [
       'Title',
@@ -123,7 +123,7 @@ class PdfInvoiceApi {
         '\$ ${item.price}',
       ];
     }).toList();
-
+// Display the table
     return Table.fromTextArray(
       headers: headers,
       data: data,
@@ -141,7 +141,7 @@ class PdfInvoiceApi {
       },
     );
   }
-
+// Calculate the total amount of donations
   static Widget buildTotal(Invoice invoice) {
     final netTotal = invoice.items
         .map((item) => item.price)
@@ -178,7 +178,7 @@ class PdfInvoiceApi {
       ),
     );
   }
-
+// Donaid contact information for the footer of the page
   static Widget buildFooter(Invoice invoice) => Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
@@ -189,7 +189,7 @@ class PdfInvoiceApi {
       buildSimpleText(title: 'Payment Method', value: invoice.supplier.paymentInfo),
     ],
   );
-
+// Text UI
   static buildSimpleText({
     required String title,
     required String value,
@@ -207,7 +207,7 @@ class PdfInvoiceApi {
     );
   }
 
-
+// Text UI
   static buildText({
     required String title,
     required String value,

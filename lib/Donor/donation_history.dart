@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
 import 'package:donaid/Donor/pdf_preview_screen.dart';
 import 'package:donaid/Models/DonaidInfo.dart';
 import 'package:donaid/Donor/urgent_case_donate_screen.dart';
@@ -10,6 +11,7 @@ import 'package:donaid/Models/UrgentCase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../Models/Donor.dart';
 import '../Models/DonorUser.dart';
@@ -33,6 +35,7 @@ class DonationHistory extends StatefulWidget {
 class _DonationHistoryState extends State<DonationHistory> {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
+  bool showLoadingSpinner = false;
   List<Donation> donations = [];
   List<InvoiceItem>  invoiceitems = [];
   List<Organization> organizations = [];
@@ -60,6 +63,9 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _getDonationHistory() async {
+    setState(() {
+      showLoadingSpinner = true;
+    });
     var ret = await _firestore
         .collection('Donations')
         .where('donorID', isEqualTo: _auth.currentUser?.uid)
@@ -101,7 +107,9 @@ class _DonationHistoryState extends State<DonationHistory> {
 
       organizations.add(organization);
     }
-    setState(() {});
+    setState(() {
+      showLoadingSpinner=false;
+    });
   }
 
   _goToChosenUrgentCase(String id) async {
@@ -247,66 +255,108 @@ class _DonationHistoryState extends State<DonationHistory> {
 
   _donationHistoryBody() {
     return donations.isNotEmpty && organizations.length == donations.length
-        ? ListView.builder(
-            itemCount: donations.length,
-            shrinkWrap: true,
-            itemBuilder: (context, int index) {
-              return Card(
-                  child: Column(
-                children: [
-                  (donations[index].charityType == 'UrgentCases')
-                      ? ListTile(
-                          onTap: () {
-                            _goToChosenUrgentCase(
-                                donations[index].charityID.toString());
-                          },
-                          title: Text(donations[index].charityName),
-                      subtitle: Text('urgent_case'.tr +'\n'+
-                              organizations[index].organizationName),
-                          trailing: Text("\u0024" +
-                              f.format(donations[index].donationAmount)),
-                        )
-                      : (donations[index].charityType == 'Campaigns')
-                          ? ListTile(
-                              onTap: () {
-                                _goToChosenCampaign(
+        ? ModalProgressHUD(
+      inAsyncCall: showLoadingSpinner,
+          child: ListView.builder(
+              itemCount: donations.length,
+              shrinkWrap: true,
+              itemBuilder: (context, int index) {
+                return Card(
+                    child: Column(
+                  children: [
+                    (donations[index].charityType == 'UrgentCases')
+                        ? ListTile(
+                            onTap: () {
+                              if(organizations[index].country == 'United States'){
+                                _goToChosenUrgentCase(
                                     donations[index].charityID.toString());
-                              },
-                              title: Text(donations[index].charityName),
-                          subtitle: Text('campaign'.tr + '\n'+
-                                  organizations[index].organizationName),
-                              trailing: Text("\u0024" +
-                                  f.format(donations[index].donationAmount)),
-                            )
-                          : ListTile(
-                              onTap: () {
-                                _goToChosenBeneficiary(
-                                    donations[index].charityID.toString());
-                              },
-                              title: Text(donations[index].charityName),
-                subtitle: Text('beneficiary'.tr + '\n'+
-                                  organizations[index].organizationName),
-                              trailing: Text("\u0024" +
-                                  f.format(donations[index].donationAmount)),
-                            ),
-                  const Divider()
-                ],
-              ));
-            })
-        : Center(
-            child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'no_donation_history'.tr,
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                'make_a_donation_to_see_it_here!'.tr,
-                style: TextStyle(fontSize: 18),
-              ),
-            ],
-          ));
+                              }
+                              else{
+                                Map<String, dynamic> charity = {
+                                  'charityID': donations[index].charityID,
+                                  'charityType': 'Urgent Case',
+                                  'charityTitle': donations[index].charityName
+                                };
+
+                                DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid, charity );
+                              }
+
+                            },
+                            title: Text(donations[index].charityName),
+                        subtitle: Text('urgent_case'.tr +'\n'+
+                                organizations[index].organizationName),
+                            trailing: Text("\u0024" +
+                                f.format(donations[index].donationAmount)),
+                          )
+                        : (donations[index].charityType == 'Campaigns')
+                            ? ListTile(
+                                onTap: () {
+                                  if(organizations[index].country == 'United States'){
+                                    _goToChosenCampaign(
+                                        donations[index].charityID.toString());
+                                  }
+                                  else{
+                                    Map<String, dynamic> charity = {
+                                      'charityID': donations[index].charityID,
+                                      'charityType': 'Campaign',
+                                      'charityTitle': donations[index].charityName
+                                    };
+
+                                    DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid, charity );
+                                  }
+
+                                },
+                                title: Text(donations[index].charityName),
+                            subtitle: Text('campaign'.tr + '\n'+
+                                    organizations[index].organizationName),
+                                trailing: Text("\u0024" +
+                                    f.format(donations[index].donationAmount)),
+                              )
+                            : ListTile(
+                                onTap: () {
+                                  if(organizations[index].country == 'United States'){
+                                    _goToChosenBeneficiary(
+                                        donations[index].charityID.toString());
+                                  }
+                                  else{
+                                    Map<String, dynamic> charity = {
+                                      'charityID': donations[index].charityID,
+                                      'charityType': 'Beneficiary',
+                                      'charityTitle': donations[index].charityName
+                                    };
+
+                                    DonorAlertDialogs.paymentLinkPopUp(context, organizations[index], _auth.currentUser!.uid, charity );
+                                  }
+
+                                },
+                                title: Text(donations[index].charityName),
+                  subtitle: Text('beneficiary'.tr + '\n'+
+                                    organizations[index].organizationName),
+                                trailing: Text("\u0024" +
+                                    f.format(donations[index].donationAmount)),
+                              ),
+                    const Divider()
+                  ],
+                ));
+              }),
+        )
+        : ModalProgressHUD(
+      inAsyncCall: showLoadingSpinner,
+          child: Center(
+              child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'no_donation_history'.tr,
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  'make_a_donation_to_see_it_here!'.tr,
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            )),
+        );
   }
 
   @override
@@ -344,12 +394,12 @@ class _DonationHistoryState extends State<DonationHistory> {
         builder: (BuildContext context) {
           return AlertDialog(
             title:  Center(
-              child: Text('Can Not Generate a PDF'),
+              child: Text('can_not_generate_a_pdf'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text("You currently have no donation history to generate a pdf."),
+            content:  Text("you_currently_have_no_donation_history_to_generate_a_pdf".tr),
             actions: [
               Center(
                 child: TextButton(

@@ -1,6 +1,7 @@
 import 'package:donaid/Donor/category_campaigns_screen.dart';
 import 'package:flutter/material.dart';
 
+// set up the charity card
 class CharityCategoryCard extends StatelessWidget {
   final String name;
   final String iconDownloadURL;
@@ -8,11 +9,13 @@ class CharityCategoryCard extends StatelessWidget {
   const CharityCategoryCard(this.name, this.iconDownloadURL, {Key? key})
       : super(key: key);
 
+  // create the charity category card
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(5.0),
         child: GestureDetector(
+          // navigate to the Category campaigns screen
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return (CategoryCampaignsScreen(categoryName: name));
@@ -25,6 +28,7 @@ class CharityCategoryCard extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                // display the category's icon
                 SizedBox(
                   width: 25,
                   height: 25,
@@ -32,7 +36,7 @@ class CharityCategoryCard extends StatelessWidget {
                   iconDownloadURL,
                   fit: BoxFit.contain,
                 ),),
-
+                // display the category's name
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: Text(name,

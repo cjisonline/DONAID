@@ -18,6 +18,7 @@ class BeneficiaryCard extends StatefulWidget {
   State<BeneficiaryCard> createState() => _BeneficiaryCardState();
 }
 
+// Set up the beneficiary card
 class _BeneficiaryCardState extends State<BeneficiaryCard> {
   Organization? organization;
   final _auth = FirebaseAuth.instance;
@@ -39,6 +40,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
     loggedInUser = _auth.currentUser;
   }
 
+  // Get the organization's information of this beneficiary from Firebase
   _getBeneficiaryOrganization() async {
     var ret = await _firestore
         .collection('OrganizationUsers')
@@ -57,16 +59,19 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
   }
 
   _getFavorite() async {
-    await _firestore
-        .collection("Favorite")
-        .doc(loggedInUser!.uid)
-        .get()
-        .then((value) {
-      setState(() {
-        pointlist = List.from(value['favoriteList']);
+    if (_auth.currentUser?.email != null) {
+      await _firestore
+          .collection("Favorite")
+          .doc(loggedInUser!.uid)
+          .get()
+          .then((value) {
+        setState(() {
+          pointlist = List.from(value['favoriteList']);
+        });
       });
-    });
+    }
   }
+  // create the beneficiary card
 
   @override
   Widget build(BuildContext context) {
@@ -78,42 +83,73 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
+        // display icon
+        (_auth.currentUser?.email != null)
+        ? Align(
+          alignment: Alignment.topRight,
+          child: IconButton(
+            icon: Icon(
+              pointlist.contains(widget.beneficiary.id.toString())
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: pointlist.contains(widget.beneficiary.id.toString())
+                  ? Colors.red
+                  : null,
+              size: 30,
+            ),
+            onPressed: () async {
+              await updateFavorites(loggedInUser!.uid.toString(),
+                  widget.beneficiary.id.toString());
+              await _getFavorite();
+
+            },
+          ),
+        ): Container(),
         Icon(
           Icons.person,
           color: Colors.blue,
           size: 40,
         ),
+        // display beneficiary name populated from Firebase
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Text(widget.beneficiary.name,
               textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
               )),
         ),
+        // display beneficiary biography populated from Firebase
         SizedBox(
             height: 75.0,
             child: Text(
               widget.beneficiary.biography,
-              textAlign: TextAlign.left,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 15,
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
             )),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          // Display beneficiary amount raised populated from firebase
           Text('\$' + f.format(widget.beneficiary.amountRaised),
               textAlign: TextAlign.left,
               style: const TextStyle(color: Colors.black, fontSize: 15)),
+          // Display beneficiary goal amount from firebase
           Text(
             '\$' + f.format(widget.beneficiary.goalAmount),
             textAlign: TextAlign.start,
             style: const TextStyle(color: Colors.black, fontSize: 15),
           ),
         ]),
+        // Display beneficiary progress bar
         Container(
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -134,6 +170,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () {
+                    // For organizations in the United States, navigate to beneficiary's donate screen
                     if (organization?.country == 'United States') {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
@@ -141,7 +178,9 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                       })).then((value) {
                         setState(() {});
                       });
-                    } else {
+                    }
+                    // For organizations outside the United States, display the dialog with gateway link
+                    else {
                       Map<String, dynamic> charity = {
                         'charityType': 'Beneficiary',
                         'charityID': widget.beneficiary.id,
@@ -151,6 +190,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                           _auth.currentUser!.uid, charity);
                     }
                   },
+                  // Display donate button
                   child: Row(children: [
                     const Icon(Icons.favorite, color: Colors.white, size: 20),
                     Container(
@@ -170,27 +210,6 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
               color: Colors.pink,
               borderRadius: BorderRadius.all(Radius.circular(10)),
             )),
-        (_auth.currentUser?.email != null) ?
-        Align(
-          alignment: Alignment.center,
-          child: IconButton(
-            icon: Icon(
-              pointlist.contains(widget.beneficiary.id.toString())
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: pointlist.contains(widget.beneficiary.id.toString())
-                  ? Colors.red
-                  : null,
-              size: 40,
-            ),
-            onPressed: () async {
-              await updateFavorites(loggedInUser!.uid.toString(),
-                  widget.beneficiary.id.toString());
-              await _getFavorite();
-            },
-          ),
-        )
-            : Container(),
       ]),
     );
   }
