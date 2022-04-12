@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.pushNamed(
                                     context, RegistrationScreen.id);
                               }))),
-                  Padding(
+                  Padding (
                       padding: const EdgeInsets.symmetric(
                           vertical: 16.0, horizontal: 5.0),
                       child: Material(
