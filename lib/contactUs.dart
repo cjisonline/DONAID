@@ -31,6 +31,7 @@ class _HomeScreenState extends State<ContactUs> {
   TextEditingController messageType = TextEditingController();
 //the Categories
   List<String> categoryOptions = [
+    "General".tr,
     "Question".tr,
     "Suggestion".tr,
     "Help".tr,
@@ -42,6 +43,7 @@ class _HomeScreenState extends State<ContactUs> {
     super.initState();
     getInfo();
   }
+
 //getting the user's email
   getInfo() async {
     var ret = await _firestore
@@ -52,192 +54,49 @@ class _HomeScreenState extends State<ContactUs> {
     email.text = doc['email'];
     setState(() {});
   }
+
   //adding documents to the collection of AdminMessages
-  _sendMessage() async{
+  _sendMessage() async {
     var docRef = await _firestore.collection('AdminMessages').add({});
 
-    await _firestore.collection('AdminMessages').doc(docRef.id).set(
-      {
-        "email": email.text,
-        "subject": subject.text,
-        "category": messageType.text,
-        "userType": widget.type,
-        "message": message.text,
-        "ContactTime": DateTime.now(),
-        "userId": FirebaseAuth.instance.currentUser!.uid,
-        "read":false,
-        "id":docRef.id
-      }
-    );
+    await _firestore.collection('AdminMessages').doc(docRef.id).set({
+      "email": email.text,
+      "subject": subject.text,
+      "category": messageType.text,
+      "userType": widget.type,
+      "message": message.text,
+      "ContactTime": DateTime.now(),
+      "userId": FirebaseAuth.instance.currentUser!.uid,
+      "read": false,
+      "id": docRef.id
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Contact Us".tr),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: (){
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        backgroundColor: Colors.white,
-        body: widget.type == "DonorUsers" ? _buildDonorBody() : _buildOrganizationBody(),
-      drawer: widget.type == "DonorUsers" ? DonorDrawer() : OrganizationDrawer(),
-      bottomNavigationBar: widget.type =='DonorUsers' ? DonorBottomNavigationBar() : OrganizationBottomNavigation(),
-    );
-  }
-
-  _buildDonorBody(){
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: DropdownButtonFormField(
-                  decoration: InputDecoration(
-                      label: Center(
-                        child: Text('category'.tr, style: TextStyle(color: Colors.black, fontSize: 20),)),
-                      border: const OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(12.0)),
-                      )),
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                  items:categoryOptions.map((items) {
-                    return DropdownMenuItem<String>(
-                      child: Text(items),
-                      value: items,
-                    );
-                  }).toList(),
-                  onChanged: (val) => setState(() {
-                    messageType.text = val.toString();
-                  }),
-                  validator: (value){
-                    if(messageType.text.isEmpty){
-                      return 'Please select a category'.tr;
-                    }
-                    else{
-                      return null;
-                    }
-                  },
-                )
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  onChanged: (value){
-                    subject.text = value;
-                  },
-                  validator: (value){
-                    if(value!.isEmpty){
-                      return 'Please enter a valid subject'.tr;
-                    }
-                    else {
-                      return null;
-                    }
-                  },
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                      label: Center(
-                        child: RichText(
-                            text:  TextSpan(
-                                text: 'Subject'.tr,
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 20.0),
-                                children: const [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ])),
-                      ),
-                      border: const OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(32.0)),
-                      )),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextFormField(
-                  minLines: 2,
-                  maxLength: 240,
-                  maxLines: 5,
-                  onChanged: (value){
-                    message.text = value;
-                  },
-                  validator: (value){
-                    if(value!.isEmpty){
-                      return 'Please enter a valid message'.tr;
-                    }
-                    else {
-                      return null;
-                    }
-                  },
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                      label: Center(
-                        child: RichText(
-                            text:  TextSpan(
-                                text: 'Message'.tr,
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 20.0),
-                                children: const [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ])),
-                      ),
-                      border: const OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(32.0)),
-                      )),
-                ),
-              ),
-              Padding(
-                  padding: const EdgeInsets.only(top: 40),
-                  child: Material(
-                      elevation: 5.0,
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(30.0),
-                      child: MaterialButton(
-                          child: Text('Send'.tr,
-                              style: const TextStyle(
-                                  fontSize: 25, color: Colors.white)),
-                          onPressed: () async {
-                            if(_formKey.currentState!.validate()){
-                              await _sendMessage();
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar( SnackBar(content: Text('Message sent!'.tr)));
-                            Navigator.popUntil(context, ModalRoute.withName(DonorDashboard.id));
-                            }
-                          }
-                      )
-                  )
-              ),
-            ],
-          ),
+      appBar: AppBar(
+        title: Text("Contact Us".tr),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
+      backgroundColor: Colors.white,
+      body: widget.type == "DonorUsers"
+          ? _buildDonorBody()
+          : _buildOrganizationBody(),
+      drawer:
+          widget.type == "DonorUsers" ? DonorDrawer() : OrganizationDrawer(),
+      bottomNavigationBar: widget.type == 'DonorUsers'
+          ? DonorBottomNavigationBar()
+          : OrganizationBottomNavigation(),
     );
   }
 
-  _buildOrganizationBody(){
+  _buildDonorBody() {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -252,13 +111,15 @@ class _HomeScreenState extends State<ContactUs> {
                   child: DropdownButtonFormField(
                     decoration: InputDecoration(
                         label: Center(
-                            child: Text('category'.tr, style: TextStyle(color: Colors.black, fontSize: 20),)),
+                            child: Text(
+                          'category'.tr,
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        )),
                         border: const OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(12.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
                         )),
                     icon: const Icon(Icons.keyboard_arrow_down),
-                    items:categoryOptions.map((items) {
+                    items: categoryOptions.map((items) {
                       return DropdownMenuItem<String>(
                         child: Text(items),
                         value: items,
@@ -267,27 +128,24 @@ class _HomeScreenState extends State<ContactUs> {
                     onChanged: (val) => setState(() {
                       messageType.text = val.toString();
                     }),
-                    validator: (value){
-                      if(messageType.text.isEmpty){
+                    validator: (value) {
+                      if (messageType.text.isEmpty) {
                         return 'Please select a category'.tr;
-                      }
-                      else{
+                      } else {
                         return null;
                       }
                     },
-                  )
-              ),
+                  )),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: TextFormField(
-                  onChanged: (value){
+                  onChanged: (value) {
                     subject.text = value;
                   },
-                  validator: (value){
-                    if(value!.isEmpty){
+                  validator: (value) {
+                    if (value!.isEmpty) {
                       return 'Please enter a valid subject'.tr;
-                    }
-                    else {
+                    } else {
                       return null;
                     }
                   },
@@ -295,23 +153,22 @@ class _HomeScreenState extends State<ContactUs> {
                   decoration: InputDecoration(
                       label: Center(
                         child: RichText(
-                            text:  TextSpan(
+                            text: TextSpan(
                                 text: 'Subject'.tr,
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 20.0),
                                 children: const [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ])),
+                              TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ])),
                       ),
                       border: const OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(32.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
                       )),
                 ),
               ),
@@ -321,14 +178,13 @@ class _HomeScreenState extends State<ContactUs> {
                   minLines: 2,
                   maxLength: 240,
                   maxLines: 5,
-                  onChanged: (value){
+                  onChanged: (value) {
                     message.text = value;
                   },
-                  validator: (value){
-                    if(value!.isEmpty){
+                  validator: (value) {
+                    if (value!.isEmpty) {
                       return 'Please enter a valid message'.tr;
-                    }
-                    else {
+                    } else {
                       return null;
                     }
                   },
@@ -336,23 +192,22 @@ class _HomeScreenState extends State<ContactUs> {
                   decoration: InputDecoration(
                       label: Center(
                         child: RichText(
-                            text:  TextSpan(
+                            text: TextSpan(
                                 text: 'Message'.tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black, fontSize: 20.0),
                                 children: const [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ])),
+                              TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ])),
                       ),
                       border: const OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(32.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
                       )),
                 ),
               ),
@@ -367,16 +222,14 @@ class _HomeScreenState extends State<ContactUs> {
                               style: const TextStyle(
                                   fontSize: 25, color: Colors.white)),
                           onPressed: () async {
-                            if(_formKey.currentState!.validate()){
+                            if (_formKey.currentState!.validate()) {
                               await _sendMessage();
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar( SnackBar(content: Text('Message sent!'.tr)));
-                              Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Message sent!'.tr)));
+                              Navigator.popUntil(context,
+                                  ModalRoute.withName(DonorDashboard.id));
                             }
-                          }
-                      )
-                  )
-              ),
+                          }))),
             ],
           ),
         ),
@@ -384,4 +237,146 @@ class _HomeScreenState extends State<ContactUs> {
     );
   }
 
+  _buildOrganizationBody() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                        label: Center(
+                            child: Text(
+                          'category'.tr,
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        )),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        )),
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: categoryOptions.map((items) {
+                      return DropdownMenuItem<String>(
+                        child: Text(items),
+                        value: items,
+                      );
+                    }).toList(),
+                    onChanged: (val) => setState(() {
+                      messageType.text = val.toString();
+                    }),
+                    validator: (value) {
+                      if (messageType.text.isEmpty) {
+                        return 'Please select a category'.tr;
+                      } else {
+                        return null;
+                      }
+                    },
+                  )),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  onChanged: (value) {
+                    subject.text = value;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a valid subject'.tr;
+                    } else {
+                      return null;
+                    }
+                  },
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      label: Center(
+                        child: RichText(
+                            text: TextSpan(
+                                text: 'Subject'.tr,
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 20.0),
+                                children: const [
+                              TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ])),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  minLines: 2,
+                  maxLength: 240,
+                  maxLines: 5,
+                  onChanged: (value) {
+                    message.text = value;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a valid message'.tr;
+                    } else {
+                      return null;
+                    }
+                  },
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      label: Center(
+                        child: RichText(
+                            text: TextSpan(
+                                text: 'Message'.tr,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20.0),
+                                children: const [
+                              TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ])),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      )),
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: Material(
+                      elevation: 5.0,
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(30.0),
+                      child: MaterialButton(
+                          child: Text('Send'.tr,
+                              style: const TextStyle(
+                                  fontSize: 25, color: Colors.white)),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              await _sendMessage();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Message sent!'.tr)));
+                              Navigator.popUntil(
+                                  context,
+                                  ModalRoute.withName(
+                                      OrganizationDashboard.id));
+                            }
+                          }))),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

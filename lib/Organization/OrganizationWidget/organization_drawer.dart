@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../home_screen.dart';
 import '../organization_profile.dart';
+
 // Organization drawar
 class OrganizationDrawer extends StatefulWidget {
   const OrganizationDrawer({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class OrganizationDrawer extends StatefulWidget {
 }
 
 class _OrganizationDrawerState extends State<OrganizationDrawer> {
-  final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   String country = "";
@@ -38,6 +39,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
     super.initState();
     _getOrg();
   }
+
   // Display organization name from Firebase
   _getOrg() async {
     var ret = await _firestore
@@ -50,6 +52,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
     profilePictureDownloadURL = doc.data()['profilePictureDownloadURL'];
     setState(() {});
   }
+
 // //Distinguish between foreign and us organization
   @override
   Widget build(BuildContext context) {
@@ -57,6 +60,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
         ? _buildUSDrawer()
         : _buildForeignDrawer();
   }
+
 // US drawer
   _buildUSDrawer() {
     return Container(
@@ -166,7 +170,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                             SimpleDialogOption(
                                 onPressed: () async {
                                   final SharedPreferences prefs = await _prefs;
-                                  prefs.setStringList('Locale', ['en','US']);
+                                  prefs.setStringList('Locale', ['en', 'US']);
 
                                   await Get.updateLocale(
                                       const Locale('en', 'US'));
@@ -176,7 +180,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                             SimpleDialogOption(
                                 onPressed: () async {
                                   final SharedPreferences prefs = await _prefs;
-                                  prefs.setStringList('Locale', ['fr','FR']);
+                                  prefs.setStringList('Locale', ['fr', 'FR']);
 
                                   await Get.updateLocale(
                                       const Locale('fr', 'FR'));
@@ -186,7 +190,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                             SimpleDialogOption(
                                 onPressed: () async {
                                   final SharedPreferences prefs = await _prefs;
-                                  prefs.setStringList('Locale', ['ar','SA']);
+                                  prefs.setStringList('Locale', ['ar', 'SA']);
 
                                   await Get.updateLocale(
                                       const Locale('ar', 'SA'));
@@ -196,7 +200,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                             SimpleDialogOption(
                                 onPressed: () async {
                                   final SharedPreferences prefs = await _prefs;
-                                  prefs.setStringList('Locale', ['es','ES']);
+                                  prefs.setStringList('Locale', ['es', 'ES']);
 
                                   await Get.updateLocale(
                                       const Locale('es', 'ES'));
@@ -226,6 +230,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
       ),
     );
   }
+
 // Foreign org drawer
   _buildForeignDrawer() {
     return Container(
@@ -352,8 +357,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                                       const Locale('ar', 'SA'));
                                   Navigator.pop(context);
                                 },
-                                child:
-                                    const Center(child: Text("اللغة العربية"))),
+                                child: const Center(child: Text("العربية"))),
                             SimpleDialogOption(
                                 onPressed: () async {
                                   await Get.updateLocale(

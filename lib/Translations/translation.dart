@@ -1,4 +1,3 @@
-
 /* THIS IS THE TRANSLATION FILE. IF YOU NEED TO ADD ANY NEW TRANSLATION, JUST ADD
 * THE KEYWORD IN HERE IN EVERY LANGUAGE AND MATCH IS WITH ITS TRANSLATION
 * DON'T FORGET TO PUT A ".tr" AFTER EVERY KEYWORD YOU WANT TRANSLATED,
@@ -7,38 +6,50 @@
 * AFTER THAT, GO IN THE CODE AND PUT "Hello".tr WHEREVER YOU NEED IT. */
 
 import 'package:get/get.dart';
+
 class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
-          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":"Please provide a monthly donation amount minimum of \$1",
-          "please_enter_a_valid_cvc":"Please enter a valid CVC.",
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
+              "Please provide a monthly donation amount minimum of \$1",
+          "please_enter_a_valid_cvc": "Please enter a valid CVC.",
           "year": "Year",
-          "please_enter_a_valid_expiration_year":"Please enter a valid expiration year.",
+          "please_enter_a_valid_expiration_year":
+              "Please enter a valid expiration year.",
           "month": "Month",
-          "please_enter_a_valid_expiration_month":"Please enter a valid expiration month.",
-          "card_number":"Card Number",
-          "please_enter_a_valid_card_number":"Please enter a valid card number.",
-          "adoptions_can_only_be_made_in_whole_dollar_amounts":"Adoptions can only be made in whole dollar amounts.",
-          "are_you_sure_you_want_to_cancel_this_adoption":"Are you sure you want to cancel this adoption you can readopt this beneficiary from the Beneficiaries page. Would you like to continue with canceling this adoption?",
-          "resuming_adoption_charity_would_you_like_to_continue": "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from My Beneficiaries page. Would you like to continue?",
-          "no_inactive_adoptions_to_show" : "No inactive adoptions to show.",
-          "please_enter_adoption_name" : "Please enter adoption name.",
-          "edit_adoption" : "Edit Adoption",
-          "no_active_adoptions_to_show" : "No active adoptions to show.",
-          "monthly_donation_amount" : "Monthly Donation Amount",
-          "adopt" : "Adopt",
-          "monthly_amount" : "Monthly Amount: \$",
-          "cancel_adoption" : "Cancel Adoption",
-          "my_adoptions" : "My Adoptions",
-          "set_beneficiary_up_for_adoption"  : "Set beneficiary up for adoption: ",
-          "you_currently_have_no_donation_history_to_generate_a_pdf":"You currently have no donation history to generate a pdf.",
+          "please_enter_a_valid_expiration_month":
+              "Please enter a valid expiration month.",
+          "card_number": "Card Number",
+          "please_enter_a_valid_card_number":
+              "Please enter a valid card number.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":
+              "Adoptions can only be made in whole dollar amounts.",
+          "are_you_sure_you_want_to_cancel_this_adoption":
+              "Are you sure you want to cancel this adoption you can readopt this beneficiary from the Beneficiaries page. Would you like to continue with canceling this adoption?",
+          "resuming_adoption_charity_would_you_like_to_continue":
+              "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from My Beneficiaries page. Would you like to continue?",
+          "no_inactive_adoptions_to_show": "No inactive adoptions to show.",
+          "please_enter_adoption_name": "Please enter adoption name.",
+          "edit_adoption": "Edit Adoption",
+          "no_active_adoptions_to_show": "No active adoptions to show.",
+          "monthly_donation_amount": "Monthly Donation Amount",
+          "adopt": "Adopt",
+          "monthly_amount": "Monthly Amount: \$",
+          "cancel_adoption": "Cancel Adoption",
+          "my_adoptions": "My Adoptions",
+          "set_beneficiary_up_for_adoption":
+              "Set beneficiary up for adoption: ",
+          "you_currently_have_no_donation_history_to_generate_a_pdf":
+              "You currently have no donation history to generate a pdf.",
           "can_not_generate_a_pdf": "Can Not Generate a PDF",
-          "this_organization_does_not_have_any_active_beneficiaries_at_this_time": "This organization doesn\'t have any \nactive beneficiaries at this time.",
-          "this_organization_does_not_have_any_active_campaigns_at_this_time":"This organization does not have any \nactive campaigns at this time.",
+          "this_organization_does_not_have_any_active_beneficiaries_at_this_time":
+              "This organization doesn\'t have any \nactive beneficiaries at this time.",
+          "this_organization_does_not_have_any_active_campaigns_at_this_time":
+              "This organization does not have any \nactive campaigns at this time.",
           "your_information": "Your Information",
           "_unique_donors": " unique donors",
-          "donations":"Donations",
+          "donations": "Donations",
           "statistics": "Statistics",
           "urgent_case_approvals": "Urgent Case Approvals",
           "This charity has reached it\'s goal!":
@@ -61,7 +72,8 @@ class Messages extends Translations {
           "Please enter the amount that was donated.":
               "Please enter the amount that was donated.",
           "Confirm Donation": "Confirm Donation",
-          "Please confirm that this visit to your gateway did not result in a donation.":"Please confirm that this visit to your gateway did not result in a donation.",
+          "Please confirm that this visit to your gateway did not result in a donation.":
+              "Please confirm that this visit to your gateway did not result in a donation.",
           "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
               "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?",
           "Deleting this charity will completely remove it from the application. Would you like to continue?":
@@ -80,6 +92,7 @@ class Messages extends Translations {
           "Message": "Message",
           "Subject": "Subject",
           "Question": "Question",
+          "General": "General",
           "Help": "Help",
           "Suggestion": "Suggestion",
           "Other": "Other",
@@ -304,40 +317,51 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               "Check Your Email to Reset Password",
           "forgot_password!": "Forgot Password?",
-          "adoptions" : "Adoptions"
+          "adoptions": "Adoptions"
         },
         'fr_FR': {
-          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":"Veuillez fournir un montant de don mensuel minimum de 1 \$",
-          "please_enter_a_valid_cvc":"Veuillez entrer un CVC valide.",
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
+              "Veuillez fournir un montant de don mensuel minimum de 1 \$",
+          "please_enter_a_valid_cvc": "Veuillez entrer un CVC valide.",
           "year": "An",
-          "please_enter_a_valid_expiration_year":"Veuillez saisir une année d'expiration valide.",
+          "please_enter_a_valid_expiration_year":
+              "Veuillez saisir une année d'expiration valide.",
           "month": "Mois",
-          "please_enter_a_valid_expiration_month":"Veuillez saisir un mois d'expiration valide.",
-          "card_number":"Numéro de carte",
-          "please_enter_a_valid_card_number":"S'il vous plaît entrez un numéro de carte valide.",
-          "adoptions_can_only_be_made_in_whole_dollar_amounts":"Les adoptions ne peuvent être faites qu'en dollars entiers.",
-          "are_you_sure_you_want_to_cancel_this_adoption":"Êtes-vous sûr de vouloir annuler cette adoption, vous pouvez réadopter ce bénéficiaire à partir de la page Bénéficiaires. Voulez-vous continuer avec l'annulation de cette adoption ?",
+          "please_enter_a_valid_expiration_month":
+              "Veuillez saisir un mois d'expiration valide.",
+          "card_number": "Numéro de carte",
+          "please_enter_a_valid_card_number":
+              "S'il vous plaît entrez un numéro de carte valide.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":
+              "Les adoptions ne peuvent être faites qu'en dollars entiers.",
+          "are_you_sure_you_want_to_cancel_this_adoption":
+              "Êtes-vous sûr de vouloir annuler cette adoption, vous pouvez réadopter ce bénéficiaire à partir de la page Bénéficiaires. Voulez-vous continuer avec l'annulation de cette adoption ?",
           "resuming_adoption_charity_would_you_like_to_continue":
-          "La reprise de cette association la rendra à nouveau visible pour les donateurs. Une fois que vous avez repris cet organisme de bienfaisance, vous pouvez le désactiver à nouveau à partir de la page Mes bénéficiaires. Voulez-vous continuer?",
-          "no_inactive_adoptions_to_show" : "Aucune adoption inactive à afficher.",
-          "please_enter_adoption_name" : "Veuillez entrer le nom d'adoption.",
-          "edit_adoption" : "Modifier l'adoption",
-          "no_active_adoptions_to_show" : "Aucune adoption active à afficher.",
-          "monthly_donation_amount" : "Montant du don mensuel",
-          "adopt" : "Adopter",
-          "monthly_amount" : "Montant mensuel: \$",
-          "cancel_adoption" : "Annuler l'adoption",
-          "my_adoptions" : "Mes adoptions",
-          "set_beneficiary_up_for_adoption"  : "Configurer le bénéficiaire pour l'adoption: ",
+              "La reprise de cette association la rendra à nouveau visible pour les donateurs. Une fois que vous avez repris cet organisme de bienfaisance, vous pouvez le désactiver à nouveau à partir de la page Mes bénéficiaires. Voulez-vous continuer?",
+          "no_inactive_adoptions_to_show":
+              "Aucune adoption inactive à afficher.",
+          "please_enter_adoption_name": "Veuillez entrer le nom d'adoption.",
+          "edit_adoption": "Modifier l'adoption",
+          "no_active_adoptions_to_show": "Aucune adoption active à afficher.",
+          "monthly_donation_amount": "Montant du don mensuel",
+          "adopt": "Adopter",
+          "monthly_amount": "Montant mensuel: \$",
+          "cancel_adoption": "Annuler l'adoption",
+          "my_adoptions": "Mes adoptions",
+          "set_beneficiary_up_for_adoption":
+              "Configurer le bénéficiaire pour l'adoption: ",
           "This charity has reached it\'s goal!":
               "Cet organisme de bienfaisance a atteint son objectif!",
-          "you_currently_have_no_donation_history_to_generate_a_pdf":"Vous n'avez actuellement aucun historique de dons pour générer un PDF.",
+          "you_currently_have_no_donation_history_to_generate_a_pdf":
+              "Vous n'avez actuellement aucun historique de dons pour générer un PDF.",
           "can_not_generate_a_pdf": "Impossible de générer un PDF",
-          "this_organization_does_not_have_any_active_beneficiaries_at_this_time": "Cette organisation n'a aucun \nbénéficiaire actif pour le moment.",
-          "this_organization_does_not_have_any_active_campaigns_at_this_time":"Cette organisation n'a \naucune campagne active pour le moment.",
+          "this_organization_does_not_have_any_active_beneficiaries_at_this_time":
+              "Cette organisation n'a aucun \nbénéficiaire actif pour le moment.",
+          "this_organization_does_not_have_any_active_campaigns_at_this_time":
+              "Cette organisation n'a \naucune campagne active pour le moment.",
           "your_information": "Vos informations",
           "_unique_donors": " donateurs uniques",
-          "donations":"Des dons",
+          "donations": "Des dons",
           "statistics": "Statistiques",
           "urgent_case_approvals": "Approbations de cas urgents",
           "Denials": "Refus",
@@ -378,6 +402,7 @@ class Messages extends Translations {
           "Message": "Message",
           "Subject": "Objet",
           "Question": "Question",
+          "General": "Generale",
           "Help": "Aide",
           "Suggestion": "Suggestion",
           "Other": "Autre",
@@ -615,40 +640,53 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               "Vérifiez votre courriel pour réinitialiser votre mot de passe",
           "forgot_password!": "Mot de passe oublié?",
-          "adoptions" : "Adoptions"
+          "adoptions": "Adoptions"
         },
         'ar_SA': {
-          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":"يرجى تقديم مبلغ تبرع شهري لا يقل عن 1 دولار",
-          "please_enter_a_valid_cvc":"الرجاء إدخال رمز التحقق من البطاقة (CVC) صالحًا.",
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
+              "يرجى تقديم مبلغ تبرع شهري لا يقل عن 1 دولار",
+          "please_enter_a_valid_cvc":
+              "الرجاء إدخال رمز التحقق من البطاقة (CVC) صالحًا.",
           "year": "سنة",
-          "please_enter_a_valid_expiration_year":"الرجاء إدخال سنة انتهاء صالحة.",
+          "please_enter_a_valid_expiration_year":
+              "الرجاء إدخال سنة انتهاء صالحة.",
           "month": "شهر",
-          "please_enter_a_valid_expiration_month":"الرجاء إدخال شهر انتهاء صالح.",
-          "card_number":"رقم البطاقة",
-          "please_enter_a_valid_card_number":"الرجاء إدخال رقم بطاقة سارية المفعول.",
-          "adoptions_can_only_be_made_in_whole_dollar_amounts":"لا يمكن إجراء عمليات التبني إلا بمبالغ كاملة بالدولار.",
-          "are_you_sure_you_want_to_cancel_this_adoption":"هل أنت متأكد أنك تريد إلغاء هذا التبني ، يمكنك إعادة اختيار هذا المستفيد من صفحة المستفيدين. هل ترغب في الاستمرار في إلغاء هذا التبني؟",
-          "resuming_adoption_charity_would_you_like_to_continue": "استئناف هذه المؤسسة الخيرية سيجعلها مرئية للمانحين مرة أخرى. بمجرد استئناف هذه المؤسسة الخيرية ، يمكنك إلغاء تنشيطها مرة أخرى من صفحة المستفيدون. هل ترغب في الاستمرار؟",
-          "no_inactive_adoptions_to_show" : "لا توجد عمليات تبني غير نشطة للعرض.",
-          "please_enter_adoption_name" : "الرجاء إدخال اسم الاعتماد.",
-          "edit_adoption" : "تحرير الاعتماد",
-          "no_active_adoptions_to_show" : "لا توجد عمليات تبني نشطة لعرضها.",
-          "monthly_donation_amount" : "مبلغ التبرع الشهري",
-          "adopt" : "يتبنى",
-          "monthly_amount" : "المبلغ الشهري: \$",
-          "cancel_adoption" : "إلغاء الاعتماد",
-          "my_adoptions" : "عمليات التبني الخاصة بي",
-          "set_beneficiary_up_for_adoption"  : "تعيين المستفيد للتبني: ",
-          "you_currently_have_no_donation_history_to_generate_a_pdf":"ليس لديك حاليًا أي سجل تبرعات لإنشاء ملف PDF.",
+          "please_enter_a_valid_expiration_month":
+              "الرجاء إدخال شهر انتهاء صالح.",
+          "card_number": "رقم البطاقة",
+          "please_enter_a_valid_card_number":
+              "الرجاء إدخال رقم بطاقة سارية المفعول.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":
+              "لا يمكن إجراء عمليات التبني إلا بمبالغ كاملة بالدولار.",
+          "are_you_sure_you_want_to_cancel_this_adoption":
+              "هل أنت متأكد أنك تريد إلغاء هذا التبني ، يمكنك إعادة اختيار هذا المستفيد من صفحة المستفيدين. هل ترغب في الاستمرار في إلغاء هذا التبني؟",
+          "resuming_adoption_charity_would_you_like_to_continue":
+              "استئناف هذه المؤسسة الخيرية سيجعلها مرئية للمانحين مرة أخرى. بمجرد استئناف هذه المؤسسة الخيرية ، يمكنك إلغاء تنشيطها مرة أخرى من صفحة المستفيدون. هل ترغب في الاستمرار؟",
+          "no_inactive_adoptions_to_show":
+              "لا توجد عمليات تبني غير نشطة للعرض.",
+          "please_enter_adoption_name": "الرجاء إدخال اسم الاعتماد.",
+          "edit_adoption": "تحرير الاعتماد",
+          "no_active_adoptions_to_show": "لا توجد عمليات تبني نشطة لعرضها.",
+          "monthly_donation_amount": "مبلغ التبرع الشهري",
+          "adopt": "يتبنى",
+          "monthly_amount": "المبلغ الشهري: \$",
+          "cancel_adoption": "إلغاء الاعتماد",
+          "my_adoptions": "عمليات التبني الخاصة بي",
+          "set_beneficiary_up_for_adoption": "تعيين المستفيد للتبني: ",
+          "you_currently_have_no_donation_history_to_generate_a_pdf":
+              "ليس لديك حاليًا أي سجل تبرعات لإنشاء ملف PDF.",
           "can_not_generate_a_pdf": "لا يمكن إنشاء ملف PDF",
-          "this_organization_does_not_have_any_active_beneficiaries_at_this_time": "لا يوجد لدى هذه المنظمة أي \n مستفيدين نشطين في الوقت الحالي.",
-          "this_organization_does_not_have_any_active_campaigns_at_this_time":"هذه المنظمة ليس لديها\n أي حملات نشطة في هذا الوقت.",
+          "this_organization_does_not_have_any_active_beneficiaries_at_this_time":
+              "لا يوجد لدى هذه المنظمة أي \n مستفيدين نشطين في الوقت الحالي.",
+          "this_organization_does_not_have_any_active_campaigns_at_this_time":
+              "هذه المنظمة ليس لديها\n أي حملات نشطة في هذا الوقت.",
           "your_information": "معلوماتك",
           "_unique_donors": " المتبرعين الفريدين",
-          "donations":"التبرعات",
+          "donations": "التبرعات",
           "statistics": "إحصائيات",
           "urgent_case_approvals": "الموافقات العاجلة للحالة",
-          "This charity has reached it\'s goal!":"لقد وصلت هذه المؤسسة الخيرية إلى هدفها!",
+          "This charity has reached it\'s goal!":
+              "لقد وصلت هذه المؤسسة الخيرية إلى هدفها!",
           "Denials": "النفي",
           "Edit Urgent Case": "تعديل الحالة العاجلة",
           "Urgent case resubmitted!": "إعادة تقديم حالة عاجلة!",
@@ -687,6 +725,7 @@ class Messages extends Translations {
           "Message": "رسالة",
           "Subject": "موضوع",
           "Question": "سؤال",
+          "General": "عام",
           "Help": "تعليمات",
           "Suggestion": "اقتراح",
           "Other": "آخر",
@@ -907,40 +946,54 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               " تحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور",
           "forgot_password!": " هل نسيت كلمة السر؟",
-          "adoptions" : "التبني"
+          "adoptions": "التبني"
         },
         'es_ES': {
-          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":"Proporcione un monto de donación mensual mínimo de \$ 1",
-          "please_enter_a_valid_cvc":"Introduzca un CVC válido.",
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
+              "Proporcione un monto de donación mensual mínimo de \$ 1",
+          "please_enter_a_valid_cvc": "Introduzca un CVC válido.",
           "year": "Año",
-          "please_enter_a_valid_expiration_year":"Introduzca un año de caducidad válido.",
+          "please_enter_a_valid_expiration_year":
+              "Introduzca un año de caducidad válido.",
           "month": "Mes",
-          "please_enter_a_valid_expiration_month":"Introduzca un mes de caducidad válido.",
-          "card_number":"Número de tarjeta",
-          "please_enter_a_valid_card_number": "Por favor, introduzca un número de tarjeta válido.",
-          "adoptions_can_only_be_made_in_whole_dollar_amounts":"Las adopciones solo se pueden hacer en cantidades enteras en dólares.",
-          "are_you_sure_you_want_to_cancel_this_adoption":"¿Está seguro de que desea cancelar esta adopción? Puede volver a adoptar a este beneficiario desde la página Beneficiarios. ¿Le gustaría continuar con la cancelación de esta adopción?",
-          "resuming_adoption_charity_would_you_like_to_continue": "Reanudar esta organización benéfica la hará visible para los donantes nuevamente. Una vez que reanude esta organización benéfica, puede desactivarla nuevamente desde la página Mis beneficiarios. ¿Te gustaria continuar?",
-          "no_inactive_adoptions_to_show" : "No hay adopciones inactivas para mostrar.",
-          "please_enter_adoption_name" : "Ingrese el nombre de adopción.",
-          "edit_adoption" : "Editar adopción",
-          "no_active_adoptions_to_show" : "No hay adopciones activas para mostrar.",
-          "monthly_donation_amount" : "Cantidad de donación mensual",
-          "adopt" : "Adoptar",
-          "monthly_amount" : "Cantidad mensual: \$",
-          "cancel_adoption" : "Cancelar Adopción",
-          "my_adoptions" : "Mis adopciones",
-          "set_beneficiary_up_for_adoption"  : "Establecer beneficiario para adopción: ",
-          "you_currently_have_no_donation_history_to_generate_a_pdf":"Actualmente no tienes historial de donaciones para generar un PDF.",
+          "please_enter_a_valid_expiration_month":
+              "Introduzca un mes de caducidad válido.",
+          "card_number": "Número de tarjeta",
+          "please_enter_a_valid_card_number":
+              "Por favor, introduzca un número de tarjeta válido.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":
+              "Las adopciones solo se pueden hacer en cantidades enteras en dólares.",
+          "are_you_sure_you_want_to_cancel_this_adoption":
+              "¿Está seguro de que desea cancelar esta adopción? Puede volver a adoptar a este beneficiario desde la página Beneficiarios. ¿Le gustaría continuar con la cancelación de esta adopción?",
+          "resuming_adoption_charity_would_you_like_to_continue":
+              "Reanudar esta organización benéfica la hará visible para los donantes nuevamente. Una vez que reanude esta organización benéfica, puede desactivarla nuevamente desde la página Mis beneficiarios. ¿Te gustaria continuar?",
+          "no_inactive_adoptions_to_show":
+              "No hay adopciones inactivas para mostrar.",
+          "please_enter_adoption_name": "Ingrese el nombre de adopción.",
+          "edit_adoption": "Editar adopción",
+          "no_active_adoptions_to_show":
+              "No hay adopciones activas para mostrar.",
+          "monthly_donation_amount": "Cantidad de donación mensual",
+          "adopt": "Adoptar",
+          "monthly_amount": "Cantidad mensual: \$",
+          "cancel_adoption": "Cancelar Adopción",
+          "my_adoptions": "Mis adopciones",
+          "set_beneficiary_up_for_adoption":
+              "Establecer beneficiario para adopción: ",
+          "you_currently_have_no_donation_history_to_generate_a_pdf":
+              "Actualmente no tienes historial de donaciones para generar un PDF.",
           "can_not_generate_a_pdf": "No se puede generar un PDF",
-          "this_organization_does_not_have_any_active_beneficiaries_at_this_time": "Esta organización no tiene ningún \nbeneficiario activo en este momento.",
-          "this_organization_does_not_have_any_active_campaigns_at_this_time":"Esta organización no tiene campañas \nactivas en este momento.",
+          "this_organization_does_not_have_any_active_beneficiaries_at_this_time":
+              "Esta organización no tiene ningún \nbeneficiario activo en este momento.",
+          "this_organization_does_not_have_any_active_campaigns_at_this_time":
+              "Esta organización no tiene campañas \nactivas en este momento.",
           "your_information": "Tu información",
           "_unique_donors": " donantes únicos",
-          "donations":"Donaciones",
+          "donations": "Donaciones",
           "statistics": "Estadísticas",
           "urgent_case_approvals": "Aprobaciones de casos urgentes",
-          "This charity has reached it\'s goal!":"¡Esta organización benéfica ha alcanzado su objetivo!",
+          "This charity has reached it\'s goal!":
+              "¡Esta organización benéfica ha alcanzado su objetivo!",
           "Denials": "Negaciones",
           "Edit Urgent Case": "Editar caso urgente",
           "Urgent case resubmitted!": "¡Caso urgente reenviado!",
@@ -979,6 +1032,7 @@ class Messages extends Translations {
           "Message": "Mensaje",
           "Subject": "Asunto",
           "Question": "Pregunta",
+          "General": "General",
           "Help": "Ayuda",
           "Suggestion": "Sugerencia",
           "Other": "Otro",
@@ -1219,7 +1273,7 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               "Revise su correo electrónico para restablecer la contraseña",
           "forgot_password!": "¿Has olvidado tu contraseña?",
-          "adoptions" : "Adopciones"
+          "adoptions": "Adopciones"
         }
       };
 }
