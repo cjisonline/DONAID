@@ -141,7 +141,6 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                             widget.beneficiary.id.toString());
                         await _getFavorite();
                   },
-                      },
                     ),
                   )
                 : Container(),
@@ -273,8 +272,6 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
       ),
     );
   }
-
-  void createDonationDocument() async{
   void createDonationDocument() async {
     final docRef = await _firestore.collection('Donations').add({});
 
@@ -356,7 +353,6 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
 
       ScaffoldMessenger.of(context)
           .showSnackBar( SnackBar(content: Text('payment_cancelled!'.tr)));
-          .showSnackBar(SnackBar(content: Text('payment_cancelled!'.tr)));
     }
   }
 
