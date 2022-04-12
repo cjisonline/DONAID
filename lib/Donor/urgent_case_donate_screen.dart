@@ -1,15 +1,11 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Donor/donor_dashboard.dart';
-import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Donor/updateFavorite.dart';
 import 'package:donaid/Models/UrgentCase.dart';
-import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
@@ -76,30 +72,32 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
             content: Text(
                 "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.".tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () async{
-                    Navigator.pop(context);
-                    await makePayment();
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () async{
+                      Navigator.pop(context);
+                      await makePayment();
 
 
-                  },
-                  child: const Text('Yes'),
-                ),
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('No'),
+                  ),
+                ],
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('No'),
-                ),
-              ),
+
             ],
           );
         });
   }
-
+// get Favorite from firebase
   _getFavorite() async {
     await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
       setState(() {
@@ -115,6 +113,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
         scrollDirection: Axis.vertical,
         child: Center(
             child: Padding(
+              // Favorite button UI
               padding: const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 (_auth.currentUser?.email != null) ?

@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'organization_dashboard.dart';
 import 'package:get/get.dart';
-
+// Add campaign form
 class AddBeneficiaryForm extends StatefulWidget {
   static const id = 'beneficiary_form_screen';
   const AddBeneficiaryForm({Key? key}) : super(key: key);
@@ -36,6 +36,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   bool? isAdopted = false;
   bool userIsDomesticOrganization=false;
 
+  // Get category
   _getCategories() async {
     var ret = await firestore
         .collection('CharityCategories')
@@ -46,7 +47,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
 
     setState(() {});
   }
-
+// Get admin time limit from firebase
   _getTimeLimit() async {
     var ret = await firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
 
@@ -69,7 +70,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
     userIsDomesticOrganization = organizationUserDoc['country'] == 'United States';
   }
 
-
+//Add beneficiary to firebase
   Future<void> addBeneficiary(String category, String biography, double goalAmount,
       String name, String endDateController) async {
     try {
@@ -168,6 +169,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
       return Container();
     }
   }
+// UI for for beneficiary
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,6 +195,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         const SizedBox(
                           height: 15.0,
                         ),
+                        // Add beneficiary from UI
                          Center(
                           child: Text(
                             'add_beneficiary'.tr,
@@ -206,10 +209,11 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                           padding: EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 25.0),
                           child: Text(
-                            '* - required_fields'.tr,
+                            '* - '+'required_fields'.tr,
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
+                        // Error message please enter nickname
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -225,6 +229,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 return null;
                               }
                             },
+                            // UI for nickname enter field
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 label: Center(
@@ -250,6 +255,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 )),
                           ),
                         ),
+                        // Error message please enter bio
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -264,6 +270,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 return null;
                               }
                             },
+                            //biography field ui
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 label: Center(
@@ -289,6 +296,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 )),
                           ),
                         ),
+                        //Please enter goal amount error message or enter valid goal amount
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -304,6 +312,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 return null;
                               }
                             },
+                            //UI for goal amount
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                                 label: Center(
@@ -398,6 +407,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   ? 'please_fill_in_the_category'.tr : null,
                             )
                         ),
+                        //Submit button and navigate to the dashboard
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 25.0, horizontal: 5.0),
@@ -426,7 +436,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   else{
                                     addBeneficiary(categoryController.text,
                                         biographyController.text,
-                                        int.parse(goalAmountController.text).toDouble(),
+                                      double.parse(goalAmountController.text).toDouble(),
                                         nameController.text,
                                         endDateController.text);
                                   }

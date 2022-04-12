@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+//Update donor favorite list
 Future<bool> updateFavorites(String? uid, String updateItemID) {
   DocumentReference favoritesReference =
   FirebaseFirestore.instance.collection('Favorite').doc(uid);

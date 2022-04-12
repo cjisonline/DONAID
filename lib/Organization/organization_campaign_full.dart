@@ -75,24 +75,26 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
             content: Text(
                 'Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?'.tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    _stopCampaign();
-                    Navigator.pop(context);
-                    _refreshCampaign();
-                  },
-                  child:  Text('yes'.tr),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _stopCampaign();
+                      Navigator.pop(context);
+                      _refreshCampaign();
+                    },
+                    child:  Text('yes'.tr),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child:  Text('no'.tr),
+                  ),
+                ],
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:  Text('no'.tr),
-                ),
-              ),
+
             ],
           );
         });
@@ -114,23 +116,26 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
             content: Text(
                 'Deleting this charity will completely remove it from the application. Would you like to continue?'.tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    _deleteCampaign();
-                    Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
-                  },
-                  child:  Text('yes'.tr),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _deleteCampaign();
+                      Navigator.popUntil(context, ModalRoute.withName(OrganizationDashboard.id));
+                    },
+                    child:  Text('yes'.tr),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child:  Text('no'.tr),
+                  ),
+                ],
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:  Text('no'.tr),
-                ),
-              ),
+
+
             ],
           );
         });
@@ -152,24 +157,26 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
             content: Text(
                 'Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?'.tr),
             actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    _resumeCampaign();
-                    Navigator.pop(context);
-                    _refreshCampaign();
-                  },
-                  child:  Text('yes'.tr),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _resumeCampaign();
+                      Navigator.pop(context);
+                      _refreshCampaign();
+                    },
+                    child:  Text('yes'.tr),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child:  Text('no'.tr),
+                  ),
+                ],
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:  Text('no'.tr),
-                ),
-              ),
+
             ],
           );
         });

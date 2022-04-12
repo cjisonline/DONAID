@@ -2,7 +2,7 @@ import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Organization/organization_beneficiary_full.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+//Beneficiary card display set up
 class BeneficiaryCard extends StatefulWidget {
   final Beneficiary beneficiary;
 
@@ -18,6 +18,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      //Navigate to the selected beneficiary page
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context){
           return OrganizationBeneficiaryFullScreen(widget.beneficiary);
@@ -25,6 +26,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
           setState(() {});
         });
       },
+      //Display card
       child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
@@ -34,7 +36,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                 color: Colors.white,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 border: Border.all(color: Colors.grey.shade300, width: 2.0)),
-
+          // Display icon
             child: Column(children: [
               IconButton(
                 enableFeedback: false,
@@ -43,6 +45,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                     color: Colors.blue,
                     size: 50),
               ),
+              // Display beneficiary name populated from firebase
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(widget.beneficiary.name,
@@ -52,6 +55,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                       fontSize: 20,
                     )),
               ),
+              // Display beneficiary bio populated from firebase
               SizedBox(
                   height: 75.0,
                   child: Text(
@@ -64,16 +68,19 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
                   )),
+              // Display beneficiary amount raised populated from firebase
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Text('\$'+f.format(widget.beneficiary.amountRaised),
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.black, fontSize: 15)),
+                // Display beneficiary goal amount populated from firebase
                 Text(
                   '\$'+f.format(widget.beneficiary.goalAmount),
                   textAlign: TextAlign.start,
                   style: const TextStyle(color: Colors.black, fontSize: 15),
                 ),
               ]),
+              // Display beneficiary progress bar
               Container(
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
