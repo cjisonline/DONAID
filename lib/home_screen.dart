@@ -136,6 +136,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       fontSize: 25, color: Colors.white)),
                               onPressed: () async {
                                 try {
+                                  /*
+                                    Asynchronously creates and becomes an anonymous user.
+                                    If there is already an anonymous user signed in, that user will be
+                                    returned instead. If there is any other existing user signed in, that
+                                    user will be signed out.
+                                  */
                                   await FirebaseAuth.instance
                                       .signInAnonymously();
                                   Navigator.of(context).popUntil(

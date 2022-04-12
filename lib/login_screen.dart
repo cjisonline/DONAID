@@ -48,16 +48,18 @@ class _LoginScreenState extends State<LoginScreen> {
       final userType = await getUserType();
       if (userType == 1) {
         //If user logging in is a donor user
-        final donorUser = await _firestore.collection('DonorUsers').where('email', isEqualTo: email).get();
+        final donorUser = await _firestore
+            .collection('DonorUsers')
+            .where('email', isEqualTo: email)
+            .get();
         final enabled = donorUser.docs[0]['enabled'];
 
-        if(enabled) {
-          await _auth.signInWithEmailAndPassword(email: email, password: password);
+        if (enabled) {
+          await _auth.signInWithEmailAndPassword(
+              email: email, password: password);
           Navigator.pushNamed(context, DonorDashboard.id);
-        }
-        else{
+        } else {
           _accountDisabledDialog();
-
         }
       } else if (userType == 2) {
         //If user logging in is an organization user
@@ -68,7 +70,8 @@ class _LoginScreenState extends State<LoginScreen> {
         final approved = organizationUser.docs[0]['approved'];
         print('APPROVAL STATUS: $approved');
         if (approved) {
-          await _auth.signInWithEmailAndPassword(email: email, password: password);
+          await _auth.signInWithEmailAndPassword(
+              email: email, password: password);
           Navigator.pushNamed(context, OrganizationDashboard.id);
         } else {
           _accountNotApprovedDialog();
@@ -96,28 +99,26 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
+            title: Center(
               child: Text('hold_on_a_second!'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text(
-                'cannot_log_in_with_that_email'.tr),
+            content: Text('cannot_log_in_with_that_email'.tr),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('ok'.tr),
+                  child: Text('ok'.tr),
                 ),
               ),
             ],
           );
         });
   }
-
 
   Future<void> _accountNotApprovedDialog() async {
     setState(() {
@@ -128,22 +129,21 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
+            title: Center(
               child: Text('hang_on!'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text(
-                'your_organizationaccount_has_not_yet_been_approved'.tr
-                  ),
+            content:
+                Text('your_organizationaccount_has_not_yet_been_approved'.tr),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('ok'.tr),
+                  child: Text('ok'.tr),
                 ),
               ),
             ],
@@ -160,22 +160,21 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:  Center(
+            title: Center(
               child: Text('hang_on!'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text(
-                'your_donor_account_has_been_disabled_by_the_administrator'.tr
-                    ),
+            content: Text(
+                'your_donor_account_has_been_disabled_by_the_administrator'.tr),
             actions: [
               Center(
                 child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:  Text('ok'.tr),
+                  child: Text('ok'.tr),
                 ),
               ),
             ],
@@ -193,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pop(context);
           },
         ),
-        title:  Text('login'.tr),
+        title: Text('login'.tr),
       ),
       body: ModalProgressHUD(
         inAsyncCall: showLoadingSpinner,
@@ -258,7 +257,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(32.0),
                   child: MaterialButton(
-                    child: Text('login'.tr, style: TextStyle(color: Colors.white)),
+                    child:
+                        Text('login'.tr, style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       passwordreset = false;
                       if (_formKey.currentState!.validate()) {
@@ -273,42 +273,51 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Center(
                   child: InkWell(
-                    onTap: () async {
-                      passwordreset = true;
-                      // setState(() {});
-                      if (_formKey.currentState!.validate()) {
-                        setState(() {
-                          showLoadingSpinner = true;
-                        });
-                        await FirebaseAuth.instance
-                            .sendPasswordResetEmail(email: email);
-                        setState(() {
-                          showLoadingSpinner = false;
-                        });
-                        showDialog<void>(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: Center(child: Text('reset_link_sent!'.tr)),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(32.0)),
-                                  content:
+                onTap: () async {
+                  passwordreset = true;
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      showLoadingSpinner = true;
+                    });
+                    /*
+                      Sends a password reset email to the given email address.
+                      To complete the password reset, call [confirmPasswordReset] with the code supplied
+                      in the email sent to the user, along with the new password specified by the user.  
+                      May throw a [FirebaseAuthException] with the following error codes:
+                      - invalid-email
+                        Thrown if the email address is not valid.
+                      - user-not-found
+                        Thrown if there is no user corresponding to the email address.'''
+                    */
+                    await FirebaseAuth.instance
+                        .sendPasswordResetEmail(email: email);
+                    setState(() {
+                      showLoadingSpinner = false;
+                    });
+                    showDialog<void>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                              title: Center(child: Text('reset_link_sent!'.tr)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32.0)),
+                              content:
                                   Text('check_your_email_to_reset_password'.tr),
-                                  actions: [
-                                    Center(
-                                        child: TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child:  Text('oK'.tr)))
-                                  ]);
-                            });
-                      }
-                    },
-                    child: Text('forgot_password!'.tr,
-                        style: TextStyle(color: Colors.black)),
-                  )),
+                              actions: [
+                                Center(
+                                    child: TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('oK'.tr)))
+                              ]);
+                        });
+                  }
+                },
+                child: Text('forgot_password!'.tr,
+                    style: TextStyle(color: Colors.black)),
+              )),
               Spacer(),
             ],
           ),

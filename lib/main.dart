@@ -128,6 +128,10 @@ class Donaid extends StatelessWidget {
             GatewayVisits.id: (context) => const GatewayVisits(),
           MyAdoptions.id: (context) => const MyAdoptions(),
           },
+          /* Translations are kept as a simple key-value dictionary map.
+            To add custom translations, create a class and extend Translations.
+            Translations inject the Messages() values in the applications which access with the
+            parameter '.tr' */
           translations: Messages(),
           locale: const Locale('en', 'US'),
           fallbackLocale: const Locale('en', 'US')),

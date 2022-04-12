@@ -5,6 +5,7 @@ import 'package:donaid/Organization/OrganizationWidget/organization_drawer.dart'
 import 'package:donaid/Widgets/horizontal_bar_chart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'OrganizationWidget/profile_list_row.dart';
 import 'organization_edit_profile.dart';
 import 'package:get/get.dart';

@@ -29,7 +29,7 @@ class _HomeScreenState extends State<ContactUs> {
   TextEditingController email = TextEditingController();
   TextEditingController message = TextEditingController();
   TextEditingController messageType = TextEditingController();
-
+//the Categories
   List<String> categoryOptions = [
     "Question".tr,
     "Suggestion".tr,
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<ContactUs> {
     super.initState();
     getInfo();
   }
-
+//getting the user's email
   getInfo() async {
     var ret = await _firestore
         .collection(widget.type)
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<ContactUs> {
     email.text = doc['email'];
     setState(() {});
   }
-
+  //adding documents to the collection of AdminMessages
   _sendMessage() async{
     var docRef = await _firestore.collection('AdminMessages').add({});
 

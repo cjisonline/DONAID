@@ -33,7 +33,7 @@ class _DonorProfileState extends State<DonorProfile> {
     _getDonorInformation();
   }
 
-  _refreshPage(){
+  _refreshPage() {
     _getCurrentUser();
     _getDonorInformation();
     setState(() {});
@@ -45,15 +45,17 @@ class _DonorProfileState extends State<DonorProfile> {
 
   // Get current logged in donor's information from Firebase
   _getDonorInformation() async {
-    var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
+    var ret = await _firestore
+        .collection('DonorUsers')
+        .where('uid', isEqualTo: loggedInUser?.uid)
+        .get();
     final doc = ret.docs[0];
     donor = Donor(
         email: doc['email'],
         firstName: doc['firstName'],
         lastName: doc['lastName'],
         phoneNumber: doc['phoneNumber'],
-        id: doc['id']
-      );
+        id: doc['id']);
     setState(() {});
   }
 
@@ -64,10 +66,10 @@ class _DonorProfileState extends State<DonorProfile> {
       appBar: AppBar(
         // Display back button in top app bar
         // On pressed, navigate to previous screen
-        title:  Text('profile'.tr),
+          title: Text('profile'.tr),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: (){
+            onPressed: () {
               Navigator.pop(context);
             },
           ),
@@ -76,9 +78,13 @@ class _DonorProfileState extends State<DonorProfile> {
             // On pressed, navigate to edit profile screen
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DonorEditProfile())).then((value) => _refreshPage());
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DonorEditProfile()))
+                    .then((value) => _refreshPage());
               },
-              child:  Text('edit'.tr,
+              child: Text('edit'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
