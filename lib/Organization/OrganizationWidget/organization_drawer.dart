@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../home_screen.dart';
 import '../organization_profile.dart';
-
+// Organization drawar
 class OrganizationDrawer extends StatefulWidget {
   const OrganizationDrawer({Key? key}) : super(key: key);
 
@@ -38,7 +38,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
     super.initState();
     _getOrg();
   }
-
+  // Display organization name from Firebase
   _getOrg() async {
     var ret = await _firestore
         .collection('OrganizationUsers')
@@ -50,14 +50,14 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
     profilePictureDownloadURL = doc.data()['profilePictureDownloadURL'];
     setState(() {});
   }
-
+// //Distinguish between foreign and us organization
   @override
   Widget build(BuildContext context) {
     return country == "United States"
         ? _buildUSDrawer()
         : _buildForeignDrawer();
   }
-
+// US drawer
   _buildUSDrawer() {
     return Container(
       child: Drawer(
@@ -66,6 +66,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
             DrawerHeader(
               child: Stack(
                 children: [
+                  // US org display name in drawer
                   Positioned(
                     bottom: 8.0,
                     left: 4.0,
@@ -80,6 +81,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 color: Colors.blue,
               ),
             ),
+            // US org display setting option in drawer
+            // On press Navigate to the settings page
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("settings".tr),
@@ -87,6 +90,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 Navigator.pushNamed(context, OrganizationSettingsPage.id);
               },
             ),
+            // US org display profile option in drawer
+            //On press Navigate to the settings page
             ListTile(
               leading: const Icon(Icons.account_circle),
               title: Text("profile".tr),
@@ -94,6 +99,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 Navigator.pushNamed(context, OrganizationProfile.id);
               },
             ),
+            // US org display pending approvals option in drawer
+            //On press Navigate to the pending approvals page
             ListTile(
               leading: Icon(Icons.pending),
               title: Text("pending_approvals".tr),
@@ -105,6 +112,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 });
               },
             ),
+            // US org display expired charity option in drawer
+            //On press Navigate to the expired charities page
             ListTile(
               leading: Icon(Icons.watch_later_outlined),
               title: Text("expired_charities".tr),
@@ -116,6 +125,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 });
               },
             ),
+            // US org display inactive charity option in drawer
+            //On press Navigate to inactive charity page
             ListTile(
               leading: Icon(Icons.not_interested),
               title: Text("inactive_charities".tr),
@@ -127,6 +138,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 });
               },
             ),
+            // US org display contact admin option in drawer
+            //On press Navigate to contact admin form page
             if (FirebaseAuth.instance.currentUser != null)
               ListTile(
                 leading: const Icon(Icons.assignment_ind_outlined),
@@ -135,6 +148,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                   Get.to(ContactUs("OrganizationUsers"));
                 },
               ),
+            // US org display language option in drawer
+            //On press change to the language selected
             ListTile(
               leading: const Icon(Icons.translate),
               title: Text("language".tr),
@@ -192,6 +207,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                     });
               },
             ),
+            // US org display logout option in drawer
+            //On press Navigate to the login page
             ListTile(
               leading: Icon(Icons.logout),
               title: Text("logout".tr),
@@ -209,7 +226,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
       ),
     );
   }
-
+// Foreign org drawer
   _buildForeignDrawer() {
     return Container(
       child: Drawer(
@@ -219,6 +236,7 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
               margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: Stack(
                 children: [
+                  // Foreign org display name in drawer
                   Positioned(
                     bottom: 8.0,
                     left: 4.0,
@@ -233,6 +251,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 color: Colors.blue,
               ),
             ),
+            // Foreign org display setting option in drawer
+            // On press Navigate to the settings page
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("settings".tr),
@@ -240,6 +260,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 Navigator.pushNamed(context, OrganizationSettingsPage.id);
               },
             ),
+            // Foreign org display profile option in drawer
+            //On press Navigate to the settings page
             ListTile(
               leading: const Icon(Icons.account_circle),
               title: Text("profile".tr),
@@ -247,6 +269,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 Navigator.pushNamed(context, OrganizationProfile.id);
               },
             ),
+            // Foreign org display gateway visits option in drawer
+            //On press Navigate to the gateway visits page
             ListTile(
               leading: const Icon(Icons.link),
               title: Text("Gateway Visits".tr),
@@ -254,6 +278,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 Navigator.pushNamed(context, GatewayVisits.id);
               },
             ),
+            // Foreign org display pending approvals option in drawer
+            //On press Navigate to the pending approvals page
             ListTile(
               leading: Icon(Icons.pending),
               title: Text("pending_approvals".tr),
@@ -265,6 +291,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 });
               },
             ),
+            // Foreign org display expired charity option in drawer
+            //On press Navigate to the expired charities page
             ListTile(
               leading: Icon(Icons.watch_later_outlined),
               title: Text("expired_charities".tr),
@@ -276,6 +304,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 });
               },
             ),
+            // Foreign org display inactive charity option in drawer
+            //On press Navigate to inactive charity page
             ListTile(
               leading: Icon(Icons.not_interested),
               title: Text("inactive_charities".tr),
@@ -287,6 +317,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                 });
               },
             ),
+            // Foreign org display language option in drawer
+            //On press change to the language selected
             ListTile(
               leading: const Icon(Icons.translate),
               title: Text("language".tr),
@@ -333,6 +365,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                     });
               },
             ),
+            // Foreign org display contact admin option in drawer
+            //On press Navigate to contact admin form page
             if (FirebaseAuth.instance.currentUser != null)
               ListTile(
                 leading: const Icon(Icons.assignment_ind_outlined),
@@ -341,6 +375,8 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                   Get.to(ContactUs("OrganizationUsers"));
                 },
               ),
+            // Foreign org display logout option in drawer
+            //On press Navigate to the login page
             ListTile(
               leading: Icon(Icons.logout),
               title: Text("logout".tr),

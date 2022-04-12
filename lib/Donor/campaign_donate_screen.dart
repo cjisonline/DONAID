@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:donaid/Donor/category_campaigns_screen.dart';
 import 'package:donaid/Donor/updateFavorite.dart';
 import 'package:donaid/Models/Campaign.dart';
-import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +9,11 @@ import 'package:flutter/painting.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
-
-import 'donor_dashboard.dart';
-
 class CampaignDonateScreen extends StatefulWidget {
   final Campaign campaign;
   const CampaignDonateScreen(this.campaign, {Key? key}) : super(key: key);
@@ -104,7 +97,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
           );
         });
   }
-
+// get Favorite from firebase
   _getFavorite() async {
     await _firestore.collection("Favorite").doc(loggedInUser!.uid).get().then((value){
       setState(() {
@@ -122,7 +115,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
 
             child: Padding(
           padding: const EdgeInsets.all(8.0),
-
+            // Favorite button UI
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             (_auth.currentUser?.email != null) ?
             Align(

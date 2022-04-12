@@ -2,7 +2,7 @@ import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Organization/organization_campaign_full.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+//Campaign card display set up
 class CampaignCard extends StatefulWidget {
   final Campaign campaign;
 
@@ -18,6 +18,7 @@ class _CampaignCardState extends State<CampaignCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      //Navigate to the selected Campaign page
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context){
           return OrganizationCampaignFullScreen(widget.campaign);
@@ -25,6 +26,7 @@ class _CampaignCardState extends State<CampaignCard> {
           setState(() {});
         });
       },
+      //Display card
       child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
@@ -34,7 +36,7 @@ class _CampaignCardState extends State<CampaignCard> {
                 color: Colors.white,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 border: Border.all(color: Colors.grey.shade300, width: 2.0)),
-
+            // Display icon
             child: Column(children: [
               IconButton(
                 enableFeedback: false,
@@ -43,6 +45,7 @@ class _CampaignCardState extends State<CampaignCard> {
                     color: Colors.blue,
                     size: 50),
               ),
+              // Display Campaign title populated from firebase
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(widget.campaign.title,
@@ -52,6 +55,7 @@ class _CampaignCardState extends State<CampaignCard> {
                       fontSize: 20,
                     )),
               ),
+              // Display Campaign description populated from firebase
               SizedBox(
                   height: 75.0,
                   child: Text(
@@ -64,16 +68,19 @@ class _CampaignCardState extends State<CampaignCard> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
                   )),
+              // Display Campaign amount raised populated from firebase
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Text('\$'+f.format(widget.campaign.amountRaised),
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.black, fontSize: 15)),
+                // Display Campaign amount raised populated from firebase
                 Text(
                   '\$'+f.format(widget.campaign.goalAmount),
                   textAlign: TextAlign.start,
                   style: const TextStyle(color: Colors.black, fontSize: 15),
                 ),
               ]),
+              // Display Campaign progress bar
               Container(
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
