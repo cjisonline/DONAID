@@ -2,6 +2,7 @@ import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
 import 'package:donaid/Donor/categories_screen.dart';
 import 'package:donaid/Donor/donor_favorite_screen.dart';
 import 'package:donaid/Donor/donor_search_screen.dart';
+import 'package:donaid/Donor/my_adoptions.dart';
 import 'package:donaid/Donor/notifications_page.dart';
 import 'package:donaid/Donor/organizations_expanded_screen.dart';
 import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
@@ -125,6 +126,7 @@ class Donaid extends StatelessWidget {
             OrganizationSettingsPage.id: (context) =>
                 const OrganizationSettingsPage(),
             GatewayVisits.id: (context) => const GatewayVisits(),
+          MyAdoptions.id: (context) => const MyAdoptions(),
           },
           /* Translations are kept as a simple key-value dictionary map.
             To add custom translations, create a class and extend Translations.

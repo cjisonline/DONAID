@@ -13,6 +13,7 @@ import '../../home_screen.dart';
 import '../donation_history.dart';
 import '../donor_favorite_screen.dart';
 import '../donor_profile.dart';
+import '../my_adoptions.dart';
 import '../settings.dart';
 
 // Donor Drawer Menu
@@ -91,6 +92,13 @@ class _DonorDrawerState extends State<DonorDrawer> {
               ),
             // Display language option in drawer
             // On tap, display Language Selection dialog
+            ListTile(
+              leading: const Icon(Icons.person_sharp ),
+              title: Text("my_adoptions".tr),
+              onTap: () {
+                Navigator.pushNamed(context, MyAdoptions.id);
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.translate),
               title: Text("language".tr),
