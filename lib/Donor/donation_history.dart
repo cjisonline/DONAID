@@ -344,12 +344,12 @@ class _DonationHistoryState extends State<DonationHistory> {
         builder: (BuildContext context) {
           return AlertDialog(
             title:  Center(
-              child: Text('Can Not Generate a PDF'),
+              child: Text('can_not_generate_a_pdf'.tr),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            content:  Text("You currently have no donation history to generate a pdf."),
+            content:  Text("you_currently_have_no_donation_history_to_generate_a_pdf".tr),
             actions: [
               Center(
                 child: TextButton(

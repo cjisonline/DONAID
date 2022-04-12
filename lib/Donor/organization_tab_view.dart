@@ -155,7 +155,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
           );
         })
         //doubt
-    : const Center(child: Text('This organization doesn\'t have any \nactive campaigns at this time.', style: TextStyle(fontSize: 18),));
+    :  Center(child: Text('this_organization_does_not_have_any_active_campaigns_at_this_time'.tr, style: TextStyle(fontSize: 18),));
   }
 
   _organizationBeneficiariesBody(){
@@ -219,7 +219,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
           );
         })
         //doubt
-    : const Center(child: Text('This organization doesn\'t have any \nactive beneficiaries at this time.', style: TextStyle(fontSize: 18),));
+    : Center(child: Text('this_organization_does_not_have_any_active_beneficiaries_at_this_time'.tr, style: TextStyle(fontSize: 18),));
   }
 
   @override
@@ -228,7 +228,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom: const TabBar(tabs: [Tab(text: 'Campaigns',), Tab(text: 'Beneficiaries',)],),
+          bottom:  TabBar(tabs: [Tab(text: '_campaigns'.tr,), Tab(text: 'beneficiaries'.tr,)],),
           title: Text(widget.organization.organizationName),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
