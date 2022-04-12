@@ -32,7 +32,7 @@ class _DonorProfileState extends State<DonorProfile> {
     _getDonorInformation();
   }
 
-  _refreshPage(){
+  _refreshPage() {
     _getCurrentUser();
     _getDonorInformation();
     setState(() {});
@@ -43,15 +43,17 @@ class _DonorProfileState extends State<DonorProfile> {
   }
 
   _getDonorInformation() async {
-    var ret = await _firestore.collection('DonorUsers').where('uid', isEqualTo: loggedInUser?.uid).get();
+    var ret = await _firestore
+        .collection('DonorUsers')
+        .where('uid', isEqualTo: loggedInUser?.uid)
+        .get();
     final doc = ret.docs[0];
     donor = Donor(
         email: doc['email'],
         firstName: doc['firstName'],
         lastName: doc['lastName'],
         phoneNumber: doc['phoneNumber'],
-        id: doc['id']
-      );
+        id: doc['id']);
     setState(() {});
   }
 
@@ -59,19 +61,23 @@ class _DonorProfileState extends State<DonorProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('profile'.tr),
+          title: Text('profile'.tr),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: (){
+            onPressed: () {
               Navigator.pop(context);
             },
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DonorEditProfile())).then((value) => _refreshPage());
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DonorEditProfile()))
+                    .then((value) => _refreshPage());
               },
-              child:  Text('edit'.tr,
+              child: Text('edit'.tr,
                   style: TextStyle(fontSize: 15.0, color: Colors.white)),
             ),
           ]),
@@ -82,17 +88,16 @@ class _DonorProfileState extends State<DonorProfile> {
   }
 
   _body() {
-    return  SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children:  [
-                ProfileRow('YOUR EMAIL', donor.email),
-                ProfileRow('FIRST NAME', donor.firstName),
-                ProfileRow('LAST NAME', donor.lastName),
-                ProfileRow('YOUR PHONE', donor.phoneNumber),
-              ],
-            )
-        );
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            ProfileRow('YOUR EMAIL', donor.email),
+            ProfileRow('FIRST NAME', donor.firstName),
+            ProfileRow('LAST NAME', donor.lastName),
+            ProfileRow('YOUR PHONE', donor.phoneNumber),
+          ],
+        ));
   }
 
   _bottomNavigationBar() {
@@ -112,7 +117,7 @@ class _DonorProfileState extends State<DonorProfile> {
               },
               icon: const Icon(Icons.home, color: Colors.white, size: 35),
             ),
-             Text('home'.tr,
+            Text('home'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -126,7 +131,7 @@ class _DonorProfileState extends State<DonorProfile> {
                 size: 35,
               ),
             ),
-             Text('search'.tr,
+            Text('search'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -137,7 +142,7 @@ class _DonorProfileState extends State<DonorProfile> {
               icon: const Icon(Icons.notifications,
                   color: Colors.white, size: 35),
             ),
-             Text('notifications'.tr,
+            Text('notifications'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
@@ -147,7 +152,7 @@ class _DonorProfileState extends State<DonorProfile> {
               onPressed: () {},
               icon: const Icon(Icons.message, color: Colors.white, size: 35),
             ),
-             Text('message'.tr,
+            Text('message'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 10)),
           ]),
