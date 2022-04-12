@@ -78,6 +78,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     super.initState();
   }
 
+  // Get charity categories from Firebase
   _getCategories() async {
     var ret = await _firestore.collection('CharityCategories').get();
     ret.docs.forEach((element) {
@@ -87,6 +88,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     setState(() {});
   }
 
+  // Get approved organization users from Firebase
   _getOrganizationUsers() async {
     var ret = await _firestore
         .collection('OrganizationUsers')
@@ -109,6 +111,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     setState(() {});
   }
 
+  // Get active campaign from Firebase
   _getCampaign() async {
     var ret = await _firestore
         .collection('Campaigns')
@@ -133,6 +136,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     setState(() {});
   }
 
+  // From Firebase, get the approved and active urgent cases where the end date is after the current date
+  //  Order the urgent cases by end date in ascending order
   _getUrgentCases() async {
     var ret = await _firestore
         .collection('UrgentCases')
@@ -163,6 +168,9 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     setState(() {});
   }
 
+
+  // From Firebase, get active beneficiaries where the end date is after the current date
+  // Order the beneficiaries by end date in ascending order
   _getBeneficiaries() async {
     var ret = await _firestore
         .collection('Beneficiaries')
@@ -190,7 +198,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     setState(() {});
   }
 
-
+  // Search for items that contain the entered keyword
+  // Create an array of search results
   void _searchResults(String enteredKeyword) {
     _filterResults();
     if (enteredKeyword.isEmpty) {
@@ -217,6 +226,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     });
   }
 
+  // Filter results based on category of the charity
+  // Create an array of filtered results
   void _categoryResult() {
     if(categoryFilterController.text.isNotEmpty){
       campaigns = campaigns
@@ -237,6 +248,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     }
   }
 
+  // Filter results based on the country of the charity organization
+  // Create an array of filtered results
   void _countryResult(){
     if(countryController.text.isNotEmpty){
       organizations = allOrganizations.where((item) => item.country!.contains(countryController.text)).toList();
@@ -262,6 +275,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     }
   }
 
+  // Sort results by end date and amount raised
+  // Create an array of sorted results
   void _sortResults(){
     if(sortingController.text.isNotEmpty){
 
@@ -291,6 +306,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     }
   }
 
+
+  // Apply filters to the search results
   _filterResults(){
     campaigns = allCampaigns;
     beneficiaries = allBeneficiaries;
@@ -299,6 +316,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     _categoryResult();
   }
 
+  // From Firebase, get campaign data
+  // Navigate to the full screen of the selected campaign
   _goToChosenCampaign(String id) async {
     var ret = await _firestore
         .collection('Campaigns')
@@ -321,6 +340,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     }));
   }
 
+  // From Firebase, get beneficiary data
+  // Navigate to the full screen of the selected beneficiary
   _goToChosenBeneficiary(String id) async {
     var ret = await _firestore
         .collection('Beneficiaries')
@@ -343,6 +364,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     }));
   }
 
+  // From Firebase, get urgent case data
+  // Navigate to the full screen of the selected urgent case
   _goToChosenUrgentCase(String id) async {
     var ret = await _firestore
         .collection('UrgentCases')
@@ -367,6 +390,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     }));
   }
 
+  // Reset the page
   void _reset() {
     Navigator.pushReplacement(
       context,
@@ -386,6 +410,8 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
             title:  Text('search'.tr),
             bottom: TabBar(tabs: [Tab(text: 'campaigns'.tr), Tab(text: 'beneficiaries'.tr), Tab(text: 'urgent_cases'.tr)],),
             actions: <Widget>[
+              // Display reset button
+              // On tap, reset the page
               TextButton(
                   onPressed: _reset,
                   child:
@@ -393,6 +419,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
             ],
           ),
           drawer: const DonorDrawer(),
+          // Display the search tabs
           body: TabBarView(
             children: [
               _buildCampaignsBody(),
@@ -404,18 +431,20 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     );
   }
 
+  // Create the campaign body
   _buildCampaignsBody(){
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
         children: [
+          // Display the search bar
           TextField(
             onChanged: (val) {
               _searchResults(val.toString());
             },
             controller: searchFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
+            decoration: InputDecoration(
+              labelText: 'search'.tr,
             ),
           ),
           const SizedBox(
@@ -423,6 +452,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           ),
           Row(
             children: <Widget>[
+              // Display the category filter drop down
               Expanded(
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
@@ -449,6 +479,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
               const SizedBox(
                 width: 20,
               ),
+              // Display the Country filter drop down
               Expanded(
                 child: TextFormField(
                   controller: countryController,
@@ -479,6 +510,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           ),
           Row(
             children: [
+              // Display the Sort By filter drop down
               Expanded(
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
@@ -507,6 +539,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           const SizedBox(
             height: 20,
           ),
+          // Display the search results for campaigns
           Expanded(
             child: campaigns.isNotEmpty
                 ? ListView.builder(
@@ -544,18 +577,20 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     );
   }
 
+  // Display the beneficiary tab's search page
   _buildBeneficiariesBody(){
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
         children: [
+          // Display the search bar
           TextField(
             onChanged: (val) {
               _searchResults(val.toString());
             },
             controller: searchFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
+            decoration:  InputDecoration(
+              labelText: 'search'.tr,
             ),
           ),
           const SizedBox(
@@ -563,6 +598,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           ),
           Row(
             children: <Widget>[
+              // Display the category filter drop down menu
               Expanded(
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
@@ -589,6 +625,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
               const SizedBox(
                 width: 20,
               ),
+              // Display the country filter drop down menu
               Expanded(
                 child: TextFormField(
                   controller: countryController,
@@ -619,6 +656,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           ),
           Row(
             children: [
+              // Display the Sort By drop down menu
               Expanded(
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
@@ -647,6 +685,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           const SizedBox(
             height: 20,
           ),
+          // Display the beneficiary search results
           Expanded(
             child: beneficiaries.isNotEmpty
                 ? ListView.builder(
@@ -684,18 +723,20 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
     );
   }
 
+  // Display the urgent case tab's search page
   _buildUrgentCasesBody(){
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
         children: [
+          // Display the search bar
           TextField(
             onChanged: (val) {
               _searchResults(val.toString());
             },
             controller: searchFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
+            decoration:  InputDecoration(
+              labelText: 'search'.tr,
             ),
           ),
           const SizedBox(
@@ -703,6 +744,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           ),
           Row(
             children: <Widget>[
+              // Display the category filter drop down menu
               Expanded(
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
@@ -729,6 +771,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
               const SizedBox(
                 width: 20,
               ),
+              // Display the Country filter drop down menu
               Expanded(
                 child: TextFormField(
                   controller: countryController,
@@ -759,6 +802,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           ),
           Row(
             children: [
+              // Display the Sort By filter drop down menu
               Expanded(
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
@@ -787,6 +831,7 @@ class _DonorSearchScreenState extends State<DonorSearchScreen> {
           const SizedBox(
             height: 20,
           ),
+          // Display the search results for urgent cases
           Expanded(
             child: urgentCases.isNotEmpty
                 ? ListView.builder(

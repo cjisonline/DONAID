@@ -325,9 +325,9 @@ class _EditCampaignState extends State<EditCampaign> {
               value: items,
             );
           }).toList(),
-          onChanged: (val) => setState(() {
+          onChanged: (val) {
             _campaignCategoryController?.text = val.toString();
-          }),
+          },
           validator: (value) => value == null
               ? 'please_fill_in_the_category'.tr : null,
         )

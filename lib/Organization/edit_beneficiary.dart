@@ -325,9 +325,9 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               value: items,
             );
           }).toList(),
-          onChanged: (val) => setState(() {
+          onChanged: (val) {
             _beneficiaryCategoryController?.text = val.toString();
-          }),
+          },
           validator: (value) => value == null
               ? 'please_fill_in_the_category'.tr : null,
         )

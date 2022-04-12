@@ -359,8 +359,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               _searchResults(val.toString());
             },
             controller: searchFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
+            decoration:  InputDecoration(
+              labelText: 'search'.tr,
             ),
           ),
           const SizedBox(
@@ -473,8 +473,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               _searchResults(val.toString());
             },
             controller: searchFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
+            decoration:  InputDecoration(
+              labelText: 'search'.tr,
             ),
           ),
           const SizedBox(
@@ -582,8 +582,8 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
               _searchResults(val.toString());
             },
             controller: searchFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
+            decoration:  InputDecoration(
+              labelText: 'search'.tr,
             ),
           ),
           const SizedBox(

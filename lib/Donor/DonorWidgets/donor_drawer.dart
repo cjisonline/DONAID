@@ -15,6 +15,7 @@ import '../donor_favorite_screen.dart';
 import '../donor_profile.dart';
 import '../settings.dart';
 
+// Donor Drawer Menu
 class DonorDrawer extends StatefulWidget {
   const DonorDrawer({Key? key}) : super(key: key);
 
@@ -25,6 +26,7 @@ class DonorDrawer extends StatefulWidget {
 class _DonorDrawerState extends State<DonorDrawer> {
   final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
 
+  // Create donor drawer
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,6 +50,8 @@ class _DonorDrawerState extends State<DonorDrawer> {
                 color: Colors.blue,
               ),
             ),
+            // Display settings option in drawer
+            // On tap, navigate to donor's setting page
             ListTile(
               leading: const Icon(Icons.settings),
               title: Text("settings".tr),
@@ -55,6 +59,8 @@ class _DonorDrawerState extends State<DonorDrawer> {
                 Navigator.pushNamed(context, DonorSettingsPage.id);
               },
             ),
+            // For non-guest donor users, display Profile option in drawer
+            // On tap, navigate to donor's Profile
             if (FirebaseAuth.instance.currentUser?.email != null)
               ListTile(
                 leading: const Icon(Icons.account_circle),
@@ -63,6 +69,8 @@ class _DonorDrawerState extends State<DonorDrawer> {
                   Navigator.pushNamed(context, DonorProfile.id);
                 },
               ),
+            // For non-guest donor users, display My Favorites option in drawer
+            // On tap, navigate to donor's My Favorites page
             if (FirebaseAuth.instance.currentUser?.email != null)
               ListTile(
                 leading: const Icon(Icons.favorite),
@@ -71,6 +79,8 @@ class _DonorDrawerState extends State<DonorDrawer> {
                   Navigator.pushNamed(context, DonorFavoritePage.id);
                 },
               ),
+            // For non-guest donor users, display Donation History option in drawer
+            // On tap, navigate to Donation History page
             if (FirebaseAuth.instance.currentUser?.email != null)
               ListTile(
                 leading: const Icon(Icons.history),
@@ -79,10 +89,13 @@ class _DonorDrawerState extends State<DonorDrawer> {
                   Navigator.pushNamed(context, DonationHistory.id);
                 },
               ),
+            // Display language option in drawer
+            // On tap, display Language Selection dialog
             ListTile(
               leading: const Icon(Icons.translate),
               title: Text("language".tr),
               onTap: () {
+                // Display language selection dialog
                 showDialog(
                     context: context,
                     builder: (context) {
@@ -137,6 +150,8 @@ class _DonorDrawerState extends State<DonorDrawer> {
                     });
               },
             ),
+            // For non-guest donor users, display Contact Admin option in drawer
+            // On tap, navigate to donor's Contact Admin page
             if (FirebaseAuth.instance.currentUser?.email != null)
               ListTile(
                 leading: const Icon(Icons.assignment_ind_outlined),
@@ -145,6 +160,8 @@ class _DonorDrawerState extends State<DonorDrawer> {
                   Get.to(ContactUs("DonorUsers"));
                 },
               ),
+            // Display Logout option in drawer
+            // On tap, navigate to Home screen
             ListTile(
               leading: const Icon(Icons.logout),
               title: Text("logout".tr),

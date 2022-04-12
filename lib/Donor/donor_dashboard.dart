@@ -55,7 +55,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   List<CharityCategory> charityCategories = [];
   var pointlist = [];
 
-
+  // initializes functions
   @override
   void initState() {
     super.initState();
@@ -159,7 +159,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
     }
   }
 
-
+  // Get approved organization users from Firebase
   _getOrganizationUsers() async {
     var ret = await _firestore.collection('OrganizationUsers').where('approved', isEqualTo: true).get();
     for (var element in ret.docs) {
@@ -176,7 +176,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
     setState(() {});
   }
 
-
+  // Get charity categories from Firebase
   _getCharityCategories() async {
     var ret = await _firestore.collection('CharityCategories').get();
     for (var element in ret.docs) {
@@ -190,6 +190,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
     setState(() {});
   }
 
+  // From Firebase, get active beneficiaries where the end date is after the current date
+  // Order the beneficiaries by end date in ascending order
   _getBeneficiaries() async {
     var ret = await _firestore.collection('Beneficiaries')
         .where('active',isEqualTo: true)
@@ -214,6 +216,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
     setState(() {});
   }
 
+  // From Firebase, get the approved and active urgent cases where the end date is after the current date
+  //  Order the urgent cases by end date in ascending order
   _getUrgentCases() async {
     var ret = await _firestore.collection('UrgentCases')
         .where('approved',isEqualTo: true)
@@ -256,7 +260,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
     }
   }
 
-
+  // Create donor dashboard
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -269,6 +273,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
     );
   }
 
+  // Create body for donor dashboard
   _body() {
     return RefreshIndicator(
       onRefresh: ()async{
@@ -312,6 +317,9 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 );
               }).toList(),
             ),
+
+
+            // Categories section of dashboard
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -319,11 +327,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                       Text(
+                      // Display category title
+                      Text(
                         'categories'.tr,
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
+                      // Display see more option
+                      // On pressed, navigate to Categories screen
                       TextButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesScreen())).then((value) => _refreshPage());
@@ -337,6 +348,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     ]),
               ),
             ),
+            // Display the charity category list
             SizedBox(
                 height: 75.0,
                 child: ListView.builder(
@@ -348,19 +360,23 @@ class _DonorDashboardState extends State<DonorDashboard> {
                   },
                 )),
 
-                // organization list
-                Align(
+
+            // Organization section of dashboard
+            Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // Display title
                           Text(
                             'organization'.tr,
                             style: TextStyle(fontSize: 20),
                             textAlign: TextAlign.start,
                           ),
+                          // Display see more option
+                          // On pressed, navigate to Organization Expanded Screen
                           TextButton(
                             onPressed: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizationsExpandedScreen())).then((value) => _refreshPage());
@@ -374,6 +390,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
                         ]),
                   ),
                 ),
+                // Display organization list
                 SizedBox(
                     height: 200.0,
                     child: ListView.builder(
@@ -384,7 +401,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                       },
                     )),
 
-                //beneficiaries list
+
+                // Beneficiary section of dashboard
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
@@ -392,11 +410,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // Display title
                           Text(
                             'beneficiaries'.tr,
                             style: TextStyle(fontSize: 20),
                             textAlign: TextAlign.start,
                           ),
+                          // Display see more option
+                          // On pressed, navigate to Beneficiary Expanded Screen
                           TextButton(
                             onPressed: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context) => BeneficiaryExpandedScreen())).then((value) => _refreshPage());
@@ -410,7 +431,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                         ]),
                   ),
                 ),
-                beneficiaries.isNotEmpty
+            // Display the beneficiary list
+            beneficiaries.isNotEmpty
                     ? SizedBox(
                     height: 325.0,
                     child: ListView.builder(
@@ -422,7 +444,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     ))
                     :  Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),)),
 
-                // urgent case list
+
+                // Urgent case section of dashboard
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
@@ -430,11 +453,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // Display title
                           Text(
                             'urgent_cases'.tr,
                             style: TextStyle(fontSize: 20),
                             textAlign: TextAlign.start,
                           ),
+                          // Display see more option
+                          // On pressed, navigate to Urgent Case Expanded Screen
                           TextButton(
                             onPressed: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context) => UrgentCasesExpandedScreen())).then((value) => _refreshPage());
@@ -448,7 +474,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
                         ]),
                   ),
                 ),
-                urgentCases.isNotEmpty
+            // Display the urgent case list
+            urgentCases.isNotEmpty
                     ? SizedBox(
                     height: 325.0,
                     child: ListView.builder(
