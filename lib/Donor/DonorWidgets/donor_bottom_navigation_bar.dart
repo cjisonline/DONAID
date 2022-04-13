@@ -17,7 +17,8 @@ class DonorBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
+      height: 75,
+      padding: const EdgeInsets.only(bottom:12.0),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
       ),
@@ -38,7 +39,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
             ),
              Text('home'.tr,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
+                style: TextStyle(color: Colors.white, fontSize: 12)),
           ]),
           // Display search button
           // On pressed, navigate to the search screen
@@ -56,7 +57,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
             ),
              Text('search'.tr,
                 textAlign: TextAlign.center,
-                style:  TextStyle(color: Colors.white, fontSize: 10)),
+                style:  TextStyle(color: Colors.white, fontSize: 12)),
           ]),
         ],
       )
@@ -77,7 +78,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
             ),
              Text('home'.tr,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 10)),
+                style: TextStyle(color: Colors.white, fontSize: 12)),
           ]),
           // Display search button
           // On pressed, navigate to search screen
@@ -95,7 +96,7 @@ class DonorBottomNavigationBar extends StatelessWidget {
             ),
              Text('search'.tr,
                 textAlign: TextAlign.center,
-                style:  TextStyle(color: Colors.white, fontSize: 10)),
+                style:  TextStyle(color: Colors.white, fontSize: 12)),
           ]),
           // Display notification button
           // On pressed, navigate to the donor's notification page
