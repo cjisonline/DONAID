@@ -113,15 +113,18 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
         // display beneficiary name populated from Firebase
         Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Text(widget.beneficiary.name,
-              textAlign: TextAlign.center,
-              softWrap: true,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              )),
+          child: Container(
+            height: 50,
+            child: Text(widget.beneficiary.name,
+                textAlign: TextAlign.center,
+                softWrap: true,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                )),
+          ),
         ),
         // display beneficiary biography populated from Firebase
         SizedBox(

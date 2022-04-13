@@ -323,14 +323,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Display category title
                       Text(
                         'categories'.tr,
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[650]),
                         textAlign: TextAlign.start,
                       ),
                       // Display see more option
@@ -365,14 +365,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
             Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0, bottom: 0),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Display title
                           Text(
                             'organization'.tr,
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[650]),
                             textAlign: TextAlign.start,
                           ),
                           // Display see more option
@@ -406,14 +406,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 0),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Display title
                           Text(
                             'beneficiaries'.tr,
-                            style: TextStyle(fontSize: 20),
+                            style:  TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[650]),
                             textAlign: TextAlign.start,
                           ),
                           // Display see more option
@@ -449,14 +449,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 0),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Display title
                           Text(
                             'urgent_cases'.tr,
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[650]),
                             textAlign: TextAlign.start,
                           ),
                           // Display see more option

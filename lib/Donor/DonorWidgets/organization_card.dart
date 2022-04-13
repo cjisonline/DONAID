@@ -76,6 +76,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.black,
+                      fontWeight: FontWeight.bold,
                       fontSize: 20,
                     )),
               ),
