@@ -262,7 +262,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                           ),
                         ],
                       ))
-                  : Text('beneficiary_is_no_longer_available'.tr),
+                  : Text('beneficiary_is_no_longer_available'.tr, style: TextStyle(fontSize: 18),),
             )
           ]),
         )),

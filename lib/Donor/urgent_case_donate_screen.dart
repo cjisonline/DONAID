@@ -245,7 +245,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                           ),
                         ],
                       ))
-                  : Text('ugent_case_is_no_longer'.tr),
+                  : Text('ugent_case_is_no_longer'.tr, style: TextStyle(fontSize: 18),),
                 )
               ]),
             )),

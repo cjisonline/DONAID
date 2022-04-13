@@ -197,120 +197,121 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: ModalProgressHUD(
         inAsyncCall: showLoadingSpinner,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  onChanged: (value) {
-                    email = value;
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "please_enter_your_email.".tr;
-                    } else if (!emailRegExp.hasMatch(value)) {
-                      return "please_enter_a_valid_email_address.".tr;
-                    } else {
-                      return null;
-                    }
-                  },
-                  keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                      hintText: "Email",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      )),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: TextFormField(
-                  onChanged: (value) {
-                    password = value;
-                  },
-                  validator: (value) {
-                    if (passwordreset) return null;
-                    if (value!.isEmpty || value.length < 6) {
-                      return "password_must_be_at_least_6_characters.".tr;
-                    } else {
-                      return null;
-                    }
-                  },
-                  obscureText: true,
-                  textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                      hintText: "Password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      )),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
-                child: Material(
-                  elevation: 5.0,
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(32.0),
-                  child: MaterialButton(
-                    child: Text('login'.tr, style: TextStyle(color: Colors.white)),
-                    onPressed: () async {
-                      passwordreset = false;
-                      if (_formKey.currentState!.validate()) {
-                        setState(() {
-                          showLoadingSpinner = true;
-                        });
-                        loginUser();
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "please_enter_your_email.".tr;
+                      } else if (!emailRegExp.hasMatch(value)) {
+                        return "please_enter_a_valid_email_address.".tr;
+                      } else {
+                        return null;
                       }
                     },
+                    keyboardType: TextInputType.emailAddress,
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                        hintText: "Email",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        )),
                   ),
                 ),
-              ),
-              Center(
-                  child: InkWell(
-                    onTap: () async {
-                      passwordreset = true;
-                      // setState(() {});
-                      if (_formKey.currentState!.validate()) {
-                        setState(() {
-                          showLoadingSpinner = true;
-                        });
-                        await FirebaseAuth.instance
-                            .sendPasswordResetEmail(email: email);
-                        setState(() {
-                          showLoadingSpinner = false;
-                        });
-                        showDialog<void>(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: Center(child: Text('reset_link_sent!'.tr)),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(32.0)),
-                                  content:
-                                  Text('check_your_email_to_reset_password'.tr),
-                                  actions: [
-                                    Center(
-                                        child: TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child:  Text('oK'.tr)))
-                                  ]);
-                            });
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      password = value;
+                    },
+                    validator: (value) {
+                      if (passwordreset) return null;
+                      if (value!.isEmpty || value.length < 6) {
+                        return "password_must_be_at_least_6_characters.".tr;
+                      } else {
+                        return null;
                       }
                     },
-                    child: Text('forgot_password!'.tr,
-                        style: TextStyle(color: Colors.black)),
-                  )),
-              Spacer(),
-            ],
+                    obscureText: true,
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                        hintText: "Password",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
+                  child: Material(
+                    elevation: 5.0,
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(32.0),
+                    child: MaterialButton(
+                      child: Text('login'.tr, style: TextStyle(color: Colors.white)),
+                      onPressed: () async {
+                        passwordreset = false;
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            showLoadingSpinner = true;
+                          });
+                          loginUser();
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                Center(
+                    child: InkWell(
+                      onTap: () async {
+                        passwordreset = true;
+                        // setState(() {});
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            showLoadingSpinner = true;
+                          });
+                          await FirebaseAuth.instance
+                              .sendPasswordResetEmail(email: email);
+                          setState(() {
+                            showLoadingSpinner = false;
+                          });
+                          showDialog<void>(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                    title: Center(child: Text('reset_link_sent!'.tr)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(32.0)),
+                                    content:
+                                    Text('check_your_email_to_reset_password'.tr),
+                                    actions: [
+                                      Center(
+                                          child: TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child:  Text('oK'.tr)))
+                                    ]);
+                              });
+                        }
+                      },
+                      child: Text('forgot_password!'.tr,
+                          style: TextStyle(color: Colors.black)),
+                    )),
+              ],
+            ),
           ),
         ),
       ),

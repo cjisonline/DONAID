@@ -131,9 +131,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(30.0),
                           child: MaterialButton(
-                              child: Text('guest_login'.tr,
-                                  style: const TextStyle(
-                                      fontSize: 25, color: Colors.white)),
+                              child: Center(
+                                child: Text('guest_login'.tr,
+                                    style: const TextStyle(
+                                        fontSize: 25, color: Colors.white)),
+                              ),
                               onPressed: () async {
                                 try {
                                   await FirebaseAuth.instance

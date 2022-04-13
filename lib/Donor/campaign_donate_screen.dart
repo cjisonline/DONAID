@@ -249,7 +249,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                     ],
                   )
               )
-                  :  Text('compaign_is_no_longer_available_to_donate'.tr),
+                  :  Text('compaign_is_no_longer_available_to_donate'.tr, style: TextStyle(fontSize: 18),),
             )
           ]),
         )),
