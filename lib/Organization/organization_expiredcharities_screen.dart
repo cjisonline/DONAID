@@ -172,7 +172,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
@@ -225,7 +225,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
@@ -278,7 +278,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );

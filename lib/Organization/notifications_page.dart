@@ -117,9 +117,7 @@ class _OrganizationNotificationPageState extends State<OrganizationNotificationP
                   ),),
                 ),
               ),
-              const Divider(
-                color: Colors.grey,
-              ),
+              SizedBox(height:10)
             ],
           );
         });

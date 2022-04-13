@@ -149,7 +149,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
@@ -213,7 +213,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );

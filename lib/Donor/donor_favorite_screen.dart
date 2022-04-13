@@ -281,7 +281,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                                         _favUserCampaign[index]['id']);
                                 },
                               ),
-                              const Divider()
+                              SizedBox(height:10)
                             ])),
                       )
                           : Center(
@@ -333,7 +333,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                                 _favUserBeneficiary[index]['id']);
                         },
                       ),
-                      const Divider()
+                      SizedBox(height:10)
                     ])),
               )
                   : Center(
@@ -386,7 +386,7 @@ class _DonorFavoritePageState extends State<DonorFavoritePage> {
                                 _favUserUrgentCase[index]['id']);;
                         },
                       ),
-                      const Divider()
+                      SizedBox(height:10)
                     ])),
               )
                   : Center(

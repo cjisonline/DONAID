@@ -183,7 +183,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
@@ -239,7 +239,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                       ],
                     ),
                   ),
-                  const Divider()
+                  SizedBox(height:10)
                 ],
               ),
             );

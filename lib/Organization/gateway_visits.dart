@@ -449,9 +449,7 @@ class _GatewayVisitsState extends State<GatewayVisits> {
                               ],
                             ),
                           ),
-                          const Divider(
-                            color: Colors.grey,
-                          )
+                          SizedBox(height:10)
                         ],
                       );
                     })

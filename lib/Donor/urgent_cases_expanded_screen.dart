@@ -146,7 +146,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );

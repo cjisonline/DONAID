@@ -119,7 +119,7 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
                       ],
                     ),
                   ),
-                  const Divider()
+                  SizedBox(height:10)
                 ],
               ),
             );

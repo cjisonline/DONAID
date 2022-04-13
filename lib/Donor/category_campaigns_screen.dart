@@ -145,8 +145,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                     ],
                   ),
                 ),
-
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );

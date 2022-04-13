@@ -64,7 +64,7 @@ class _OrganizationsExpandedScreenState extends State<OrganizationsExpandedScree
                   title: Text(organizations[index].organizationName),
                   subtitle: Text(organizations[index].organizationDescription.toString()),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );

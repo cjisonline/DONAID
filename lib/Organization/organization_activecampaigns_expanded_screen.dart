@@ -115,7 +115,7 @@ class _OrganizationCampaignsExpandedScreenState
                       ],
                     ),
                   ),
-                  const Divider()
+                  SizedBox(height:10)
                 ],
               ),
             );

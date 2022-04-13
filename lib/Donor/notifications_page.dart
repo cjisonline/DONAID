@@ -162,9 +162,7 @@ class _DonorNotificationPageState extends State<DonorNotificationPage> {
                   ),),
                 ),
               ),
-              const Divider(
-                color: Colors.grey,
-              ),
+              SizedBox(height:10)
             ],
           );
         });

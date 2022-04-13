@@ -150,7 +150,7 @@ class _PendingApprovalsAndDenialsState extends State<PendingApprovalsAndDenials>
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
@@ -203,7 +203,7 @@ class _PendingApprovalsAndDenialsState extends State<PendingApprovalsAndDenials>
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );

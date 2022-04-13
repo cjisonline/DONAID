@@ -454,7 +454,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                             campaigns[index].id);
                       },
                     ),
-                    const Divider()
+                    SizedBox(height:10)
                   ])),
             )
                 :  Text(
@@ -568,7 +568,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                             beneficiaries[index].id);
                       },
                     ),
-                    const Divider()
+                    SizedBox(height:10)
                   ])),
             )
                 :  Text(
@@ -682,7 +682,7 @@ class _OrgSearchPageState extends State<OrgSearchPage> {
                             urgentCases[index].id);
                       },
                     ),
-                    const Divider()
+                    SizedBox(height:10)
                   ])),
             )
                 :  Text(

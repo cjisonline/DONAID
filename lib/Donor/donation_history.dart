@@ -335,7 +335,7 @@ class _DonationHistoryState extends State<DonationHistory> {
                                 trailing: Text("\u0024" +
                                     f.format(donations[index].donationAmount)),
                               ),
-                    const Divider()
+                    SizedBox(height:10)
                   ],
                 ));
               }),

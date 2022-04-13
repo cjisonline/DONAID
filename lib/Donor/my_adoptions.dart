@@ -150,7 +150,7 @@ class _MyAdoptionsState extends State<MyAdoptions> {
                         ],
                       ),
                     ),
-                    const Divider()
+                    SizedBox(height:10)
                   ],
                 ),
               );

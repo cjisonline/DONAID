@@ -212,7 +212,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
@@ -265,7 +265,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
@@ -318,7 +318,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
@@ -371,7 +371,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );

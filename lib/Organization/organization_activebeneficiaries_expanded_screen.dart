@@ -150,7 +150,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
                       ],
                     ),
                   ),
-                  const Divider()
+                  SizedBox(height:10)
                 ],
               ),
             );
@@ -208,7 +208,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
                       ],
                     ),
                   ),
-                  const Divider()
+                  SizedBox(height:10)
                 ],
               ),
             );
