@@ -30,6 +30,7 @@ dependencies:
   flutter_linkify: ^5.0.2
   url_launcher: ^6.0.20
   carousel_slider: ^4.0.0
+  sign_in_with_apple: ^3.3.0
 
   pdf: ^3.1.0
   path_provider: ^2.0.1
@@ -55,7 +56,6 @@ dependencies:
   flutter_stripe: ^2.2.0
   http: ^0.13.4
   cupertino_icons: ^1.0.2
-  sign_in_with_apple:
 
 
 dev_dependencies:

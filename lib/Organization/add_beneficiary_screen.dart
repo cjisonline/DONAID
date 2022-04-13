@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 // Add campaign form
 class AddBeneficiaryForm extends StatefulWidget {
   static const id = 'beneficiary_form_screen';
-  AddBeneficiaryForm({Key? key}) : super(key: key);
+  const AddBeneficiaryForm({Key? key}) : super(key: key);
 
   @override
   _AddBeneficiaryFormState createState() => _AddBeneficiaryFormState();
@@ -29,14 +29,15 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   );
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
-  User? loggedInUser;
   final firestore = FirebaseFirestore.instance;
   late DocumentSnapshot documentSnapshot;
   var category = [];
   int beneficiaryTimeLimit=0;
+  bool? isAdopted = false;
+  bool userIsDomesticOrganization=false;
 
-// Get category
-  _getCampaign() async {
+  // Get category
+  _getCategories() async {
     var ret = await firestore
         .collection('CharityCategories')
         .get();
@@ -57,13 +58,16 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   @override
   void initState() {
     super.initState();
-    _getCurrentUser();
-    _getCampaign();
+    _getCurrentOrganizationCountry();
+    _getCategories();
     _getTimeLimit();
   }
 
-  void _getCurrentUser() {
-    loggedInUser = _auth.currentUser;
+   _getCurrentOrganizationCountry() async {
+    var ret = await firestore.collection('OrganizationUsers').where('uid', isEqualTo: _auth.currentUser?.uid).get();
+    var organizationUserDoc = ret.docs.first;
+
+    userIsDomesticOrganization = organizationUserDoc['country'] == 'United States';
   }
 
 //Add beneficiary to firebase
@@ -81,7 +85,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         'endDate': Timestamp.fromDate(DateTime.parse(endDateController)),
         'goalAmount': goalAmount,
         'id': docRef.id,
-        'organizationID': loggedInUser?.uid,
+        'organizationID': _auth.currentUser?.uid,
         'name': name
       });
     } catch (e) {
@@ -89,6 +93,82 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
     }
   }
 
+  Future<void> addAdoption(String category, String biography, double goalAmount,
+      String name) async {
+    try {
+      final docRef = await firestore.collection("Adoptions").add({});
+      await firestore.collection("Adoptions").doc(docRef.id).set({
+        'active': true,
+        'category': category,
+        'dateCreated': FieldValue.serverTimestamp(),
+        'biography': biography,
+        'goalAmount': goalAmount,
+        'amountRaised': 0,
+        'id': docRef.id,
+        'organizationID': _auth.currentUser?.uid,
+        'name': name,
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Widget showEndDateField(){
+    if(isAdopted == false){
+      return  Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextFormField(
+            controller: endDateController,
+            readOnly: true,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "please_enter_end_date.".tr;
+              }
+              if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
+                return 'beneficiaries_cannot_have_a_duration_longer_than_1_year.'.tr;
+              }
+              else {
+                return null;
+              }
+            },
+            textAlign: TextAlign.center,
+            decoration: InputDecoration(
+                label: Center(
+                  child: RichText(
+                      text: TextSpan(
+                          text: 'enter_end_date'.tr,
+                          style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 20.0),
+                          children: const [
+                            TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ])),
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.all(Radius.circular(32.0)),
+                )
+            ),
+            onTap: () async {
+              var date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2100));
+              endDateController.text =
+                  date.toString().substring(0, 10);
+            },));
+    }
+    else{
+      return Container();
+    }
+  }
 // UI for for beneficiary
   @override
   Widget build(BuildContext context) {
@@ -258,57 +338,33 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 )),
                           ),
                         ),
-                        //Please valid enter end date error
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: endDateController,
-                              readOnly: true,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "please_enter_end_date.".tr;
-                                }
-                                if(DateTime.parse(value).difference(DateTime.now()).inDays > beneficiaryTimeLimit){
-                                  return 'beneficiaries_cannot_have_a_duration_longer_than_1_year.'.tr;
-                                }
-                                else {
-                                  return null;
-                                }
+
+                      userIsDomesticOrganization
+                      ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child:
+                          Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                             Text(
+                              'set_beneficiary_up_for_adoption'.tr,
+                              style: TextStyle(fontSize: 17.0),
+                            ),
+                            Checkbox(
+                              value: isAdopted,
+                              onChanged: (value) {
+                                setState(() {
+                                  isAdopted = value;
+                                });
                               },
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                  label: Center(
-                                    child: RichText(
-                                        text: TextSpan(
-                                            text: 'enter_end_date'.tr,
-                                            style: TextStyle(
-                                                color: Colors.grey[600],
-                                                fontSize: 20.0),
-                                            children: const [
-                                              TextSpan(
-                                                  text: ' *',
-                                                  style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 20.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ])),
-                                  ),
-                                  border: const OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(32.0)),
-                                  )
-                              ),
-                              onTap: () async {
-                                var date = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime(2100));
-                                endDateController.text =
-                                    date.toString().substring(0, 10);
-                              },)),
-                        // Category field UI
+                            ),
+                          ],
+                        )))
+                      : Container(),
+                        showEndDateField(),
+
+
                         Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: DropdownButtonFormField <String>(
@@ -371,11 +427,20 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                   setState(() {
                                     showLoadingSpinner = true;
                                   });
-                                  addBeneficiary(categoryController.text,
-                                      biographyController.text,
+                                  if(isAdopted == true){
+                                    addAdoption(categoryController.text,
+                                        biographyController.text,
+                                        int.parse(goalAmountController.text).toDouble(),
+                                        nameController.text);
+                                  }
+                                  else{
+                                    addBeneficiary(categoryController.text,
+                                        biographyController.text,
                                       double.parse(goalAmountController.text).toDouble(),
-                                      nameController.text,
-                                      endDateController.text);
+                                        nameController.text,
+                                        endDateController.text);
+                                  }
+
                                   Navigator.of(context).popUntil(ModalRoute.withName(OrganizationDashboard.id));
 
                                   ScaffoldMessenger.of(context)

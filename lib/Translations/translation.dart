@@ -1,61 +1,109 @@
+/* THIS IS THE TRANSLATION FILE. IF YOU NEED TO ADD ANY NEW TRANSLATION, JUST ADD
+* THE KEYWORD IN HERE IN EVERY LANGUAGE AND MATCH IS WITH ITS TRANSLATION
+* DON'T FORGET TO PUT A ".tr" AFTER EVERY KEYWORD YOU WANT TRANSLATED,
+* FOR EXAMPLE IF YOU WANT TO TRANSLATE "HELLO" ONLY IN SPANISH, YOU ADD IN HERE UNDER
+* THE ES LANGUAGE : "Hello": "Hola"
+* AFTER THAT, GO IN THE CODE AND PUT "Hello".tr WHEREVER YOU NEED IT. */
+
 import 'package:get/get.dart';
 
 class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
-          "you_currently_have_no_donation_history_to_generate_a_pdf":"You currently have no donation history to generate a pdf.",
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
+              "Please provide a monthly donation amount minimum of \$1",
+          "please_enter_a_valid_cvc": "Please enter a valid CVC.",
+          "year": "Year",
+          "please_enter_a_valid_expiration_year":
+              "Please enter a valid expiration year.",
+          "month": "Month",
+          "please_enter_a_valid_expiration_month":
+              "Please enter a valid expiration month.",
+          "card_number": "Card Number",
+          "please_enter_a_valid_card_number":
+              "Please enter a valid card number.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":
+              "Adoptions can only be made in whole dollar amounts.",
+          "are_you_sure_you_want_to_cancel_this_adoption":
+              "Are you sure you want to cancel this adoption you can readopt this beneficiary from the Beneficiaries page. Would you like to continue with canceling this adoption?",
+          "resuming_adoption_charity_would_you_like_to_continue":
+              "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from My Beneficiaries page. Would you like to continue?",
+          "no_inactive_adoptions_to_show": "No inactive adoptions to show.",
+          "please_enter_adoption_name": "Please enter adoption name.",
+          "edit_adoption": "Edit Adoption",
+          "no_active_adoptions_to_show": "No active adoptions to show.",
+          "monthly_donation_amount": "Monthly Donation Amount",
+          "adopt": "Adopt",
+          "monthly_amount": "Monthly Amount: \$",
+          "cancel_adoption": "Cancel Adoption",
+          "my_adoptions": "My Adoptions",
+          "set_beneficiary_up_for_adoption":
+              "Set beneficiary up for adoption: ",
+          "you_currently_have_no_donation_history_to_generate_a_pdf":
+              "You currently have no donation history to generate a pdf.",
           "can_not_generate_a_pdf": "Can Not Generate a PDF",
-          "this_organization_does_not_have_any_active_beneficiaries_at_this_time": "This organization doesn\'t have any \nactive beneficiaries at this time.",
-          "this_organization_does_not_have_any_active_campaigns_at_this_time":"This organization does not have any \nactive campaigns at this time.",
+          "this_organization_does_not_have_any_active_beneficiaries_at_this_time":
+              "This organization doesn\'t have any \nactive beneficiaries at this time.",
+          "this_organization_does_not_have_any_active_campaigns_at_this_time":
+              "This organization does not have any \nactive campaigns at this time.",
           "your_information": "Your Information",
           "_unique_donors": " unique donors",
-          "donations":"Donations",
+          "donations": "Donations",
           "statistics": "Statistics",
           "urgent_case_approvals": "Urgent Case Approvals",
-          "This charity has reached it\'s goal!":"This charity has reached it\'s goal!",
-          "Denials":"Denials",
-          "Edit Urgent Case":"Edit Urgent Case",
-          "Urgent case resubmitted!":"Urgent case resubmitted!",
-          "This urgent case is pending approval.":"This urgent case is pending approval",
-          "Attention:":"Attention:",
-          "Your Urgent Case Was Denied":"Your Urgent Case Was Denied",
+          "This charity has reached it\'s goal!":
+              "This charity has reached it\'s goal!",
+          "Denials": "Denials",
+          "Edit Urgent Case": "Edit Urgent Case",
+          "Urgent case resubmitted!": "Urgent case resubmitted!",
+          "This urgent case is pending approval.":
+              "This urgent case is pending approval",
+          "Attention:": "Attention:",
+          "Your Urgent Case Was Denied": "Your Urgent Case Was Denied",
           "After administrative review, your urgent case was denied for the following reason:":
-          "After administrative review, your urgent case was denied for the following reason:",
-          "No denied urgent cases to show.":"No denied urgent cases to show.",
+              "After administrative review, your urgent case was denied for the following reason:",
+          "No denied urgent cases to show.": "No denied urgent cases to show.",
           "_campaigns": "Campaigns",
-          "No new visits":"No new visits",
-          "Did this visit result in a donation?":"Did this visit result in a donation?",
-          "Gateway Visits":"Gateway Visits",
-          "Please enter the amount that was donated.":"Please enter the amount that was donated.",
-          "Confirm Donation":"Confirm Donation",
-          "Please confirm that this visit to your gateway did not result in a donation.":"Please confirm that this visit to your gateway did not result in a donation.",
+          "No new visits": "No new visits",
+          "Did this visit result in a donation?":
+              "Did this visit result in a donation?",
+          "Gateway Visits": "Gateway Visits",
+          "Please enter the amount that was donated.":
+              "Please enter the amount that was donated.",
+          "Confirm Donation": "Confirm Donation",
+          "Please confirm that this visit to your gateway did not result in a donation.":
+              "Please confirm that this visit to your gateway did not result in a donation.",
           "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
-      "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?",
-          "Deleting this charity will completely remove it from the application. Would you like to continue?":"Deleting this charity will completely remove it from the application. Would you like to continue?",
+              "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?",
+          "Deleting this charity will completely remove it from the application. Would you like to continue?":
+              "Deleting this charity will completely remove it from the application. Would you like to continue?",
           "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
-"Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?",
-          "Delete":"Delete",
-          "The email you chose is already in use.":"The email you chose is already in use.",
-          "Are You Sure?":"Are You Sure?",
-          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.",
-          "Sort By":"Sort By",
-          "Country":"Country",
-          "Send":"Send",
-          "Message":"Message",
-          "Subject":"Subject",
-          "Question":"Question",
-          "Help":"Help",
-          "Suggestion":"Suggestion",
-          "Other":"Other",
-          "Please select a category":"Please select a category",
-          "Please enter a valid subject":"Please enter a valid subject",
-          "Please enter a valid message":"Please enter a valid message",
-          "Contact Us":"Contact Us",
+              "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?",
+          "Delete": "Delete",
+          "The email you chose is already in use.":
+              "The email you chose is already in use.",
+          "Are You Sure?": "Are You Sure?",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":
+              "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.",
+          "Sort By": "Sort By",
+          "Country": "Country",
+          "Send": "Send",
+          "Message": "Message",
+          "Subject": "Subject",
+          "Question": "Question",
+          "General": "General",
+          "Help": "Help",
+          "Suggestion": "Suggestion",
+          "Other": "Other",
+          "Please select a category": "Please select a category",
+          "Please enter a valid subject": "Please enter a valid subject",
+          "Please enter a valid message": "Please enter a valid message",
+          "Contact Us": "Contact Us",
           "contact_admin": "Contact Admin",
-          "My Favorites":"My Favorites",
-          "Favorite Page":"Favorite Page",
-          "No favorites found":"No favorites found",
+          "My Favorites": "My Favorites",
+          "Favorite Page": "Favorite Page",
+          "No favorites found": "No favorites found",
           "type_a_message": "Type a message",
           "message": "Messages",
           "no": "No",
@@ -269,59 +317,102 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               "Check Your Email to Reset Password",
           "forgot_password!": "Forgot Password?",
+          "adoptions": "Adoptions"
         },
         'fr_FR': {
-          "you_currently_have_no_donation_history_to_generate_a_pdf":"Vous n'avez actuellement aucun historique de dons pour générer un PDF.",
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
+              "Veuillez fournir un montant de don mensuel minimum de 1 \$",
+          "please_enter_a_valid_cvc": "Veuillez entrer un CVC valide.",
+          "year": "An",
+          "please_enter_a_valid_expiration_year":
+              "Veuillez saisir une année d'expiration valide.",
+          "month": "Mois",
+          "please_enter_a_valid_expiration_month":
+              "Veuillez saisir un mois d'expiration valide.",
+          "card_number": "Numéro de carte",
+          "please_enter_a_valid_card_number":
+              "S'il vous plaît entrez un numéro de carte valide.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":
+              "Les adoptions ne peuvent être faites qu'en dollars entiers.",
+          "are_you_sure_you_want_to_cancel_this_adoption":
+              "Êtes-vous sûr de vouloir annuler cette adoption, vous pouvez réadopter ce bénéficiaire à partir de la page Bénéficiaires. Voulez-vous continuer avec l'annulation de cette adoption ?",
+          "resuming_adoption_charity_would_you_like_to_continue":
+              "La reprise de cette association la rendra à nouveau visible pour les donateurs. Une fois que vous avez repris cet organisme de bienfaisance, vous pouvez le désactiver à nouveau à partir de la page Mes bénéficiaires. Voulez-vous continuer?",
+          "no_inactive_adoptions_to_show":
+              "Aucune adoption inactive à afficher.",
+          "please_enter_adoption_name": "Veuillez entrer le nom d'adoption.",
+          "edit_adoption": "Modifier l'adoption",
+          "no_active_adoptions_to_show": "Aucune adoption active à afficher.",
+          "monthly_donation_amount": "Montant du don mensuel",
+          "adopt": "Adopter",
+          "monthly_amount": "Montant mensuel: \$",
+          "cancel_adoption": "Annuler l'adoption",
+          "my_adoptions": "Mes adoptions",
+          "set_beneficiary_up_for_adoption":
+              "Configurer le bénéficiaire pour l'adoption: ",
+          "This charity has reached it\'s goal!":
+              "Cet organisme de bienfaisance a atteint son objectif!",
+          "you_currently_have_no_donation_history_to_generate_a_pdf":
+              "Vous n'avez actuellement aucun historique de dons pour générer un PDF.",
           "can_not_generate_a_pdf": "Impossible de générer un PDF",
-          "this_organization_does_not_have_any_active_beneficiaries_at_this_time": "Cette organisation n'a aucun \nbénéficiaire actif pour le moment.",
-          "this_organization_does_not_have_any_active_campaigns_at_this_time":"Cette organisation n'a \naucune campagne active pour le moment.",
+          "this_organization_does_not_have_any_active_beneficiaries_at_this_time":
+              "Cette organisation n'a aucun \nbénéficiaire actif pour le moment.",
+          "this_organization_does_not_have_any_active_campaigns_at_this_time":
+              "Cette organisation n'a \naucune campagne active pour le moment.",
           "your_information": "Vos informations",
           "_unique_donors": " donateurs uniques",
-          "donations":"Des dons",
+          "donations": "Des dons",
           "statistics": "Statistiques",
           "urgent_case_approvals": "Approbations de cas urgents",
-          "This charity has reached it\'s goal!":"Cet organisme de bienfaisance a atteint son objectif!",
-          "Denials":"Refus",
-          "Edit Urgent Case":"Modifier le cas urgent",
-          "Urgent case resubmitted!":"Cas urgent soumis à nouveau",
-          "This urgent case is pending approval.":"Cette affaire urgente est en attente d’approbation.",
-          "Attention:":"Attention:",
-          "Your Urgent Case Was Denied":"Votre cas urgent a été refusé",
+          "Denials": "Refus",
+          "Edit Urgent Case": "Modifier le cas urgent",
+          "Urgent case resubmitted!": "Cas urgent soumis à nouveau",
+          "This urgent case is pending approval.":
+              "Cette affaire urgente est en attente d’approbation.",
+          "Attention:": "Attention:",
+          "Your Urgent Case Was Denied": "Votre cas urgent a été refusé",
           "After administrative review, your urgent case was denied for the following reason:":
-          "Après examen administratif, votre cas urgent a été refusé pour la raison suivante:",
-          "No denied urgent cases to show.":"Aucun cas urgent refusé à montrer.",
-          "No new visits":"Pas de nouvelles visites",
-          "Did this visit result in a donation?":"Cette visite a-t-elle donné lieu à un don?",
-          "Gateway Visits":"Visites de passerelle",
-          "Please enter the amount that was donated.":"Veuillez entrer le montant qui a été donné.",
-          "Confirm Donation":"Confirmer le don",
-          "Please confirm that this visit to your gateway did not result in a donation.":"Veuillez confirmer que cette visite à votre portail n’a pas donné lieu à un don.",
+              "Après examen administratif, votre cas urgent a été refusé pour la raison suivante:",
+          "No denied urgent cases to show.":
+              "Aucun cas urgent refusé à montrer.",
+          "No new visits": "Pas de nouvelles visites",
+          "Did this visit result in a donation?":
+              "Cette visite a-t-elle donné lieu à un don?",
+          "Gateway Visits": "Visites de passerelle",
+          "Please enter the amount that was donated.":
+              "Veuillez entrer le montant qui a été donné.",
+          "Confirm Donation": "Confirmer le don",
+          "Please confirm that this visit to your gateway did not result in a donation.":
+              "Veuillez confirmer que cette visite à votre portail n’a pas donné lieu à un don.",
           "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
-      "La reprise de cet organisme de bienfaisance le rendra à nouveau visible pour les donateurs. Une fois que vous avez repris cet organisme de bienfaisance, vous pouvez le désactiver à nouveau à partir du tableau de bord ou de la page Mes bénéficiaires. Voulez-vous continuer?",
+              "La reprise de cet organisme de bienfaisance le rendra à nouveau visible pour les donateurs. Une fois que vous avez repris cet organisme de bienfaisance, vous pouvez le désactiver à nouveau à partir du tableau de bord ou de la page Mes bénéficiaires. Voulez-vous continuer?",
           "Deleting this charity will completely remove it from the application. Would you like to continue?":
-      "La suppression de cet organisme de bienfaisance le supprimera complètement de l’application. Voulez-vous continuer?",
+              "La suppression de cet organisme de bienfaisance le supprimera complètement de l’application. Voulez-vous continuer?",
           "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
-      "L’arrêt de cet organisme de bienfaisance le rendra invisible pour les donateurs. Une fois que vous avez arrêté cet organisme de bienfaisance, vous pouvez le réactiver à partir de la page Organismes de bienfaisance inactifs. Aimeriez-vous continuer à mettre fin à cet organisme de bienfaisance?",
-          "Delete":"Supprimer",
-          "The email you chose is already in use.":"L’e-mail que vous avez choisi est déjà utilisé",
-          "Are You Sure?":"",
-          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"Nous voyons que vous avez inscrit un montant de don supérieur à 999 \$. Nous apprécions votre générosité, mais veuillez confirmer que ce montant est correct pour continuer.",
+              "L’arrêt de cet organisme de bienfaisance le rendra invisible pour les donateurs. Une fois que vous avez arrêté cet organisme de bienfaisance, vous pouvez le réactiver à partir de la page Organismes de bienfaisance inactifs. Aimeriez-vous continuer à mettre fin à cet organisme de bienfaisance?",
+          "Delete": "Supprimer",
+          "The email you chose is already in use.":
+              "L’e-mail que vous avez choisi est déjà utilisé",
+          "Are You Sure?": "",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":
+              "Nous voyons que vous avez inscrit un montant de don supérieur à 999 \$. Nous apprécions votre générosité, mais veuillez confirmer que ce montant est correct pour continuer.",
           "Sort By": "Trier par",
-          "Country":"Pays",
-          "Send":"Envoyer",
-          "Message":"Message",
-          "Subject":"Objet",
-          "Question":"Question",
-          "Help":"Aide",
-          "Suggestion":"Suggestion",
-          "Other":"Autre",
-          "Please select a category":"Veuillez sélectionner une catégorie",
-          "Please enter a valid subject":"Veuillez saisir un sujet valide",
-          "Please enter a valid message":"Veuillez saisir un message valide",
-          "Contact Us":"Contactez-nous",
-          "My Favorites":"Mes favoris",
-          "Favorite Page":"Favorite Page",
-          "No favorites found":"Aucun favori trouvé",
+          "Country": "Pays",
+          "Send": "Envoyer",
+          "Message": "Message",
+          "Subject": "Objet",
+          "Question": "Question",
+          "General": "Generale",
+          "Help": "Aide",
+          "Suggestion": "Suggestion",
+          "Other": "Autre",
+          "Please select a category": "Veuillez sélectionner une catégorie",
+          "Please enter a valid subject": "Veuillez saisir un sujet valide",
+          "Please enter a valid message": "Veuillez saisir un message valide",
+          "Contact Us": "Contactez-nous",
+          "My Favorites": "Mes favoris",
+          "Favorite Page": "Favorite Page",
+          "No favorites found": "Aucun favori trouvé",
           "contact_admin": "Contacter l'administrateur",
           "type_a_message": "Tapez/écrivez un message",
           "message": "Message",
@@ -419,7 +510,8 @@ class Messages extends Translations {
           "beneficiaries_cannot_have_a_duration_longer_than_1_year.":
               "Les bénéficiaires ne peuvent avoir une durée supérieure à 1 an..",
           "enter_end_date": "Saisir une date de fin",
-          "please_fill_in_the_category": "S’il vous plaît remplir la catégorie.",
+          "please_fill_in_the_category":
+              "S’il vous plaît remplir la catégorie.",
           "submit": "Envoyer",
           "beneficiary_created!": "Bénéficiaire créé!",
           "add_campaign": "Ajouter une campagne",
@@ -548,59 +640,102 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               "Vérifiez votre courriel pour réinitialiser votre mot de passe",
           "forgot_password!": "Mot de passe oublié?",
+          "adoptions": "Adoptions"
         },
         'ar_SA': {
-          "you_currently_have_no_donation_history_to_generate_a_pdf":"ليس لديك حاليًا أي سجل تبرعات لإنشاء ملف PDF.",
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
+              "يرجى تقديم مبلغ تبرع شهري لا يقل عن 1 دولار",
+          "please_enter_a_valid_cvc":
+              "الرجاء إدخال رمز التحقق من البطاقة (CVC) صالحًا.",
+          "year": "سنة",
+          "please_enter_a_valid_expiration_year":
+              "الرجاء إدخال سنة انتهاء صالحة.",
+          "month": "شهر",
+          "please_enter_a_valid_expiration_month":
+              "الرجاء إدخال شهر انتهاء صالح.",
+          "card_number": "رقم البطاقة",
+          "please_enter_a_valid_card_number":
+              "الرجاء إدخال رقم بطاقة سارية المفعول.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":
+              "لا يمكن إجراء عمليات التبني إلا بمبالغ كاملة بالدولار.",
+          "are_you_sure_you_want_to_cancel_this_adoption":
+              "هل أنت متأكد أنك تريد إلغاء هذا التبني ، يمكنك إعادة اختيار هذا المستفيد من صفحة المستفيدين. هل ترغب في الاستمرار في إلغاء هذا التبني؟",
+          "resuming_adoption_charity_would_you_like_to_continue":
+              "استئناف هذه المؤسسة الخيرية سيجعلها مرئية للمانحين مرة أخرى. بمجرد استئناف هذه المؤسسة الخيرية ، يمكنك إلغاء تنشيطها مرة أخرى من صفحة المستفيدون. هل ترغب في الاستمرار؟",
+          "no_inactive_adoptions_to_show":
+              "لا توجد عمليات تبني غير نشطة للعرض.",
+          "please_enter_adoption_name": "الرجاء إدخال اسم الاعتماد.",
+          "edit_adoption": "تحرير الاعتماد",
+          "no_active_adoptions_to_show": "لا توجد عمليات تبني نشطة لعرضها.",
+          "monthly_donation_amount": "مبلغ التبرع الشهري",
+          "adopt": "يتبنى",
+          "monthly_amount": "المبلغ الشهري: \$",
+          "cancel_adoption": "إلغاء الاعتماد",
+          "my_adoptions": "عمليات التبني الخاصة بي",
+          "set_beneficiary_up_for_adoption": "تعيين المستفيد للتبني: ",
+          "you_currently_have_no_donation_history_to_generate_a_pdf":
+              "ليس لديك حاليًا أي سجل تبرعات لإنشاء ملف PDF.",
           "can_not_generate_a_pdf": "لا يمكن إنشاء ملف PDF",
-          "this_organization_does_not_have_any_active_beneficiaries_at_this_time": "لا يوجد لدى هذه المنظمة أي \n مستفيدين نشطين في الوقت الحالي.",
-          "this_organization_does_not_have_any_active_campaigns_at_this_time":"هذه المنظمة ليس لديها\n أي حملات نشطة في هذا الوقت.",
+          "this_organization_does_not_have_any_active_beneficiaries_at_this_time":
+              "لا يوجد لدى هذه المنظمة أي \n مستفيدين نشطين في الوقت الحالي.",
+          "this_organization_does_not_have_any_active_campaigns_at_this_time":
+              "هذه المنظمة ليس لديها\n أي حملات نشطة في هذا الوقت.",
           "your_information": "معلوماتك",
           "_unique_donors": " المتبرعين الفريدين",
-          "donations":"التبرعات",
+          "donations": "التبرعات",
           "statistics": "إحصائيات",
           "urgent_case_approvals": "الموافقات العاجلة للحالة",
-          "This charity has reached it\'s goal!":"لقد وصلت هذه المؤسسة الخيرية إلى هدفها!",
-          "Denials":"النفي",
-          "Edit Urgent Case":"تعديل الحالة العاجلة",
-          "Urgent case resubmitted!":"إعادة تقديم حالة عاجلة!",
-          "This urgent case is pending approval.":"ولا تزال هذه الحالة العاجلة في انتظار الموافقة.",
-          "Attention:":"اهتمام:",
-          "Your Urgent Case Was Denied":"تم رفض قضيتك العاجلة",
+          "This charity has reached it\'s goal!":
+              "لقد وصلت هذه المؤسسة الخيرية إلى هدفها!",
+          "Denials": "النفي",
+          "Edit Urgent Case": "تعديل الحالة العاجلة",
+          "Urgent case resubmitted!": "إعادة تقديم حالة عاجلة!",
+          "This urgent case is pending approval.":
+              "ولا تزال هذه الحالة العاجلة في انتظار الموافقة.",
+          "Attention:": "اهتمام:",
+          "Your Urgent Case Was Denied": "تم رفض قضيتك العاجلة",
           "After administrative review, your urgent case was denied for the following reason:":
-          "بعد المراجعة الإدارية، تم رفض قضيتك العاجلة للسبب التالي:",
-          "No denied urgent cases to show.":"لا يوجد حالات عاجلة مرفوضة لإظهارها.",
-          "No new visits":"لا توجد زيارات جديدة",
-          "Did this visit result in a donation?":"هل أسفرت هذه الزيارة عن تبرع؟",
-          "Gateway Visits":"زيارات البوابة",
-          "Please enter the amount that was donated.":"يرجى إدخال المبلغ الذي تم التبرع به.",
-          "Confirm Donation":"تأكيد التبرع",
-          "Please confirm that this visit to your gateway did not result in a donation.": "يرجى التأكد من أن هذه الزيارة إلى بوابتك لم تسفر عن تبرع",
+              "بعد المراجعة الإدارية، تم رفض قضيتك العاجلة للسبب التالي:",
+          "No denied urgent cases to show.":
+              "لا يوجد حالات عاجلة مرفوضة لإظهارها.",
+          "No new visits": "لا توجد زيارات جديدة",
+          "Did this visit result in a donation?":
+              "هل أسفرت هذه الزيارة عن تبرع؟",
+          "Gateway Visits": "زيارات البوابة",
+          "Please enter the amount that was donated.":
+              "يرجى إدخال المبلغ الذي تم التبرع به.",
+          "Confirm Donation": "تأكيد التبرع",
+          "Please confirm that this visit to your gateway did not result in a donation.":
+              "يرجى التأكد من أن هذه الزيارة إلى بوابتك لم تسفر عن تبرع",
           "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
-      "إن استئناف هذه المؤسسة الخيرية سيجعلها مرئية للمتبرعين مرة أخرى. بمجرد استئناف هذه المؤسسة الخيرية ، يمكنك إلغاء تنشيطها مرة أخرى من لوحة التحكم أو صفحة المستفيدين مني. هل ترغب في المتابعة؟",
+              "إن استئناف هذه المؤسسة الخيرية سيجعلها مرئية للمتبرعين مرة أخرى. بمجرد استئناف هذه المؤسسة الخيرية ، يمكنك إلغاء تنشيطها مرة أخرى من لوحة التحكم أو صفحة المستفيدين مني. هل ترغب في المتابعة؟",
           "Deleting this charity will completely remove it from the application. Would you like to continue?":
-      "سيؤدي حذف هذه المؤسسة الخيرية إلى إزالتها تماما من التطبيق. هل ترغب في المتابعة؟",
+              "سيؤدي حذف هذه المؤسسة الخيرية إلى إزالتها تماما من التطبيق. هل ترغب في المتابعة؟",
           "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
-      "إن وقف هذه المؤسسة الخيرية سيجعلها غير مرئية للمانحين. بمجرد إيقاف هذه المؤسسة الخيرية ، يمكنك إعادة تنشيطها من صفحة الجمعيات الخيرية غير النشطة. هل ترغب في الاستمرار في إيقاف هذه المؤسسة الخيرية؟",
-          "Delete":"حذف",
-          "The email you chose is already in use.":"البريد الإلكتروني الذي اخترته قيد الاستخدام بالفعل",
-          "Are You Sure?":"هل أنت متأكد؟",
-          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"نرى أنك أدخلت مبلغ تبرع أكبر من 999 دولارا. نحن نقدر كرمك ، ولكن يرجى التأكد من أن هذا المبلغ صحيح للمتابعة.",
+              "إن وقف هذه المؤسسة الخيرية سيجعلها غير مرئية للمانحين. بمجرد إيقاف هذه المؤسسة الخيرية ، يمكنك إعادة تنشيطها من صفحة الجمعيات الخيرية غير النشطة. هل ترغب في الاستمرار في إيقاف هذه المؤسسة الخيرية؟",
+          "Delete": "حذف",
+          "The email you chose is already in use.":
+              "البريد الإلكتروني الذي اخترته قيد الاستخدام بالفعل",
+          "Are You Sure?": "هل أنت متأكد؟",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":
+              "نرى أنك أدخلت مبلغ تبرع أكبر من 999 دولارا. نحن نقدر كرمك ، ولكن يرجى التأكد من أن هذا المبلغ صحيح للمتابعة.",
           "Sort By": "ترتيب حسب",
-          "Country":"بلد",
-          "Send":"ارسل",
-          "Message":"رسالة",
-          "Subject":"موضوع",
-          "Question":"سؤال",
-          "Help":"تعليمات",
-          "Suggestion":"اقتراح",
-          "Other":"آخر",
-          "Please select a category":"يرجى اختيار فئة",
-          "Please enter a valid subject":"الرجاء إدخال موضوع صالح",
-          "Please enter a valid message":"الرجاء إدخال رسالة صحيحة",
-          "Contact Us":"اتصل بنا",
-          "My Favorites":"مفضلاتي",
-          "Favorite Page":"الصفحة المفضلة",
-          "No favorites found":"لم يتم العثور على المفضلة",
+          "Country": "بلد",
+          "Send": "ارسل",
+          "Message": "رسالة",
+          "Subject": "موضوع",
+          "Question": "سؤال",
+          "General": "عام",
+          "Help": "تعليمات",
+          "Suggestion": "اقتراح",
+          "Other": "آخر",
+          "Please select a category": "يرجى اختيار فئة",
+          "Please enter a valid subject": "الرجاء إدخال موضوع صالح",
+          "Please enter a valid message": "الرجاء إدخال رسالة صحيحة",
+          "Contact Us": "اتصل بنا",
+          "My Favorites": "مفضلاتي",
+          "Favorite Page": "الصفحة المفضلة",
+          "No favorites found": "لم يتم العثور على المفضلة",
           "contact_admin": "اتصل بالمسؤول",
           "type_a_message": " اكتب رسالة",
           "message": " رسائل",
@@ -811,59 +946,103 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               " تحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور",
           "forgot_password!": " هل نسيت كلمة السر؟",
+          "adoptions": "التبني"
         },
         'es_ES': {
-          "you_currently_have_no_donation_history_to_generate_a_pdf":"Actualmente no tienes historial de donaciones para generar un PDF.",
+          "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
+              "Proporcione un monto de donación mensual mínimo de \$ 1",
+          "please_enter_a_valid_cvc": "Introduzca un CVC válido.",
+          "year": "Año",
+          "please_enter_a_valid_expiration_year":
+              "Introduzca un año de caducidad válido.",
+          "month": "Mes",
+          "please_enter_a_valid_expiration_month":
+              "Introduzca un mes de caducidad válido.",
+          "card_number": "Número de tarjeta",
+          "please_enter_a_valid_card_number":
+              "Por favor, introduzca un número de tarjeta válido.",
+          "adoptions_can_only_be_made_in_whole_dollar_amounts":
+              "Las adopciones solo se pueden hacer en cantidades enteras en dólares.",
+          "are_you_sure_you_want_to_cancel_this_adoption":
+              "¿Está seguro de que desea cancelar esta adopción? Puede volver a adoptar a este beneficiario desde la página Beneficiarios. ¿Le gustaría continuar con la cancelación de esta adopción?",
+          "resuming_adoption_charity_would_you_like_to_continue":
+              "Reanudar esta organización benéfica la hará visible para los donantes nuevamente. Una vez que reanude esta organización benéfica, puede desactivarla nuevamente desde la página Mis beneficiarios. ¿Te gustaria continuar?",
+          "no_inactive_adoptions_to_show":
+              "No hay adopciones inactivas para mostrar.",
+          "please_enter_adoption_name": "Ingrese el nombre de adopción.",
+          "edit_adoption": "Editar adopción",
+          "no_active_adoptions_to_show":
+              "No hay adopciones activas para mostrar.",
+          "monthly_donation_amount": "Cantidad de donación mensual",
+          "adopt": "Adoptar",
+          "monthly_amount": "Cantidad mensual: \$",
+          "cancel_adoption": "Cancelar Adopción",
+          "my_adoptions": "Mis adopciones",
+          "set_beneficiary_up_for_adoption":
+              "Establecer beneficiario para adopción: ",
+          "you_currently_have_no_donation_history_to_generate_a_pdf":
+              "Actualmente no tienes historial de donaciones para generar un PDF.",
           "can_not_generate_a_pdf": "No se puede generar un PDF",
-          "this_organization_does_not_have_any_active_beneficiaries_at_this_time": "Esta organización no tiene ningún \nbeneficiario activo en este momento.",
-          "this_organization_does_not_have_any_active_campaigns_at_this_time":"Esta organización no tiene campañas \nactivas en este momento.",
+          "this_organization_does_not_have_any_active_beneficiaries_at_this_time":
+              "Esta organización no tiene ningún \nbeneficiario activo en este momento.",
+          "this_organization_does_not_have_any_active_campaigns_at_this_time":
+              "Esta organización no tiene campañas \nactivas en este momento.",
           "your_information": "Tu información",
           "_unique_donors": " donantes únicos",
-          "donations":"Donaciones",
+          "donations": "Donaciones",
           "statistics": "Estadísticas",
           "urgent_case_approvals": "Aprobaciones de casos urgentes",
-          "This charity has reached it\'s goal!":"¡Esta organización benéfica ha alcanzado su objetivo!",
-          "Denials":"Negaciones",
-          "Edit Urgent Case":"Editar caso urgente",
-          "Urgent case resubmitted!":"¡Caso urgente reenviado!",
-          "This urgent case is pending approval.":"Este caso urgente está pendiente de aprobación.",
-          "Attention:":"Atención:",
-          "Your Urgent Case Was Denied":"Su caso urgente fue denegado",
+          "This charity has reached it\'s goal!":
+              "¡Esta organización benéfica ha alcanzado su objetivo!",
+          "Denials": "Negaciones",
+          "Edit Urgent Case": "Editar caso urgente",
+          "Urgent case resubmitted!": "¡Caso urgente reenviado!",
+          "This urgent case is pending approval.":
+              "Este caso urgente está pendiente de aprobación.",
+          "Attention:": "Atención:",
+          "Your Urgent Case Was Denied": "Su caso urgente fue denegado",
           "After administrative review, your urgent case was denied for the following reason:":
-          "Después de la revisión administrativa, su caso urgente fue denegado por la siguiente razón:",
-          "No denied urgent cases to show.":"No se negaron casos urgentes para mostrar.",
-          "No new visits":"No hay nuevas visitas",
-          "Did this visit result in a donation?":"¿Esta visita resultó en una donación?",
-          "Gateway Visits":"Visitas a la puerta de enlace",
-          "Please enter the amount that was donated.":"Por favor, introduzca la cantidad que fue donada.",
-          "Confirm Donation":"Confirmar donación",
-          "Please confirm that this visit to your gateway did not result in a donation.":"Por favor, confirme que esta visita a su puerta de enlace no resultó en una donación",
+              "Después de la revisión administrativa, su caso urgente fue denegado por la siguiente razón:",
+          "No denied urgent cases to show.":
+              "No se negaron casos urgentes para mostrar.",
+          "No new visits": "No hay nuevas visitas",
+          "Did this visit result in a donation?":
+              "¿Esta visita resultó en una donación?",
+          "Gateway Visits": "Visitas a la puerta de enlace",
+          "Please enter the amount that was donated.":
+              "Por favor, introduzca la cantidad que fue donada.",
+          "Confirm Donation": "Confirmar donación",
+          "Please confirm that this visit to your gateway did not result in a donation.":
+              "Por favor, confirme que esta visita a su puerta de enlace no resultó en una donación",
           "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from the dashboard or the My Beneficiaries page. Would you like to continue?":
-      "Reanudar esta organización benéfica la hará visible nuevamente para los donantes. Una vez que reanude esta organización benéfica, puede desactivarla nuevamente desde el panel de control o la página Mis beneficiarios. ¿Te gustaría continuar?",
+              "Reanudar esta organización benéfica la hará visible nuevamente para los donantes. Una vez que reanude esta organización benéfica, puede desactivarla nuevamente desde el panel de control o la página Mis beneficiarios. ¿Te gustaría continuar?",
           "Deleting this charity will completely remove it from the application. Would you like to continue?":
-      "Eliminar esta organización benéfica la eliminará por completo de la aplicación. ¿Te gustaría continuar?",
+              "Eliminar esta organización benéfica la eliminará por completo de la aplicación. ¿Te gustaría continuar?",
           "Stopping this charity will make it not visible to donors. Once you stop this charity you can reactivate it from the Inactive Charities page. Would you like to continue with stopping this charity?":
-          "Detener esta organización benéfica hará que no sea visible para los donantes. Una vez que detenga esta organización benéfica, puede reactivarla desde la página Organizaciones benéficas inactivas. ¿Te gustaría seguir parando esta caridad?",
-          "Delete":"Borrar",
-          "The email you chose is already in use.":"El correo electrónico que elegiste ya está en uso",
-          "Are You Sure?":"¿Estás seguro?",
-          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":"Vemos que ha ingresado un monto de donación superior a \$999. Agradecemos su generosidad, pero por favor confirme que esta cantidad es correcta para proceder.",
+              "Detener esta organización benéfica hará que no sea visible para los donantes. Una vez que detenga esta organización benéfica, puede reactivarla desde la página Organizaciones benéficas inactivas. ¿Te gustaría seguir parando esta caridad?",
+          "Delete": "Borrar",
+          "The email you chose is already in use.":
+              "El correo electrónico que elegiste ya está en uso",
+          "Are You Sure?": "¿Estás seguro?",
+          "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":
+              "Vemos que ha ingresado un monto de donación superior a \$999. Agradecemos su generosidad, pero por favor confirme que esta cantidad es correcta para proceder.",
           "Sort By": "Ordenar por",
           "Country": "País",
-          "Send":"Enviar",
-          "Message":"Mensaje",
-          "Subject":"Asunto",
-          "Question":"Pregunta",
-          "Help":"Ayuda",
-          "Suggestion":"Sugerencia",
-          "Other":"Otro",
-          "Please select a category":"Seleccione una categoría",
-          "Please enter a valid subject":"Introduzca un asunto válido",
-          "Please enter a valid message":"Introduce un mensaje válido",
-          "Contact Us":"Contáctenos",
-          "My Favorites":"Mis favoritos",
-          "Favorite Page":"Página favorita",
-          "No favorites found":"No se han encontrado favoritos",
+          "Send": "Enviar",
+          "Message": "Mensaje",
+          "Subject": "Asunto",
+          "Question": "Pregunta",
+          "General": "General",
+          "Help": "Ayuda",
+          "Suggestion": "Sugerencia",
+          "Other": "Otro",
+          "Please select a category": "Seleccione una categoría",
+          "Please enter a valid subject": "Introduzca un asunto válido",
+          "Please enter a valid message": "Introduce un mensaje válido",
+          "Contact Us": "Contáctenos",
+          "My Favorites": "Mis favoritos",
+          "Favorite Page": "Página favorita",
+          "No favorites found": "No se han encontrado favoritos",
           "contact_admin": "Administrador de contacto",
           "type_a_message": "Escriba un mensaje",
           "message": "Mensajes",
@@ -1094,6 +1273,7 @@ class Messages extends Translations {
           "check_your_email_to_reset_password":
               "Revise su correo electrónico para restablecer la contraseña",
           "forgot_password!": "¿Has olvidado tu contraseña?",
+          "adoptions": "Adopciones"
         }
       };
 }

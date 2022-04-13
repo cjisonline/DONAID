@@ -5,11 +5,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/state_manager.dart';
 
 var chatListener;
-
 class ChatService extends GetxService {
   DatabaseReference dbRefMessages =
       FirebaseDatabase.instance.ref().child('chat');
 
+  /*
+  In this we will get all the previous message which is send and received between currentUser and his friends.
+  */
   Future<void> getFriendsData(myId) async {
     try {
       await dbRefMessages.child(myId).once().then((value) {
@@ -44,6 +46,10 @@ class ChatService extends GetxService {
     }
   }
 
+  /*
+  In this we make the listener on our message parent child, like when even any child is added in the parent we will know and
+  we are able to display on our screen, it is user for the realtime chat implementation.
+  */
   listenFriend(myId, type) {
     try {
       print(MyGlobals.allMessages);
@@ -75,7 +81,9 @@ class ChatService extends GetxService {
       EasyLoading.showInfo(e.toString(), duration: Duration(seconds: 3));
     }
   }
-
+  /*
+  send the message and also save it in the realtime database, the message is saved 2 time, one for the sender and one for the receiver
+  */
   Future<void> sendMessage(MessageModel message) async {
     try {
       String? id = dbRefMessages.push().key;

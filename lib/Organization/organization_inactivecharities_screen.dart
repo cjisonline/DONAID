@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donaid/Models/Adoption.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Campaign.dart';
 import 'package:donaid/Models/UrgentCase.dart';
@@ -9,6 +10,7 @@ import 'package:donaid/Organization/organization_campaign_full.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'organization_adoption_full.dart';
 import 'organization_urgentcase_full.dart';
 import 'package:get/get.dart';
 
@@ -26,6 +28,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
   List<Beneficiary> beneficiaries=[];
   List<Campaign> campaigns=[];
   List<UrgentCase> urgentCases=[];
+  List<Adoption> adoptions=[];
   var f = NumberFormat("###,##0.00", "en_US");
 
   @override
@@ -34,15 +37,18 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
     _getExpiredCampaigns();
     _getExpiredBeneficiaries();
     _getExpiredUrgentCases();
+    _getExpiredAdoptions();
   }
 
   _refreshPage(){
     beneficiaries.clear();
     campaigns.clear();
     beneficiaries.clear();
+    adoptions.clear();
     _getExpiredCampaigns();
     _getExpiredBeneficiaries();
     _getExpiredUrgentCases();
+    _getExpiredAdoptions();
   }
 
   _getExpiredBeneficiaries() async {
@@ -125,6 +131,37 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
           approved: element.data()['approved']
       );
       urgentCases.add(urgentCase);
+    }
+
+    setState(() {});
+  }
+
+
+  _getExpiredAdoptions() async {
+    try{
+      var ret = await _firestore
+          .collection('Adoptions')
+          .where('organizationID', isEqualTo: _auth.currentUser?.uid)
+          .where('active', isEqualTo: false)
+          .get();
+
+      for (var element in ret.docs) {
+        Adoption adoption = Adoption(
+          name: element.data()['name'],
+          biography: element.data()['biography'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
+          category: element.data()['category'],
+          dateCreated: element.data()['dateCreated'],
+          id: element.data()['id'],
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active'],
+        );
+        adoptions.add(adoption);
+      }
+    }
+    catch(e){
+      print(e);
     }
 
     setState(() {});
@@ -288,13 +325,66 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
         })
     :  Center(child: Text('no_inactive_urgent_cases_to_show.'.tr, style: TextStyle(fontSize: 18),));
   }
+
+  _getAdoptionsBody(){
+    return adoptions.isNotEmpty
+        ? ListView.builder(
+        itemCount: adoptions.length,
+        shrinkWrap: true,
+        itemBuilder: (context, int index) {
+          return Card(
+            child: Column(
+              children: [
+                ListTile(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return (OrganizationAdoptionFullScreen(adoptions[index]));
+                    })).then((value) => _refreshPage());
+                  },
+                  title: Text(adoptions[index].name),
+                  subtitle: Text(adoptions[index].biography),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text('\$'+f.format(adoptions[index].amountRaised),
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(color: Colors.black, fontSize: 15)),
+                        Text(
+                          '\$'+f.format(adoptions[index].goalAmount),
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ]),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Colors.green),
+                          value: (adoptions[index].amountRaised/adoptions[index].goalAmount),
+                          minHeight: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider()
+              ],
+            ),
+          );
+        })
+        : Center(child: Text('no_inactive_adoptions_to_show'.tr, style: TextStyle(fontSize: 18),));
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
-          bottom:  TabBar(tabs: [Tab(text: '_campaign'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,)],),
+          bottom:  TabBar(tabs: [Tab(text: 'campaigns'.tr,), Tab(text: 'beneficiaries'.tr,), Tab(text: 'urgent_cases'.tr,), Tab(text: 'adoptions'.tr,)],),
           title:  Text('inactive_charities'.tr),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
@@ -308,7 +398,8 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
           children: [
             _campaignsBody(),
             _beneficiariesBody(),
-            _urgentCasesBody()
+            _urgentCasesBody(),
+            _getAdoptionsBody(),
           ],
         ),
         bottomNavigationBar: const OrganizationBottomNavigation(),

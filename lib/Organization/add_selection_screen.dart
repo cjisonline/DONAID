@@ -81,7 +81,7 @@ class _addPage extends State<OrgAddSelection> {
                       ),
                       onPressed: () async {
                         Navigator.pushNamed(context, AddBeneficiaryForm.id);
-                      })))
+                      }))),
         ])
       ]),
 

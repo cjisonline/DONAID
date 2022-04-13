@@ -13,6 +13,7 @@ import '../../home_screen.dart';
 import '../donation_history.dart';
 import '../donor_favorite_screen.dart';
 import '../donor_profile.dart';
+import '../my_adoptions.dart';
 import '../settings.dart';
 
 // Donor Drawer Menu
@@ -24,7 +25,7 @@ class DonorDrawer extends StatefulWidget {
 }
 
 class _DonorDrawerState extends State<DonorDrawer> {
-  final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   // Create donor drawer
   @override
@@ -92,6 +93,13 @@ class _DonorDrawerState extends State<DonorDrawer> {
             // Display language option in drawer
             // On tap, display Language Selection dialog
             ListTile(
+              leading: const Icon(Icons.person_sharp),
+              title: Text("my_adoptions".tr),
+              onTap: () {
+                Navigator.pushNamed(context, MyAdoptions.id);
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.translate),
               title: Text("language".tr),
               onTap: () {
@@ -108,7 +116,7 @@ class _DonorDrawerState extends State<DonorDrawer> {
                             SimpleDialogOption(
                                 onPressed: () async {
                                   final SharedPreferences prefs = await _prefs;
-                                  prefs.setStringList('Locale', ['en','US']);
+                                  prefs.setStringList('Locale', ['en', 'US']);
 
                                   await Get.updateLocale(
                                       const Locale('en', 'US'));
@@ -118,7 +126,7 @@ class _DonorDrawerState extends State<DonorDrawer> {
                             SimpleDialogOption(
                                 onPressed: () async {
                                   final SharedPreferences prefs = await _prefs;
-                                  prefs.setStringList('Locale', ['fr','FR']);
+                                  prefs.setStringList('Locale', ['fr', 'FR']);
 
                                   await Get.updateLocale(
                                       const Locale('fr', 'FR'));
@@ -128,18 +136,17 @@ class _DonorDrawerState extends State<DonorDrawer> {
                             SimpleDialogOption(
                                 onPressed: () async {
                                   final SharedPreferences prefs = await _prefs;
-                                  prefs.setStringList('Locale', ['ar','SA']);
+                                  prefs.setStringList('Locale', ['ar', 'SA']);
 
                                   await Get.updateLocale(
                                       const Locale('ar', 'SA'));
                                   Navigator.pop(context);
                                 },
-                                child:
-                                    const Center(child: Text("اللغة العربية"))),
+                                child: const Center(child: Text("العربية"))),
                             SimpleDialogOption(
                                 onPressed: () async {
                                   final SharedPreferences prefs = await _prefs;
-                                  prefs.setStringList('Locale', ['es','ES']);
+                                  prefs.setStringList('Locale', ['es', 'ES']);
 
                                   await Get.updateLocale(
                                       const Locale('es', 'ES'));

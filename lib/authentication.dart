@@ -23,11 +23,21 @@ class Auth {
     'https://www.googleapis.com/auth/contacts.readonly'
   ]);
   static final FacebookAuth _facebookAuth = FacebookAuth.instance;
-
+  /*
+    make a login request using the facebook SDK
+    permissions: like ["email","public_profile"]
+    oginBehavior: (only Android) set the UI for the authentication,
+    like webview, native app, or a dialog.
+    facebookLoginResult.status: tell is that user is successfully login or not, possible status are [success, cancelled, failed, operationInProgress]
+    After user loing successfully we get the token and also get the user data, like name, pic, email from the graph.facebook api by the help of token
+    then we sync the fb token with the firebase by the help of AuthCredential.
+    then we have the firebase user and save the user data which we get from facebook graph api, in the firebase database.
+  */
   static fbLogin(context) async {
     try {
-      LoginResult facebookLoginResult =
-          await _facebookAuth.login(permissions: ["public_profile", "email"]);
+      LoginResult facebookLoginResult = await _facebookAuth.login(
+          permissions: ["public_profile", "email"],
+          loginBehavior: LoginBehavior.dialogOnly);
       if (facebookLoginResult.status == LoginStatus.success) {
         String token = facebookLoginResult.accessToken!.token;
         var graphResponse = await Dio().get(
@@ -68,6 +78,15 @@ class Auth {
     }
   }
 
+  /*
+    make a login request using the google SDK
+    Returned Future resolves to an instance of [GoogleSignInAccount] for a
+    successful sign in or `null` in case sign in process was aborted.
+    Authentication process is triggered only if there is no currently signed in
+    user (that is when `currentUser == null`), otherwise this method returns a Future which resolves to the same user instance.
+    then we sync the google token with the firebase by the help of AuthCredential.
+    then we have the firebase user and save the user data which we get from api, in the firebase database.
+  */
   static googleLogin(context) async {
     try {
       GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
@@ -149,22 +168,28 @@ class Auth {
     }
   }
 
+  /*
+    Requests an Apple ID credential.
+    The returned [AuthorizationCredentialAppleID]'s `authorizationCode` should then be used to validate the token with Apple's servers and
+    create a session in your system.
+    Fields on the returned [AuthorizationCredentialAppleID] will be set based on the given scopes.
+    User data fields (first name, last name, email) will only be set if this is the initial authentication between the current app and Apple ID.
+    The returned Future will resolve in all cases on iOS and macOS, either with an exception if Sign in with Apple is not available,
+    or as soon as the native UI goes away (either due cancellation or the completion of the authorization).
+    On Android the returned Future will never resolve in case the user closes the Chrome Custom Tab without finishing the authentication flow.
+    Any previous Future would be rejected if the [getAppleIDCredential] is called again, while an earlier one is still pending.
+    then we sync the google token with the firebase by the help of AuthCredential.
+    then we have the firebase user and save the user data which we get from api, in the firebase database.
+   */
   static Future<bool> appleLogin(context) async {
     try {
       final rawNonce = generateNonce();
       final nonce = sha256ofString(rawNonce);
       AuthorizationCredentialAppleID appleCredential =
-          await SignInWithApple.getAppleIDCredential(
-              scopes: [
-            AppleIDAuthorizationScopes.email,
-            AppleIDAuthorizationScopes.fullName
-          ],
-              nonce: nonce,
-              webAuthenticationOptions: WebAuthenticationOptions(
-                  clientId: 'com.youme.login',
-                  redirectUri: Uri.parse(
-                      'https://donaid-d3244.firebaseapp.com/__/auth/handler')));
-
+          await SignInWithApple.getAppleIDCredential(scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName
+      ], nonce: nonce);
       OAuthCredential authCredential = OAuthProvider("apple.com").credential(
           idToken: appleCredential.identityToken, rawNonce: rawNonce);
       User? user =
