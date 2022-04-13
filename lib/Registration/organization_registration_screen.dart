@@ -709,12 +709,19 @@ class _OrganizationRegistrationScreenState
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
+                  child: Center(child: Text('Selected country:\t' + country, style: TextStyle(fontSize: 16),)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: TextButton(
                     onPressed: () {
                       showCountryPicker(
                           context: context,
                           onSelect: (Country selectedCountry) {
                             country = selectedCountry.name;
+                            setState(() {
+
+                            });
                           });
                     },
                     child: Row(
