@@ -48,12 +48,15 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               // Display Urgent Case title populated from firebase
               Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Text(widget.urgentCase.title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                    )),
+                child: Container(
+                  height: 50,
+                  child: Text(widget.urgentCase.title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      )),
+                ),
               ),
               // Display Urgent case description populated from firebase
               SizedBox(
