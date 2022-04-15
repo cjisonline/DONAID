@@ -58,7 +58,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                 border: Border.all(color: Colors.grey.shade300, width: 2.0)),
             child: Column(children: [
               // Display icon
-              (widget.organization.profilePictureDownloadURL.toString() == "")
+              (widget.organization.profilePictureDownloadURL == null || widget.organization.profilePictureDownloadURL.toString().isEmpty)
                   ? const Icon(
                       Icons.apartment,
                       color: Colors.blue,
