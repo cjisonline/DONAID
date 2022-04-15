@@ -59,11 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (locale![0].toString() == 'en' && locale[1].toString() == 'US') {
       await Get.updateLocale(const Locale('en', 'US'));
-    } else if (locale![0].toString() == 'fr' && locale![1].toString() == 'FR') {
+    } else if (locale[0].toString() == 'fr' && locale[1].toString() == 'FR') {
       await Get.updateLocale(const Locale('fr', 'FR'));
-    } else if (locale![0].toString() == 'ar' && locale![1].toString() == 'SA') {
+    } else if (locale[0].toString() == 'ar' && locale[1].toString() == 'SA') {
       await Get.updateLocale(const Locale('ar', 'SA'));
-    } else if (locale![0].toString() == 'es' && locale![1].toString() == 'ES') {
+    } else if (locale[0].toString() == 'es' && locale[1].toString() == 'ES') {
       await Get.updateLocale(const Locale('es', 'ES'));
     }
   }
