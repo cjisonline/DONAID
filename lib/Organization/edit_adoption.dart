@@ -34,7 +34,7 @@ class _EditAdoptionState extends State<EditAdoption> {
   }
 
 
-
+  // get categories from Firebase
   _getCategories() async {
     var ret = await _firestore
         .collection('CharityCategories')
@@ -46,10 +46,15 @@ class _EditAdoptionState extends State<EditAdoption> {
     setState(() {});
   }
 
+  // Submit and validate from
   _submitForm() async{
+    // Information inputted in the form is invalid
+    // Show errors
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    // Information inputted in the form is valid
+    // Update adoption's information and navigate to adoption details page
     else{
       await _updateAdoption();
       Navigator.pop(context,true);
@@ -57,6 +62,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     _formKey.currentState!.save();
   }
 
+  // Update current adoption's information in Firebase
   _updateAdoption() async{
     _firestore.collection('Adoptions').doc(widget.adoption.id).update({
       "name": _adoptionNameController?.text,
@@ -66,6 +72,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     });
   }
 
+  // Display edit adoption page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +80,8 @@ class _EditAdoptionState extends State<EditAdoption> {
           centerTitle: true,
           title:  Text('edit_adoption'.tr),
           leadingWidth: 80,
+          // Display cancel button in top app bar
+          // On pressed, navigate to the profile page
           leading: TextButton(
             onPressed: () {
               Navigator.pop(context);
@@ -81,6 +90,8 @@ class _EditAdoptionState extends State<EditAdoption> {
                 style: TextStyle(fontSize: 15.0, color: Colors.white)),
           ),
           actions: [
+            // Display save button in top app bar
+            // On pressed, submit edit adoption form
             TextButton(
               onPressed: () async {
                 _submitForm();
@@ -115,7 +126,7 @@ class _EditAdoptionState extends State<EditAdoption> {
       ),
     );
   }
-
+  // Create name text field and prepopulate adoption's name
   Widget _buildAdoptionNameField() {
     _adoptionNameController = TextEditingController(text: widget.adoption.name);
     return Padding(
@@ -137,6 +148,7 @@ class _EditAdoptionState extends State<EditAdoption> {
                 borderRadius: BorderRadius.all(Radius.circular(32.0)),
               )),
           validator: (value) {
+            // Show error message if text field is left blank
             if (value == null || value.isEmpty) {
               return 'please_enter_adoption_name'.tr;
             }
@@ -145,6 +157,7 @@ class _EditAdoptionState extends State<EditAdoption> {
         ));
   }
 
+  // Create biography text field and prepopulate adoption's biography
   Widget _buildAdoptionBiographyField() {
     _adoptionBiographyController = TextEditingController(text: widget.adoption.biography);
     return  Padding(
@@ -172,6 +185,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     );
   }
 
+  // Create goal amount text field and prepopulate adoption's goal amount
   Widget _buildGoalAmountField(){
     _adoptionGoalAmountController = TextEditingController(text: widget.adoption.goalAmount.toStringAsFixed(2));
     return  Padding(
@@ -217,6 +231,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     );
   }
 
+  // Create category drop down menu and prepopulate menu selection with adoption's category
   Widget _buildCategoryField(){
     _adoptionCategoryController = TextEditingController(text: widget.adoption.category);
     return Padding(
