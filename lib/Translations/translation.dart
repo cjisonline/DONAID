@@ -393,7 +393,7 @@ class Messages extends Translations {
           "Delete": "Supprimer",
           "The email you chose is already in use.":
               "L’e-mail que vous avez choisi est déjà utilisé",
-          "Are You Sure?": "",
+          "Are You Sure?": "Es-tu sûr?",
           "We see that you have entered a donation amount greater than \$999. We appreciate your generosity, but please confirm that this amount is correct to proceed.":
               "Nous voyons que vous avez inscrit un montant de don supérieur à 999 \$. Nous apprécions votre générosité, mais veuillez confirmer que ce montant est correct pour continuer.",
           "Sort By": "Trier par",
