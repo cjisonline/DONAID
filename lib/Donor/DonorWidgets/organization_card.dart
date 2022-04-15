@@ -1,4 +1,3 @@
-
 import 'package:donaid/Donor/organization_full_details_screen.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,29 +27,24 @@ class _OrganizationCardState extends State<OrganizationCard> {
     loggedInUser = _auth.currentUser;
   }
 
-
   // Create organization card
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         // Navigate to organization's Tab View screen
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return (OrganizationTabViewScreen(organization: widget.organization));
-        })).then((value){
-          setState(() {
-            
-          });
+        })).then((value) {
+          setState(() {});
         });
       },
-      onLongPress: (){
+      onLongPress: () {
         // Navigate to organization's Full Details screen
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return (OrganizationFullDetailsScreen(widget.organization));
-        })).then((value){
-          setState(() {
-
-          });
+        })).then((value) {
+          setState(() {});
         });
       },
       // Display organization card
@@ -64,11 +58,21 @@ class _OrganizationCardState extends State<OrganizationCard> {
                 border: Border.all(color: Colors.grey.shade300, width: 2.0)),
             child: Column(children: [
               // Display icon
-              const Icon(
-                Icons.apartment,
-                color: Colors.blue,
-                size: 40,
-              ),
+              (widget.organization.profilePictureDownloadURL.toString() == "")
+                  ? const Icon(
+                      Icons.apartment,
+                      color: Colors.blue,
+                      size: 50,
+                    )
+                  : SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: Image.network(
+                        widget.organization.profilePictureDownloadURL
+                            .toString(),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
               // Display organization's name
               Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -83,17 +87,17 @@ class _OrganizationCardState extends State<OrganizationCard> {
               // Display organization's description
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text(widget.organization.organizationDescription.toString(),
-                    textAlign: TextAlign.center,
-                    softWrap: true,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                    )),
+                child:
+                    Text(widget.organization.organizationDescription.toString(),
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        )),
               ),
-
             ]),
           )),
     );
