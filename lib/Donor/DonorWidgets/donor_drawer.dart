@@ -92,6 +92,7 @@ class _DonorDrawerState extends State<DonorDrawer> {
               ),
             // Display language option in drawer
             // On tap, display Language Selection dialog
+            if (FirebaseAuth.instance.currentUser?.email != null)
             ListTile(
               leading: const Icon(Icons.person_sharp),
               title: Text("my_adoptions".tr),
