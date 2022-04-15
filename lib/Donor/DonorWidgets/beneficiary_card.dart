@@ -195,9 +195,8 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                   },
                   // Display donate button
                   child: Row(children: [
-                    const Icon(Icons.favorite, color: Colors.white, size: 20),
                     Container(
-                      margin: const EdgeInsets.only(left: 0.0, right: 10.0),
+                      margin: const EdgeInsets.only(left: 5.0, right: 5.0),
                       child: Text('donate'.tr,
                           textAlign: TextAlign.center,
                           style: TextStyle(
