@@ -8,9 +8,7 @@ II. How to add enable apple sign in and push notifications(iOS) -- contact Kamal
 
 
 
-I.
-
------ STEPS TO RUN APP ON IOS SIMULATOR / REAL OS DEVICE ------
+------I. STEPS TO RUN APP ON IOS SIMULATOR / REAL OS DEVICE ------
 
 Download XCode first, open it and select from the dropdown the device you want to use, then close xcode.
 also make sure cocoapods is installed on your macbook( terminal command: sudo install gem cocoapods ), and rosetta also( TYPE THIS COMMAND IN VSCODE TERMINAL IN YOUR PROJECT: softwareupdate --install-rosetta --agree-to-license
@@ -50,9 +48,7 @@ TO RUN ON REAL IOS DEVICE( YOUR PERSONAL IPHONE):
 
 
 
-II.
-
-----HOW TO ENABLE PUSH NOTIFICATIONS FOR iOS AND ENBALE APPLE SIGN IN----
+------II. HOW TO ENABLE PUSH NOTIFICATIONS FOR iOS AND ENBALE APPLE SIGN IN----
 
 The application already has Apple sign in and Push notifications implemented.
 In case you need to use them, you need a paid apple developer account(priced at 100$/year)
@@ -68,5 +64,19 @@ After you get the account, follow the steps below to enable:
 8. enable all of them and click "try again" below the signing 
 
 Everything should work fine after this, and the app could use both those features and would have the capability to be released on the apple store.
+
+------III. HOW TO INSTALL ANDROID STUDIO----
+
+Android Studio 2020.3.1 will be used as an IDE for the application for debugging and testing purposes. 
+(Install at https://developer.android.com/studio), you will need to configure the emulator via the AVD manager settings in Android Studio. 
+The emulator API version is API 30, all other settings are left as default.
+
+
+------IIII. HOW TO INSTALL FLUTTER And DART----
+
+We used flutter version 2.5.1 and Dart version 2.15 as a programming language and framework to develop the app. 
+To install the correct version of Flutter and Dart, use the following link download Flutter and Dart as one package: 
+https://docs.flutter.dev/development/tools/sdk/releases
+
 
 
