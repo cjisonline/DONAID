@@ -75,19 +75,19 @@ Android Studio 2020.3.1 will be used as an IDE for the application for debugging
 The emulator API version is API 30, all other settings are left as default.
 
 
-## IIII. HOW TO INSTALL FLUTTER And DART <a name="paragraph3"></a>
+## IV. HOW TO INSTALL FLUTTER And DART <a name="paragraph3"></a>
 
 We used Flutter version 2.5.1 and Dart version 2.15 as a programming language and framework to develop the app. 
 To install the correct version of Flutter and Dart, use the following link download Flutter and Dart as one package: 
 https://docs.flutter.dev/development/tools/sdk/releases
 
-## IV. FIREBASE <a name="paragraph4"></a>
+## V. FIREBASE <a name="paragraph4"></a>
 -	Firebase Authentication – All DONAID users are authenticated using email and password. It also provides Google, Apple, and Facebook sign-in. Firebase Authentication also tracks anonymous authentication which allows the user to login without an email and password. 
 -	Firestore Database – All the data in DONAID is stored in the cloud Firestore. The data is organized into different collections. Each collection has documents which store the various data entries. 
 -	Realtime Database – All the messaging data of DONAID is stored within the Realtime database. This allows for data to be synced in realtime. 
 -	Firebase Storage – All the images are saved in the Firebase storage which includes the carousel, icons, profile pictures, and verification documents. 
 
-## V. CONTACT <a name="paragraph5"></a>
+## VI. CONTACT <a name="paragraph5"></a>
 - I. How to Run app on iOS simulator/device -- contact Kamal if you need more assistance. 
 - II. How to add enable apple sign in and push notifications(iOS) -- contact Kamal if you need more assistance.
 
