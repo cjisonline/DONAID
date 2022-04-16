@@ -1,5 +1,5 @@
 # DONAID
-## Descirption 
+## Description 
 The DONAID application's goal is to connect charity organizations to donors across the globe. Through DONAID, charity organizations can advertise their charities. This mobile application allows those in need to receive funds when and where they need them. There are people in the world willing to donate to a cause, and we can solve that.
 
 ## Contributers:
