@@ -78,5 +78,12 @@ We used flutter version 2.5.1 and Dart version 2.15 as a programming language an
 To install the correct version of Flutter and Dart, use the following link download Flutter and Dart as one package: 
 https://docs.flutter.dev/development/tools/sdk/releases
 
+------IV. FIREBASE----
+-	Firebase Authentication – All DONAID users are authenticated using email and password. It also provides Google, Apple, and Facebook sign-in. Firebase Authentication also tracks anonymous authentication which allows the user to login without an email and password. 
+-	Firestore Database – All the data in DONAID is stored in the cloud Firestore. The data is organized into different collections. Each collection has documents which store the various data entries. 
+-	Realtime Database – All the messaging data of DONAID is stored within the Realtime database. This allows for data to be synced in realtime. 
+-	Firebase Storage – All the images are saved in the Firebase storage which includes the carousel, icons, profile pictures, and verification documents. 
+
+
 
 
