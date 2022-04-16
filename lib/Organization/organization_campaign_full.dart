@@ -27,6 +27,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
   }
 
   _refreshCampaign() async{
+    //Refreshes the campaign information on the page. This is used for after when a user edits a campaign
     var ret = await _firestore.collection('Campaigns').where('id',isEqualTo: widget.campaign.id).get();
 
     var doc = ret.docs[0];
@@ -42,6 +43,7 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
   }
 
   _stopCampaign() async {
+    //Toggles the campaign to inactive. This makes it no longer display to donors
     await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
       'active': false
     });
@@ -50,10 +52,12 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
   }
 
   _deleteCampaign() async{
+    //Delete campaign from database
     await _firestore.collection('Campaigns').doc(widget.campaign.id).delete();
   }
 
   _resumeCampaign() async {
+    //Toggles the campaign to active. This makes it display to donors again
     await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
       'active': true
     });
@@ -229,6 +233,15 @@ class _OrganizationCampaignFullScreenState extends State<OrganizationCampaignFul
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: (widget.campaign.amountRaised < widget.campaign.goalAmount) ? [
+                  /*The UI for this page consists of several ternary operators to make different checks and
+                        * display different UI. If the campaign does not have any contributions yet, it will display the edit and delete buttons
+                        * along with the stop/resume button.
+                        * If the campaign does have contributions, it will only show the stop/resume charity buttons.
+                        * If the campaign has reached its goal amount, it will not show any buttons, and will simply show a message indicating that it has reached
+                        * its goal
+                        *
+                        * Also, if the campaign has passed its end date but has not reached its goal, it will display a message telling the user
+                        * that the charity has expired and that they can extend the charity by editing the end date.*/
                   Container(
                       padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
                       child: Material(

@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
+/*
+* This page creates the list view page to show all of the active campaigns that have
+* been created by the organization
+* */
 class OrganizationCampaignsExpandedScreen extends StatefulWidget {
   static const id = 'organization_campaigns_expanded_screen';
   const OrganizationCampaignsExpandedScreen({Key? key}) : super(key: key);
@@ -38,6 +42,7 @@ class _OrganizationCampaignsExpandedScreenState
     });
   }
   _getCampaigns() async {
+    //Get all active campaigns
     var ret = await _firestore
         .collection('Campaigns')
         .where('organizationID', isEqualTo: _auth.currentUser?.uid)
@@ -62,6 +67,7 @@ class _OrganizationCampaignsExpandedScreenState
       campaigns.add(campaign);
     }
 
+    //Sort campaigns by the most recently created
     campaigns.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }

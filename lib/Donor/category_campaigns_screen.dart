@@ -45,6 +45,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
   }
 
   _getCampaigns() async {
+    //Gets all of the campaigns for the category that we have chosen
     var ret = await _firestore.collection('Campaigns')
         .where('category', isEqualTo: widget.categoryName)
         .where('active', isEqualTo: true)
@@ -72,6 +73,9 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
   }
 
   _getCampaignOrganizations() async{
+    /*This method gets the organizations that correspond to each campaign.
+    * This is used so that we can check if the organization for a campaign is based in the
+    * US or not when a user selects a campaign*/
     for(var campaign in campaigns){
       var ret = await _firestore.collection('OrganizationUsers')
           .where('uid', isEqualTo: campaign.organizationID)
@@ -92,6 +96,7 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
 
   _categoryCampaignsBody() {
     return campaigns.isNotEmpty
+    //If there are campaigns in this cateogry, create a list view of them
     ? ListView.builder(
         itemCount: campaigns.length,
         shrinkWrap: true,
@@ -102,11 +107,15 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
                 ListTile(
                   onTap: () {
                     if(organizations[index].country =='United States'){
+                      //If the campaign is by a US organization, then navigate to donation page for that campaign
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (CampaignDonateScreen(campaigns[index]));
                       })).then((value) => _refreshPage());
                     }
                     else{
+                      //If campaign is by foreign organization, show payment gateway link popup
+
+                      //This charity object is used to create the payment gateway visit record if the user clicks on the link
                       Map<String, dynamic> charity = {
                         'charityID':campaigns[index].id,
                         'charityType':'Campaign',
@@ -150,7 +159,8 @@ class _CategoryCampaignsScreenState extends State<CategoryCampaignsScreen> {
             ),
           );
         })
-    :  Center(child: Text('no_compaigns_in_this_category'.tr, style: TextStyle(fontSize: 18),));
+    :  //If there are no campaigns in this category, show empty state indicator
+    Center(child: Text('no_compaigns_in_this_category'.tr, style: TextStyle(fontSize: 18),));
   }
 
   @override

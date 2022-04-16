@@ -14,6 +14,11 @@ import 'organization_adoption_full.dart';
 import 'organization_urgentcase_full.dart';
 import 'package:get/get.dart';
 
+/*
+* This page creates a tab view where each tab has a list view for all of the inactive charities that an
+* organization has. The inactive charities are the ones that the organization has gone and selected
+* 'Stop Charity' for.
+* */
 
 class InactiveCharitiesScreen extends StatefulWidget {
   const InactiveCharitiesScreen({Key? key}) : super(key: key);

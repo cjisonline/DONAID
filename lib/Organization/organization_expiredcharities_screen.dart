@@ -12,7 +12,10 @@ import 'package:intl/intl.dart';
 import 'organization_urgentcase_full.dart';
 import 'package:get/get.dart';
 
-
+/*
+* This page creates a different tabs which each have a list view for the organization to see all of
+* charities that it has created that have passed their end date
+*  */
 class ExpiredCharitiesScreen extends StatefulWidget {
   const ExpiredCharitiesScreen({Key? key}) : super(key: key);
 
@@ -46,6 +49,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
   }
 
   _getExpiredBeneficiaries() async {
+    //Gets expired beneficiaries from Firestore
     var ret = await _firestore.collection('Beneficiaries')
         .where('organizationID', isEqualTo: _auth.currentUser?.uid)
         .where('endDate',isLessThan: Timestamp.now())
@@ -73,6 +77,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
   }
 
   _getExpiredCampaigns()async{
+    //Gets expired campaigns from Firestore
     var ret = await _firestore.collection('Campaigns')
         .where('organizationID',isEqualTo: _auth.currentUser?.uid)
         .where('endDate',isLessThan: Timestamp.now())
@@ -98,6 +103,7 @@ class _ExpiredCharitiesScreenState extends State<ExpiredCharitiesScreen> {
   }
 
   _getExpiredUrgentCases() async {
+    //Gets expired urgent cases from Firestore
     var ret = await _firestore
         .collection('UrgentCases')
         .where('organizationID', isEqualTo: _auth.currentUser?.uid)

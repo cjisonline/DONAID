@@ -60,20 +60,30 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   }
 
   handleNotifications()async{
+    /*
+    * This method is used to set up everything needed for the app to handle notifications
+    * */
+
+    //onMessageOpenedApp is called when the app is opened by the user clicking a notification
+    //that was sent to their device. When this happens, we direct the user to their notifications page
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
       Navigator.push(context, MaterialPageRoute(builder: (context){
         return OrganizationNotificationPage();
       }));
 
     });
-    registerNotification();
-    checkForInitialMessage();
+    registerNotification(); //call registerNotification method
+    checkForInitialMessage();//call checkForIntitialMessage method
   }
 
   checkForInitialMessage() async{
+    //getInitialMessage is called when the app is opened from the terminated state by a push
+    //notification that was sent to the device
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if(initialMessage != null){
-      addNotification(_auth.currentUser?.uid, initialMessage);
+      addNotification(_auth.currentUser?.uid, initialMessage);//add that notification to the users notification document in the database
+
+      //redirect to notifications page
       Navigator.push(context, MaterialPageRoute(builder: (context){
         return OrganizationNotificationPage();
       }));
@@ -81,6 +91,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   }
 
   registerNotification() async {
+    //Requests the notifications permission
     NotificationSettings notificationSettings = await _messaging.requestPermission(
         alert: true,
         badge: true,
@@ -88,11 +99,17 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
         sound: true
     );
 
+    //If the user authorizes notifications then the application listens for notifications
     if(notificationSettings.authorizationStatus == AuthorizationStatus.authorized)
     {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        //Whenever a notification is receieved, add it to the user's notifications document in the database
         addNotification(_auth.currentUser?.uid, message);
 
+        /*
+          * When we receive a notification while the application is open, we show an in-app overlay using showSimpleNotification to show the notification.
+          * Firebase Cloud Messaging will automatically create the push notification to the device when the application is closed.
+          * */
         if(message.notification!=null){
           showSimpleNotification(
             Text(message.notification!.title!),

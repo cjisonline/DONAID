@@ -24,6 +24,9 @@ class _DonorSettingsPageState extends State<DonorSettingsPage> {
   }
 
   _getSharedPreferences()async{
+    /*The SharedPreferences is a small amount of data that we can store directly on the device
+    * In this instance, it is being used to store whether or not the user is enrolled in receiving notifications
+    * for when urgent cases are approved.*/
     final prefs = await _prefs;
     urgentCaseApprovalsNotifications = prefs.getBool('urgentCaseApprovalsNotifications')!;
 
@@ -84,6 +87,8 @@ class _DonorSettingsPageState extends State<DonorSettingsPage> {
   }
 
   toggleButton()async{
+    /*Toggle the boolean value that indicates whether or not the user is enrolled for notifications
+    * Based on the new value, either enroll or unenroll the user from notifications*/
     setState(() {
       urgentCaseApprovalsNotifications = !urgentCaseApprovalsNotifications;
     });

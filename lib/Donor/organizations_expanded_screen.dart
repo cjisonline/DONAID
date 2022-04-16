@@ -30,6 +30,7 @@ class _OrganizationsExpandedScreenState extends State<OrganizationsExpandedScree
 
 
   _getOrganizations() async{
+    //Get all organizations that have been approved by an admin
       var ret = await _firestore.collection('OrganizationUsers')
           .where('approved', isEqualTo: true)
           .get();
@@ -48,6 +49,7 @@ class _OrganizationsExpandedScreenState extends State<OrganizationsExpandedScree
     }
 
   _organizationsBody() {
+    //show all of the approved organizations in a list view
     return ListView.builder(
         itemCount: organizations.length,
         shrinkWrap: true,

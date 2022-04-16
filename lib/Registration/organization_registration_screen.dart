@@ -140,6 +140,7 @@ class _OrganizationRegistrationScreenState
           final docRef =
               await _firestore.collection('OrganizationUsers').add({});
 
+          //Create record in the OrganizationUsers collection
           await _firestore.collection('OrganizationUsers').doc(docRef.id).set({
             'id': docRef.id,
             'uid': newUser.user.uid,
@@ -159,6 +160,7 @@ class _OrganizationRegistrationScreenState
             'profilePictureDownloadURL': ''
           });
 
+          //Create record in the Users collection
           final usersDocRef = await _firestore.collection('Users').add({});
           await _firestore.collection('Users').doc(usersDocRef.id).set({
             'id': usersDocRef.id,
@@ -167,12 +169,16 @@ class _OrganizationRegistrationScreenState
             'userType': 2
           });
 
+
+          //Subscribe the user to a topic for push notifications. This enrolls the organization user
+          //to get notifications whenever they have an urgent case approved
           await FirebaseMessaging.instance
               .subscribeToTopic(newUser.user.uid.toString() + 'Approvals');
           final SharedPreferences prefs = await _prefs;
           await prefs.setBool(
               'organizationUrgentCaseApprovalsNotifications', true);
 
+          //Pop navigation context to the home screen and the redirect to the login screen
           Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen
               .id)); //remove all screens on the stack and return to home screen
           Navigator.pushNamed(
@@ -279,6 +285,7 @@ class _OrganizationRegistrationScreenState
   }
 
   Future chooseFile() async {
+    //This method is where we get the image that the user selects as their verification document
     await _imagePicker.pickImage(source: ImageSource.gallery).then((image) {
       setState(() {
         _image = image;
@@ -287,6 +294,10 @@ class _OrganizationRegistrationScreenState
   }
 
   Future uploadFile(dynamic newUser) async {
+    /*This method is called when the user clicks the submit button for registration.
+    * this method will upload the image that they selected for their verification documents
+    * and then will get the downloadURL from Firebase Storage
+    * */
     File file = File(_image!.path);
 
     final storageReference = _firebaseStorage

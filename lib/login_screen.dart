@@ -28,6 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<int> getUserType() async {
     //Searches firestore for the user corresponding to the email. Changes the userType variable accordingly.
+    //The Users collection in Firestore stores all organization user and donor user emails along with a
+    //number to indicate their user type.  userType==1 -> donor; userType==2 -> organization
     int userType = -1;
     try {
       final user = await _firestore
@@ -35,7 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
           .where('email', isEqualTo: email)
           .get();
       userType = user.docs[0]['userType'];
-      print('USERTYPE: $userType');
     } catch (e) {
       print(e);
     }
@@ -54,7 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
             .get();
         final enabled = donorUser.docs[0]['enabled'];
 
+
         if (enabled) {
+          //If the donor user has not been disabled by the admin, sign them in and redirect to dashboard
           await _auth.signInWithEmailAndPassword(
               email: email, password: password);
           Navigator.pushNamed(context, DonorDashboard.id);
@@ -68,8 +71,11 @@ class _LoginScreenState extends State<LoginScreen> {
             .where('email', isEqualTo: email)
             .get();
         final approved = organizationUser.docs[0]['approved'];
-        print('APPROVAL STATUS: $approved');
+
+
         if (approved) {
+
+          //If the organization has been approved by the admin, sign them in and redirect to dashboard
           await _auth.signInWithEmailAndPassword(
               email: email, password: password);
           Navigator.pushNamed(context, OrganizationDashboard.id);

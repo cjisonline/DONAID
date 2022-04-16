@@ -59,6 +59,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
         if (newUser != null) {
           final docRef = await _firestore.collection('DonorUsers').add({});
 
+          //Create record in the DonorUsers collection
           await _firestore.collection('DonorUsers').doc(docRef.id).set({
             'id': docRef.id,
             'uid': newUser.user.uid,
@@ -71,6 +72,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
 
           final usersDocRef = await _firestore.collection('Users').add({});
 
+          //Create record in the Users collection
           await _firestore.collection('Users').doc(usersDocRef.id).set({
             'id': usersDocRef.id,
             'uid':newUser.user.uid,
@@ -78,6 +80,7 @@ class _DonorRegistrationScreenState extends State<DonorRegistrationScreen> {
             'userType':1
           });
 
+          //Enroll the donor user to get push notifications for when abn urgent case gets approved by the admin
           await FirebaseMessaging.instance.subscribeToTopic('UrgentCaseApprovals');
           final SharedPreferences prefs = await _prefs;
           await prefs.setBool('urgentCaseApprovalsNotifications', true);

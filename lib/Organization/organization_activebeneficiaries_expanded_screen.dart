@@ -10,7 +10,10 @@ import 'organization_adoption_full.dart';
 import 'package:get/get.dart';
 
 import 'organization_beneficiary_full.dart';
-
+/*
+* This page creates the list view for the organization user to display all of their active
+* beneficiaries
+* */
 class OrganizationBeneficiariesExpandedScreen extends StatefulWidget {
   static const id = 'organization_beneficaries_expanded_screen';
   const OrganizationBeneficiariesExpandedScreen({Key? key}) : super(key: key);
@@ -44,6 +47,7 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
     });
   }
   _getBeneficiaries() async {
+    //Get all active beneficiaries that have been created by the organization
     var ret = await _firestore
         .collection('Beneficiaries')
         .where('organizationID', isEqualTo: _auth.currentUser?.uid)
@@ -67,11 +71,14 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
       );
       beneficiaries.add(beneficiary);
     }
+
+    //Sort beneficiaries by most recently created
     beneficiaries.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
 
   _getAdoptions() async {
+    //Get all active adoptions that have been created by the organization
     try{
       var ret = await _firestore
           .collection('Adoptions')
@@ -93,6 +100,11 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
         );
         adoptions.add(adoption);
       }
+
+      //Sort adoptions by most recently created
+      adoptions.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
+      setState(() {});
+
     }
     catch(e){
       print(e);

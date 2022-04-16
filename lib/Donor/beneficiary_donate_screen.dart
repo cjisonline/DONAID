@@ -77,18 +77,24 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
-                    onPressed: () async{
-                      Navigator.pop(context);
-                      await makePayment();
-                    },
-                    child: const Text('Yes'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('No'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () async{
+                          Navigator.pop(context);
+                          await makePayment();
+                        },
+                        child: const Text('Yes'),
+                      ),
+
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('No'),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -248,8 +254,10 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
                                       showLoadingSpinner = true;
                                     });
                                     if (double.parse(donationAmount) > 999) {
+                                      //If the donation is $1k or more, ask for confirmation
                                       _confirmDonationAmount();
                                     } else {
+                                      //If donation is les than $1k, go into makePayment method
                                       await makePayment();
                                     }
                                     setState(() {
@@ -270,6 +278,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
     );
   }
   void createDonationDocument() async {
+    //This method creates a document in the Donations collection to keep record of this donation
     final docRef = await _firestore.collection('Donations').add({});
 
     await _firestore.collection('Donations').doc(docRef.id).set({
@@ -286,8 +295,10 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
   }
 
   void updateBeneficiary() async {
+    //This method updates the beneficiary with this donation.
     if (widget.beneficiary.amountRaised + double.parse(donationAmount) >=
         widget.beneficiary.goalAmount) {
+      //If this donation makes the beneficiary reach its goal amount, make the beneficiary inactive
       await _firestore
           .collection('Beneficiaries')
           .doc(widget.beneficiary.id)
@@ -297,6 +308,8 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
         'active': false
       });
     } else {
+      //If this donation did not make the beneficiary reach its goal, simply add the donated amount
+      // to the amountRaised field
       await _firestore
           .collection('Beneficiaries')
           .doc(widget.beneficiary.id)
@@ -308,6 +321,8 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
   }
 
   Future<void> makePayment() async {
+    //This method calls the createPaymentIntent method and the calls the
+    // method to create the payment sheet
     try {
       paymentIntentData = await createPaymentIntent(donationAmount, 'USD');
       await Stripe.instance.initPaymentSheet(
@@ -328,6 +343,8 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
   }
 
   displayPaymentSheet() async {
+    /*Displaying the payment sheet requires the client secret that is given from the payment intents
+    * from the Stripe API (this is to keep track of this user's checkout session.*/
     try {
       await Stripe.instance.presentPaymentSheet(
         parameters: PresentPaymentSheetParameters(
@@ -339,6 +356,7 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
       setState(() {
         paymentIntentData = null;
       });
+      //If the payment is successfully completed, show a message
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('paid_successfully'.tr)));
 
@@ -348,12 +366,15 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
     } catch (e) {
       print('Stripe Exception: ${e.toString()}');
 
+      //Show a message to indicate if the payment was cancelled
       ScaffoldMessenger.of(context)
           .showSnackBar( SnackBar(content: Text('payment_cancelled!'.tr)));
     }
   }
 
   createPaymentIntent(String amount, String currency) async {
+    /*This method calls the node app to create a payment intent with the Stripe API.
+    * The node app will then return the client secret that is needed to create the payment sheet*/
     try {
       final body = {
         'amount': calculateAmount(amount),
@@ -374,6 +395,12 @@ class _BeneficiaryDonateScreenState extends State<BeneficiaryDonateScreen> {
   }
 
   calculateAmount(String amount) {
+    /*Stripe takes the payment amount as an integer. The integer that it takes is the payment amount
+    * in pennies. so $1.50 will be sent to Stripe as 150.
+    *
+    * This method parses the donation amount to a double (so that we can handle fractional dollar donations). Then it multiplies
+    * by 100 to convert to pennies. Then it does toInt to convert to integer so that Stripe will accept it. We return that integer dollar
+    * amount as a string that is sent to the API*/
     final price = (double.parse(amount) * 100).toInt();
     return price.toString();
   }

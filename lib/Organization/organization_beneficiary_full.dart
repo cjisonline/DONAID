@@ -28,6 +28,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
   }
 
   _refreshBeneficiary() async{
+    //Refreshes the beneficiary information the page. This is used after the user edits a beneficiary
     var ret = await _firestore.collection('Beneficiaries').where('id',isEqualTo: widget.beneficiary.id).get();
 
     var doc = ret.docs[0];
@@ -43,6 +44,7 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
   }
 
   _stopBeneficiary() async {
+    //Toggle the beneficiary to inactive. This makes it no longer display to donor users
     await _firestore.collection('Beneficiaries').doc(widget.beneficiary.id).update({
       'active': false
     });
@@ -51,10 +53,12 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
   }
 
   _deleteBeneficiary() async {
+    //Delete beneficiary from database
     await _firestore.collection('Beneficiaries').doc(widget.beneficiary.id).delete();
   }
 
   _resumeBeneficiary() async {
+    //Toggle beneficiary to active. This will make it display to donors again
     await _firestore.collection('Beneficiaries').doc(widget.beneficiary.id).update({
       'active': true
     });
@@ -230,6 +234,15 @@ class _OrganizationBeneficiaryFullScreenState extends State<OrganizationBenefici
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: widget.beneficiary.amountRaised < widget.beneficiary.goalAmount ? [
+                    /*The UI for this page consists of several ternary operators to make different checks and
+                        * display different UI. If the beneficiary does not have any contributions yet, it will display the edit and delete buttons
+                        * along with the stop/resume button.
+                        * If the beneficiary does have contributions, it will only show the stop/resume charity buttons.
+                        * If the beneficiary has reached its goal amount, it will not show any buttons, and will simply show a message indicating that it has reached
+                        * its goal
+                        *
+                        * Also, if the beneficiary has passed its end date but has not reached its goal, it will display a message telling the user
+                        * that the charity has expired and that they can extend the charity by editing the end date.*/
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
                       child: Material(

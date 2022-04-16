@@ -28,6 +28,8 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
   }
 
   _refreshUrgentCase() async{
+    //Refresh urgent case information on the page. This is used for after when an organization edits
+    // a resubmits a denied urgent case
     var ret = await _firestore.collection('UrgentCases').where('id',isEqualTo: widget.urgentCase.id).get();
 
     var doc = ret.docs[0];
@@ -45,6 +47,7 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
   }
 
   _stopUrgentCase() async {
+    //Toggle the urgent case to inactive. This makes it no longer display to donors
     await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).update({
       'active': false
     });
@@ -53,10 +56,12 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
   }
 
   _deleteUrgentCase() async {
+    //Delete urgent case from database
     await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).delete();
   }
 
   _resumeUrgentCase() async {
+    //Toggle urgent case to active. This makes it display to donors
     await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).update({
       'active': true
     });
@@ -231,6 +236,15 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: widget.urgentCase.amountRaised < widget.urgentCase.goalAmount ? [
+                  /*The UI for this page consists of several ternary operators to make different checks and
+                        * display different UI. If the urgent case does not have any contributions yet, it will display the delete button
+                        * along with the stop/resume button.
+                        * If the urgent case does have contributions, it will only show the stop/resume charity buttons.
+                        * If the urgent case has reached its goal amount, it will not show any buttons, and will simply show a message indicating that it has reached
+                        * its goal
+                        *
+                        * Also, if the urgent case has passed its end date but has not reached its goal, it will display a message telling the user
+                        * that the charity has expired. Unlike other charity types, urgent cases cannot be extended because each urgent case requires admin approval*/
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                       child: (widget.urgentCase.active && widget.urgentCase.endDate.compareTo(Timestamp.now()) > 0)
@@ -323,6 +337,13 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
   }
 
   _urgentCaseDeniedBody() {
+    /*
+    * This UI is used when the urgent case that we are viewing is one that has been denied by the admin.
+    * This method will create a UI that tells the organization user the reason for the denial (entered by the admin on the admin panel).
+    *
+    * Urgent cases that have been denied will be given the option to either delete the urgent case or edit and resubmit for review.
+    * */
+
     return Center(
         child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -393,6 +414,11 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
   }
 
   _urgentCasePendingBody() {
+    /*
+    * This method creates the UI for urgent cases that are pending (have not yet been reviewed by the admin)
+    * This UI simply gives a message to the user that the urgent case is pending admin review and it provides the delete
+    * button in case the organization wants to remove the urgent case from submission.
+    * */
     return Center(
         child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -437,6 +463,8 @@ class _OrganizationUrgentCaseFullScreenState extends State<OrganizationUrgentCas
   }
 
   _buildBody(){
+    //This method checks the state of the urgent case (i.e. whether its approved, pending, or rejected)
+    //and calls the appropriate method to build the corresponding UI
     if(widget.urgentCase.rejected){
       return _urgentCaseDeniedBody();
     }
