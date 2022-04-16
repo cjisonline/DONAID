@@ -749,7 +749,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                 ),
                                 Material(
                                     elevation: 5.0,
-                                    color: Colors.green,
+                                    color: Colors.blue,
                                     borderRadius:
                                     BorderRadius.circular(32.0),
                                     child: MaterialButton(

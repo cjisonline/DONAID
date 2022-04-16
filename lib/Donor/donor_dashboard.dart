@@ -10,6 +10,7 @@ import 'package:donaid/Donor/categories_screen.dart';
 import 'package:donaid/Donor/organizations_expanded_screen.dart';
 import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Models/AdminCarouselImage.dart';
+import 'package:donaid/Models/Adoption.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:donaid/Models/Organization.dart';
@@ -50,6 +51,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
 
   List<Beneficiary> beneficiaries = [];
+  List<Adoption> adoptions=[];
+  List<dynamic> beneficiariesAndAdoptions=[];
   List<UrgentCase> urgentCases = [];
   List<Organization> organizations = [];
   List<CharityCategory> charityCategories = [];
@@ -61,7 +64,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
     super.initState();
     handleNotifications();
     _getCurrentUser();
-    _getBeneficiaries();
+    _getBeneficiariesAndAdoptions();
     _getUrgentCases();
     _getOrganizationUsers();
     _getCharityCategories();
@@ -143,12 +146,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _refreshPage() {
+    adoptions.clear();
+    beneficiariesAndAdoptions.clear();
     beneficiaries.clear();
     urgentCases.clear();
     organizations.clear();
     charityCategories.clear();
     _getCurrentUser();
-    _getBeneficiaries();
+    _getBeneficiariesAndAdoptions();
     _getUrgentCases();
     _getOrganizationUsers();
     _getCharityCategories();
@@ -209,12 +214,15 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
   // From Firebase, get active beneficiaries where the end date is after the current date
   // Order the beneficiaries by end date in ascending order
-  _getBeneficiaries() async {
+  _getBeneficiariesAndAdoptions() async {
+
+    //Get Beneficiaries from Firestore
     var ret = await _firestore.collection('Beneficiaries')
         .where('active',isEqualTo: true)
         .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
         .orderBy('endDate',descending: false)
         .get();
+
     for (var element in ret.docs) {
       Beneficiary beneficiary = Beneficiary(
           name: element.data()['name'],
@@ -230,7 +238,40 @@ class _DonorDashboardState extends State<DonorDashboard> {
       );
       beneficiaries.add(beneficiary);
     }
+
+    //Only display the adoptions if the user is not a guest user
+    if(_auth.currentUser?.email != null) {
+      //Get Adoptions from Firestore
+      var ret2 = await _firestore.collection('Adoptions')
+          .where('active', isEqualTo: true)
+          .get();
+
+      for (var element in ret2.docs) {
+        Adoption adoption = Adoption(
+            name: element.data()['name'],
+            biography: element.data()['biography'],
+            goalAmount: element.data()['goalAmount'].toDouble(),
+            amountRaised: element.data()['amountRaised'].toDouble(),
+            category: element.data()['category'],
+            dateCreated: element.data()['dateCreated'],
+            id: element.data()['id'],
+            organizationID: element.data()['organizationID'],
+            active: element.data()['active']
+        );
+        adoptions.add(adoption);
+      }
+
+      beneficiariesAndAdoptions.addAll(adoptions);
+      beneficiariesAndAdoptions.addAll(beneficiaries);
+      beneficiariesAndAdoptions.sort((b, a) =>
+          (a.dateCreated).compareTo((b.dateCreated)));
+    }
+    else{
+      beneficiariesAndAdoptions.addAll(beneficiaries);
+    }
+
     setState(() {});
+
   }
 
   // From Firebase, get the approved and active urgent cases where the end date is after the current date
@@ -450,14 +491,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
                   ),
                 ),
             // Display the beneficiary list
-            beneficiaries.isNotEmpty
+            beneficiariesAndAdoptions.isNotEmpty
                     ? SizedBox(
                     height: 325.0,
                     child: ListView.builder(
-                      itemCount: beneficiaries.length,
+                      itemCount: beneficiariesAndAdoptions.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, int index) {
-                        return BeneficiaryCard(beneficiaries[index]);
+                        return BeneficiaryCard(beneficiariesAndAdoptions[index]);
                       },
                     ))
                     :  Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),)),
