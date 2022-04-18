@@ -13,12 +13,12 @@ CJ Fox, Ashley John, Kamal Mansour, Devin Stawicki, Raisa Zaman
 5. [CONTACT](#paragraph5)
 
 
-## I. Stpes to run app on iOS simulator <a name="paragraph1"></a>
+## I. Steps to run app on iOS simulator <a name="paragraph1"></a>
 
 Download XCode first, open it and select from the dropdown the device you want to use, then close Xcode.
 Make sure Cocoapods is installed on your Macbook( terminal command: sudo install gem cocoapods ), and Rosetta also( TYPE THIS COMMAND IN VSCODE TERMINAL IN YOUR PROJECT: `softwareupdate --install-rosetta --agree-to-license`
 
-I would prefer using VSCODE instead of Android Studio on macbook, but XCODE IS NECESSARY.
+Using VSCODE instead of Android Studio on Macbook is preferred, but XCode is necessary.
 
 ### On M1 chip Macbook only:
 
@@ -54,7 +54,7 @@ To run on real iOS device:
 ## II. How to enable push notifications and Apple sign in for deployment <a name="paragraph2"></a>
 
 The application already has Apple sign in and push notifications implemented.
-In case you need to use them, you need a paid Apple developer account (priced at 100$/year)
+In case you need to use them, you need a paid Apple developer account (priced at $100/year)
 After you get the account, follow the steps below to enable:
 
 1. Go into your iOS folder inside the DONAID project.
@@ -66,7 +66,7 @@ After you get the account, follow the steps below to enable:
 7. In there search for apple sign in, apple background and push notifications. 
 8. Enable all of them and click "try again" below the signing. 
 
-Everything should work fine after this, and the app could use both those features and would have the capability to be released on the Apple store.
+Following these steps will enable the use of these functionalities' implementation on iOS devices.
 
 ## III. How to install Android Studio
 
