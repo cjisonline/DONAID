@@ -136,7 +136,8 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
     setState(() {});
   }
 
-
+  // from Firebase, get adoptions where organization id is equal to the current organization
+  // and where the active attribute is false
   _getExpiredAdoptions() async {
     try{
       var ret = await _firestore
@@ -326,6 +327,7 @@ class _InactiveCharitiesScreenState extends State<InactiveCharitiesScreen> {
     :  Center(child: Text('no_inactive_urgent_cases_to_show.'.tr, style: TextStyle(fontSize: 18),));
   }
 
+  // Display the inactive adoptions in a list view
   _getAdoptionsBody(){
     return adoptions.isNotEmpty
         ? ListView.builder(

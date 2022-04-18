@@ -93,6 +93,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
     }
   }
 
+  // add adoption to Firebase in the Adoptions table
   Future<void> addAdoption(String category, String biography, double goalAmount,
       String name) async {
     try {
@@ -114,6 +115,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   }
 
   Widget showEndDateField(){
+    // show end date field when adoptions check field is not selected
     if(isAdopted == false){
       return  Padding(
           padding: const EdgeInsets.all(8.0),
@@ -165,6 +167,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   date.toString().substring(0, 10);
             },));
     }
+    // hide end date field when adoptions check field is selected
     else{
       return Container();
     }
@@ -338,7 +341,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                                 )),
                           ),
                         ),
-
+                      // for United States organizations, show 'set beneficiary up for adoption' checkbox
                       userIsDomesticOrganization
                       ? Padding(
                       padding: const EdgeInsets.all(8.0),
