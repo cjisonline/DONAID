@@ -13,14 +13,14 @@ CJ Fox, Ashley John, Kamal Mansour, Devin Stawicki, Raisa Zaman
 5. [CONTACT](#paragraph5)
 
 
-## I. STEPS TO RUN APP ON IOS SIMULATOR / REAL OS DEVICE <a name="paragraph1"></a>
+## I. Stpes to run app on iOS simulator <a name="paragraph1"></a>
 
 Download XCode first, open it and select from the dropdown the device you want to use, then close Xcode.
 Make sure Cocoapods is installed on your Macbook( terminal command: sudo install gem cocoapods ), and Rosetta also( TYPE THIS COMMAND IN VSCODE TERMINAL IN YOUR PROJECT: `softwareupdate --install-rosetta --agree-to-license`
 
 I would prefer using VSCODE instead of Android Studio on macbook, but XCODE IS NECESSARY.
 
-ON M1 CHIP MACBOOK ONLY:
+### On M1 chip Macbook only:
 
 1. Clone the repository.
 2. In the project, cd ( change directory ) into the iOS file.
@@ -32,9 +32,9 @@ ON M1 CHIP MACBOOK ONLY:
 8. Click on run -> run WITHOUT debugging
 9. Wait about 5-10 mins(might be 2-3 mins) and it should simulate it.
 
-I have not tested it on an intel macbook, but I assume you can skip steps 3 and 4 only, since those are only required for M1 devices.
+For an intel Macbook, skip steps 3 and 4 only, since those are only required for M1 devices.
 
-TO RUN ON REAL IOS DEVICE( YOUR PERSONAL IPHONE):
+To run on real iOS device:
   
  1. You have to use Xcode for this one.
  2. Open your project file and go to iOS file, then open the file runner workspace.
@@ -51,7 +51,7 @@ TO RUN ON REAL IOS DEVICE( YOUR PERSONAL IPHONE):
  13. App should run on the iPhone, do NOT disconnect your device or it will kick you out of the app.
 
 
-## II. HOW TO ENABLE PUSH NOTIFICATIONS FOR iOS AND ENBALE APPLE SIGN IN <a name="paragraph2"></a>
+## II. How to enable push notifications and Apple sign in for deployment <a name="paragraph2"></a>
 
 The application already has Apple sign in and push notifications implemented.
 In case you need to use them, you need a paid Apple developer account (priced at 100$/year)
@@ -68,27 +68,28 @@ After you get the account, follow the steps below to enable:
 
 Everything should work fine after this, and the app could use both those features and would have the capability to be released on the Apple store.
 
-## III. HOW TO INSTALL ANDROID STUDIO
+## III. How to install Android Studio
 
 Android Studio 2020.3.1 will be used as an IDE for the application for debugging and testing purposes. 
 (Install at https://developer.android.com/studio), you will need to configure the emulator via the AVD manager settings in Android Studio. 
 The emulator API version is API 30, all other settings are left as default.
 
 
-## IV. HOW TO INSTALL FLUTTER And DART <a name="paragraph3"></a>
+## IV. How to install Flutter and Dart <a name="paragraph3"></a>
 
 We used Flutter version 2.5.1 and Dart version 2.15 as a programming language and framework to develop the app. 
 To install the correct version of Flutter and Dart, use the following link download Flutter and Dart as one package: 
 https://docs.flutter.dev/development/tools/sdk/releases
 
-## V. FIREBASE <a name="paragraph4"></a>
+## V. Firebase <a name="paragraph4"></a>
 -	Firebase Authentication – All DONAID users are authenticated using email and password. It also provides Google, Apple, and Facebook sign-in. Firebase Authentication also tracks anonymous authentication which allows the user to login without an email and password. 
 -	Firestore Database – All the data in DONAID is stored in the cloud Firestore. The data is organized into different collections. Each collection has documents which store the various data entries. 
 -	Realtime Database – All the messaging data of DONAID is stored within the Realtime database. This allows for data to be synced in realtime. 
 -	Firebase Storage – All the images are saved in the Firebase storage which includes the carousel, icons, profile pictures, and verification documents. 
 
-## VI. CONTACT <a name="paragraph5"></a>
+## VI. Contact <a name="paragraph5"></a>
 - I. How to Run app on iOS simulator/device -- contact Kamal if you need more assistance. 
 - II. How to add enable apple sign in and push notifications(iOS) -- contact Kamal if you need more assistance.
+- For other information, the DONAID team lead, CJ Fox, can be contacted for assistance at ge5315@wayne.edu
 
 
