@@ -10,15 +10,15 @@ CJ Fox, Ashley John, Kamal Mansour, Devin Stawicki, Raisa Zaman
 2. [HOW TO ENABLE PUSH NOTIFICATIONS FOR iOS AND ENBALE APPLE SIGN IN](#paragraph2)
 3. [HOW TO INSTALL ANDROID STUDIO](#paragraph3)
 4. [FIREBASE](#paragraph4)
-5. [CONTACT](#paragraph5)
+5. [CONTACT](#contact)
 
 
 ## I. Steps to run app on iOS simulator <a name="paragraph1"></a>
 
 Download XCode first, open it and select from the dropdown the device you want to use, then close Xcode.
-Make sure Cocoapods is installed on your Macbook( terminal command: sudo install gem cocoapods ), and Rosetta also( TYPE THIS COMMAND IN VSCODE TERMINAL IN YOUR PROJECT: `softwareupdate --install-rosetta --agree-to-license`
+Make sure Cocoapods is installed on your Macbook (terminal command: sudo install gem cocoapods), and Rosetta also (Enter this command into the VSCode terminal: `softwareupdate --install-rosetta --agree-to-license`)
 
-Using VSCODE instead of Android Studio on Macbook is preferred, but XCode is necessary.
+Using VSCode instead of Android Studio on Macbook is preferred, but XCode is necessary.
 
 ### On M1 chip Macbook only:
 
@@ -29,7 +29,7 @@ Using VSCODE instead of Android Studio on Macbook is preferred, but XCode is nec
 5. After its done parsing file, run the command: `pod install`
 6. Go to terminal and type ` open -a Simulator`
 7. A simulator that you chose earlier should open
-8. Click on run -> run WITHOUT debugging
+8. Click on run -> run without debugging
 9. Wait about 5-10 mins(might be 2-3 mins) and it should simulate it.
 
 For an intel Macbook, skip steps 3 and 4 only, since those are only required for M1 devices.
@@ -40,13 +40,13 @@ To run on real iOS device:
  2. Open your project file and go to iOS file, then open the file runner workspace.
  3. Xcode should automatically open.
  4. Click on runner on the left side, then go to signing, click to add a team then enter your information.
- 5. Then add your team ( personal ).
+ 5. Then add your team (personal).
  6. After that plug in your iPhone and click trust from your iPhone while its unlocked. make sure your iPhone is unlocked throughout this whole process.
- 7. After trusting, click `Run` on the top ( the play button ).
+ 7. After trusting, click `Run` on the top (the play button).
  8. Wait for about 5-10 mins. 
  9. It should prompt you that the app developer is not trusted.
  10. Go to your iPhone Settings-> General -> VPN and Device management and click your app from there and put TRUST.
- 11. Click `Run` again ( the play button ).
+ 11. Click `Run` again (the play button).
  12. Wait another 2-5 mins.
  13. App should run on the iPhone, do NOT disconnect your device or it will kick you out of the app.
 
@@ -87,7 +87,22 @@ https://docs.flutter.dev/development/tools/sdk/releases
 -	Realtime Database – All the messaging data of DONAID is stored within the Realtime database. This allows for data to be synced in realtime. 
 -	Firebase Storage – All the images are saved in the Firebase storage which includes the carousel, icons, profile pictures, and verification documents. 
 
-## VI. Contact <a name="paragraph5"></a>
+## VI. Node App & Stripe API <a name="paragraph5">
+The DONAID application required the implementation of a small node.js application in order to properly use the Stripe API. This is because the Stripe API provides two API keys - a publishable key and a secret key. For proper security of the application, the secret key must not be stored in the mobile application.
+
+So, the DONAID mobile application has the publishable Stripe API key in its mobile code which can be found in the initalization of the application in `main.dart`. 
+  
+Then, when the mobile application needs to communicate with the Stripe API, it will make an HTTPS request to the node.js app that we have created which is hosted on Heroku. The node.js app contains the Stripe secret API key and so it will make the necessary call to Stripe API and then return the needed information back to the mobile application.  The node.js app is needed for any and all communication with the Stripe API. More detailed information on the implementation of the node.js app and the use of the Stripe API can be found within the code's comments.
+  
+## VII. DONAID Mobile Application Packages
+  ------------- CJ FINISH THIS SECTION -----------------------
+  
+## VIII. Login Information
+For all services used in the creation of this project, if they required account creation with the service, the DONAID team used a specific DONAID email for all accounts. The DONAID application's email address is donaidmobileapp1@gmail.com and the password is Donaid12311!!
+  
+------------- CJ FINISH THIS SECTION -----------------------
+  
+## VI. Contact <a name="contact"></a>
 - I. How to Run app on iOS simulator/device -- contact Kamal if you need more assistance. 
 - II. How to add enable apple sign in and push notifications(iOS) -- contact Kamal if you need more assistance.
 - For other information, the DONAID team lead, CJ Fox, can be contacted for assistance at ge5315@wayne.edu
