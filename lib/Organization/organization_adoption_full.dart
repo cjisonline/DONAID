@@ -37,11 +37,14 @@ class _OrganizationAdoptionFullScreenState
 
   _refreshAdoption() async {
     //This method is used to refresh adoption information after an organization user has edited it
+    // Get current adoption's information from Firebase
+
     var ret = await _firestore
         .collection('Adoptions')
         .where('id', isEqualTo: widget.adoption.id)
         .get();
 
+    // Update the adoption object with the data from Firebase
     var doc = ret.docs[0];
     widget.adoption.name = doc['name'];
     widget.adoption.biography = doc['biography'];
@@ -52,12 +55,14 @@ class _OrganizationAdoptionFullScreenState
     setState(() {});
   }
 
+
   _stopAdoption() async {
     //This method will toggle the 'active' boolean in the database
     //Having 'active' as false will make the adoption no longer visible to donors
     setState(() {
       showLoadingSpinner = true;
     });
+    // Update the current adoption's active field to false in Firebase
     await _firestore
         .collection('Adoptions')
         .doc(widget.adoption.id)
@@ -132,6 +137,7 @@ class _OrganizationAdoptionFullScreenState
     }
   }
 
+  // Update the current adoption's active field to true in Firebase
   _resumeAdoption() async {
     //Toggles the adoption to be active again
     await _firestore
@@ -140,11 +146,13 @@ class _OrganizationAdoptionFullScreenState
         .update({'active': true});
   }
 
+  // Delete current adoption in Firebase
   _deleteAdoption() async {
     //Delete adoption from database
     await _firestore.collection('Adoptions').doc(widget.adoption.id).delete();
   }
 
+  // Display stop charity confirmation dialog
   Future<void> _stopCharityConfirm() async {
     return showDialog<void>(
         context: context,
@@ -186,6 +194,7 @@ class _OrganizationAdoptionFullScreenState
         });
   }
 
+  // Display resume charity confirmation dialog
   Future<void> _resumeCharityConfirm() async {
     return showDialog<void>(
         context: context,
@@ -205,6 +214,8 @@ class _OrganizationAdoptionFullScreenState
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Center(
+                    // Display 'yes' option
+                    // On pressed, resume adoption charity and go back to adoption details
                     child: TextButton(
                       onPressed: () {
                         _resumeAdoption();
@@ -214,6 +225,8 @@ class _OrganizationAdoptionFullScreenState
                       child: Text('yes'.tr),
                     ),
                   ),
+                  // Display 'no' option
+                  // On pressed, go back to adoption details
                   Center(
                     child: TextButton(
                       onPressed: () {
@@ -229,6 +242,8 @@ class _OrganizationAdoptionFullScreenState
         });
   }
 
+
+  // Display delete charity confirmation dialog
   Future<void> _deleteCharityConfirm() async {
     return showDialog<void>(
         context: context,
@@ -250,6 +265,8 @@ class _OrganizationAdoptionFullScreenState
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Center(
+                    // Display 'yes' option
+                    // On pressed, delete adoption charity and go back to organization dashboard
                     child: TextButton(
                       onPressed: () {
                         _deleteAdoption();
@@ -259,6 +276,8 @@ class _OrganizationAdoptionFullScreenState
                       child: Text('yes'.tr),
                     ),
                   ),
+                  // Display 'no' option
+                  // On pressed, go back to adoption details
                   Center(
                     child: TextButton(
                       onPressed: () {
