@@ -10,9 +10,11 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../home_screen.dart';
+import '../../policy.dart';
 import '../donation_history.dart';
 import '../donor_favorite_screen.dart';
 import '../donor_profile.dart';
+import '../donor_user_manual.dart';
 import '../my_adoptions.dart';
 import '../settings.dart';
 
@@ -168,6 +170,20 @@ class _DonorDrawerState extends State<DonorDrawer> {
                   Get.to(ContactUs("DonorUsers"));
                 },
               ),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: Text("User Manual".tr),
+              onTap: () {
+                Navigator.pushNamed(context, DonorUserManual.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.rule),
+              title: Text("Policy".tr),
+              onTap: () {
+                Navigator.pushNamed(context, PolicyPage.id);
+              },
+            ),
             // Display Logout option in drawer
             // On tap, navigate to Home screen
             ListTile(

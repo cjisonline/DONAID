@@ -11,6 +11,10 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          "Donor User Manual":"Donor User Manual",
+          "Organization User Manual":"Organization User Manual",
+          "Policy":"Policy",
+          "User Manual":"User Manual",
           "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
               "Please provide a monthly donation amount minimum of \$1",
           "please_enter_a_valid_cvc": "Please enter a valid CVC.",
@@ -320,6 +324,10 @@ class Messages extends Translations {
           "adoptions": "Adoptions"
         },
         'fr_FR': {
+          "Donor User Manual":"Manuel de l’utilisateur du donateur",
+          "Organization User Manual":"Manuel de l’utilisateur de l’organisation",
+          "Policy":"Politique",
+          "User Manual":"Manuel",
           "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
               "Veuillez fournir un montant de don mensuel minimum de 1 \$",
           "please_enter_a_valid_cvc": "Veuillez entrer un CVC valide.",
@@ -643,6 +651,10 @@ class Messages extends Translations {
           "adoptions": "Adoptions"
         },
         'ar_SA': {
+          "Donor User Manual":"دليل مستخدم الجهات المانحة",
+          "Organization User Manual":"دليل مستخدم المؤسسة",
+          "Policy":"السياسات",
+          "User Manual":"دليل المستخدم",
           "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
               "يرجى تقديم مبلغ تبرع شهري لا يقل عن 1 دولار",
           "please_enter_a_valid_cvc":
@@ -949,6 +961,10 @@ class Messages extends Translations {
           "adoptions": "التبني"
         },
         'es_ES': {
+          "Donor User Manual":"Manual de usuario del donante",
+          "Organization User Manual":"Manual de usuario de la organización",
+          "Policy":"Política",
+          "User Manual":"Manual de usuario",
           "please_provide_a_monthly_donation_amount_minimum_of_one_dollar":
               "Proporcione un monto de donación mensual mínimo de \$ 1",
           "please_enter_a_valid_cvc": "Introduzca un CVC válido.",
