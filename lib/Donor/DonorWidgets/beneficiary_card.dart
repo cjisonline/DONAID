@@ -86,7 +86,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
         // display icon
-        (_auth.currentUser?.email != null)
+        (_auth.currentUser?.email != null && widget.beneficiary is Beneficiary)
         ? Align(
           alignment: Alignment.topRight,
           child: IconButton(
