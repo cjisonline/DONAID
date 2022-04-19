@@ -40,6 +40,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
   final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
+  DateTime today = DateTime.now();
 
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
@@ -263,8 +264,16 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
       beneficiariesAndAdoptions.addAll(adoptions);
       beneficiariesAndAdoptions.addAll(beneficiaries);
+      
+      /*The sorting algorithm below is used to sort the list that contains all beneficiaries and adoptions.
+      * We sort this list using the algorithm ( [GoalAmount]-[AmountRaised]/[TodayDateTime - DateCreated] ) 
+      * This algorithm essentially calculates the average amount of money that each beneficiary/adoption has raised per day since it was
+      * created. We then sort the list in descending order based on this algorithm, so that charities that are not raising as much money as fast
+      * will be pushed to the top of the list and get more exposure. This sorting algorithm is only used for beneficiaries and adoptions because
+      * adoptions don't have an end date so we couldn't sort beneficiariesAndAdoptions by endDate like we do with other lists.
+      *  */
       beneficiariesAndAdoptions.sort((b, a) =>
-          (a.dateCreated).compareTo((b.dateCreated)));
+          ((a.goalAmount-a.amountRaised)/today.difference(a.dateCreated.toDate()).inDays).compareTo((b.goalAmount-b.amountRaised)/today.difference(a.dateCreated.toDate()).inDays));
     }
     else{
       beneficiariesAndAdoptions.addAll(beneficiaries);
