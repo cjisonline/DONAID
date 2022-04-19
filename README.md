@@ -15,7 +15,7 @@ CJ Fox, Ashley John, Kamal Mansour, Devin Stawicki, Raisa Zaman
 7. [DONAID Mobile Application Packages](#paragraph7)
 8. [Login Information](#paragraph8)
 9. [Edit & Deploy Admin Panel Updates](#paragraph9)
-10. [CONTACT](#contact)
+10. [Contact](#contact)
 
 
 ## I. Steps to run app on iOS simulator <a name="paragraph1"></a>
