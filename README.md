@@ -10,7 +10,8 @@ CJ Fox, Ashley John, Kamal Mansour, Devin Stawicki, Raisa Zaman
 2. [HOW TO ENABLE PUSH NOTIFICATIONS FOR iOS AND ENBALE APPLE SIGN IN](#paragraph2)
 3. [HOW TO INSTALL ANDROID STUDIO](#paragraph3)
 4. [FIREBASE](#paragraph4)
-5. [CONTACT](#contact)
+5. [HOW TO EDIT & DEPLOY ADMIN PANEL](#paragraph6)
+6. [CONTACT](#contact)
 
 
 ## I. Steps to run app on iOS simulator <a name="paragraph1"></a>
@@ -74,7 +75,6 @@ Android Studio 2020.3.1 will be used as an IDE for the application for debugging
 (Install at https://developer.android.com/studio), you will need to configure the emulator via the AVD manager settings in Android Studio. 
 The emulator API version is API 30, all other settings are left as default.
 
-
 ## IV. How to install Flutter and Dart <a name="paragraph3"></a>
 
 We used Flutter version 2.5.1 and Dart version 2.15 as a programming language and framework to develop the app. 
@@ -102,7 +102,15 @@ For all services used in the creation of this project, if they required account 
   
 ------------- CJ FINISH THIS SECTION -----------------------
   
-## VI. Contact <a name="contact"></a>
+## IX. Edit & Deploy Admin Panel Updates <a name="paragraph5">
+The DONAID administration panel web application was placed in a separate branch to not interfere with the flutter/dart code. This branch is titled "AdminConsole" in this repository. To edit the admin panel, clone the branch to a folder and edit the pages within the ./public folder only. The files outside the ./public folder are specific settings required within Firebase to deploy the web app to the domain it is at: https://donaid-d3244.web.app/
+  
+The DONAID administration panel web application was developed using HTML, CSS and vanilla JavaScript. There are no packages or frameworks involved that need to be installed, simply applications that allow the developer to edit and deploy new features. These are explained below. The application can be edited with whatever IDE the user prefers, but for the sake of compatibility and limitless extension options, VSCode was used: https://code.visualstudio.com/download with the Live Server Extension for ease of use when testing new features: https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
+  
+One thing that is needed to deploy the web app, if updated, is the Firebase CLI, which can be found here: https://firebase.google.com/docs/cli
+Once downloaded and installed, within the terminal that the web app is cloned, run the command "firebase deploy" and type "no" for any prompts to delete any current repositories. The web app with its new updates will be deployed to the link above. 
+  
+## X. Contact <a name="contact"></a>
 - I. How to Run app on iOS simulator/device -- contact Kamal if you need more assistance. 
 - II. How to add enable apple sign in and push notifications(iOS) -- contact Kamal if you need more assistance.
 - For other information, the DONAID team lead, CJ Fox, can be contacted for assistance at ge5315@wayne.edu
