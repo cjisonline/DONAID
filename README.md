@@ -110,9 +110,9 @@ All packages are also commented in the pubspec.yaml file to give brief descripti
 
   
 ## VIII. Login Information
-For all services used in the creation of this project, if they required account creation with the service, the DONAID team used a specific DONAID email for all accounts. The DONAID application's email address is donaidmobileapp1@gmail.com and the password is Donaid12311!!
+For all services used in the creation of this project, if they required account creation with the service, the DONAID team used a specific DONAID email for all accounts.
   
-------------- CJ FINISH THIS SECTION -----------------------
+One of the important uses of the DONAID email was for the creation of a Stripe account to use for development. The other most important use of the DONAID email is that it has ownership in the DONAID Firebase project and the Heroku project which hosts the node.js app outlined in section VI. Due to the sensitivity of the information in the node.js application and the Stripe development account, the login information for these services will be given to the client, Dr. Seyed. If upon continuing the development of the DONAID application, this login information is needed, please contact Dr. Seyed. 
   
 ## IX. Edit & Deploy Admin Panel Updates <a name="paragraph9">
 The DONAID administration panel web application was placed in a separate branch to not interfere with the flutter/dart code. This branch is titled "AdminConsole" in this repository. To edit the admin panel, clone the branch to a folder and edit the pages within the ./public folder only. The files outside the ./public folder are specific settings required within Firebase to deploy the web app to the domain it is at: https://donaid-d3244.web.app/
