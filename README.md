@@ -10,7 +10,7 @@ CJ Fox, Ashley John, Kamal Mansour, Devin Stawicki, Raisa Zaman
 2. [HOW TO ENABLE PUSH NOTIFICATIONS FOR iOS AND ENBALE APPLE SIGN IN](#paragraph2)
 3. [HOW TO INSTALL ANDROID STUDIO](#paragraph3)
 4. [FIREBASE](#paragraph4)
-5. [HOW TO EDIT & DEPLOY ADMIN PANEL](#paragraph6)
+5. [HOW TO EDIT & DEPLOY ADMIN PANEL](#paragraph9)
 6. [CONTACT](#contact)
 
 
@@ -95,14 +95,26 @@ So, the DONAID mobile application has the publishable Stripe API key in its mobi
 Then, when the mobile application needs to communicate with the Stripe API, it will make an HTTPS request to the node.js app that we have created which is hosted on Heroku. The node.js app contains the Stripe secret API key and so it will make the necessary call to Stripe API and then return the needed information back to the mobile application.  The node.js app is needed for any and all communication with the Stripe API. More detailed information on the implementation of the node.js app and the use of the Stripe API can be found within the code's comments.
   
 ## VII. DONAID Mobile Application Packages
-  ------------- CJ FINISH THIS SECTION -----------------------
+All packages that are needed for the DONAID mobile application are outlined in the dependencies section of the pubspec.yaml file. All packages used in the DONAID mobile application were imported and implemented by following documentation on pub.dev.  This section will describe some of the most important packages in the project.
+All packages are also commented in the pubspec.yaml file to give brief descriptions of their uses in the app.
+ 
+  * Get (https://pub.dev/packages/get): Used for translations in the application's language localization
+  * Firebase Core (https://pub.dev/packages/firebase_core): This package is needed in order to use other Firebase services because other Firebase services depend on Firebase Core
+  * Firebase Auth (https://pub.dev/packages/firebase_auth): Used for logging users into the application and retrieving user information from Firebase
+  * Cloud Firestore (https://pub.dev/packages/cloud_firestore): This package is needed for the use of Firebase Firestore database
+  * Firebase Storage (https://pub.dev/packages/firebase_storage): This package is needed for the use of Firebase Storage - the Firebase file storage that the application uses for storing profile pictures, organization verification documents, and other similar documents.
+  * Firebase Messaging (https://pub.dev/packages/firebase_messaging): This package is used for Firebase Cloud Messaging which is the Firebase service that's used for the implementation of push notifications.
+  * Shared Preferences (https://pub.dev/packages/shared_preferences): This package is used for storing small amounts of data on a user's mobile device which is used in the DONAID application for storing information such as whether a user has push notifications enabled, a user's language preferences, etc.
+  * Flutter Stripe (https://pub.dev/packages/flutter_stripe): Used for the implementation of Stripe into the DONAID mobile application
+  * Http (https://pub.dev/packages/http): Used for making https API requests in the implementation of Stripe.
+
   
 ## VIII. Login Information
 For all services used in the creation of this project, if they required account creation with the service, the DONAID team used a specific DONAID email for all accounts. The DONAID application's email address is donaidmobileapp1@gmail.com and the password is Donaid12311!!
   
 ------------- CJ FINISH THIS SECTION -----------------------
   
-## IX. Edit & Deploy Admin Panel Updates <a name="paragraph5">
+## IX. Edit & Deploy Admin Panel Updates <a name="paragraph9">
 The DONAID administration panel web application was placed in a separate branch to not interfere with the flutter/dart code. This branch is titled "AdminConsole" in this repository. To edit the admin panel, clone the branch to a folder and edit the pages within the ./public folder only. The files outside the ./public folder are specific settings required within Firebase to deploy the web app to the domain it is at: https://donaid-d3244.web.app/
   
 The DONAID administration panel web application was developed using HTML, CSS and vanilla JavaScript. There are no packages or frameworks involved that need to be installed, simply applications that allow the developer to edit and deploy new features. These are explained below. The application can be edited with whatever IDE the user prefers, but for the sake of compatibility and limitless extension options, VSCode was used: https://code.visualstudio.com/download with the Live Server Extension for ease of use when testing new features: https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
