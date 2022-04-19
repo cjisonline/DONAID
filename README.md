@@ -6,12 +6,16 @@ The DONAID application's goal is to connect charity organizations to donors acro
 CJ Fox, Ashley John, Kamal Mansour, Devin Stawicki, Raisa Zaman
 
 ## Table of Contents
-1. [STEPS TO RUN APP ON IOS SIMULATOR / REAL OS DEVICE](#paragraph1)
-2. [HOW TO ENABLE PUSH NOTIFICATIONS FOR iOS AND ENBALE APPLE SIGN IN](#paragraph2)
-3. [HOW TO INSTALL ANDROID STUDIO](#paragraph3)
-4. [FIREBASE](#paragraph4)
-5. [HOW TO EDIT & DEPLOY ADMIN PANEL](#paragraph9)
-6. [CONTACT](#contact)
+1. [Steps to run app on iOS simulator](#paragraph1)
+2. [How to enable push notifications and Apple sign in for deployment](#paragraph2)
+3. [How to install Android Studio](#paragraph3)
+4. [How to install Flutter and Dart](#paragraph4)
+5. [Firebase](#paragraph5)
+6. [Node App & Stripe API](#paragraph6)
+7. [DONAID Mobile Application Packages](#paragraph7)
+8. [Login Information](#paragraph8)
+9. [Edit & Deploy Admin Panel Updates](#paragraph9)
+10. [CONTACT](#contact)
 
 
 ## I. Steps to run app on iOS simulator <a name="paragraph1"></a>
@@ -69,32 +73,32 @@ After you get the account, follow the steps below to enable:
 
 Following these steps will enable the use of these functionalities' implementation on iOS devices.
 
-## III. How to install Android Studio
+## III. How to install Android Studio<a name="paragraph3"></a>
 
 Android Studio 2020.3.1 will be used as an IDE for the application for debugging and testing purposes. 
 (Install at https://developer.android.com/studio), you will need to configure the emulator via the AVD manager settings in Android Studio. 
 The emulator API version is API 30, all other settings are left as default.
 
-## IV. How to install Flutter and Dart <a name="paragraph3"></a>
+## IV. How to install Flutter and Dart <a name="paragraph4"></a>
 
 We used Flutter version 2.5.1 and Dart version 2.15 as a programming language and framework to develop the app. 
 To install the correct version of Flutter and Dart, use the following link download Flutter and Dart as one package: 
 https://docs.flutter.dev/development/tools/sdk/releases
 
-## V. Firebase <a name="paragraph4"></a>
+## V. Firebase <a name="paragraph5"></a>
 -	Firebase Authentication – All DONAID users are authenticated using email and password. It also provides Google, Apple, and Facebook sign-in. Firebase Authentication also tracks anonymous authentication which allows the user to login without an email and password. 
 -	Firestore Database – All the data in DONAID is stored in the cloud Firestore. The data is organized into different collections. Each collection has documents which store the various data entries. 
 -	Realtime Database – All the messaging data of DONAID is stored within the Realtime database. This allows for data to be synced in realtime. 
 -	Firebase Storage – All the images are saved in the Firebase storage which includes the carousel, icons, profile pictures, and verification documents. 
 
-## VI. Node App & Stripe API <a name="paragraph5">
+  ## VI. Node App & Stripe API <a name="paragraph6"></a>
 The DONAID application required the implementation of a small node.js application in order to properly use the Stripe API. This is because the Stripe API provides two API keys - a publishable key and a secret key. For proper security of the application, the secret key must not be stored in the mobile application.
 
 So, the DONAID mobile application has the publishable Stripe API key in its mobile code which can be found in the initalization of the application in `main.dart`. 
   
 Then, when the mobile application needs to communicate with the Stripe API, it will make an HTTPS request to the node.js app that we have created which is hosted on Heroku. The node.js app contains the Stripe secret API key and so it will make the necessary call to Stripe API and then return the needed information back to the mobile application.  The node.js app is needed for any and all communication with the Stripe API. More detailed information on the implementation of the node.js app and the use of the Stripe API can be found within the code's comments.
   
-## VII. DONAID Mobile Application Packages
+  ## VII. DONAID Mobile Application Packages <a name="paragraph7"></a>
 All packages that are needed for the DONAID mobile application are outlined in the dependencies section of the pubspec.yaml file. All packages used in the DONAID mobile application were imported and implemented by following documentation on pub.dev.  This section will describe some of the most important packages in the project.
 All packages are also commented in the pubspec.yaml file to give brief descriptions of their uses in the app.
  
@@ -109,12 +113,12 @@ All packages are also commented in the pubspec.yaml file to give brief descripti
   * Http (https://pub.dev/packages/http): Used for making https API requests in the implementation of Stripe.
 
   
-## VIII. Login Information
+  ## VIII. Login Information <a name="paragraph8"></a>
 For all services used in the creation of this project, if they required account creation with the service, the DONAID team used a specific DONAID email for all accounts.
   
 One of the important uses of the DONAID email was for the creation of a Stripe account to use for development. The other most important use of the DONAID email is that it has ownership in the DONAID Firebase project and the Heroku project which hosts the node.js app outlined in section VI. Due to the sensitivity of the information in the node.js application and the Stripe development account, the login information for these services will be given to the client, Dr. Seyed. If upon continuing the development of the DONAID application, this login information is needed, please contact Dr. Seyed. 
   
-## IX. Edit & Deploy Admin Panel Updates <a name="paragraph9">
+  ## IX. Edit & Deploy Admin Panel Updates <a name="paragraph9"></a>
 The DONAID administration panel web application was placed in a separate branch to not interfere with the flutter/dart code. This branch is titled "AdminConsole" in this repository. To edit the admin panel, clone the branch to a folder and edit the pages within the ./public folder only. The files outside the ./public folder are specific settings required within Firebase to deploy the web app to the domain it is at: https://donaid-d3244.web.app/
   
 The DONAID administration panel web application was developed using HTML, CSS and vanilla JavaScript. There are no packages or frameworks involved that need to be installed, simply applications that allow the developer to edit and deploy new features. These are explained below. The application can be edited with whatever IDE the user prefers, but for the sake of compatibility and limitless extension options, VSCode was used: https://code.visualstudio.com/download with the Live Server Extension for ease of use when testing new features: https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
