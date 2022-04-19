@@ -6,41 +6,75 @@ environment:
   sdk: ">=2.15.1 <3.0.0"
 
 dependencies:
+
+  #Used for the in-app PDF viewer used for the User Manuals
   advance_pdf_viewer_fork: any
+
+  #Imports a favorite button widget used in the favorites feature
   favorite_button: ^0.0.3
   flutter:
     sdk: flutter
+
   flutter_form_builder: ^7.1.0
+
+  # Used for the implementation of alternative sign in methods
   flutter_facebook_auth: ^4.0.1
   google_sign_in: ^5.2.3
   flutter_signin_button: ^2.0.0
+  sign_in_with_apple: ^3.3.0
+
   flutter_easyloading: ^3.0.3
+
+  #Used for firebase services
   firebase_core: ^1.12.0
   firebase_auth: ^3.3.6
   cloud_firestore: ^3.1.7
   firebase_storage: ^10.2.7
   firebase_messaging: ^11.2.8
+
+  #Used for requesting permissions on iOS
   permission_handler: ^9.2.0
+
+  #Used for chart graphics in organization donation statistics
   charts_flutter: ^0.12.0
+
+  #Used for loading progress indicator
   modal_progress_hud_nsn: ^0.1.0-nullsafety-0
+
+  #Used for in-app push notifications
   overlay_support: ^1.2.1
-  flutter_local_notifications: ^9.4.0
+
+  #Used for storing small amounts of information on user's device
   shared_preferences: ^2.0.13
+
+  #Used to implement country selection dialog
   country_picker: ^2.0.11
+
+  #Used for picking images from user's device - e.g. profile picture
   image_picker: ^0.8.4+8
+
+  #Used for the foreign organization dialog as well as launching
+  #the payment gateway links
   flutter_linkify: ^5.0.2
   url_launcher: ^6.0.20
-  carousel_slider: ^4.0.0
-  sign_in_with_apple: ^3.3.0
 
+  #Used for admin carousel in donor dashboard
+  carousel_slider: ^4.0.0
+
+
+  #Used for PDF generation and PDF preview in Donation History
   pdf: ^3.1.0
-  path_provider:  ^2.0.1
+  path_provider: ^2.0.1
   open_file: ^3.1.0
+
+  #Used for number formatting
   intl: ^0.17.0
 
 
+  #Used for in-app messaging and translations
   get:
   get_storage: ^2.0.3
+
   dio: ^4.0.4
   bubble:
   google_fonts:
@@ -54,7 +88,10 @@ dependencies:
   modal_bottom_sheet:
   top_modal_sheet:
 
+  #Used for Stripe API
   flutter_stripe: ^2.2.0
+
+  #Used for making https API requets
   http: ^0.13.4
   cupertino_icons: ^1.0.2
 
