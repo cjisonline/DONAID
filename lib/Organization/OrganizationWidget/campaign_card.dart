@@ -48,12 +48,15 @@ class _CampaignCardState extends State<CampaignCard> {
               // Display Campaign title populated from firebase
               Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Text(widget.campaign.title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                    )),
+                child: Container(
+                  height: 50,
+                  child: Text(widget.campaign.title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      )),
+                ),
               ),
               // Display Campaign description populated from firebase
               SizedBox(

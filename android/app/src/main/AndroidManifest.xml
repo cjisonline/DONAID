@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.donaid">
    <application
-        android:label="donaid"
+        android:label="DONAID"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

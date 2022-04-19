@@ -25,6 +25,12 @@ class _OrganizationSettingsPageState extends State<OrganizationSettingsPage> {
   }
 
   _getSharedPreferences()async{
+    /*The SharedPreferences is a small amount of data that we can store directly on the device
+    * In this instance, it is being used to store whether or not the user is enrolled in receiving notifications
+    * for when urgent cases are approved. The Firebase Messaging topic that organizations are enrolled to is different from the topic
+    * that donor users get subscribed to. Organizations are subscribed to a topic that is unique for their organization so that
+    * the organization user can receive notifications for both urgent case approvals and denials for the urgent cases that they have
+    * submitted*/
     final prefs = await _prefs;
     urgentCaseApprovalsNotifications = prefs.getBool('organizationUrgentCaseApprovalsNotifications')!;
 
@@ -86,6 +92,8 @@ class _OrganizationSettingsPageState extends State<OrganizationSettingsPage> {
   }
 
   toggleButton()async{
+    /*Toggle the boolean value that indicates whether or not the user is enrolled for notifications
+    * Based on the new value, either enroll or unenroll the user from notifications*/
     setState(() {
       urgentCaseApprovalsNotifications = !urgentCaseApprovalsNotifications;
     });

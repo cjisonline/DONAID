@@ -10,6 +10,7 @@ import 'package:donaid/Donor/categories_screen.dart';
 import 'package:donaid/Donor/organizations_expanded_screen.dart';
 import 'package:donaid/Donor/urgent_cases_expanded_screen.dart';
 import 'package:donaid/Models/AdminCarouselImage.dart';
+import 'package:donaid/Models/Adoption.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/CharityCategory.dart';
 import 'package:donaid/Models/Organization.dart';
@@ -39,6 +40,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _auth = FirebaseAuth.instance;
   final Future<SharedPreferences> _prefs =  SharedPreferences.getInstance();
+  DateTime today = DateTime.now();
 
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
@@ -50,6 +52,8 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
 
   List<Beneficiary> beneficiaries = [];
+  List<Adoption> adoptions=[];
+  List<dynamic> beneficiariesAndAdoptions=[];
   List<UrgentCase> urgentCases = [];
   List<Organization> organizations = [];
   List<CharityCategory> charityCategories = [];
@@ -61,7 +65,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
     super.initState();
     handleNotifications();
     _getCurrentUser();
-    _getBeneficiaries();
+    _getBeneficiariesAndAdoptions();
     _getUrgentCases();
     _getOrganizationUsers();
     _getCharityCategories();
@@ -76,20 +80,30 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   handleNotifications()async{
+    /*
+    * This method is used to set up everything needed for the app to handle notifications
+    * */
+
+    //onMessageOpenedApp is called when the app is opened by the user clicking a notification
+    //that was sent to their device. When this happens, we direct the user to their notifications page
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
       Navigator.push(context, MaterialPageRoute(builder: (context){
         return DonorNotificationPage();
       }));
 
     });
-    registerNotification();
-    checkForInitialMessage();
+    registerNotification(); //call registerNotification method
+    checkForInitialMessage(); //call checkForIntitialMessage method
   }
 
   checkForInitialMessage() async{
+    //getInitialMessage is called when the app is opened from the terminated state by a push
+    //notification that was sent to the device
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if(initialMessage != null){
-      addNotification(_auth.currentUser?.uid, initialMessage);
+      addNotification(_auth.currentUser?.uid, initialMessage); //add that notification to the users notification document in the database
+
+      //redirect to notifications page
       Navigator.push(context, MaterialPageRoute(builder: (context){
         return DonorNotificationPage();
       }));
@@ -97,6 +111,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   registerNotification() async {
+    //Requests the notifications permission
     NotificationSettings notificationSettings = await _messaging.requestPermission(
       alert: true,
       badge: true,
@@ -104,11 +119,17 @@ class _DonorDashboardState extends State<DonorDashboard> {
       sound: true
     );
 
+    //If the user authorizes notifications then the application listens for notifications
     if(notificationSettings.authorizationStatus == AuthorizationStatus.authorized)
       {
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+          //Whenever a notification is receieved, add it to the user's notifications document in the database
           addNotification(_auth.currentUser?.uid, message);
 
+          /*
+          * When we receive a notification while the application is open, we show an in-app overlay using showSimpleNotification to show the notification.
+          * Firebase Cloud Messaging will automatically create the push notification to the device when the application is closed.
+          * */
           if(message.notification!=null){
             showSimpleNotification(
               Text(message.notification!.title!),
@@ -126,12 +147,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _refreshPage() {
+    adoptions.clear();
+    beneficiariesAndAdoptions.clear();
     beneficiaries.clear();
     urgentCases.clear();
     organizations.clear();
     charityCategories.clear();
     _getCurrentUser();
-    _getBeneficiaries();
+    _getBeneficiariesAndAdoptions();
     _getUrgentCases();
     _getOrganizationUsers();
     _getCharityCategories();
@@ -192,12 +215,15 @@ class _DonorDashboardState extends State<DonorDashboard> {
 
   // From Firebase, get active beneficiaries where the end date is after the current date
   // Order the beneficiaries by end date in ascending order
-  _getBeneficiaries() async {
+  _getBeneficiariesAndAdoptions() async {
+
+    //Get Beneficiaries from Firestore
     var ret = await _firestore.collection('Beneficiaries')
         .where('active',isEqualTo: true)
         .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
         .orderBy('endDate',descending: false)
         .get();
+
     for (var element in ret.docs) {
       Beneficiary beneficiary = Beneficiary(
           name: element.data()['name'],
@@ -213,7 +239,48 @@ class _DonorDashboardState extends State<DonorDashboard> {
       );
       beneficiaries.add(beneficiary);
     }
+
+    //Only display the adoptions if the user is not a guest user
+    if(_auth.currentUser?.email != null) {
+      //Get Adoptions from Firestore
+      var ret2 = await _firestore.collection('Adoptions')
+          .where('active', isEqualTo: true)
+          .get();
+
+      for (var element in ret2.docs) {
+        Adoption adoption = Adoption(
+            name: element.data()['name'],
+            biography: element.data()['biography'],
+            goalAmount: element.data()['goalAmount'].toDouble(),
+            amountRaised: element.data()['amountRaised'].toDouble(),
+            category: element.data()['category'],
+            dateCreated: element.data()['dateCreated'],
+            id: element.data()['id'],
+            organizationID: element.data()['organizationID'],
+            active: element.data()['active']
+        );
+        adoptions.add(adoption);
+      }
+
+      beneficiariesAndAdoptions.addAll(adoptions);
+      beneficiariesAndAdoptions.addAll(beneficiaries);
+      
+      /*The sorting algorithm below is used to sort the list that contains all beneficiaries and adoptions.
+      * We sort this list using the algorithm ( [GoalAmount]-[AmountRaised]/[TodayDateTime - DateCreated] ) 
+      * This algorithm essentially calculates the average amount of money that each beneficiary/adoption has raised per day since it was
+      * created. We then sort the list in descending order based on this algorithm, so that charities that are not raising as much money as fast
+      * will be pushed to the top of the list and get more exposure. This sorting algorithm is only used for beneficiaries and adoptions because
+      * adoptions don't have an end date so we couldn't sort beneficiariesAndAdoptions by endDate like we do with other lists.
+      *  */
+      beneficiariesAndAdoptions.sort((b, a) =>
+          ((a.goalAmount-a.amountRaised)/today.difference(a.dateCreated.toDate()).inDays).compareTo((b.goalAmount-b.amountRaised)/today.difference(a.dateCreated.toDate()).inDays));
+    }
+    else{
+      beneficiariesAndAdoptions.addAll(beneficiaries);
+    }
+
     setState(() {});
+
   }
 
   // From Firebase, get the approved and active urgent cases where the end date is after the current date
@@ -247,6 +314,7 @@ class _DonorDashboardState extends State<DonorDashboard> {
   }
 
   _getCarouselImagesAndCardList() async{
+    //Gets the admin carousel images from the database to display on the dashboard
     var ret = await _firestore.collection('AdminCarouselImages').get();
 
     for(var doc in ret.docs){
@@ -323,14 +391,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Display category title
                       Text(
                         'categories'.tr,
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[650]),
                         textAlign: TextAlign.start,
                       ),
                       // Display see more option
@@ -365,14 +433,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
             Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0, bottom: 0),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Display title
                           Text(
                             'organization'.tr,
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[650]),
                             textAlign: TextAlign.start,
                           ),
                           // Display see more option
@@ -406,14 +474,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 0),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Display title
                           Text(
                             'beneficiaries'.tr,
-                            style: TextStyle(fontSize: 20),
+                            style:  TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[650]),
                             textAlign: TextAlign.start,
                           ),
                           // Display see more option
@@ -432,14 +500,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
                   ),
                 ),
             // Display the beneficiary list
-            beneficiaries.isNotEmpty
+            beneficiariesAndAdoptions.isNotEmpty
                     ? SizedBox(
                     height: 325.0,
                     child: ListView.builder(
-                      itemCount: beneficiaries.length,
+                      itemCount: beneficiariesAndAdoptions.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, int index) {
-                        return BeneficiaryCard(beneficiaries[index]);
+                        return BeneficiaryCard(beneficiariesAndAdoptions[index]);
                       },
                     ))
                     :  Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),)),
@@ -449,14 +517,14 @@ class _DonorDashboardState extends State<DonorDashboard> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 0),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Display title
                           Text(
                             'urgent_cases'.tr,
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[650]),
                             textAlign: TextAlign.start,
                           ),
                           // Display see more option

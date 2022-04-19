@@ -37,6 +37,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
   }
 
   _getTimeLimit() async {
+    //This gets the beneficiary time limit that is in the AdminRestrictions collection in Firestore.
+    //The time limit is given in number of days and can be changed from the Admin panel.
     var ret = await _firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
 
     var doc = ret.docs[0];
@@ -131,7 +133,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
-          readOnly: widget.beneficiary.amountRaised > 0,
+          readOnly: widget.beneficiary.amountRaised > 0,//name cannot be edited if some money has been raised
           controller: _beneficiaryNameController,
           decoration: InputDecoration(
               label: Center(
@@ -160,7 +162,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        readOnly: widget.beneficiary.amountRaised > 0,
+        readOnly: widget.beneficiary.amountRaised > 0,//biography cannot be edited if some money has been raised
         controller: _beneficiaryBiographyController,
         minLines: 2,
         maxLines: 5,
@@ -187,7 +189,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        readOnly: widget.beneficiary.amountRaised > 0,
+        readOnly: widget.beneficiary.amountRaised > 0,//goal amount cannot be edited if some money has been raised
         keyboardType: TextInputType.number,
         controller: _beneficiaryGoalAmountController,
         validator: (value) {
@@ -234,8 +236,11 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           controller: _beneficiaryEndDateController,
-          readOnly: true,
+          readOnly: true,//this makes it so that the user cannot enter text, but must use the date selection popup
           validator: (value) {
+            /*Validator ensures the field isn't empty and checks the selected end date against the time limit from
+            * the AdminRestrictions collection. The number of days between the current date and the selected end date must be
+            * less than the time limit. */
             if (value!.isEmpty) {
               return "please_enter_end_date.".tr;
             }
@@ -272,6 +277,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
           ),
           onTap: () async {
             if(widget.beneficiary.amountRaised < widget.beneficiary.goalAmount) {
+              //Only show the date picker if the goal amount has not been reached.
+              //If the goal has been reached, don't allow organizations to extend the end date
               var date = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
@@ -317,6 +324,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
           icon: widget.beneficiary.amountRaised > 0
               ? Visibility(child: Icon(Icons.keyboard_arrow_down,),visible: false,)
               : Icon(Icons.keyboard_arrow_down),
+
+          //If money has been raised, category options are not shown so that the category can't be changed
           items: widget.beneficiary.amountRaised > 0
               ? [DropdownMenuItem<String>(child: Text(_beneficiaryCategoryController!.text), value: _beneficiaryCategoryController!.text,)]
               : category.map((items) {

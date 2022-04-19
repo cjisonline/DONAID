@@ -28,6 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<int> getUserType() async {
     //Searches firestore for the user corresponding to the email. Changes the userType variable accordingly.
+    //The Users collection in Firestore stores all organization user and donor user emails along with a
+    //number to indicate their user type.  userType==1 -> donor; userType==2 -> organization
     int userType = -1;
     try {
       final user = await _firestore
@@ -35,7 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
           .where('email', isEqualTo: email)
           .get();
       userType = user.docs[0]['userType'];
-      print('USERTYPE: $userType');
     } catch (e) {
       print(e);
     }
@@ -54,7 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
             .get();
         final enabled = donorUser.docs[0]['enabled'];
 
+
         if (enabled) {
+          //If the donor user has not been disabled by the admin, sign them in and redirect to dashboard
           await _auth.signInWithEmailAndPassword(
               email: email, password: password);
           Navigator.pushNamed(context, DonorDashboard.id);
@@ -68,8 +71,11 @@ class _LoginScreenState extends State<LoginScreen> {
             .where('email', isEqualTo: email)
             .get();
         final approved = organizationUser.docs[0]['approved'];
-        print('APPROVAL STATUS: $approved');
+
+
         if (approved) {
+
+          //If the organization has been approved by the admin, sign them in and redirect to dashboard
           await _auth.signInWithEmailAndPassword(
               email: email, password: password);
           Navigator.pushNamed(context, OrganizationDashboard.id);
@@ -196,93 +202,95 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: ModalProgressHUD(
         inAsyncCall: showLoadingSpinner,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  onChanged: (value) {
-                    email = value;
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "please_enter_your_email.".tr;
-                    } else if (!emailRegExp.hasMatch(value)) {
-                      return "please_enter_a_valid_email_address.".tr;
-                    } else {
-                      return null;
-                    }
-                  },
-                  keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                      hintText: "Email",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      )),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: TextFormField(
-                  onChanged: (value) {
-                    password = value;
-                  },
-                  validator: (value) {
-                    if (passwordreset) return null;
-                    if (value!.isEmpty || value.length < 6) {
-                      return "password_must_be_at_least_6_characters.".tr;
-                    } else {
-                      return null;
-                    }
-                  },
-                  obscureText: true,
-                  textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                      hintText: "Password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      )),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
-                child: Material(
-                  elevation: 5.0,
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(32.0),
-                  child: MaterialButton(
-                    child:
-                        Text('login'.tr, style: TextStyle(color: Colors.white)),
-                    onPressed: () async {
-                      passwordreset = false;
-                      if (_formKey.currentState!.validate()) {
-                        setState(() {
-                          showLoadingSpinner = true;
-                        });
-                        loginUser();
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height*0.25),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "please_enter_your_email.".tr;
+                      } else if (!emailRegExp.hasMatch(value)) {
+                        return "please_enter_a_valid_email_address.".tr;
+                      } else {
+                        return null;
                       }
                     },
+                    keyboardType: TextInputType.emailAddress,
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                        hintText: "Email",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        )),
                   ),
                 ),
-              ),
-              Center(
-                  child: InkWell(
-                onTap: () async {
-                  passwordreset = true;
-                  if (_formKey.currentState!.validate()) {
-                    setState(() {
-                      showLoadingSpinner = true;
-                    });
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      password = value;
+                    },
+                    validator: (value) {
+                      if (passwordreset) return null;
+                      if (value!.isEmpty || value.length < 6) {
+                        return "password_must_be_at_least_6_characters.".tr;
+                      } else {
+                        return null;
+                      }
+                    },
+                    obscureText: true,
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                        hintText: "Password",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
+                  child: Material(
+                    elevation: 5.0,
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(32.0),
+                    child: MaterialButton(
+                    child:
+                        Text('login'.tr, style: TextStyle(color: Colors.white)),
+                      onPressed: () async {
+                        passwordreset = false;
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            showLoadingSpinner = true;
+                          });
+                          loginUser();
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                Center(
+                    child: InkWell(
+                      onTap: () async {
+                        passwordreset = true;
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            showLoadingSpinner = true;
+                          });
                     /*
                       Sends a password reset email to the given email address.
                       To complete the password reset, call [confirmPasswordReset] with the code supplied
-                      in the email sent to the user, along with the new password specified by the user.  
+                      in the email sent to the user, along with the new password specified by the user.
                       May throw a [FirebaseAuthException] with the following error codes:
                       - invalid-email
                         Thrown if the email address is not valid.
@@ -318,8 +326,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text('forgot_password!'.tr,
                     style: TextStyle(color: Colors.black)),
               )),
-              Spacer(),
-            ],
+              ],
+            ),
           ),
         ),
       ),

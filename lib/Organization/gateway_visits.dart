@@ -13,6 +13,19 @@ import '../Models/UrgentCase.dart';
 import 'OrganizationWidget/organization_bottom_navigation.dart';
 import 'OrganizationWidget/organization_drawer.dart';
 
+/*
+* This page is only available to foreign organizations.
+* This page will show all the documents from the GatewayVisits collection in Firestore where the organizationID matches
+* the logged in user's ID. A GatewayVisits document is generated whenever a donor user clicks on the payment gateway from the
+* payment gateway popup for foreign organizations.
+*
+* With each payment gateway visit record on this page, the organization can then confirm/deny if the visit resulted in a donation.
+* This is so that we can still provide value to foreign organizations in this application even though we do not handle donations for foreign
+* organizations.
+*
+* If a visit is confirmed as resulting in a donation, the organization will enter how much was donated so that the appropriate charity can be updated,
+* and the donor user will also have a record added to their donation history.
+* */
 class GatewayVisits extends StatefulWidget {
   static const id = 'gateway_visits';
   const GatewayVisits({Key? key}) : super(key: key);
@@ -44,6 +57,7 @@ class _GatewayVisitsState extends State<GatewayVisits> {
   }
 
   _getGatewayVisits() async {
+    //Get unread gateway visits for the currently logged in organization user
     var ret = await _firestore
         .collection('GatewayVisits')
         .where('organizationID', isEqualTo: _auth.currentUser!.uid)
@@ -70,6 +84,7 @@ class _GatewayVisitsState extends State<GatewayVisits> {
   }
 
   _getDonors() async {
+    /* Get the donor users for each visit. */
     for (var visit in visits) {
 
       if(!visit.guest) {
@@ -104,6 +119,7 @@ class _GatewayVisitsState extends State<GatewayVisits> {
   }
 
   _markAsRead(GatewayVisit visit) async {
+    //This method will mark a visit as read
     await _firestore.collection('GatewayVisits').doc(visit.id).set({
       'organizationID': visit.organizationID,
       'donorID': visit.donorID,
@@ -119,6 +135,9 @@ class _GatewayVisitsState extends State<GatewayVisits> {
   }
 
   _updateCharityAndCreateDonationRecord(GatewayVisit visit) async {
+    /*This method will add the entered donation amount to the amountRaised field for the charity
+    * and will create a donation record with the donor's ID so that it will show up in their donation
+    * history*/
     if (visit.charityType == 'Campaign') {
       var ret = await _firestore
           .collection('Campaigns')
@@ -449,9 +468,7 @@ class _GatewayVisitsState extends State<GatewayVisits> {
                               ],
                             ),
                           ),
-                          const Divider(
-                            color: Colors.grey,
-                          )
+                          SizedBox(height:10)
                         ],
                       );
                     })

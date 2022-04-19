@@ -249,7 +249,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
                     ],
                   )
               )
-                  :  Text('compaign_is_no_longer_available_to_donate'.tr),
+                  :  Text('compaign_is_no_longer_available_to_donate'.tr, style: TextStyle(fontSize: 18),),
             )
           ]),
         )),
@@ -258,6 +258,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   }
 
   void createDonationDocument() async{
+    //This method creates a document in the Donations collection to keep record of this donation
     final docRef = await _firestore.collection('Donations').add({});
 
     await _firestore.collection('Donations').doc(docRef.id).set({
@@ -275,13 +276,17 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   }
 
   void updateCampaign() async{
+    //This method updates the campaign with this donation.
     if(widget.campaign.amountRaised+double.parse(donationAmount) >= widget.campaign.goalAmount){
+      //If this donation makes the campaign reach its goal amount, make the campaign inactive
       await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
         'amountRaised': widget.campaign.amountRaised+double.parse(donationAmount),
         'active':false
       });
     }
     else{
+      //If this donation did not make the campaign reach its goal, simply add the donated amount
+      // to the amountRaised field
       await _firestore.collection('Campaigns').doc(widget.campaign.id).update({
         'amountRaised': widget.campaign.amountRaised+double.parse(donationAmount)
       });
@@ -289,6 +294,8 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
 
   }
   Future<void> makePayment() async {
+    //This method calls the createPaymentIntent method and the calls the
+    // method to create the payment sheet
     try {
       paymentIntentData =
           await createPaymentIntent(donationAmount, 'USD');
@@ -311,6 +318,8 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   }
 
   displayPaymentSheet() async {
+    /*Displaying the payment sheet requires the client secret that is given from the payment intents
+    * from the Stripe API (this is to keep track of this user's checkout session.*/
     try {
       await Stripe.instance.presentPaymentSheet(
         parameters: PresentPaymentSheetParameters(
@@ -321,9 +330,10 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
       );
 
       setState(() {
-        // paymentIntentData = null;
+        paymentIntentData = null;
       });
 
+      //If the payment is successfully completed, show a message
       ScaffoldMessenger.of(context)
           .showSnackBar( SnackBar(content: Text('paid_successfully'.tr)));
 
@@ -334,6 +344,7 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
     }catch (e) {
       print('Stripe Exception: ${e.toString()}');
 
+      //Show a message to indicate if the payment was cancelled
       ScaffoldMessenger.of(context)
           .showSnackBar( SnackBar(content: Text('payment_cancelled!'.tr)));
 
@@ -341,6 +352,8 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   }
 
   createPaymentIntent(String amount, String currency) async {
+    /*This method calls the node app to create a payment intent with the Stripe API.
+    * The node app will then return the client secret that is needed to create the payment sheet*/
     try {
       final body = {
         'amount': calculateAmount(amount),
@@ -362,6 +375,12 @@ class _CampaignDonateScreenState extends State<CampaignDonateScreen> {
   }
 
   calculateAmount(String amount) {
+    /*Stripe takes the payment amount as an integer. The integer that it takes is the payment amount
+    * in pennies. so $1.50 will be sent to Stripe as 150.
+    *
+    * This method parses the donation amount to a double (so that we can handle fractional dollar donations). Then it multiplies
+    * by 100 to convert to pennies. Then it does toInt to convert to integer so that Stripe will accept it. We return that integer dollar
+    * amount as a string that is sent to the API*/
     final price = (double.parse(amount)*100).toInt();
     return price.toString();
   }

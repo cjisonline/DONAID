@@ -27,6 +27,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   _getCharityCategories() async {
+    //Get all charity categories from the database
     var ret = await _firestore.collection('CharityCategories').get();
     for (var element in ret.docs) {
       CharityCategory charityCategory = CharityCategory(
@@ -57,6 +58,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   _categoriesBody(){
+    //Create a grid view to show all of the categories
     return GridView.builder(
       itemCount: charityCategories.length,
       itemBuilder: (BuildContext context, int index) {

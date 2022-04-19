@@ -22,7 +22,8 @@ class _OrganizationBottomNavigationState extends State<OrganizationBottomNavigat
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
+      height: 78,
+      padding: const EdgeInsets.only(bottom:15.0),
       decoration: BoxDecoration(
         color: Theme
             .of(context)

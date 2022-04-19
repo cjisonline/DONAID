@@ -32,6 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   checkAuthState() async {
+    /*This method is called every time the application is open. This method checks to see if the user is signed in or signed out
+    * If the user never logged out of the application during their last session, it will automatically redirect them to the dashboard for their
+    * account.*/
     _auth.authStateChanges().listen((User? user) async {
       if (user == null) {
         print('User signed out.');
@@ -54,16 +57,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _setLanguage() async {
+    /*This method is called whenever the application is opened. The SharedPreferences stores
+    * small amounts of user data on the mobile device itself. We use this SharedPreferences to save information
+    * about what language the user wants the application to be in. So whenever the application is loaded, we translate the
+    * application to the language stored in the SharedPreferenbces*/
     final SharedPreferences prefs = await _prefs;
     List<String>? locale = prefs.getStringList('Locale');
 
     if (locale![0].toString() == 'en' && locale[1].toString() == 'US') {
       await Get.updateLocale(const Locale('en', 'US'));
-    } else if (locale![0].toString() == 'fr' && locale![1].toString() == 'FR') {
+    } else if (locale[0].toString() == 'fr' && locale[1].toString() == 'FR') {
       await Get.updateLocale(const Locale('fr', 'FR'));
-    } else if (locale![0].toString() == 'ar' && locale![1].toString() == 'SA') {
+    } else if (locale[0].toString() == 'ar' && locale[1].toString() == 'SA') {
       await Get.updateLocale(const Locale('ar', 'SA'));
-    } else if (locale![0].toString() == 'es' && locale![1].toString() == 'ES') {
+    } else if (locale[0].toString() == 'es' && locale[1].toString() == 'ES') {
       await Get.updateLocale(const Locale('es', 'ES'));
     }
   }
@@ -124,9 +131,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(30.0),
                           child: MaterialButton(
-                              child: Text('guest_login'.tr,
-                                  style: const TextStyle(
-                                      fontSize: 25, color: Colors.white)),
+                              child: Center(
+                                child: Text('guest_login'.tr,
+                                    style: const TextStyle(
+                                        fontSize: 25, color: Colors.white)),
+                              ),
                               onPressed: () async {
                                 try {
                                   /*

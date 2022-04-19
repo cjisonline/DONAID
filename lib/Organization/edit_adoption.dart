@@ -132,7 +132,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
-          readOnly: widget.adoption.amountRaised > 0,
+          readOnly: widget.adoption.amountRaised > 0, //name cannot be edited if the adoption has raised some money
           controller: _adoptionNameController,
           decoration: InputDecoration(
               label: Center(
@@ -163,7 +163,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        readOnly: widget.adoption.amountRaised > 0,
+        readOnly: widget.adoption.amountRaised > 0,//The biography cannot be edited if the adoption has raised some money
         controller: _adoptionBiographyController,
         minLines: 2,
         maxLines: 5,
@@ -191,7 +191,7 @@ class _EditAdoptionState extends State<EditAdoption> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-          readOnly: widget.adoption.amountRaised > 0,
+          readOnly: widget.adoption.amountRaised > 0,//The goal amount can not be edited if the adoptions has raised some money
           keyboardType: TextInputType.number,
         controller: _adoptionGoalAmountController,
         validator: (value) {
@@ -264,6 +264,8 @@ class _EditAdoptionState extends State<EditAdoption> {
           icon: widget.adoption.amountRaised > 0
               ? Visibility(child: Icon(Icons.keyboard_arrow_down,),visible: false,)
               : Icon(Icons.keyboard_arrow_down),
+
+          // If the adoption has raised some money, then the category options do not display, and it cannot be changed
           items: widget.adoption.amountRaised > 0
               ? [DropdownMenuItem<String>(child: Text(_adoptionCategoryController!.text), value: _adoptionCategoryController!.text,)]
               : category.map((items) {

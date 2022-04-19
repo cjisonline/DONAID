@@ -63,6 +63,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _getDonationHistory() async {
+    //This method gets the donation records from the Donations collection for the signed in user
     setState(() {
       showLoadingSpinner = true;
     });
@@ -90,6 +91,9 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _getDonationOrganizations() async {
+    //This gets the organization that corresponds to each of the charities in the donation history
+    //so that we can check if the organization is in the US or not when the user tries to navigate to
+    //a charity from the donation history page
     for (var donation in donations) {
       var ret = await _firestore
           .collection('OrganizationUsers')
@@ -113,6 +117,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _goToChosenUrgentCase(String id) async {
+    //This method navigates to donation page for urgent case from the donation history page
     var ret = await _firestore
         .collection('UrgentCases')
         .where('id', isEqualTo: id)
@@ -139,6 +144,8 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _goToChosenCampaign(String id) async {
+    //This method gets full information for a selected campaign and then navigates to
+    // the donation page for that campaign from donation history page
     var ret = await _firestore
         .collection('Campaigns')
         .where('id', isEqualTo: id)
@@ -163,6 +170,8 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _goToChosenBeneficiary(String id) async {
+    //This method gets full information for a selected beneficiary
+    // and then navigates to the donate page for that beneficiary
     var ret = await _firestore
         .collection('Beneficiaries')
         .where('id', isEqualTo: id)
@@ -188,6 +197,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _getDonorInformation() async {
+    //This method gets donor info for generating the PDF
     var ret = await _firestore.collection('DonorUsers').where(
         'uid', isEqualTo: loggedInUser?.uid).get();
     final doc = ret.docs[0];
@@ -202,6 +212,7 @@ class _DonationHistoryState extends State<DonationHistory> {
   }
 
   _createPDF() async {
+    //This method creates the donation history PDF for donors
     if(donations.isEmpty){
       await _noDonationsForPDF();
     }
@@ -335,7 +346,7 @@ class _DonationHistoryState extends State<DonationHistory> {
                                 trailing: Text("\u0024" +
                                     f.format(donations[index].donationAmount)),
                               ),
-                    const Divider()
+                    SizedBox(height:10)
                   ],
                 ));
               }),
@@ -388,6 +399,7 @@ class _DonationHistoryState extends State<DonationHistory> {
 
 
   Future<void> _noDonationsForPDF() async {
+    //Alert dialog for if a user tries to generate PDF when they don't have any donation history
     return showDialog<void>(
         context: context,
         barrierDismissible: false,

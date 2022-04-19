@@ -34,30 +34,27 @@ class _CategoryScreenTileState extends State<CategoryScreenTile> {
               decoration: const BoxDecoration(
                   color: Colors.blue,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    SizedBox(
-                    width: 25,
-                    height: 25,
-                    child: Image.network(
-                      widget.charityCategory.iconDownloadURL,
-                      fit: BoxFit.contain,
-                    ),
-                    ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                    child: Text(widget.charityCategory.name,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 15.0,
-                        )),
-                  )
-                ]),
-              ))),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Image.network(
+                    widget.charityCategory.iconDownloadURL,
+                    fit: BoxFit.contain,
+                  ),
+                  ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Text(widget.charityCategory.name,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30.0,
+                      )),
+                )
+              ]))),
     );
   }
 }

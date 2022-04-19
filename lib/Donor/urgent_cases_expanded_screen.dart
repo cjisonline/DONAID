@@ -44,6 +44,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
   }
 
   _getUrgentCases() async {
+    //Get all urgent cases that are active and have been approved by the admin
     var ret = await _firestore.collection('UrgentCases')
         .where('approved',isEqualTo: true)
         .where('active', isEqualTo: true)
@@ -73,6 +74,8 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
   }
 
   _getUrgentCaseOrganizations() async{
+    //Get organization that corresponds for each urgent case so that we can check
+    // if the organization is based in the US or not
     for(var urgentCase in urgentCases){
       var ret = await _firestore.collection('OrganizationUsers')
           .where('uid', isEqualTo: urgentCase.organizationID)
@@ -103,11 +106,16 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                 ListTile(
                   onTap: () {
                     if(organizations[index].country =='United States'){
+                      //If organization for urgent case is based in the US, navigate to urgent case donation screen
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (UrgentCaseDonateScreen(urgentCases[index]));
                       })).then((value) => _refreshPage());
                     }
                     else{
+                      //If organization for urgent case is foreign, show payment gateway link popup
+
+                      //Charity object is used to create payment gateway visit record if the donor user clicks
+                      // on the payment gateway link
                       Map<String, dynamic> charity = {
                         'charityID':urgentCases[index].id,
                         'charityType':'Urgent Case',
@@ -146,7 +154,7 @@ class _UrgentCasesExpandedScreenState extends State<UrgentCasesExpandedScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );

@@ -22,6 +22,8 @@ class CharityCategoryCard extends StatelessWidget {
             }));
           },
           child: Container(
+            height: 75,
+              width: 150,
               decoration: const BoxDecoration(
                   color: Colors.blue,
                   borderRadius: BorderRadius.all(Radius.circular(10))),

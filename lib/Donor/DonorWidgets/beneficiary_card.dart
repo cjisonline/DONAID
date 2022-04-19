@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Donor/DonorAlertDialog/DonorAlertDialogs.dart';
+import 'package:donaid/Donor/adoption_details_screen.dart';
+import 'package:donaid/Models/Adoption.dart';
 import 'package:donaid/Models/Beneficiary.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +12,7 @@ import '../updateFavorite.dart';
 import 'package:get/get.dart';
 
 class BeneficiaryCard extends StatefulWidget {
-  final Beneficiary beneficiary;
+  final beneficiary;
 
   const BeneficiaryCard(this.beneficiary, {Key? key}) : super(key: key);
 
@@ -84,7 +86,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
           border: Border.all(color: Colors.grey.shade300, width: 2.0)),
       child: Column(children: [
         // display icon
-        (_auth.currentUser?.email != null)
+        (_auth.currentUser?.email != null && widget.beneficiary is Beneficiary)
         ? Align(
           alignment: Alignment.topRight,
           child: IconButton(
@@ -105,23 +107,30 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
             },
           ),
         ): Container(),
+        (widget.beneficiary is Beneficiary) ?
         Icon(
           Icons.person,
           color: Colors.blue,
           size: 40,
-        ),
+        )
+        : Icon(Icons.handshake_outlined,
+        color: Colors.blue,
+        size: 40),
         // display beneficiary name populated from Firebase
         Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Text(widget.beneficiary.name,
-              textAlign: TextAlign.center,
-              softWrap: true,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              )),
+          child: Container(
+            height: 50,
+            child: Text(widget.beneficiary.name,
+                textAlign: TextAlign.center,
+                softWrap: true,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                )),
+          ),
         ),
         // display beneficiary biography populated from Firebase
         SizedBox(
@@ -172,12 +181,26 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                   onTap: () {
                     // For organizations in the United States, navigate to beneficiary's donate screen
                     if (organization?.country == 'United States') {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return (BeneficiaryDonateScreen(widget.beneficiary));
-                      })).then((value) {
-                        setState(() {});
-                      });
+
+                      //If beneficiary is not up for adoptions, go to beneficiary donate screen
+                      if(widget.beneficiary is Beneficiary ){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                              return (BeneficiaryDonateScreen(widget.beneficiary));
+                            })).then((value) {
+                          setState(() {});
+                        });
+                      }
+                      //if the beneficiary is up for adoption, go to the adoptions details screen
+                      else if(widget.beneficiary is Adoption){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                              return (AdoptionDetailsScreen(widget.beneficiary));
+                            })).then((value) {
+                          setState(() {});
+                        });
+                      }
+
                     }
                     // For organizations outside the United States, display the dialog with gateway link
                     else {
@@ -192,10 +215,20 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                   },
                   // Display donate button
                   child: Row(children: [
-                    const Icon(Icons.favorite, color: Colors.white, size: 20),
+                    (widget.beneficiary is Beneficiary) ?
                     Container(
-                      margin: const EdgeInsets.only(left: 0.0, right: 10.0),
+                      margin: const EdgeInsets.only(left: 5.0, right: 5.0),
                       child: Text('donate'.tr,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          )),
+                    )
+                        :
+                    Container(
+                      margin: const EdgeInsets.only(left: 5.0, right: 5.0),
+                      child: Text('adopt'.tr,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,

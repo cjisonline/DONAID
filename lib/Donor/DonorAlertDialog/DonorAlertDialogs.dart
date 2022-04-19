@@ -6,6 +6,12 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 
+/*This file contains a few static methods for actions that are used repeatedly throughout the application.
+* the createGatewayVisit method is one of the most important. createGatewayVisit is called whenever a donor user clicks on
+* the payment gateway link for an organization (the link is displayed by the paymentLinkPopUp method).
+*
+* createGatewayVisit will create record for each time the payment gateway is visited by donor users. This is then shown in the
+* Gateway Visits page for foreign organizations where they can confirm/deny that a visit resulted in a donation.*/
 class DonorAlertDialogs{
   static createGatewayVisit(Organization organization, String uidDonor, Map<String, dynamic> charity) async{
     final _firestore = FirebaseFirestore.instance;
@@ -82,33 +88,6 @@ class DonorAlertDialogs{
               linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
               textAlign: TextAlign.center,
             ),
-            actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:  Text('ok'.tr),
-                ),
-              ),
-            ],
-          );
-        });
-  }
-
-  static Future<void> showFullOrganizationDetails(context, Organization organization) async {
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Center(
-              child: Text(organization.organizationName),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0),
-            ),
-            content: Text(organization.organizationDescription.toString()),
             actions: [
               Center(
                 child: TextButton(

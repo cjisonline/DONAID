@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../Models/UrgentCase.dart';
-
+/*
+* Editing an urgent case is only available from the 'Edit & Resubmit' after an urgent case has been denied by the admin.
+* Urgent cases cannot be edited at all after they have been submitted and approved by the admin.
+* */
 class EditUrgentCase extends StatefulWidget {
   UrgentCase urgentCase;
 
@@ -38,6 +41,8 @@ class _EditUrgentCaseState extends State<EditUrgentCase> {
   }
 
   _getTimeLimit() async {
+    //Get urgent case time limit from the AdminRestrictions Firestore collection. The time limit is given in number of\
+    //days and can be edited from the admin panel
     var ret = await _firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
 
     var doc = ret.docs[0];
@@ -136,7 +141,7 @@ class _EditUrgentCaseState extends State<EditUrgentCase> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
-          readOnly: widget.urgentCase.amountRaised > 0,
+          readOnly: widget.urgentCase.amountRaised > 0,//title cannot be edited if some money has been raised
           controller: _urgentCaseTitleController,
           decoration: InputDecoration(
               label: Center(
@@ -165,7 +170,7 @@ class _EditUrgentCaseState extends State<EditUrgentCase> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        readOnly: widget.urgentCase.amountRaised > 0,
+        readOnly: widget.urgentCase.amountRaised > 0,//description cannot be edited if some money has been raised
         controller: _urgentCaseDescriptionController,
         minLines: 2,
         maxLines: 5,
@@ -192,7 +197,7 @@ class _EditUrgentCaseState extends State<EditUrgentCase> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        readOnly: widget.urgentCase.amountRaised > 0,
+        readOnly: widget.urgentCase.amountRaised > 0,//goal amount cannot be edited if some money has been raised
         keyboardType: TextInputType.number,
         controller: _urgentCaseGoalAmountController,
         validator: (value) {
@@ -239,8 +244,11 @@ class _EditUrgentCaseState extends State<EditUrgentCase> {
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           controller: _urgentCaseEndDateController,
-          readOnly: true,
+          readOnly: true,//this prevents user from entering text, forcing them to use the date picker
           validator: (value) {
+            /*Validator ensures the field isn't empty and checks the selected end date against the time limit from
+            * the AdminRestrictions collection. The number of days between the current date and the selected end date must be
+            * less than the time limit. */
             if (value!.isEmpty) {
               return "please_enter_end_date.".tr;
             }

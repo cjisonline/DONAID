@@ -16,7 +16,9 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../home_screen.dart';
+import '../../policy.dart';
 import '../organization_profile.dart';
+import '../organization_user_manual.dart';
 
 // Organization drawar
 class OrganizationDrawer extends StatefulWidget {
@@ -211,6 +213,20 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                     });
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: Text("User Manual".tr),
+              onTap: () {
+                Navigator.pushNamed(context, OrganizationUserManual.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.rule),
+              title: Text("Policy".tr),
+              onTap: () {
+                Navigator.pushNamed(context, PolicyPage.id);
+              },
+            ),
             // US org display logout option in drawer
             //On press Navigate to the login page
             ListTile(
@@ -367,6 +383,20 @@ class _OrganizationDrawerState extends State<OrganizationDrawer> {
                                 child: const Center(child: Text("Espanol")))
                           ]);
                     });
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: Text("User Manual".tr),
+              onTap: () {
+                Navigator.pushNamed(context, OrganizationUserManual.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.rule),
+              title: Text("Policy".tr),
+              onTap: () {
+                Navigator.pushNamed(context, PolicyPage.id);
               },
             ),
             // Foreign org display contact admin option in drawer

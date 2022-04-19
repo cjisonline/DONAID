@@ -28,6 +28,7 @@ class _OrganizationFullDetailsScreenState extends State<OrganizationFullDetailsS
   }
 
   _getCounts() async{
+    //Counts the number of campaigns and beneficiaries that are active for this organization
     var campaignsRet = await _firestore.collection('Campaigns').where('organizationID', isEqualTo: widget.organization.uid).get();
     campaignCount = campaignsRet.docs.length;
 
@@ -38,6 +39,8 @@ class _OrganizationFullDetailsScreenState extends State<OrganizationFullDetailsS
   }
 
   Widget _buildProfilePictureDisplay(){
+    /*This method checks to see if the organization has uploaded a profile picture. If they have, it will show that
+    * profile picture. If not, it will show a generic icon*/
     return Padding(
       padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
       child: (widget.organization.profilePictureDownloadURL==null || widget.organization.profilePictureDownloadURL.toString().isEmpty)

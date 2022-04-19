@@ -174,7 +174,43 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   initState() {
     super.initState();
-    _getOrganizationsFromDonations();
+    /*
+    * If you call _getOrganizationsFromDonations() instead of getOrganizations
+    * the organizations array will be filled only with the organizations
+    * that they have donated to. This was our original restriction for the messaging feature
+    * but as of 4/12/22 Dr. Seyed has decided to change course so I'm editing the code, but leaving
+    * the _getOrganizationsFromDonations() function written in case he decides to change back another time
+    * */
+    //_getOrganizationsFromDonations();
+
+    _getOrganizations();
+  }
+
+  _getOrganizations()async{
+     setState(() {
+       showLoadingSpinner=true;
+     });
+
+     var ret = await _firestore.collection('OrganizationUsers').get();
+
+     for(var org in ret.docs){
+       Organization organization = Organization(
+           organizationEmail: org.data()['organizationEmail'],
+           organizationName: org.data()['organizationName'],
+           phoneNumber: org.data()['phoneNumber'],
+           uid: org.data()['uid'],
+           organizationDescription: org.data()['organizationDescription'],
+           country: org.data()['country'],
+           gatewayLink: org.data()['gatewayLink'],
+           id: org.data()['id']);
+
+         orgIDs.add(org.data()['uid'].toString());
+         organizations.add(organization);
+     }
+
+     setState(() {
+       showLoadingSpinner=false;
+     });
   }
 
   _getOrganizationsFromDonations() async {

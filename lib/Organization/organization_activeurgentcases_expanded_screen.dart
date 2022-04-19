@@ -8,6 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
+/*
+* This page creates the list view to show all of the active and admin-approved urgent cases
+* for the organization
+* */
+
 class OrganizationUrgentCasesExpandedScreen extends StatefulWidget {
   static const id = 'organization_urgentcases_expanded_screen';
   const OrganizationUrgentCasesExpandedScreen({Key? key})
@@ -39,6 +44,7 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
   }
 
   _getUrgentCases() async {
+    //Get all active urgent cases that have been approved by the admin
     var ret = await _firestore.collection('UrgentCases')
         .where('organizationID', isEqualTo: _auth.currentUser?.uid)
         .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
@@ -65,6 +71,7 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
       urgentCases.add(urgentCase);
     }
 
+    //Sort urgent cases by the most recently created
     urgentCases.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
     setState(() {});
   }
@@ -119,7 +126,7 @@ class _OrganizationUrgentCasesExpandedScreenState extends State<OrganizationUrge
                       ],
                     ),
                   ),
-                  const Divider()
+                  SizedBox(height:10)
                 ],
               ),
             );

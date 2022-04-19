@@ -43,6 +43,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
   }
   
   _getOrganizationBeneficiaries() async {
+    //Get all beneficiaries created by the chosen organization
     var ret = await _firestore.collection('Beneficiaries')
         .where('organizationID', isEqualTo: widget.organization.uid)
         .where('active',isEqualTo: true)
@@ -69,6 +70,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
   }
 
   _getOrganizationCampaigns()async{
+    //Get all campaigns created by the chosen organization
     var ret = await _firestore.collection('Campaigns')
         .where('organizationID',isEqualTo: widget.organization.uid)
         .where('active', isEqualTo: true)
@@ -95,6 +97,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
   }
 
   _organizationCampaignsBody(){
+    //Show all the active campaigns for the chosen organization
     return campaigns.isNotEmpty
     ? ListView.builder(
         itemCount: campaigns.length,
@@ -106,11 +109,16 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                 ListTile(
                   onTap: () {
                     if(widget.organization.country =='United States'){
+                      //If organization is from US, navigate to the campaign donate screen
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (CampaignDonateScreen(campaigns[index]));
                       })).then((value) => _refreshPage());
                     }
                     else{
+                      //If the organization is not from US, create payment gateway link popup
+
+                      //The charity object is used to create a payment gateway visit record if the user
+                      //clicks on the payment gatgeway link
                       Map<String, dynamic> charity = {
                         'charityID':campaigns[index].id,
                         'charityType':'Campaign',
@@ -149,7 +157,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
@@ -159,6 +167,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
   }
 
   _organizationBeneficiariesBody(){
+    //Display all active beneficiaries for the chosen organization
     return beneficiaries.isNotEmpty
     ? ListView.builder(
         itemCount: beneficiaries.length,
@@ -170,11 +179,16 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                 ListTile(
                   onTap: () {
                     if(widget.organization.country =='United States'){
+                      //If the organization is from US, navigate to the beneficiary donate screen
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (BeneficiaryDonateScreen(beneficiaries[index]));
                       })).then((value) => _refreshPage());
                     }
                     else{
+                      //If the organization is foreign, create payment link popup
+
+                      //charity object is used to create payment gateway visit record if the user
+                      // clicks the payment gateway link
                       Map<String, dynamic> charity = {
                         'charityID':beneficiaries[index].id,
                         'charityType':'Beneficiary',
@@ -213,7 +227,7 @@ class _OrganizationTabViewScreenState extends State<OrganizationTabViewScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );

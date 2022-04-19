@@ -55,6 +55,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
   }
 
   _getBeneficiaries() async {
+    //This method gets all beneficiaries from the database
     var ret = await _firestore.collection('Beneficiaries')
         .where('active', isEqualTo: true)
         .where('endDate',isGreaterThanOrEqualTo: Timestamp.now())
@@ -80,6 +81,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
     _getBeneficiaryOrganizations();
   }
   _getAdoptions() async {
+    //This method gets all adoptions from the database
     try{
       var ret = await _firestore
           .collection('Adoptions')
@@ -110,6 +112,8 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
     setState(() {});
   }
   _getBeneficiaryOrganizations() async{
+    /*Gets the organizations that correspond to each beneficiary so that we can check if the
+    * organization is based in the US or not when a user selects a beneficiary*/
     for(var beneficiary in beneficiaries){
       var ret = await _firestore.collection('OrganizationUsers')
           .where('uid', isEqualTo: beneficiary.organizationID)
@@ -130,6 +134,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
 
   _beneficiariesBody() {
     return beneficiaries.isNotEmpty
+    //If there are beneficiaries in the database, create a listview for those beneficiaries
     ? ListView.builder(
         itemCount: beneficiaries.length,
         shrinkWrap: true,
@@ -140,11 +145,15 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                 ListTile(
                   onTap: () {
                     if(organizations[index].country =='United States'){
+                      //If the beneficiary is from a US organization, go to the full details page
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return (BeneficiaryDonateScreen(beneficiaries[index]));
                       })).then((value) => _refreshPage());
                     }
                     else{
+                      //If the beneficiary is from a foreign organization, create the paymentLinkPopUp
+
+                      //This charity object is used to create the gateway visit if the user clicks on the link
                       Map<String, dynamic> charity = {
                         'charityID':beneficiaries[index].id,
                         'charityType':'Beneficiary',
@@ -183,19 +192,22 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
         })
-    :  Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),));
+    : //If there isn't any beneficiaries in the database, show an empty state indicator
+    Center(child: Text('no_active_beneficiaries_to_show'.tr, style: TextStyle(fontSize: 18),));
   }
   _adoptionsBody() {
+     /*This method builds the UI for the adoptions tab in the tab view*/
     return RefreshIndicator(
       onRefresh: ()async{
         _refreshPage();
       },
       child: adoptions.isNotEmpty
+      //If there are adoptions in the database, create a list view for them
           ? ListView.builder(
           itemCount: adoptions.length,
           shrinkWrap: true,
@@ -239,12 +251,13 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                       ],
                     ),
                   ),
-                  const Divider()
+                  SizedBox(height:10)
                 ],
               ),
             );
           })
-          :  Center(child: Text('no_active_adoptions_to_show'.tr, style: const TextStyle(fontSize: 18),)),
+          ://If there are no adoptions in the database, give empty state indicator
+      Center(child: Text('no_active_adoptions_to_show'.tr, style: const TextStyle(fontSize: 18),)),
     );
   }
   @override

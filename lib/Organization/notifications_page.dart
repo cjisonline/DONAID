@@ -32,6 +32,7 @@ class _OrganizationNotificationPageState extends State<OrganizationNotificationP
   }
 
   _goToChosenUrgentCase(String id)async{
+    //This method allows organization users to navigate to the full details page for the urgent case that they got a notification for
     var ret = await _firestore.collection('UrgentCases').where('id',isEqualTo: id).get();
     var doc = ret.docs[0];
     UrgentCase urgentCase = UrgentCase(
@@ -55,6 +56,7 @@ class _OrganizationNotificationPageState extends State<OrganizationNotificationP
   }
 
   _getNotifications() async {
+    //This method gets the notifications for the logged in organization from Firestore
     var notificationsDoc = await _firestore.collection('Notifications').doc(_auth.currentUser?.uid).get();
 
     for(var item in notificationsDoc['notificationsList']){
@@ -75,6 +77,7 @@ class _OrganizationNotificationPageState extends State<OrganizationNotificationP
   }
 
   _body(){
+    //Create list view for notifications
     return ListView.builder(
         itemCount: notifications.length,
         scrollDirection: Axis.vertical,
@@ -90,6 +93,8 @@ class _OrganizationNotificationPageState extends State<OrganizationNotificationP
                   deleteNotification(_auth.currentUser?.uid, notifications[index]);
                   notifications.removeAt(index);
                   setState(() {});
+
+                  //After a notification has been deleted, show the snackbar for 5 seconds that allows the user to UNDO the deletion
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Notification deleted.'),
@@ -107,6 +112,9 @@ class _OrganizationNotificationPageState extends State<OrganizationNotificationP
                 },
                 child: GestureDetector(
                   onTap: (){
+                    //If the notification has the dataTitle 'UrgentCaseApprovals' then navigate to the urgent
+                    //case full details page on tap. This check was implemented to allow for other types of notifications
+                    //in the future
                     if(notifications[index].dataTitle.toString() == 'UrgentCaseApprovals'){
                       _goToChosenUrgentCase(notifications[index].dataBody.toString());
                     }
@@ -117,9 +125,7 @@ class _OrganizationNotificationPageState extends State<OrganizationNotificationP
                   ),),
                 ),
               ),
-              const Divider(
-                color: Colors.grey,
-              ),
+              SizedBox(height:10)
             ],
           );
         });

@@ -37,6 +37,8 @@ class _EditCampaignState extends State<EditCampaign> {
   }
 
   _getTimeLimit() async {
+    //Get the campaign time limit that is in the AdminRestrictions collection in Firestore.
+    //The time limit is given in number of days and can be edited from the admin panel
     var ret = await _firestore.collection('AdminRestrictions').where('id',isEqualTo: 'CharityDurationLimits').get();
 
     var doc = ret.docs[0];
@@ -132,7 +134,7 @@ class _EditCampaignState extends State<EditCampaign> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
-          readOnly: widget.campaign.amountRaised > 0,
+          readOnly: widget.campaign.amountRaised > 0,//title cannot be edited if some money has been raised
           controller: _campaignTitleController,
           decoration: InputDecoration(
               label: Center(
@@ -162,7 +164,7 @@ class _EditCampaignState extends State<EditCampaign> {
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         readOnly: widget.campaign.amountRaised > 0,
-        controller: _campaignDescriptionController,
+        controller: _campaignDescriptionController,//description cannot be edited if some money has been raised
         minLines: 2,
         maxLines: 5,
         maxLength: 240,
@@ -188,7 +190,7 @@ class _EditCampaignState extends State<EditCampaign> {
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        readOnly: widget.campaign.amountRaised > 0,
+        readOnly: widget.campaign.amountRaised > 0,//goal amount cannot be edited if some money has been raised
         keyboardType: TextInputType.number,
         controller: _campaignGoalAmountController,
         validator: (value) {
@@ -235,8 +237,11 @@ class _EditCampaignState extends State<EditCampaign> {
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           controller: _campaignEndDateController,
-          readOnly: true,
+          readOnly: true,//this makes it so that text cannot be entered in this field, and the user must use the date picker
           validator: (value) {
+            /*Validator ensures the field isn't empty and checks the selected end date against the time limit from
+            * the AdminRestrictions collection. The number of days between the current date and the selected end date must be
+            * less than the time limit. */
             if (value!.isEmpty) {
               return "please_enter_end_date.".tr;
             }
@@ -273,6 +278,9 @@ class _EditCampaignState extends State<EditCampaign> {
           ),
           onTap: () async {
             if(widget.campaign.amountRaised < widget.campaign.goalAmount){
+              //only show the date picker if the goal amount has not been reached
+              //If the goal has been reached, do not show date picker so that the campaign
+              //cannot be extended
               var date =  await showDatePicker(
                   context: context,
                   initialDate:DateTime.now(),
@@ -317,6 +325,7 @@ class _EditCampaignState extends State<EditCampaign> {
           icon: widget.campaign.amountRaised > 0
               ? Visibility(child: Icon(Icons.keyboard_arrow_down,),visible: false,)
               : Icon(Icons.keyboard_arrow_down),
+          //If some money has been raised, do not show category options, so that category cannot be edited
           items: widget.campaign.amountRaised > 0
               ? [DropdownMenuItem<String>(child: Text(_campaignCategoryController!.text), value: _campaignCategoryController!.text,)]
               : category.map((items) {

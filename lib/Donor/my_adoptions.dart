@@ -53,6 +53,8 @@ class _MyAdoptionsState extends State<MyAdoptions> {
     setState(() {
       showLoadingSpinner = true;
     });
+
+    //Get all of the subscriptions from Firestore for the logged in user
     var stripeSubscriptionsDoc = await _firestore.collection('StripeSubscriptions').doc(_auth.currentUser?.uid).get();
 
     for(var item in stripeSubscriptionsDoc['subscriptionList']){
@@ -68,6 +70,8 @@ class _MyAdoptionsState extends State<MyAdoptions> {
     //reverse to order by most recently subscribed to
     subscriptions = subscriptions.reversed.toList();
 
+    //For each subscription, use the adoption ID, to get the full information for that adoption entity from
+    // the database
     for(var subscription in subscriptions){
       var adoptionDoc = await _firestore.collection('Adoptions').doc(subscription.adoptionID).get();
 
@@ -150,7 +154,7 @@ class _MyAdoptionsState extends State<MyAdoptions> {
                         ],
                       ),
                     ),
-                    const Divider()
+                    SizedBox(height:10)
                   ],
                 ),
               );

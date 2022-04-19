@@ -2,6 +2,7 @@ import 'package:donaid/Donor/beneficiaries_expanded_screen.dart';
 import 'package:donaid/Donor/categories_screen.dart';
 import 'package:donaid/Donor/donor_favorite_screen.dart';
 import 'package:donaid/Donor/donor_search_screen.dart';
+import 'package:donaid/Donor/donor_user_manual.dart';
 import 'package:donaid/Donor/my_adoptions.dart';
 import 'package:donaid/Donor/notifications_page.dart';
 import 'package:donaid/Donor/organizations_expanded_screen.dart';
@@ -15,8 +16,10 @@ import 'package:donaid/Organization/notifications_page.dart';
 import 'package:donaid/Organization/organization_dashboard.dart';
 import 'package:donaid/Organization/organization_edit_profile.dart';
 import 'package:donaid/Organization/organization_profile.dart';
+import 'package:donaid/Organization/organization_user_manual.dart';
 import 'package:donaid/Registration/registration_screen.dart';
 import 'package:donaid/Services/chatServices.dart';
+import 'package:donaid/policy.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:donaid/Translations/translation.dart';
@@ -127,6 +130,9 @@ class Donaid extends StatelessWidget {
                 const OrganizationSettingsPage(),
             GatewayVisits.id: (context) => const GatewayVisits(),
           MyAdoptions.id: (context) => const MyAdoptions(),
+            DonorUserManual.id: (context) => const DonorUserManual(),
+            PolicyPage.id: (context) => const PolicyPage(),
+            OrganizationUserManual.id: (context) => const OrganizationUserManual(),
           },
           /* Translations are kept as a simple key-value dictionary map.
             To add custom translations, create a class and extend Translations.

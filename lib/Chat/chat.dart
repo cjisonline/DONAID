@@ -89,7 +89,7 @@ class Chat extends StatelessWidget {
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: Container(
-                              height: 90,
+                              height: 65,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [

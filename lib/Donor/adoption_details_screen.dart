@@ -52,6 +52,10 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   }
 
   _getStripeAccount() async{
+    /*This method gets the StripeAccounts document that corresponds to the logged in donor user.
+    * The StripeAccounts collection contains documents that store the donor user's ID and the customer ID (given by
+    * Stripe upon creation of customer account). This is so that we can start/end subscriptions for the appropriate
+    * Stripe customer account based on which donor user is doing those actions.*/
     var ret = await _firestore.collection('StripeAccounts').where(
         'donorID', isEqualTo: loggedInUser!.uid).get();
 
@@ -62,6 +66,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
   }
 
   _getSubscription() async {
+    /*This method gets the StripeSubscriptions record for the logged in donor user.
+    * This is so that we can check if the adoption that we are viewing has already been adopted by the user*/
     var subscriptionsDoc = await _firestore.collection('StripeSubscriptions')
         .doc(_auth.currentUser?.uid)
         .get();
@@ -85,6 +91,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     }
 
     _refreshPage() async {
+    /*Refreshes the information on the page*/
       isAdopted = false;
       await _getSubscription();
       await _getStripeAccount();
@@ -99,6 +106,9 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     }
 
     Future<Map<String, dynamic>> _createCustomer() async {
+    /*This method creates a Stripe customer for the donor user.  We simply call a method in the node app that we created
+    * to communicate with the Stripe API. That method will then use the Stripe API to create a new customer and it will return
+    * the new customer ID. We then store that new customer ID with the donor ID in the StripeAccounts collection.*/
       final body = {
         'description': 'New customer'
       };
@@ -125,6 +135,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     }
 
     Future<Map<String, dynamic>> _createPaymentMethod(
+        /*When a donor user adopts for the first time, they enter their payment information. The payment information
+        * is then used to create a payment method in Stripe.*/
         {required String number, required String expMonth, required String expYear, required String cvc}) async {
       final body = {
         'number': '$number',
@@ -148,6 +160,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
 
     Future<Map<String, dynamic>> _attachPaymentMethod(String paymentMethodId,
         String customerId) async {
+    /*This method attaches the created payment method to the created customer account so that
+    * recurring payments can be done.*/
       final body = {
         'customer': customerId,
         'paymentMethod': paymentMethodId
@@ -168,6 +182,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
 
     Future<Map<String, dynamic>> _updateCustomer(String paymentMethodId,
         String customerId) async {
+    /*This method updates the customer information to have the attached payment information.*/
       final body = {
         'customer': customerId,
         'default_payment_method': paymentMethodId,
@@ -188,6 +203,10 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     }
 
     Future<Map<String, dynamic>> _createSubscriptions(String customerId) async {
+    /*This method creates the subscription. Stripe requires subscriptions to be a predefined price provided by the business. So in order for us to let
+    * donor users provide their own contribution amount, we created a subscription item that costs $1 in Stripe. So, when a donor users enters a dollar amount
+    * for their contribution, we subscribe them to that quantity of $1 subscriptions.
+    * For example, a $50 subscriptions is handled by Stripe as purchasing fifty $1 subscriptions.*/
       Map<String, dynamic> body = {
         'customer': customerId,
         'quantity': monthlyAmount,
@@ -208,6 +227,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     }
 
   Future<Map<String, dynamic>> _cancelSubscription(String subscriptionId) async {
+    /*This method passes the subscription ID to Stripe and cancels that subscription at the end of the billing cycle*/
     Map<String, dynamic> body = {
       'subscription': subscriptionId,
     };
@@ -229,9 +249,13 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
 
 
     _subscribe() async {
+
       var ret = await _firestore.collection('StripeAccounts').where(
           'donorID', isEqualTo: loggedInUser!.uid).get();
+
+
       if (ret.docs.length > 0) {
+        //If the donor user already has given the app payment information and had a stripe account created
         final donorCustomerRecord = ret.docs.first;
         final customerID = donorCustomerRecord['customerID'];
         final createdSubscription = await _createSubscriptions(customerID);
@@ -240,6 +264,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
         await addSubscription(loggedInUser!.uid, subscription);
       }
       else {
+        //If the donor user has not given payment information and created a stripe account yet,
+        //this block will be called to create their customer account and payment method before subscribing them
         final _customer = await _createCustomer();
         final _paymentMethod = await _createPaymentMethod(
             number: cardNumber,
@@ -263,6 +289,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     }
 
     _unsubscribe() async {
+    //This method gets the subscription ID from Firestore and passes it to the cancelSubscription method
       var cancelSubscription = subscriptions.where((item) =>
       item.adoptionID == widget.adoption.id)
           .toList()
@@ -331,6 +358,8 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
           });
     }
 
+    //This method is simply used to double check that the entered monthly amount is an integer
+  // since our subscriptions can only be done in whole dollar amounts
     bool isInteger(num value) =>
         value is int || value == value.roundToDouble();
 
@@ -720,7 +749,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                 ),
                                 Material(
                                     elevation: 5.0,
-                                    color: Colors.green,
+                                    color: Colors.blue,
                                     borderRadius:
                                     BorderRadius.circular(32.0),
                                     child: MaterialButton(

@@ -75,21 +75,27 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
-                    onPressed: () async{
-                      Navigator.pop(context);
-                      await makePayment();
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () async{
+                          Navigator.pop(context);
+                          await makePayment();
 
 
-                    },
-                    child: const Text('Yes'),
+                        },
+                        child: const Text('Yes'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('No'),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('No'),
-                  ),
+
                 ],
               ),
 
@@ -230,9 +236,11 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                                       showLoadingSpinner = true;
                                     });
                                     if(double.parse(donationAmount) > 999){
+                                      //If donation is more than $1k, ask for confirmation
                                       _confirmDonationAmount();
                                     }
                                     else {
+                                      //If donation is less than $1k, go to makePayment method
                                       await makePayment();
                                     }
                                     setState(() {
@@ -245,7 +253,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
                           ),
                         ],
                       ))
-                  : Text('ugent_case_is_no_longer'.tr),
+                  : Text('ugent_case_is_no_longer'.tr, style: TextStyle(fontSize: 18),),
                 )
               ]),
             )),
@@ -254,6 +262,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   }
 
   void createDonationDocument() async{
+    //This method creates a document in the Donations collection to keep record of this donation
     final docRef = await _firestore.collection('Donations').add({});
 
     await _firestore.collection('Donations').doc(docRef.id).set({
@@ -271,13 +280,17 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   }
 
   void updateUrgentCase() async{
+    //This method updates the urgent case with this donation.
     if(widget.urgentCase.amountRaised+double.parse(donationAmount) >= widget.urgentCase.goalAmount){
+      //If this donation makes the urgent case reach its goal amount, make the urgent case inactive
       await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).update({
         'amountRaised': widget.urgentCase.amountRaised+double.parse(donationAmount),
         'active':false
       });
     }
     else{
+      //If this donation did not make the urgent case reach its goal, simply add the donated amount
+      // to the amountRaised field
       await _firestore.collection('UrgentCases').doc(widget.urgentCase.id).update({
         'amountRaised': widget.urgentCase.amountRaised+double.parse(donationAmount)
       });
@@ -285,6 +298,8 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
 
   }
   Future<void> makePayment() async {
+    //This method calls the createPaymentIntent method and the calls the
+    // method to create the payment sheet
     try {
       paymentIntentData =
       await createPaymentIntent(donationAmount, 'USD');
@@ -307,6 +322,8 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   }
 
   displayPaymentSheet() async {
+    /*Displaying the payment sheet requires the client secret that is given from the payment intents
+    * from the Stripe API (this is to keep track of this user's checkout session.*/
     try {
       await Stripe.instance.presentPaymentSheet(
         parameters: PresentPaymentSheetParameters(
@@ -317,8 +334,9 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
       );
 
       setState(() {
-        // paymentIntentData = null;
+        paymentIntentData = null;
       });
+      //If the payment is successfully completed, show a message
       ScaffoldMessenger.of(context)
           .showSnackBar( SnackBar(content: Text('paid_successfully'.tr)));
 
@@ -329,6 +347,7 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
     }catch (e) {
       print('Stripe Exception: ${e.toString()}');
 
+      //Show a message to indicate if the payment was cancelled
       ScaffoldMessenger.of(context)
           .showSnackBar( SnackBar(content: Text('payment_cancelled!'.tr)));
 
@@ -336,6 +355,8 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   }
 
   createPaymentIntent(String amount, String currency) async {
+    /*This method calls the node app to create a payment intent with the Stripe API.
+    * The node app will then return the client secret that is needed to create the payment sheet*/
     try {
       final body = {
         'amount': calculateAmount(amount),
@@ -357,6 +378,12 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
   }
 
   calculateAmount(String amount) {
+    /*Stripe takes the payment amount as an integer. The integer that it takes is the payment amount
+    * in pennies. so $1.50 will be sent to Stripe as 150.
+    *
+    * This method parses the donation amount to a double (so that we can handle fractional dollar donations). Then it multiplies
+    * by 100 to convert to pennies. Then it does toInt to convert to integer so that Stripe will accept it. We return that integer dollar
+    * amount as a string that is sent to the API*/
     final price = (double.parse(amount)*100).toInt();
     return price.toString();
   }

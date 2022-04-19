@@ -8,6 +8,10 @@ import 'OrganizationWidget/organization_drawer.dart';
 import 'organization_urgentcase_full.dart';
 import 'package:get/get.dart';
 
+/*
+* This page creates a tab view for the organization. One of the tabs will show all urgent cases that have been submitted by the
+* organization but have not yet been reviewed by an admin. The other tab will show urgent cases that have been denied by the admin.
+* */
 
 class PendingApprovalsAndDenials extends StatefulWidget {
   const PendingApprovalsAndDenials({Key? key}) : super(key: key);
@@ -150,7 +154,7 @@ class _PendingApprovalsAndDenialsState extends State<PendingApprovalsAndDenials>
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
@@ -203,7 +207,7 @@ class _PendingApprovalsAndDenialsState extends State<PendingApprovalsAndDenials>
                     ],
                   ),
                 ),
-                const Divider()
+                SizedBox(height:10)
               ],
             ),
           );
