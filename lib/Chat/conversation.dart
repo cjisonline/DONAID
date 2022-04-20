@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donaid/Chat/chat.dart';
 import 'package:donaid/Controller/conController.dart';
 import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
+import 'package:donaid/Donor/donor_dashboard.dart';
 import 'package:donaid/Models/Organization.dart';
 import 'package:donaid/Organization/OrganizationWidget/organization_bottom_navigation.dart';
 import 'package:donaid/Widgets/conversation.dart';
@@ -15,6 +16,8 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../Donor/DonorWidgets/donor_drawer.dart';
 import '../Organization/OrganizationWidget/organization_drawer.dart';
+import '../Organization/organization_dashboard.dart';
+import '../Services/chatServices.dart';
 
 class ResetWidget extends StatelessWidget {
   String currentUid = "", type = "";
@@ -32,13 +35,20 @@ class Conversation extends StatefulWidget {
 }
 
 class _ConversationState extends State<Conversation> {
+  final _auth = FirebaseAuth.instance;
+
   _refresh() {
-    Navigator.push(
-        context,
-        PageRouteBuilder(
-            transitionDuration: Duration.zero,
-            pageBuilder: (_, __, ___) =>
-                ResetWidget(widget.currentUid, widget.type)));
+    if(widget.type == "DonorUsers"){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return (Conversation(_auth.currentUser!.uid, "DonorUsers"));
+      }));
+    }
+    else{
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return (Conversation(_auth.currentUser!.uid, "OrganizationUsers"));
+      }));
+    }
+
   }
 
   @override
