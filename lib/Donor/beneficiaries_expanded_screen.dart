@@ -10,6 +10,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import '../Models/Adoption.dart';
+import '../Models/Subscription.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'adoption_details_screen.dart';
@@ -32,6 +33,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
   List<Organization> organizations=[];
   var f = NumberFormat("###,##0.00", "en_US");
   List<Adoption> adoptions = [];
+  List<Subscription> subscriptions=[];
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
 
@@ -42,15 +44,36 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
     super.initState();
     _getBeneficiaries();
     _getAdoptions();
+    _getCurrentlyAdopted();
   }
   
   _refreshPage(){
     beneficiaries.clear();
+    subscriptions.clear();
     adoptions.clear();
     _getBeneficiaries();
     _getAdoptions();
     setState(() {
       
+    });
+  }
+
+  _getCurrentlyAdopted()async{
+    /*This method gets the StripeSubscriptions record for the logged in donor user.
+    * This is so that we can check if the adoption that we are viewing has already been adopted by the user*/
+      var subscriptionsDoc = await _firestore.collection('StripeSubscriptions')
+          .doc(_auth.currentUser?.uid)
+          .get();
+      for (var item in subscriptionsDoc['subscriptionList']) {
+        Subscription subscription = Subscription(
+          item['adoptionID'],
+          item['subscriptionID'],
+          item['monthlyAmount'],
+        );
+        subscriptions.add(subscription);
+    }
+
+    setState(() {
     });
   }
 
@@ -223,6 +246,11 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
                     },
                     title: Text(adoptions[index].name),
                     subtitle: Text(adoptions[index].biography),
+
+                      //Checks if the subscriptions array has an item where the adoption ID matches the index
+                      //of the adoption in the adoptions list. Provide the appropriate icon accordingly.
+                    trailing: subscriptions.where((item) => item.adoptionID == adoptions[index].id).toList().isNotEmpty
+                    ? Icon(Icons.handshake, color: Colors.blue,) : Icon(Icons.handshake_outlined, color: Colors.blue,)
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
