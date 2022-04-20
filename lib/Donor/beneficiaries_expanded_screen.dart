@@ -53,6 +53,7 @@ class _BeneficiaryExpandedScreenState extends State<BeneficiaryExpandedScreen> {
     adoptions.clear();
     _getBeneficiaries();
     _getAdoptions();
+    _getCurrentlyAdopted();
     setState(() {
       
     });
