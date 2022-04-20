@@ -7,6 +7,7 @@ import 'package:donaid/Models/Organization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../Models/Subscription.dart';
 import '../beneficiary_donate_screen.dart';
 import '../updateFavorite.dart';
 import 'package:get/get.dart';
@@ -29,6 +30,7 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
   User? loggedInUser;
   var pointlist = [];
   bool favorite = false;
+  bool isAdopted=false;
 
   @override
   void initState() {
@@ -36,12 +38,38 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
     _getBeneficiaryOrganization();
     _getCurrentUser();
     _getFavorite();
+    _getCurrentlyAdopted();
   }
 
   void _getCurrentUser() {
     loggedInUser = _auth.currentUser;
   }
 
+
+  _getCurrentlyAdopted()async{
+  /*This method gets the StripeSubscriptions record for the logged in donor user.
+    * This is so that we can check if the adoption that we are viewing has already been adopted by the user*/
+    if(widget.beneficiary is Adoption) {
+      var subscriptionsDoc = await _firestore.collection('StripeSubscriptions')
+          .doc(_auth.currentUser?.uid)
+          .get();
+      for (var item in subscriptionsDoc['subscriptionList']) {
+        Subscription subscription = Subscription(
+          item['adoptionID'],
+          item['subscriptionID'],
+          item['monthlyAmount'],
+        );
+
+        if (subscription.adoptionID == widget.beneficiary.id) {
+          isAdopted = true;
+          break;
+        }
+      }
+    }
+
+    setState(() {
+    });
+  }
   // Get the organization's information of this beneficiary from Firebase
   _getBeneficiaryOrganization() async {
     var ret = await _firestore
@@ -106,14 +134,16 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
 
             },
           ),
-        ): Container(),
+        ): Container(height:48),
         (widget.beneficiary is Beneficiary) ?
         Icon(
           Icons.person,
           color: Colors.blue,
           size: 40,
         )
-        : Icon(Icons.handshake_outlined,
+        : (isAdopted)?
+        Icon(Icons.handshake, color: Colors.blue, size: 40,)
+        :Icon(Icons.handshake_outlined,
         color: Colors.blue,
         size: 40),
         // display beneficiary name populated from Firebase
