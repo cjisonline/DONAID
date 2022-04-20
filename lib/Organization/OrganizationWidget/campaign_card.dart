@@ -38,13 +38,9 @@ class _CampaignCardState extends State<CampaignCard> {
                 border: Border.all(color: Colors.grey.shade300, width: 2.0)),
             // Display icon
             child: Column(children: [
-              IconButton(
-                enableFeedback: false,
-                onPressed: () {},
-                icon: const Icon(Icons.apartment,
+              Icon(Icons.campaign,
                     color: Colors.blue,
                     size: 50),
-              ),
               // Display Campaign title populated from firebase
               Padding(
                 padding: const EdgeInsets.all(20.0),

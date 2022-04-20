@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 //Beneficiary card display set up
 class BeneficiaryCard extends StatefulWidget {
-  final Beneficiary beneficiary;
+  final beneficiary;
 
   const BeneficiaryCard( this.beneficiary, {Key? key}) : super(key: key);
 
@@ -38,13 +38,14 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
                 border: Border.all(color: Colors.grey.shade300, width: 2.0)),
           // Display icon
             child: Column(children: [
-              IconButton(
-                enableFeedback: false,
-                onPressed: () {},
-                icon: const Icon(Icons.apartment,
+              (widget.beneficiary is Beneficiary) ?
+              Icon(Icons.person,
                     color: Colors.blue,
-                    size: 50),
-              ),
+                    size: 50)
+              : Icon(
+                  Icons.handshake_outlined,
+                  color: Colors.blue,
+                  size: 50),
               // Display beneficiary name populated from firebase
               Padding(
                 padding: const EdgeInsets.all(20.0),

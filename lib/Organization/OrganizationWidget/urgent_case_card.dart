@@ -41,7 +41,7 @@ class _UrgentCaseCardState extends State<UrgentCaseCard> {
               IconButton(
                 enableFeedback: false,
                 onPressed: () {},
-                icon: const Icon(Icons.apartment,
+                icon: const Icon(Icons.assistant,
                     color: Colors.blue,
                     size: 50),
               ),
