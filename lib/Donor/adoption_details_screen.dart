@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:donaid/Donor/DonorWidgets/donor_bottom_navigation_bar.dart';
+import 'package:donaid/Donor/DonorWidgets/donor_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -298,7 +300,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
 
       await _cancelSubscription(cancelSubscription.subscriptionsID);
 
-      deleteSubscription(loggedInUser!.uid, cancelSubscription);
+      await deleteSubscription(loggedInUser!.uid, cancelSubscription);
       await _firestore.collection('Adoptions').doc(widget.adoption.id).update({
         'amountRaised': widget.adoption.amountRaised - monthlyAmount
       });
@@ -793,9 +795,9 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
             },
           ),
         ),
-        drawer: const OrganizationDrawer(),
+        drawer: const DonorDrawer(),
         body: _beneficiaryFullBody(),
-        bottomNavigationBar: const OrganizationBottomNavigation(),
+        bottomNavigationBar: DonorBottomNavigationBar(),
       );
     }
   }

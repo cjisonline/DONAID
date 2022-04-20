@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Models/Adoption.dart';
 import '../Services/notifications.dart';
 import 'OrganizationWidget/beneficiary_card.dart';
 import 'OrganizationWidget/organization_bottom_navigation.dart';
@@ -39,6 +40,8 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
   User? loggedInUser;
   final _firestore = FirebaseFirestore.instance;
   List<Beneficiary> beneficiaries = [];
+  List<Adoption> adoptions = [];
+  List beneficiariesAndAdoptions = [];
   List<Campaign> campaigns = [];
   List<UrgentCase> urgentCases = [];
 
@@ -53,7 +56,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     _getCurrentUser();
     _getCampaign();
     _getUrgentCases();
-    _getBeneficiaries();
+    _getBeneficiariesAndAdoptions();
     Get.find<ChatService>().getFriendsData(loggedInUser!.uid);
     Get.find<ChatService>().listenFriend(loggedInUser!.uid, 1);
 
@@ -126,11 +129,13 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     }
   }
   _refreshPage() async{
+    beneficiariesAndAdoptions.clear();
+    adoptions.clear();
     beneficiaries.clear();
     campaigns.clear();
     urgentCases.clear();
     _getCampaign();
-    _getBeneficiaries();
+    _getBeneficiariesAndAdoptions();
     _getUrgentCases();
   }
 //Get campaigns from firebase
@@ -193,7 +198,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     setState(() {});
   }
 // get beneficiary from firebase
-  _getBeneficiaries() async {
+  _getBeneficiariesAndAdoptions() async {
     var ret = await _firestore
         .collection('Beneficiaries')
         .where('organizationID', isEqualTo: loggedInUser?.uid)
@@ -218,7 +223,30 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
       beneficiaries.add(beneficiary);
     }
 
-    beneficiaries.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
+    var ret2 = await _firestore
+        .collection('Adoptions')
+        .where('active', isEqualTo: true)
+        .get();
+
+    for (var element in ret2.docs) {
+      Adoption adoption = Adoption(
+          name: element.data()['name'],
+          biography: element.data()['biography'],
+          goalAmount: element.data()['goalAmount'].toDouble(),
+          amountRaised: element.data()['amountRaised'].toDouble(),
+          category: element.data()['category'],
+          dateCreated: element.data()['dateCreated'],
+          id: element.data()['id'],
+          organizationID: element.data()['organizationID'],
+          active: element.data()['active']
+      ); // need to add category
+      adoptions.add(adoption);
+    }
+
+    beneficiariesAndAdoptions.addAll(beneficiaries);
+    beneficiariesAndAdoptions.addAll(adoptions);
+
+    beneficiariesAndAdoptions.sort((b,a) => (a.dateCreated).compareTo((b.dateCreated)));
 
     setState(() {});
   }
@@ -376,14 +404,14 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
                     ]),
               ),
             ),
-            beneficiaries.isNotEmpty
+            beneficiariesAndAdoptions.isNotEmpty
             ? SizedBox(
                 height: 325.0,
                 child: ListView.builder(
-                  itemCount: beneficiaries.length,
+                  itemCount: beneficiariesAndAdoptions.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, int index) {
-                    return BeneficiaryCard(beneficiaries[index]);
+                    return BeneficiaryCard(beneficiariesAndAdoptions[index]);
                   },
                 ))
             :  Padding(

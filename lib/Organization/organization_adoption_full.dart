@@ -296,221 +296,223 @@ class _OrganizationAdoptionFullScreenState
   _beneficiaryFullBody() {
     return ModalProgressHUD(
       inAsyncCall: showLoadingSpinner,
-      child: Center(
-          child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        height: 100,
-                        child: Image.asset('assets/DONAID_LOGO.png')),
-                    SizedBox(height: 10),
-                    Text(
-                      widget.adoption.name,
-                      style: TextStyle(fontSize: 25),
-                    ),
-                    Text(
-                      widget.adoption.biography,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '\$' + f.format(widget.adoption.amountRaised),
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 18),
+      child: SingleChildScrollView(
+        child: Center(
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                          height: 100,
+                          child: Image.asset('assets/DONAID_LOGO.png')),
+                      SizedBox(height: 10),
+                      Text(
+                        widget.adoption.name,
+                        style: TextStyle(fontSize: 25),
+                      ),
+                      Text(
+                        widget.adoption.biography,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '\$' + f.format(widget.adoption.amountRaised),
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 18),
+                              ),
+                              Text(
+                                '\$' + f.format(widget.adoption.goalAmount),
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 18),
+                              ),
+                            ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          child: ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.grey,
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Colors.green),
+                              value: (widget.adoption.amountRaised /
+                                  widget.adoption.goalAmount),
+                              minHeight: 25,
                             ),
-                            Text(
-                              '\$' + f.format(widget.adoption.goalAmount),
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 18),
-                            ),
-                          ]),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          child: LinearProgressIndicator(
-                            backgroundColor: Colors.grey,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                Colors.green),
-                            value: (widget.adoption.amountRaised /
-                                widget.adoption.goalAmount),
-                            minHeight: 25,
                           ),
                         ),
                       ),
-                    ),
-                    Column(
-                        children:
-                        /*The UI for this page consists of several ternary operators to make different checks and
-                        * display different UI. If the adoption does not have any contributions yet, it will display the edit and delete buttons
-                        * along with the stop/resume buttons.
-                        * If the adoption does have contributions, it will only show the stop/resume charity buttons.*/
-                             [
-                                Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: widget.adoption.amountRaised == 0
-                                      ? [
-                                          Container(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                20, 75, 20, 0),
-                                            child: Material(
-                                                elevation: 5.0,
-                                                color: Colors.blue,
-                                                borderRadius:
-                                                    BorderRadius.circular(32.0),
-                                                child: MaterialButton(
-                                                    child: Text(
-                                                      'edit'.tr,
-                                                      style: const TextStyle(
-                                                        fontSize: 25,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    onPressed: () async {
-                                                      Navigator.push(context,
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) {
-                                                        return EditAdoption(
-                                                            adoption: widget
-                                                                .adoption);
-                                                      })).then((value) =>
-                                                          _refreshAdoption());
-                                                    })),
-                                          ),
-                                          Container(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 10, 20, 0),
-                                              child: (widget.adoption.active)
-                                                  ? Material(
-                                                      elevation: 5.0,
-                                                      color: Colors.orange,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              32.0),
-                                                      child: MaterialButton(
-                                                          child: Text(
-                                                            'stop_charity'.tr,
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 25,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          ),
-                                                          onPressed: () async {
-                                                            _stopCharityConfirm();
-                                                          }))
-                                                  : (!widget.adoption.active)
-                                                      ? Material(
-                                                          elevation: 5.0,
-                                                          color: Colors.green,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      32.0),
-                                                          child: MaterialButton(
-                                                              child: Text(
-                                                                'resume_charity'
-                                                                    .tr,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 25,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                              onPressed:
-                                                                  () async {
-                                                                _resumeCharityConfirm();
-                                                              }))
-                                                      : Container()),
-                                          Container(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 10, 20, 0),
+                      Column(
+                          children:
+                          /*The UI for this page consists of several ternary operators to make different checks and
+                          * display different UI. If the adoption does not have any contributions yet, it will display the edit and delete buttons
+                          * along with the stop/resume buttons.
+                          * If the adoption does have contributions, it will only show the stop/resume charity buttons.*/
+                               [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: widget.adoption.amountRaised == 0
+                                        ? [
+                                            Container(
+                                              padding: const EdgeInsets.fromLTRB(
+                                                  20, 75, 20, 0),
                                               child: Material(
                                                   elevation: 5.0,
-                                                  color: Colors.red,
+                                                  color: Colors.blue,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          32.0),
+                                                      BorderRadius.circular(32.0),
                                                   child: MaterialButton(
                                                       child: Text(
-                                                        'Delete'.tr,
-                                                        style: TextStyle(
+                                                        'edit'.tr,
+                                                        style: const TextStyle(
                                                           fontSize: 25,
                                                           color: Colors.white,
                                                         ),
                                                       ),
                                                       onPressed: () async {
-                                                        _deleteCharityConfirm();
-                                                      })))
-                                        ]
-                                      : [
-                                          Container(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 10, 20, 0),
-                                              child: (widget.adoption.active)
-                                                  ? Material(
-                                                      elevation: 5.0,
-                                                      color: Colors.orange,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              32.0),
-                                                      child: MaterialButton(
-                                                          child: Text(
-                                                            'stop_charity'.tr,
-                                                            style: TextStyle(
-                                                              fontSize: 25,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          ),
-                                                          onPressed: () async {
-                                                            _stopCharityConfirm();
-                                                          }))
-                                                  : (!widget.adoption.active)
-                                                      ? Material(
-                                                          elevation: 5.0,
-                                                          color: Colors.green,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      32.0),
-                                                          child: MaterialButton(
-                                                              child: Text(
-                                                                'resume_charity'
-                                                                    .tr,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 25,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                          return EditAdoption(
+                                                              adoption: widget
+                                                                  .adoption);
+                                                        })).then((value) =>
+                                                            _refreshAdoption());
+                                                      })),
+                                            ),
+                                            Container(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        20, 10, 20, 0),
+                                                child: (widget.adoption.active)
+                                                    ? Material(
+                                                        elevation: 5.0,
+                                                        color: Colors.orange,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                32.0),
+                                                        child: MaterialButton(
+                                                            child: Text(
+                                                              'stop_charity'.tr,
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 25,
+                                                                color:
+                                                                    Colors.white,
                                                               ),
-                                                              onPressed:
-                                                                  () async {
-                                                                _resumeCharityConfirm();
-                                                              }))
-                                                      : Container())
-                                        ],
-                                )
-                              ]
-                            ),
-                  ]))),
+                                                            ),
+                                                            onPressed: () async {
+                                                              _stopCharityConfirm();
+                                                            }))
+                                                    : (!widget.adoption.active)
+                                                        ? Material(
+                                                            elevation: 5.0,
+                                                            color: Colors.green,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        32.0),
+                                                            child: MaterialButton(
+                                                                child: Text(
+                                                                  'resume_charity'
+                                                                      .tr,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize: 25,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                                onPressed:
+                                                                    () async {
+                                                                  _resumeCharityConfirm();
+                                                                }))
+                                                        : Container()),
+                                            Container(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        20, 10, 20, 0),
+                                                child: Material(
+                                                    elevation: 5.0,
+                                                    color: Colors.red,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            32.0),
+                                                    child: MaterialButton(
+                                                        child: Text(
+                                                          'Delete'.tr,
+                                                          style: TextStyle(
+                                                            fontSize: 25,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                        onPressed: () async {
+                                                          _deleteCharityConfirm();
+                                                        })))
+                                          ]
+                                        : [
+                                            Container(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        20, 10, 20, 0),
+                                                child: (widget.adoption.active)
+                                                    ? Material(
+                                                        elevation: 5.0,
+                                                        color: Colors.orange,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                32.0),
+                                                        child: MaterialButton(
+                                                            child: Text(
+                                                              'stop_charity'.tr,
+                                                              style: TextStyle(
+                                                                fontSize: 25,
+                                                                color:
+                                                                    Colors.white,
+                                                              ),
+                                                            ),
+                                                            onPressed: () async {
+                                                              _stopCharityConfirm();
+                                                            }))
+                                                    : (!widget.adoption.active)
+                                                        ? Material(
+                                                            elevation: 5.0,
+                                                            color: Colors.green,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        32.0),
+                                                            child: MaterialButton(
+                                                                child: Text(
+                                                                  'resume_charity'
+                                                                      .tr,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize: 25,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                                onPressed:
+                                                                    () async {
+                                                                  _resumeCharityConfirm();
+                                                                }))
+                                                        : Container())
+                                          ],
+                                  )
+                                ]
+                              ),
+                    ]))),
+      ),
     );
   }
 
