@@ -30,7 +30,7 @@ class Messages extends Translations {
           "adoptions_can_only_be_made_in_whole_dollar_amounts":
               "Adoptions can only be made in whole dollar amounts.",
           "are_you_sure_you_want_to_cancel_this_adoption":
-              "Are you sure you want to cancel this adoption you can readopt this beneficiary from the Beneficiaries page. Would you like to continue with canceling this adoption?",
+              "Are you sure you want to cancel this adoption? Cancelling will prevent you from further recurring payments. You can readopt this beneficiary from the Beneficiaries page. Would you like to continue with canceling this adoption?",
           "resuming_adoption_charity_would_you_like_to_continue":
               "Resuming this charity will make it visible to donors again. Once you resume this charity you can deactivate it again from My Beneficiaries page. Would you like to continue?",
           "no_inactive_adoptions_to_show": "No inactive adoptions to show.",

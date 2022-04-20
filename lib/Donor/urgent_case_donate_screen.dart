@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'DonorWidgets/donor_bottom_navigation_bar.dart';
 import 'DonorWidgets/donor_drawer.dart';
 import 'package:http/http.dart' as http;
@@ -343,6 +344,14 @@ class _UrgentCaseDonateScreenState extends State<UrgentCaseDonateScreen> {
       createDonationDocument();
       updateUrgentCase();
       await _refreshPage();
+
+      showSimpleNotification(
+        Text('Thank you!'),
+        subtitle: Text('Your generosity is extremely appreciated!'),
+        duration: Duration(seconds: 5),
+        slideDismissDirection: DismissDirection.up,
+
+      );
 
     }catch (e) {
       print('Stripe Exception: ${e.toString()}');

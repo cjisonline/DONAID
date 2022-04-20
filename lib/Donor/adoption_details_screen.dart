@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 import '../Models/Subscription.dart';
 import '../Services/subscriptions.dart';
@@ -281,13 +282,37 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
             widget.adoption.id, createdSubscription['id'], monthlyAmount);
         await addSubscription(loggedInUser!.uid, subscription);
       }
-      await _firestore
-          .collection('Adoptions')
-          .doc(widget.adoption.id)
-          .update(
-          {'amountRaised': widget.adoption.amountRaised + monthlyAmount});
+
+      //Check if this satisfies the monthly contribution and if it does,
+      // make the adoption inactive
+      if(widget.adoption.amountRaised+monthlyAmount >= widget.adoption.goalAmount){
+        await _firestore
+            .collection('Adoptions')
+            .doc(widget.adoption.id)
+            .update(
+            {
+              'amountRaised': widget.adoption.amountRaised + monthlyAmount,
+              'active':false
+            });
+
+      }
+      else{
+        await _firestore
+            .collection('Adoptions')
+            .doc(widget.adoption.id)
+            .update(
+            {'amountRaised': widget.adoption.amountRaised + monthlyAmount});
+
+      }
 
       await _refreshPage();
+      showSimpleNotification(
+        Text('Thank you!'),
+        subtitle: Text('Your generosity is extremely appreciated!'),
+        duration: Duration(seconds: 5),
+        slideDismissDirection: DismissDirection.up,
+
+      );
     }
 
     _unsubscribe() async {
@@ -301,13 +326,74 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
       await _cancelSubscription(cancelSubscription.subscriptionsID);
 
       await deleteSubscription(loggedInUser!.uid, cancelSubscription);
-      await _firestore.collection('Adoptions').doc(widget.adoption.id).update({
-        'amountRaised': widget.adoption.amountRaised - monthlyAmount
-      });
+
+      //If the adoption was inactive, make it active again after cancelling subscription
+      if(widget.adoption.active == false){
+        await _firestore.collection('Adoptions').doc(widget.adoption.id).update({
+          'amountRaised': widget.adoption.amountRaised - monthlyAmount,
+          'active':true
+        });
+      }
+      else{
+        await _firestore.collection('Adoptions').doc(widget.adoption.id).update({
+          'amountRaised': widget.adoption.amountRaised - monthlyAmount
+        });
+      }
+
 
       _refreshPage();
     }
 
+    Future<void> _confirmAdoptionDialog() async{
+      return showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Center(
+                child: Text('Are You Sure?'.tr),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32.0),
+              ),
+              content:  Text(
+                  'Your monthly donation is more than we are requesting. Please confirm that this recurring donation amount is correct'.tr),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Center(
+                      child: TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+
+                          setState(() {
+                            showLoadingSpinner=true;
+                          });
+                          await _subscribe();
+                          setState(() {
+                            showLoadingSpinner=false;
+                          });
+                        },
+                        child: Text('yes'.tr),
+                      ),
+                    ),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('no'.tr),
+                      ),
+                    ),
+                  ],
+                ),
+
+
+              ],
+            );
+          });
+    }
 
     Future<void> _cancelAdoptionConfirm() async {
       return showDialog<void>(
@@ -365,7 +451,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
     bool isInteger(num value) =>
         value is int || value == value.roundToDouble();
 
-    _beneficiaryFullBody() {
+    _adoptionFullBody() {
       return ModalProgressHUD(
         inAsyncCall: showLoadingSpinner,
         child: SingleChildScrollView(
@@ -767,7 +853,12 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
                                             setState(() {
                                               showLoadingSpinner=true;
                                             });
-                                            await _subscribe();
+                                            if(monthlyAmount+widget.adoption.amountRaised > widget.adoption.goalAmount){
+                                              _confirmAdoptionDialog();
+                                            }
+                                            else{
+                                              await _subscribe();
+                                            }
                                             setState(() {
                                               showLoadingSpinner=false;
                                             });
@@ -796,7 +887,7 @@ class _AdoptionDetailsScreenState extends State<AdoptionDetailsScreen> {
           ),
         ),
         drawer: const DonorDrawer(),
-        body: _beneficiaryFullBody(),
+        body: _adoptionFullBody(),
         bottomNavigationBar: DonorBottomNavigationBar(),
       );
     }
