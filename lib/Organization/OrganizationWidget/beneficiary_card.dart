@@ -1,4 +1,6 @@
+import 'package:donaid/Donor/adoption_details_screen.dart';
 import 'package:donaid/Models/Beneficiary.dart';
+import 'package:donaid/Organization/organization_adoption_full.dart';
 import 'package:donaid/Organization/organization_beneficiary_full.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,11 +22,21 @@ class _BeneficiaryCardState extends State<BeneficiaryCard> {
     return GestureDetector(
       //Navigate to the selected beneficiary page
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context){
-          return OrganizationBeneficiaryFullScreen(widget.beneficiary);
-        })).then((value){
-          setState(() {});
-        });
+        if(widget.beneficiary is Beneficiary){
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return OrganizationBeneficiaryFullScreen(widget.beneficiary);
+          })).then((value){
+            setState(() {});
+          });
+        }
+        else{
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return OrganizationAdoptionFullScreen(widget.beneficiary);
+          })).then((value){
+            setState(() {});
+          });
+        }
+
       },
       //Display card
       child: Padding(

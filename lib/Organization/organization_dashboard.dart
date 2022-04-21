@@ -226,6 +226,7 @@ class _OrganizationDashboardState extends State<OrganizationDashboard> {
     var ret2 = await _firestore
         .collection('Adoptions')
         .where('active', isEqualTo: true)
+        .where('organizationID', isEqualTo: _auth.currentUser?.uid)
         .get();
 
     for (var element in ret2.docs) {
