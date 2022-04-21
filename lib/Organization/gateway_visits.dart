@@ -419,62 +419,65 @@ class _GatewayVisitsState extends State<GatewayVisits> {
 
   _body() {
     return visits.isNotEmpty
-        ? RefreshIndicator(
-            onRefresh: () async {
-              _refreshPage();
-            },
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Did this visit result in a donation?'.tr,
-                    style: TextStyle(fontSize: 18),
+        ? SingleChildScrollView(
+          child: RefreshIndicator(
+              onRefresh: () async {
+                _refreshPage();
+              },
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Did this visit result in a donation?'.tr,
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
-                ),
-                ListView.builder(
-                    itemCount: visits.length,
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemBuilder: (context, int index) {
-                      return Column(
-                        children: [
-                          ListTile(
-                            title: Text(
-                                '${donors[index].firstName} ${donors[index].lastName} - ${visits[index].charityTitle}'),
-                            subtitle: Text('${visits[index].charityType}\n'+DateFormat('yyyy-MM-dd')
-                                .format(visits[index].visitedAt.toDate())),
-                            trailing: Wrap(
-                              spacing: 12,
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      confirmDonation(visits[index]);
-                                    },
-                                    icon: const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                      size: 40,
-                                    )),
-                                IconButton(
-                                    onPressed: () {
-                                      confirmNoDonation(visits[index]);
-                                    },
-                                    icon: const Icon(
-                                      Icons.cancel,
-                                      color: Colors.red,
-                                      size: 40,
-                                    ))
-                              ],
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                      itemCount: visits.length,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemBuilder: (context, int index) {
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                  '${donors[index].firstName} ${donors[index].lastName} - ${visits[index].charityTitle}'),
+                              subtitle: Text('${visits[index].charityType}\n'+DateFormat('yyyy-MM-dd')
+                                  .format(visits[index].visitedAt.toDate())),
+                              trailing: Wrap(
+                                spacing: 12,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        confirmDonation(visits[index]);
+                                      },
+                                      icon: const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                        size: 40,
+                                      )),
+                                  IconButton(
+                                      onPressed: () {
+                                        confirmNoDonation(visits[index]);
+                                      },
+                                      icon: const Icon(
+                                        Icons.cancel,
+                                        color: Colors.red,
+                                        size: 40,
+                                      ))
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(height:10)
-                        ],
-                      );
-                    })
-              ],
+                            SizedBox(height:10)
+                          ],
+                        );
+                      })
+                ],
+              ),
             ),
-          )
+        )
         : Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
