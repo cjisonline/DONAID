@@ -96,8 +96,7 @@ class _ConversationState extends State<Conversation> {
                                         e.organizationName
                                                 .toString()
                                                 .split('.')[0]
-                                                .capitalizeFirst ??
-                                            "",
+                                                ,
                                         MyGlobals.allMessages
                                             .where(
                                                 (p0) => p0.receiverId == e.uid)

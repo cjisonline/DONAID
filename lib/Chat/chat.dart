@@ -32,7 +32,7 @@ class Chat extends StatelessWidget {
                 Scaffold(
                   appBar: AppBar(
                     title: Text(
-                      name.capitalizeFirst ?? "",
+                      name,
                       style: TextStyle(
                           fontSize: 18.5, fontWeight: FontWeight.w400),
                     ),
@@ -89,7 +89,7 @@ class Chat extends StatelessWidget {
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: Container(
-                              height: 65,
+                              height: 80,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
