@@ -84,6 +84,7 @@ class _OrganizationFullDetailsScreenState extends State<OrganizationFullDetailsS
               padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
               child: Text(widget.organization.organizationDescription.toString(),
                 style: const TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
               ),
             ),
         Linkify(

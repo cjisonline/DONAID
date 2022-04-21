@@ -29,12 +29,14 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
   List<Beneficiary> beneficiaries = [];
   List<Adoption> adoptions = [];
   var f = NumberFormat("###,##0.00", "en_US");
+  bool isForeignOrganization=false;
 
   @override
   void initState() {
     super.initState();
     _getBeneficiaries();
     _getAdoptions();
+    _getCurrentOrganization();
   }
 
   _refreshPage() async{
@@ -45,6 +47,16 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
     setState(() {
 
     });
+  }
+  _getCurrentOrganization() async{
+    var ret = await _firestore.collection('OrganizationUsers').where('uid',isEqualTo: _auth.currentUser?.uid).get();
+
+    var doc = ret.docs.first;
+    if(doc.data()['country'] != 'United States'){
+      isForeignOrganization = true;
+    }
+
+    setState(() {});
   }
   _getBeneficiaries() async {
     //Get all active beneficiaries that have been created by the organization
@@ -231,7 +243,9 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return
+      (!isForeignOrganization) ?
+      DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
@@ -252,6 +266,21 @@ class _OrganizationBeneficiariesExpandedScreenState extends State<OrganizationBe
           ],
         ),
         bottomNavigationBar:   const OrganizationBottomNavigation(),
-      ));
+      ))
+          :
+          Scaffold(
+            appBar: AppBar(
+              title: Text('my_beneficiaries'.tr),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            drawer: const OrganizationDrawer(),
+            body: _beneficiariesBody(),
+            bottomNavigationBar:   const OrganizationBottomNavigation(),
+          );
   }
 }
