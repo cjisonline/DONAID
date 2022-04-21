@@ -76,13 +76,17 @@ class _OrganizationCardState extends State<OrganizationCard> {
               // Display organization's name
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text(widget.organization.organizationName,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    )),
+                child: Container(
+                  height: 50,
+                  child: Text(widget.organization.organizationName,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      )),
+                ),
               ),
               // Display organization's description
               Padding(
@@ -91,7 +95,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                     Text(widget.organization.organizationDescription.toString(),
                         textAlign: TextAlign.center,
                         softWrap: true,
-                        maxLines: 3,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           color: Colors.black,
