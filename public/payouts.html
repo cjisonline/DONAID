@@ -160,8 +160,26 @@ async function getBeneficiaryData(){
             if(item.data().donatedAt < backdate) {
                 // Iterate through JS array and find Organization Name from ID
                 var orgName = orgInfo.find(t=>t.uid === item.data().organizationID).organizationName;
-                var orgEmail = orgInfo.find(t=>t.uid === item.data().organizationID).email;
                 
+                var orgEmail = orgInfo.find(t=>t.uid === item.data().organizationID).email;
+
+                // TRYING TO MAP FUNCTIONALITY FOR READING ORG NAME FROM ORG ID THEN SUMMING VALUES
+                // INCOMPLETE
+                
+                // var donationArray = [];
+                // donationArray.push({orgID: item.data().organizationID, donationAmount: Number(item.data().donationAmount)});
+                
+                // const endresult = donationArray.reduce((acc,dono) => {
+                // acc[dono.orgID] = acc[dono.orgID]  || dono;
+                // const theSum = acc[dono.orgID]
+                // theSum.count = !!theSum.count ? theSum.count : 0;
+                // theSum.count++
+                // theSum.donationAmount += dono.donationAmount 
+                // return acc;
+                // }, {});
+
+                // console.log(Object.values(endresult));
+                            
                 let firebaseDate = item.data().donatedAt;
                 const firebaseDateString = firebaseDate.toDate();
                 var firebaseDateData = firebaseDateString.toLocaleDateString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
@@ -170,7 +188,7 @@ async function getBeneficiaryData(){
                 document.getElementById("adminTable").getElementsByTagName('tbody')[0].innerHTML += 
                 "</td><td>" + orgName + 
                 "</td><td>" + orgEmail + 
-                "</td><td>" + '$' + item.data().donationAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' USD' +
+                "</td><td>" + '$' + donationArray.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' USD' +
                 "</td><td>" + firebaseDateData + "</td></tr>";
             }
         });
