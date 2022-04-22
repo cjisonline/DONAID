@@ -293,8 +293,8 @@ $('a#logoutButton').click(function() {
 async function sendRejectedEmail(orgEmail, orgName, deniedReason) {
     window.open('mailto:' + orgEmail + "?subject=Your DONAID Account has Been Denied." + 
         '&body=Hello ' + orgName + '. DONAID is regretful to inform you ' +
-        'that your account has been denied. Your account has been denied ' +
-        'due to: ' + deniedReason + '.' + ' Sincerely, DONAID',
+        'that your account has been denied. %0D%0AYour account has been denied ' +
+        'due to: ' + deniedReason + '.' + '%0D%0ASincerely, DONAID',
     )
     // Confirm mail sent
     .then(function (message) {
@@ -308,9 +308,9 @@ async function sendRejectedEmail(orgEmail, orgName, deniedReason) {
 async function sendApprovedEmail(orgEmail, orgName) {
     window.open('mailto:' + orgEmail + "?subject=Your DONAID Account has Been Approved!" +
         '&body=Hello ' + orgName + '. DONAID is pleased to inform you ' +
-        'that your account has been approved. Open the DONAID ' +
+        'that your account has been approved. %0D%0AOpen the DONAID ' +
         'mobile app and login to create campaigns, beneficiaries, ' +
-        'or urgent cases that need donation!' + ' Sincerely, DONAID',
+        'or urgent cases that need donation!' + '%0D%0ASincerely, DONAID',
     )
     // Confirm mail sent
     .then(function (message) {
