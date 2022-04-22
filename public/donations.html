@@ -114,17 +114,15 @@ async function getDonationData(){
                 // Iterate through JS array and find Donor Name from ID
                 var donorID = item.data().donorID;
                 var donorFindFirst = donorInfo.find(t=>t.uid === donorID).firstName;
-                const arr1 = new Array(donorFindFirst);
-                console.log(arr1)
                 var donorFindLast = donorInfo.find(t=>t.uid === donorID).lastName;
-                if (!donorFindFirst.length || !donorFindLast.length) {
+                // Set guest user if no name found in donor registry for donation
+                if (donorFindFirst === undefined || donorFindFirst === null) {
                     donorFindFirst = "Guest";
                     donorFindLast = "User";
                 }
                 else {
                     var donorName = donorFindFirst + " " + donorFindLast;
                 }
-                
                 // Variables to pass timestamp from firebase and convert it to a JS date
                 let donationDate = item.data().donatedAt;
                 var dDate = new Date(donationDate.seconds*1000);
@@ -168,10 +166,19 @@ var adminTableDef = $('#adminTable').DataTable({
             // Destroy existing table upon data population from getDonationData function
             adminTableDef.destroy();
             
+            
 
 // Run Function to get all data upon page load
 getDonationData();
 
+const delay = ms => new Promise(res => setTimeout(res, ms));
+const resizeFunction = async () => {
+    await delay(1000);
+                window.dispatchEvent(new Event('resize'));
+                console.log("Waited an additional 1s");
+            };
+
+resizeFunction();
 </script>
 
 <title>DONAID Admin Console</title>
@@ -196,7 +203,7 @@ getDonationData();
                               <li><a class="dropdown-item" href="rejections.html" data-bs-parent="#sidebar">Rejections</a></li>
                             </ul>
                           </div>
-                        <a href="beneficiaries.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="nav-active"><span>Beneficiaries</span></a>
+                        <a href="beneficiaries.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Beneficiaries</span></a>
                         <div class="dropdown">
                             <button class="btn dropdown-toggle" type="button" id="UCPages" data-bs-toggle="dropdown" aria-expanded="false">
                               Urgent Cases
@@ -208,6 +215,7 @@ getDonationData();
                           </div>
                         <a href="categories.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Categories</span></a>
                         <a href="messages.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Messages</span></a>
+                        <a href="donations.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="nav-active"><span>Donations</span></a>
                         <a href="statistics.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Statistics</span></a>
                         <a href="settings.html" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Settings</span></a>
                         <a href="#" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" id="logoutButton"><span>Logout</span></a>
